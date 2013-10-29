@@ -6,11 +6,17 @@ require 'chamber/version'
 Gem::Specification.new do |spec|
   spec.name          = "chamber"
   spec.version       = Chamber::VERSION
-  spec.authors       = ["Mark McEahern"]
-  spec.email         = ["mark@mceahern.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.authors       = ["stevenhallen", "m5rk"]
+  spec.email         = ["mark@stevenhallen.com"]
+  spec.description   = <<-CHAMBER
+Chamber lets you source your Settings from an arbitrary number
+of YAML files and provides a simple mechanism for overriding
+settings from the ENV, which is friendly to how Heroku addons
+work.
+CHAMBER
+
+  spec.summary       = "Heroku-friendly Settings"
+  spec.homepage      = "http://github.com/stevenhallen/chamber"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
