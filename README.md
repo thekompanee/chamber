@@ -1,6 +1,8 @@
 # Chamber
 
-TODO: Write a gem description
+Chamber lets you source your Settings from an arbitrary number of YAML files and
+provides a simple mechanism for overriding settings from the ENV, which is
+friendly to how Heroku addons work.
 
 ## Installation
 
