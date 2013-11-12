@@ -1,6 +1,6 @@
-require 'yaml'
 require 'erb'
 require 'hashie'
+require 'yaml'
 
 require 'chamber/version'
 
