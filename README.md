@@ -22,6 +22,13 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+## Ideas
+
+* Add a rake task for validating environments (do all environments have the same
+  settings?)
+
+* Add a rake task for setting Heroku environment variables.
+
 ## Contributing
 
 1. Fork it
