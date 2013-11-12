@@ -1,5 +1,6 @@
 require 'yaml'
 require 'erb'
+require 'hashie'
 
 require 'chamber/version'
 
