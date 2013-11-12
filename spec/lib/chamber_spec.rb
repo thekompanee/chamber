@@ -14,7 +14,7 @@ describe Chamber do
       end
 
       it 'raises ChamberInvalidOptionError' do
-        expect { Settings.source('filename', options) }.to raise_error
+        expect { Settings.source('filename', options) }.to raise_error(Chamber::ChamberInvalidOptionError)
       end
     end
 
