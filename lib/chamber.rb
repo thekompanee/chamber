@@ -21,13 +21,18 @@ module Chamber
     end
   end
 
+  def clear!
+    @chamber_instance = nil
+    @chamber_sources = nil
+  end
+
   def reload!
-    @instance = nil
+    @chamber_instance = nil
     load!
   end
 
   def instance
-    @instance ||= Hashie::Mash.new
+    @chamber_instance ||= Hashie::Mash.new
   end
 
 private
@@ -39,7 +44,7 @@ private
   end
 
   def sources
-    @sources ||= []
+    @chamber_sources ||= []
   end
 
   def add_source(filename, options)
@@ -59,17 +64,17 @@ private
 
   def hash_from_source(filename, namespace)
     contents = open(filename).read
-    hash = YAML.load(ERB.new(contents).result).to_hash
+    hash = YAML.load(ERB.new(contents).result).to_hash || {}
     hash = Hashie::Mash.new(hash)
 
-    namespace ? hash[namespace] : hash
+    namespace ? hash.fetch(namespace) : hash
   end
 
   def override_from_environment!(hash)
     hash.each_pair do |key, value|
       next unless value.is_a?(Hash)
 
-      if !value.environment.blank?
+      if value.environment
         hash[key] = ENV[value.environment]
       else
         override_from_environment!(value)
