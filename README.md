@@ -1,4 +1,4 @@
-# Build Status: [![Build Status](https://travis-ci.org/stevenhallen/chamber.png)]
+# Build Status: [![Build Status](https://travis-ci.org/stevenhallen/chamber.png)](https://travis-ci.org/stevenhallen/chamber)
 
 # Chamber
 
