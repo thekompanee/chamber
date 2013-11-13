@@ -1,3 +1,5 @@
+# Build Status: [![Build Status](https://travis-ci.org/stevenhallen/chamber)]
+
 # Chamber
 
 Chamber lets you source your Settings from an arbitrary number of YAML files and
