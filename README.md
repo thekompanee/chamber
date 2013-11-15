@@ -115,7 +115,7 @@ inherently wrong with storing sensitive information in git.  You just wouldn't
 want to store it in a public repository.
 
 If it weren't for this concern, managing settings would be trivial, easily
-solved use any number of approaches (e.g., [like using YAML and ERB in an
+solved use any number of approaches; e.g., [like using YAML and ERB in an
 initializer](http://urgetopunt.com/rails/2009/09/12/yaml-config-with-erb.html).
 
 I recommend adding a pattern like this to `.gitignore`:
