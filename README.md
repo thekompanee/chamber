@@ -59,6 +59,7 @@ class Settings
   extend Chamber
 
   source Rails.root.join('config', 'settings.yml'), namespace: Rails.env, override_from_environment: true
+end
 ```
 
 4.  Add environment-specific files for development and test to supply the values
@@ -72,6 +73,7 @@ class Settings
 
   source Rails.root.join('config', 'settings.yml'), namespace: Rails.env, override_from_environment: true
   source Rails.root.join('config', "credentials-#{Rails.env}.yml")
+end
 ```
 
 6.  Use `heroku config` to set the `ENV_VAR_NAME` value for the staging and
@@ -131,8 +133,8 @@ class Settings
 end
 ```
 
-1.  Environment-specific filenames (e.g., `settings-#{Rails.env}.yml`)
-1.  Namespaces:
+2.  Environment-specific filenames (e.g., `settings-#{Rails.env}.yml`)
+3.  Namespaces:
 
 ```ruby
 class Settings
