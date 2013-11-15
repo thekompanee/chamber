@@ -25,59 +25,84 @@ staging and production heroku environments.
 
 1.  Create a Settings class that extends Chamber in `app/models/settings.rb`:
 
-```ruby
-class Settings
-  extend Chamber
-end
-```
+        ```ruby
+        class Settings
+          extend Chamber
+        end
+        ```
 
-2.  Create a `config/settings.yml` that has this structure:
+1.  Create a `config/settings.yml` that has this structure:
 
-```yaml
-development:
-  some_setting: value for dev
-  some_password:
-    environment:  ENV_VAR_NAME
-test:
-  some_setting: value for test
-  some_password:
-    environment:  ENV_VAR_NAME
-staging:
-  some_setting: value for staging
-  some_password:
-    environment:  ENV_VAR_NAME
-production:
-  some_setting: value for production
-  some_password:
-    environment:  ENV_VAR_NAME
-```
+        ```yaml
+        development:
+          some_setting: value for dev
+          some_password:
+            environment:  ENV_VAR_NAME
+        test:
+          some_setting: value for test
+          some_password:
+            environment:  ENV_VAR_NAME
+        staging:
+          some_setting: value for staging
+          some_password:
+            environment:  ENV_VAR_NAME
+        production:
+          some_setting: value for production
+          some_password:
+            environment:  ENV_VAR_NAME
+        ```
 
-3.  Call `source` in your Settings class:
+1.  Call `source` in your Settings class:
 
-```ruby
-class Settings
-  extend Chamber
+        ```ruby
+        class Settings
+          extend Chamber
 
-  source Rails.root.join('config', 'settings.yml'), namespace: Rails.env, override_from_environment: true
-end
-```
+          source Rails.root.join('config', 'settings.yml'), namespace: Rails.env, override_from_environment: true
+        end
+        ```
 
-4.  Add environment-specific files for development and test to supply the values
+1.  Add environment-specific files for development and test to supply the values
     for those environments.  Make sure to add these to .gitignore.
 
-5.  Add another call to `source` for these files:
+1.  Add another call to `source` for these files:
 
-```ruby
-class Settings
-  extend Chamber
+        ```ruby
+        class Settings
+          extend Chamber
 
-  source Rails.root.join('config', 'settings.yml'), namespace: Rails.env, override_from_environment: true
-  source Rails.root.join('config', "credentials-#{Rails.env}.yml")
-end
-```
+          source Rails.root.join('config', 'settings.yml'), namespace: Rails.env, override_from_environment: true
+          source Rails.root.join('config', "credentials-#{Rails.env}.yml")
+        end
+        ```
 
-6.  Use `heroku config` to set the `ENV_VAR_NAME` value for the staging and
+1.  Use `heroku config` to set the `ENV_VAR_NAME` value for the staging and
     production remotes.
+
+1.  You access your settings in your code from `Settings.instance` (assuming you
+    extended Chamber in a class named `Settings`).
+
+    In other words, given a configuration file like this:
+
+        ```yaml
+        s3:
+          access_key_id: value
+          secret_access_key: value
+          bucket: value
+        ```
+
+    the corresponding Paperclip configuration would look like this:
+
+        ```ruby
+        Paperclip::Attachment.default_options.merge!(
+          storage: 's3',
+          s3_credentials: {
+            access_key_id: Settings.instance.s3.access_key_id,
+            secret_access_key: Settings.instance.s3.secret_access_key
+          },
+          bucket: Settings.instance.s3.bucket,
+          ...
+        ```
 
 ## General Principles
 
@@ -122,27 +147,28 @@ Chamber supports this by allowing:
 
 1.  Arbitrary number of files:
 
-```ruby
-class Settings
-  extend Chamber
+        ```ruby
+        class Settings
+          extend Chamber
 
-  source Rails.root.join('config', 'settings.yml')
-  source Rails.root.join('config', 'facebook.yml')
-  source Rails.root.join('config', 'twitter.yml')
-  source Rails.root.join('config', 'google-plus.yml')
-end
-```
+          source Rails.root.join('config', 'settings.yml')
+          source Rails.root.join('config', 'facebook.yml')
+          source Rails.root.join('config', 'twitter.yml')
+          source Rails.root.join('config', 'google-plus.yml')
+        end
+        ```
 
-2.  Environment-specific filenames (e.g., `settings-#{Rails.env}.yml`)
-3.  Namespaces:
+1.  Environment-specific filenames (e.g., `settings-#{Rails.env}.yml`)
 
-```ruby
-class Settings
-  extend Chamber
+1.  Namespaces:
 
-  source Rails.root.join('config', 'settings.yml'), namespace: Rails.env
-end
-```
+        ```ruby
+        class Settings
+          extend Chamber
+
+          source Rails.root.join('config', 'settings.yml'), namespace: Rails.env
+        end
+        ```
 
 ### Support overriding setting values at runtime from ENV
 
