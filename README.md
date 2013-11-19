@@ -94,8 +94,8 @@ end
 Use `heroku config` to set the `ENV_VAR_NAME` value for the staging and
 production remotes.
 
-Now you can access your settings in your code from `Settings.instance` (assuming
-you extended Chamber in a class named `Settings`).
+Now you can access your settings in your code as properties of your `Settings`
+class (assuming you extended Chamber in a class named `Settings`).
 
 In other words, given a configuration file like this:
 
@@ -112,10 +112,10 @@ the corresponding Paperclip configuration would look like this:
 Paperclip::Attachment.default_options.merge!(
   storage: 's3',
   s3_credentials: {
-    access_key_id: Settings.instance.s3.access_key_id,
-    secret_access_key: Settings.instance.s3.secret_access_key
+    access_key_id: Settings.s3.access_key_id,
+    secret_access_key: Settings.s3.secret_access_key
   },
-  bucket: Settings.instance.s3.bucket,
+  bucket: Settings.s3.bucket,
   ...
 ```
 
