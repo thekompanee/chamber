@@ -130,6 +130,11 @@ CONTENT
           Settings.load!
           expect(Settings.instance.to_hash).to eq expected
         end
+
+        it 'provides access to all settings without the instance root' do
+          Settings.load!
+          expect(Settings.to_hash).to eq expected
+        end
       end
 
       context 'and the :namespace option is specified' do
@@ -146,6 +151,11 @@ CONTENT
           it 'loads settings for the specified namespace' do
             Settings.load!
             expect(Settings.instance.to_hash).to eq expected
+          end
+
+          it 'provides access to all settings without the instance root' do
+            Settings.load!
+            expect(Settings.to_hash).to eq expected
           end
         end
 
@@ -168,6 +178,11 @@ CONTENT
             Settings.load!
             expect(Settings.instance.secret).to eq 'value'
           end
+
+          it 'provides access to all settings without the instance root' do
+            Settings.load!
+            expect(Settings.secret).to eq 'value'
+          end
         end
 
         context 'and the environment variable is not present' do
@@ -176,6 +191,11 @@ CONTENT
           it 'sets the value to nil' do
             Settings.load!
             expect(Settings.instance.secret).to be_nil
+          end
+
+          it 'provides acccess to all settings without the instance root' do
+            Settings.load!
+            expect(Settings.secret).to be_nil
           end
         end
       end

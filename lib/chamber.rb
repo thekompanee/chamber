@@ -35,6 +35,10 @@ module Chamber
     @chamber_instance ||= Hashie::Mash.new
   end
 
+  def method_missing(method_name, *args, &block)
+    instance.public_send(method_name, *args, &block)
+  end
+
   alias_method :env, :instance
 
 private
