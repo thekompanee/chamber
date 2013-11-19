@@ -35,6 +35,8 @@ module Chamber
     @chamber_instance ||= Hashie::Mash.new
   end
 
+  alias_method :env, :instance
+
 private
 
   def assert_valid_keys(options)

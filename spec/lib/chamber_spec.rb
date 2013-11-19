@@ -221,4 +221,10 @@ MODIFIED
       expect(Settings.instance).to be_a(Hashie::Mash)
     end
   end
+
+  describe '.env' do
+    it 'is aliased to :instance' do
+      expect(Settings.method(:env)).to eq Settings.method(:instance)
+    end
+  end
 end
