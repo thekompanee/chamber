@@ -36,12 +36,12 @@ Create a `config/settings.yml` that has this structure:
 ```yml
 # specify environment your Rails app is running in
 development:
-  #In development, we manually set the value to the variable we'll use
+  # In development, we manually set the value to the variable we'll use
   # Settings.REDIS_TO_GO -> returns the URL
   REDIS_TO_GO: "redis://root@localhost:6379"
 
 production:
-  #In production, on Heroku, for example
+  # In production, on Heroku, for example
   # Settings.REDIS_TO_GO -> looks for the variable in the ENV and returns its value
   REDIS_TO_GO:
     environment: "REDISTOGO_URL"
