@@ -34,22 +34,17 @@ end
 Create a `config/settings.yml` that has this structure:
 
 ```yml
+# specify environment your Rails app is running in
 development:
-  some_setting: value for dev
-  some_password:
-    environment:  ENV_VAR_NAME
-test:
-  some_setting: value for test
-  some_password:
-    environment:  ENV_VAR_NAME
-staging:
-  some_setting: value for staging
-  some_password:
-    environment:  ENV_VAR_NAME
+  #In development, we manually set the value to the variable we'll use
+  # Settings.REDIS_TO_GO -> returns the URL
+  REDIS_TO_GO: "redis://root@localhost:6379"
+
 production:
-  some_setting: value for production
-  some_password:
-    environment:  ENV_VAR_NAME
+  #In production, on Heroku, for example
+  # Settings.REDIS_TO_GO -> looks for the variable in the ENV and returns its value
+  REDIS_TO_GO:
+    environment: "REDISTOGO_URL"
 ```
 
 Call `source` in your Settings class:
