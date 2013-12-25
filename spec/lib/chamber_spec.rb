@@ -1,5 +1,5 @@
-require 'spec_helper'
-
+require 'rspectacular'
+require 'chamber'
 require 'tempfile'
 
 class Settings
