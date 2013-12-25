@@ -1,6 +1,10 @@
 require 'rspectacular'
 require 'chamber'
 
+File.open('/tmp/settings.yml', 'w+') do |file|
+  file.puts ''
+end
+
 describe Chamber do
   it 'knows how to load itself with a path string' do
     Chamber.load(:basepath => '/tmp')

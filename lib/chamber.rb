@@ -1,11 +1,15 @@
 require 'singleton'
 require 'forwardable'
 
-module Chamber
+class Chamber
   include Singleton
 
-  def_delgators :instance,  :load,
-                            :basepath
+  class << self
+    extend Forwardable
+
+    def_delegators :instance, :load,
+                              :basepath
+  end
 
   attr_accessor :basepath
 
