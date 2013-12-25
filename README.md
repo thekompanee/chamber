@@ -101,13 +101,45 @@ Chamber[:smtp][:server]
 It will return not what is in the YAML file, but what is in the environment
 variable.
 
+## Deploying to Heroku
+
+If you're deploying to Heroku, they won't let you read config files. Instead,
+all config settings must be stored in environment variables.  Well, if your
+settings are in config files, but you need to have them as environment variables,
+that seems like a tedious process.  Weeeellll, not really.  Chamber provides
+a rake task to automatically process this for you.
+
+Simply run:
+
+```sh
+rake chamber:push:heroku
+```
+
+And all of your settings will be converted to environment variable versions
+and set on your Heroku app.
+
+If you have more than one Heroku app, you can pass it to the rake task like so:
+
+```sh
+rake chamber:push:heroku --app my_heroku_app_name
+```
+
 ## Advanced Usage
+
+### Method-Based Environment Variable Access
+
+If you aren't a fan of the hash-based access, you can also access them
+using methods:
+
+```ruby
+Chamber.env.smtp.server
+```
+
+### In Order to Add Advanced Functionality
 
 In any case that you need to set configuration options or do advanced post
 processing on your YAML data, you'll want to create your own object for
 accessing it.  Don't worry, Chamber will take you 98% of the way there.
-
-### Enhancing a Class with Chamber
 
 Just include it like so:
 
@@ -232,10 +264,10 @@ I recommend adding a pattern like this to `.gitignore`:
 Let's walk through how you might use Chamber to configure your SMTP settings:
 
 ```yaml
-# config/settings/smtp.yml
+# config/settings.yml
 
 stuff:
-  not: "Related to SMTP"
+  not: "Not Related to SMTP"
 
 # config/settings/smtp.yml
 
@@ -265,7 +297,6 @@ Settings[:smtp][:password]
 
 * Add a rake task for validating environments (do all environments have the same
   settings?)
-* Add a rake task for setting Heroku environment variables.
 
 ## Alternatives
 
