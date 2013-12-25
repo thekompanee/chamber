@@ -1,16 +1,27 @@
+require 'singleton'
+require 'forwardable'
+
 module Chamber
+  include Singleton
 
-  class << self
-    attr_accessor :basepath
-  end
+  def_delgators :instance,  :load,
+                            :basepath
 
-  def self.load(options = {})
+  attr_accessor :basepath
+
+  def load(options)
     self.basepath = options.fetch(:basepath)
+
+    load_file(self.basepath + 'settings.yml')
   end
 
   private
 
-  def self.basepath=(pathlike)
+  def basepath=(pathlike)
     @basepath = Pathname.new(File.expand_path(pathlike))
+  end
+
+  def load_file(file_path)
+    File.read file_path.to_s
   end
 end
