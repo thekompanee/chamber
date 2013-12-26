@@ -36,4 +36,8 @@ describe Chamber do
   it 'can access settings through a hash-like syntax' do
     expect(Chamber[:test][:my_setting]).to eql 'my_value'
   end
+
+  it 'can access the settings through method-based access' do
+    expect(Chamber.instance.test.my_setting).to eql 'my_value'
+  end
 end
