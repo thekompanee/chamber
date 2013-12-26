@@ -40,8 +40,8 @@ class Chamber
   end
 
   def load_file(file_path)
-    file_contents = File.read(file_path.to_s)
-    erb_result    = ERB.new(file_contents).result
+    file_contents      = File.read(file_path.to_s)
+    erb_result         = ERB.new(file_contents).result
     yaml_contents      = YAML.load(erb_result)
 
     processed_settings = with_existing_environment(yaml_contents)
