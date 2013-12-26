@@ -12,6 +12,8 @@ class Chamber
     def_delegators :instance, :load,
                               :basepath,
                               :[]
+
+    alias_method :env, :instance
   end
 
   attr_accessor :basepath,

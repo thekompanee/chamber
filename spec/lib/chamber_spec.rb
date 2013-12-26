@@ -40,4 +40,8 @@ describe Chamber do
   it 'can access the settings through method-based access' do
     expect(Chamber.instance.test.my_setting).to eql 'my_value'
   end
+
+  it 'can access the instance via "env"' do
+    expect(Chamber.instance.test.my_setting).to eql 'my_value'
+  end
 end
