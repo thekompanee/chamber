@@ -2,10 +2,15 @@ require 'rspectacular'
 require 'chamber'
 
 File.open('/tmp/settings.yml', 'w+') do |file|
-  file.puts ''
+  file.puts <<-HEREDOC
+test:
+  my_setting: my_value
+  HEREDOC
 end
 
 describe Chamber do
+  before(:each) { Chamber.load(:basepath => '/tmp') }
+
   it 'knows how to load itself with a path string' do
     Chamber.load(:basepath => '/tmp')
 
@@ -26,5 +31,9 @@ describe Chamber do
 
     expect(File).to have_received(:read).
                     with('/tmp/settings.yml')
+  end
+
+  it 'can access settings through a hash-like syntax' do
+    expect(Chamber[:test][:my_setting]).to eql 'my_value'
   end
 end

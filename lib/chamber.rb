@@ -1,5 +1,8 @@
 require 'singleton'
 require 'forwardable'
+require 'yaml'
+
+require 'chamber/core_ext/hash_with_indifferent_access'
 
 class Chamber
   include Singleton
@@ -8,15 +11,21 @@ class Chamber
     extend Forwardable
 
     def_delegators :instance, :load,
-                              :basepath
+                              :basepath,
+                              :[]
   end
 
-  attr_accessor :basepath
+  attr_accessor :basepath,
+                :settings
 
   def load(options)
     self.basepath = options.fetch(:basepath)
 
     load_file(self.basepath + 'settings.yml')
+  end
+
+  def [](key)
+    settings[key]
   end
 
   private
@@ -26,6 +35,10 @@ class Chamber
   end
 
   def load_file(file_path)
-    File.read file_path.to_s
+    settings.merge! YAML.load(File.read(file_path.to_s))
+  end
+
+  def settings
+    @settings ||= ActiveSupport::HashWithIndifferentAccess.new
   end
 end
