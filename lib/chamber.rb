@@ -38,7 +38,10 @@ class Chamber
   end
 
   def load_file(file_path)
-    settings.merge! YAML.load(File.read(file_path.to_s))
+    file_contents = File.read(file_path.to_s)
+    yaml_contents = YAML.load(file_contents)
+
+    settings.merge! yaml_contents
   end
 
   def settings
