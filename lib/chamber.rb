@@ -1,6 +1,7 @@
 require 'singleton'
 require 'forwardable'
 require 'yaml'
+require 'hashie/mash'
 
 require 'chamber/core_ext/hash_with_indifferent_access'
 
@@ -39,6 +40,6 @@ class Chamber
   end
 
   def settings
-    @settings ||= ActiveSupport::HashWithIndifferentAccess.new
+    @settings ||= Hashie::Mash.new
   end
 end
