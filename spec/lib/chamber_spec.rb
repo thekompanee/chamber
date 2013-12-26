@@ -25,7 +25,7 @@ describe Chamber do
 
   it 'loads settings from a settings.yml file' do
     allow(File).to receive(:read).
-                   and_return 'settings.yml'
+                   and_return 'file: "settings.yml"'
 
     Chamber.load(:basepath => '/tmp')
 
