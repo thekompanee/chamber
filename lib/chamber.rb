@@ -42,12 +42,32 @@ class Chamber
   def load_file(file_path)
     file_contents = File.read(file_path.to_s)
     erb_result    = ERB.new(file_contents).result
-    yaml_contents = YAML.load(erb_result)
+    yaml_contents      = YAML.load(erb_result)
 
-    settings.merge! yaml_contents
+    processed_settings = with_existing_environment(yaml_contents)
+
+    settings.merge! processed_settings
   end
 
   def settings
     @settings ||= Hashie::Mash.new
+  end
+
+  def with_existing_environment(yaml_hash, parent_keys = [])
+    yaml_hash        = yaml_hash.dup
+
+    yaml_hash.each_pair do |key, value|
+      environment_keys = parent_keys.dup.push(key)
+
+      if value.respond_to? :each_pair
+        yaml_hash[key] = with_existing_environment(value, environment_keys)
+      else
+        environment_key = environment_keys.join('_').upcase
+
+        yaml_hash[key] = ENV[environment_key] || value
+      end
+    end
+
+    yaml_hash
   end
 end
