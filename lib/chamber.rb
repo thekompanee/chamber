@@ -41,7 +41,8 @@ class Chamber
 
   def load_file(file_path)
     file_contents = File.read(file_path.to_s)
-    yaml_contents = YAML.load(file_contents)
+    erb_result    = ERB.new(file_contents).result
+    yaml_contents = YAML.load(erb_result)
 
     settings.merge! yaml_contents
   end

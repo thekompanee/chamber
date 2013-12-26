@@ -5,6 +5,7 @@ File.open('/tmp/settings.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 test:
   my_setting: my_value
+  my_dynamic_setting: <%= 1 + 1 %>
   HEREDOC
 end
 
@@ -31,6 +32,10 @@ describe Chamber do
 
     expect(File).to have_received(:read).
                     with('/tmp/settings.yml')
+  end
+
+  it 'processes settings files through ERB before YAML' do
+    expect(Chamber[:test][:my_dynamic_setting]).to eql 2
   end
 
   it 'can access settings through a hash-like syntax' do
