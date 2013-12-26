@@ -23,8 +23,12 @@ class Chamber
     load_file(self.basepath + 'settings.yml')
   end
 
-  def [](key)
-    settings[key]
+  def method_missing(name, *args)
+    settings.public_send(name, *args) if settings.respond_to?(name)
+  end
+
+  def respond_to_missing(name)
+    settings.respond_to?(name)
   end
 
   private
