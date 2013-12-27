@@ -94,11 +94,18 @@ describe Chamber do
     expect(Chamber.instance.test.my_dynamic_setting).to eql 2
   end
 
-  it 'does not load multiple namespaces if it is called twice' do
+  it 'loads multiple namespaces if it is called twice' do
     Chamber.namespaces :first_namespace_call
     Chamber.namespaces :second_namespace_call
 
-    expect(Chamber.instance.namespaces).to eql [:second_namespace_call]
+    expect(Chamber.instance.namespaces).to eql [:first_namespace_call, :second_namespace_call]
+  end
+
+  it 'does not load the same namespace twice' do
+    Chamber.namespaces :first_namespace_call
+    Chamber.namespaces :first_namespace_call
+
+    expect(Chamber.instance.namespaces).to eql [:first_namespace_call]
   end
 
   it 'clears all settings each time the settings are loaded' do
