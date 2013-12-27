@@ -31,7 +31,7 @@ class Chamber
     self.basepath = options.fetch(:basepath)
 
     load_file_with_namespaces(self.basepath, 'settings.yml', namespaces)
-    load_directory("#{self.basepath}/settings/*.yml")
+    load_directory("#{self.basepath}/settings")
   end
 
   def method_missing(name, *args)
@@ -92,7 +92,7 @@ class Chamber
   end
 
   def load_directory(directory)
-    Dir[directory].each do |file|
+    Dir[directory + '/*.yml'].each do |file|
       dirname   = File.dirname(file)
       extension = File.extname(file)
 
