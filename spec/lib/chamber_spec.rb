@@ -116,4 +116,8 @@ describe Chamber do
     expect(Chamber.instance.settings).to  have_received(:clear).
                                           once
   end
+
+  it 'still raises an error if you try to send a message which the settings hash does not understand' do
+    expect{ Chamber.instance.i_do_not_know }.to raise_error NoMethodError
+  end
 end

@@ -34,7 +34,9 @@ class Chamber
   end
 
   def method_missing(name, *args)
-    settings.public_send(name, *args) if settings.respond_to?(name)
+    return settings.public_send(name, *args) if settings.respond_to?(name)
+
+    super
   end
 
   def respond_to_missing(name)
