@@ -21,6 +21,8 @@ class Chamber
                 :namespaces
 
   def self.namespaces(*args)
+    self.instance.namespaces = []
+
     args.each do |namespace|
       self.instance.namespaces << namespace
     end
