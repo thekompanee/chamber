@@ -100,4 +100,13 @@ describe Chamber do
 
     expect(Chamber.instance.namespaces).to eql [:second_namespace_call]
   end
+
+  it 'clears all settings each time the settings are loaded' do
+    allow(Chamber.instance.settings).to receive(:clear)
+
+    Chamber.load(:basepath => '/tmp')
+
+    expect(Chamber.instance.settings).to  have_received(:clear).
+                                          once
+  end
 end

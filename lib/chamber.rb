@@ -29,6 +29,7 @@ class Chamber
   end
 
   def load(options)
+    self.settings.clear
     self.basepath = options.fetch(:basepath)
 
     load_file_with_namespaces(self.basepath, 'settings.yml', namespaces)
