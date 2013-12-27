@@ -46,6 +46,10 @@ class Chamber
     @namespaces ||= []
   end
 
+  def settings
+    @settings ||= Hashie::Mash.new
+  end
+
   private
 
   def basepath=(pathlike)
@@ -75,10 +79,6 @@ class Chamber
     processed_settings = with_existing_environment(yaml_contents)
 
     settings.merge! processed_settings
-  end
-
-  def settings
-    @settings ||= Hashie::Mash.new
   end
 
   def with_existing_environment(yaml_hash, parent_keys = [])
