@@ -71,7 +71,7 @@ class Chamber
     namespaces.each do |namespace|
       namespace_value     = self.public_send(namespace)
       namespaced_filename = filename.gsub(extension, "-#{namespace_value}#{extension}")
-      namespaced_filepath = basepath + namespaced_filename
+      namespaced_filepath = basefile.dirname + namespaced_filename
 
       load_file(namespaced_filepath)
     end
@@ -93,12 +93,10 @@ class Chamber
 
   def load_directory(directory)
     Dir[directory + '/*.yml'].each do |file|
-      dirname   = File.dirname(file)
-      extension = File.extname(file)
+      dirname   = Pathname.new(File.dirname(file))
+      filename  = File.basename(file)
 
-      filename  = file.gsub("#{dirname}/", '').gsub(extension, '')
-
-      settings.merge!(filename => processed_settings(file)) unless filename =~ /\-/
+      load_file_with_namespaces(dirname, filename, namespaces) unless filename.match(/\-/)
     end
   end
 
