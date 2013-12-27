@@ -101,7 +101,7 @@ class Chamber
   end
 
   def with_existing_environment(yaml_hash, parent_keys = [])
-    yaml_hash        = yaml_hash.dup
+    yaml_hash = yaml_hash.dup
 
     yaml_hash.each_pair do |key, value|
       environment_keys = parent_keys.dup.push(key)
