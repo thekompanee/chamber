@@ -174,4 +174,18 @@ describe Chamber, :singletons => [Chamber, CustomSettings] do
 
     expect(CustomSettings['sub_settings']['my_namespaced_sub_setting']).to eql 'my_namespaced_sub_setting_value'
   end
+
+  it 'can convert the settings to their environment variable versions' do
+    CustomSettings.load(:basepath => '/tmp')
+
+    expect(CustomSettings.to_environment).to eql(
+      'SUB_SETTINGS_MY_SUB_SETTING'             => 'my_sub_setting_value',
+      'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY' => '["item 1", "item 2", "item 3"]',
+      'TEST_ANOTHER_LEVEL_LEVEL_THREE_A_SCALAR' => 'hello',
+      'TEST_ANOTHER_LEVEL_SETTING_ONE'          => '1',
+      'TEST_ANOTHER_LEVEL_SETTING_TWO'          => '2',
+      'TEST_MY_DYNAMIC_SETTING'                 => '2',
+      'TEST_MY_SETTING'                         => 'my_value',
+    )
+  end
 end

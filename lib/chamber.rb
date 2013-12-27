@@ -11,7 +11,8 @@ class Chamber
 
     def_delegators :instance, :load,
                               :basepath,
-                              :[]
+                              :[],
+                              :to_environment
 
     alias_method :env, :instance
   end
@@ -54,6 +55,23 @@ class Chamber
 
   def add_namespace(namespace)
     namespaces.push(namespace).uniq!
+  end
+
+  def to_environment(settings_hash = self.settings, parent_keys = [])
+    environment_hash = {}
+
+    settings_hash.each_pair do |key, value|
+      environment_keys = parent_keys.dup.push(key)
+      environment_key  = environment_keys.join('_').upcase
+
+      if value.respond_to? :each_pair
+        environment_hash.merge! to_environment(value, environment_keys)
+      else
+        environment_hash[environment_key] = value.to_s
+      end
+    end
+
+    environment_hash
   end
 
   private
