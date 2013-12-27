@@ -21,10 +21,8 @@ class Chamber
                 :namespaces
 
   def self.namespaces(*args)
-    self.instance.namespaces = []
-
     args.each do |namespace|
-      self.instance.namespaces << namespace
+      self.instance.add_namespace(namespace)
     end
   end
 
@@ -49,6 +47,10 @@ class Chamber
 
   def settings
     @settings ||= Hashie::Mash.new
+  end
+
+  def add_namespace(namespace)
+    namespaces.push(namespace).uniq!
   end
 
   private
