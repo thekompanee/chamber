@@ -20,6 +20,10 @@ end
 
 File.open('/tmp/settings-blue.yml', 'w+') do |file|
   file.puts <<-HEREDOC
+test:
+  my_other_setting: my_other_value
+  another_level:
+    setting_one: 3
 other:
   everything: works
   HEREDOC
@@ -128,5 +132,14 @@ describe Chamber, :singletons => [Chamber, CustomSettings] do
     CustomSettings.namespaces :non_existant_namespace
 
     expect { CustomSettings.load(:basepath => '/tmp') }.not_to raise_error
+  end
+
+  it 'merges (not overrides) subsequent settings' do
+    CustomSettings.namespaces :my_namespace
+    CustomSettings.load(:basepath => '/tmp')
+
+    expect(CustomSettings.instance.test.my_setting).to                eql 'my_value'
+    expect(CustomSettings.instance.test.my_other_setting).to          eql 'my_other_value'
+    expect(CustomSettings.instance.test.another_level.setting_one).to eql 3
   end
 end
