@@ -84,6 +84,8 @@ class Chamber
     processed_settings = with_existing_environment(yaml_contents)
 
     settings.merge! processed_settings
+  rescue Errno::ENOENT
+    # If a settings file does not exist, ignore it
   end
 
   def with_existing_environment(yaml_hash, parent_keys = [])

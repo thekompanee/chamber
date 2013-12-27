@@ -26,10 +26,12 @@ other:
 end
 
 class CustomSettings < Chamber
-  namespaces :my_namespace
-
   def my_namespace
     'blue'
+  end
+
+  def non_existant_namespace
+    'unknown'
   end
 end
 
@@ -120,5 +122,11 @@ describe Chamber, :singletons => [Chamber, CustomSettings] do
 
   it 'still raises an error if you try to send a message which the settings hash does not understand' do
     expect{ Chamber.instance.i_do_not_know }.to raise_error NoMethodError
+  end
+
+  it 'does not raise an exception if a namespaced file does not exist' do
+    CustomSettings.namespaces :non_existant_namespace
+
+    expect { CustomSettings.load(:basepath => '/tmp') }.not_to raise_error
   end
 end
