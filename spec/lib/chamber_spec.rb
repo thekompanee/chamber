@@ -1,5 +1,8 @@
 require 'rspectacular'
 require 'chamber'
+require 'fileutils'
+
+FileUtils.mkdir '/tmp/settings' unless File.exist? '/tmp/settings'
 
 File.open('/tmp/settings.yml', 'w+') do |file|
   file.puts <<-HEREDOC
@@ -26,6 +29,18 @@ test:
     setting_one: 3
 other:
   everything: works
+  HEREDOC
+end
+
+File.open('/tmp/settings/sub_settings.yml', 'w+') do |file|
+  file.puts <<-HEREDOC
+my_sub_setting: my_sub_setting_value
+  HEREDOC
+end
+
+File.open('/tmp/settings/sub_settings-namespaced.yml', 'w+') do |file|
+  file.puts <<-HEREDOC
+my_namespaced_sub_setting: my_namespaced_sub_setting_value
   HEREDOC
 end
 
@@ -141,5 +156,13 @@ describe Chamber, :singletons => [Chamber, CustomSettings] do
     expect(CustomSettings.instance.test.my_setting).to                eql 'my_value'
     expect(CustomSettings.instance.test.my_other_setting).to          eql 'my_other_value'
     expect(CustomSettings.instance.test.another_level.setting_one).to eql 3
+  end
+
+  it 'loads YAML files from the "settings" directory under the base directory if any exist' do
+    expect(Chamber.instance.sub_settings.my_sub_setting).to eql 'my_sub_setting_value'
+  end
+
+  it 'does not load YAML files from the "settings" directory if it is namespaced' do
+    expect(Chamber['sub_settings-namespaced']).to be_nil
   end
 end

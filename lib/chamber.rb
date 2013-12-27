@@ -31,6 +31,7 @@ class Chamber
     self.basepath = options.fetch(:basepath)
 
     load_file_with_namespaces(self.basepath, 'settings.yml', namespaces)
+    load_directory("#{self.basepath}/settings/*.yml")
   end
 
   def method_missing(name, *args)
@@ -88,6 +89,17 @@ class Chamber
     with_existing_environment(yaml_contents)
   rescue Errno::ENOENT
     {}
+  end
+
+  def load_directory(directory)
+    Dir[directory].each do |file|
+      dirname   = File.dirname(file)
+      extension = File.extname(file)
+
+      filename  = file.gsub("#{dirname}/", '').gsub(extension, '')
+
+      settings.merge!(filename => processed_settings(file)) unless filename =~ /\-/
+    end
   end
 
   def with_existing_environment(yaml_hash, parent_keys = [])
