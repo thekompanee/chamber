@@ -17,12 +17,19 @@ class Chamber
   end
 
   attr_accessor :basepath,
-                :settings
+                :settings,
+                :namespaces
+
+  def self.namespaces(*args)
+    args.each do |namespace|
+      self.instance.namespaces << namespace
+    end
+  end
 
   def load(options)
     self.basepath = options.fetch(:basepath)
 
-    load_file(self.basepath + 'settings.yml')
+    load_file_with_namespaces(self.basepath, 'settings.yml', namespaces)
   end
 
   def method_missing(name, *args)
@@ -33,10 +40,29 @@ class Chamber
     settings.respond_to?(name)
   end
 
+  def namespaces
+    @namespaces ||= []
+  end
+
   private
 
   def basepath=(pathlike)
     @basepath = Pathname.new(File.expand_path(pathlike))
+  end
+
+  def load_file_with_namespaces(path, filename, namespaces)
+    basefile  = path + filename
+    extension = basefile.extname
+
+    load_file(basefile)
+
+    namespaces.each do |namespace|
+      namespace_value     = self.public_send(namespace)
+      namespaced_filename = filename.gsub(extension, "-#{namespace_value}#{extension}")
+      namespaced_filepath = basepath + namespaced_filename
+
+      load_file(namespaced_filepath)
+    end
   end
 
   def load_file(file_path)
