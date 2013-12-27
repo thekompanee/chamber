@@ -33,7 +33,7 @@ class CustomSettings < Chamber
   end
 end
 
-describe Chamber do
+describe Chamber, :singletons => [Chamber, CustomSettings] do
   before(:each) { Chamber.load(:basepath => '/tmp') }
 
   it 'knows how to load itself with a path string' do
@@ -88,10 +88,11 @@ describe Chamber do
   end
 
   it 'can load files based on the namespace passed in' do
+    CustomSettings.namespaces :my_namespace
     CustomSettings.load(:basepath => '/tmp')
 
-    expect(CustomSettings.env.other.everything).to eql 'works'
-    expect(Chamber.instance.test.my_dynamic_setting).to eql 2
+    expect(CustomSettings.instance.other.everything).to eql 'works'
+    expect(CustomSettings.instance.test.my_dynamic_setting).to eql 2
   end
 
   it 'loads multiple namespaces if it is called twice' do
