@@ -18,6 +18,21 @@ test:
   HEREDOC
 end
 
+File.open('/tmp/settings-blue.yml', 'w+') do |file|
+  file.puts <<-HEREDOC
+other:
+  everything: works
+  HEREDOC
+end
+
+class CustomSettings < Chamber
+  namespaces :my_namespace
+
+  def my_namespace
+    'blue'
+  end
+end
+
 describe Chamber do
   before(:each) { Chamber.load(:basepath => '/tmp') }
 
@@ -70,5 +85,12 @@ describe Chamber do
 
     ENV.delete 'TEST_MY_SETTING'
     ENV.delete 'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'
+  end
+
+  it 'can load files based on the namespace passed in' do
+    CustomSettings.load(:basepath => '/tmp')
+
+    expect(CustomSettings.env.other.everything).to eql 'works'
+    expect(Chamber.instance.test.my_dynamic_setting).to eql 2
   end
 end
