@@ -77,15 +77,17 @@ class Chamber
   end
 
   def load_file(file_path)
+    settings.merge! processed_settings(file_path)
+  end
+
+  def processed_settings(file_path)
     file_contents      = File.read(file_path.to_s)
     erb_result         = ERB.new(file_contents).result
     yaml_contents      = YAML.load(erb_result)
 
-    processed_settings = with_existing_environment(yaml_contents)
-
-    settings.merge! processed_settings
+    with_existing_environment(yaml_contents)
   rescue Errno::ENOENT
-    # If a settings file does not exist, ignore it
+    {}
   end
 
   def with_existing_environment(yaml_hash, parent_keys = [])
