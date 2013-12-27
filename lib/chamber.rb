@@ -3,8 +3,6 @@ require 'forwardable'
 require 'yaml'
 require 'hashie/mash'
 
-require 'chamber/core_ext/hash_with_indifferent_access'
-
 class Chamber
   include Singleton
 
