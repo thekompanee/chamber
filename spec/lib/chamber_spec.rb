@@ -168,7 +168,7 @@ describe Chamber, :singletons => [Chamber, CustomSettings] do
     expect(Chamber['sub_settings-namespaced']).to be_nil
   end
 
-  it 'does load namespaced YAML files in the "settings" directory if they correspond to a value namespace' do
+  it 'loads namespaced YAML files in the "settings" directory if they correspond to a value namespace' do
     CustomSettings.namespaces :my_namespace
     CustomSettings.load(:basepath => '/tmp')
 
