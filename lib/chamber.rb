@@ -69,7 +69,7 @@ class Chamber
       if value.respond_to? :each_pair
         environment_hash.merge! to_environment(value, environment_keys)
       else
-        environment_hash[environment_key] = value.to_s
+        environment_hash.merge!( environment_key => value.to_s )
       end
     end
 
@@ -120,21 +120,20 @@ class Chamber
     end
   end
 
-  def with_existing_environment(yaml_hash, parent_keys = [])
-    yaml_hash = yaml_hash.dup
+  def with_existing_environment(settings_hash = self.settings, parent_keys = [])
+    environment_hash = {}
 
-    yaml_hash.each_pair do |key, value|
+    settings_hash.each_pair do |key, value|
       environment_keys = parent_keys.dup.push(key)
+      environment_key  = environment_keys.join('_').upcase
 
       if value.respond_to? :each_pair
-        yaml_hash[key] = with_existing_environment(value, environment_keys)
+        environment_hash.merge!( key => with_existing_environment(value, environment_keys) )
       else
-        environment_key = environment_keys.join('_').upcase
-
-        yaml_hash[key] = ENV[environment_key] || value
+        environment_hash.merge!( key => (ENV[environment_key] || value) )
       end
     end
 
-    yaml_hash
+    environment_hash
   end
 end
