@@ -60,13 +60,13 @@ class Chamber
   end
 
   def to_environment(settings_hash = self.settings, parent_keys = [])
-    with_environment(settings_hash, parent_keys) do |key, value, environment_keys, environment_key|
-      if value.respond_to? :each_pair
+    with_environment(settings_hash, parent_keys,
+      ->(key, value, environment_keys) do
         to_environment(value, environment_keys)
-      else
+      end,
+      ->(key, value, environment_key) do
         { environment_key => value.to_s }
-      end
-    end
+      end)
   end
 
   private
@@ -114,23 +114,27 @@ class Chamber
   end
 
   def with_existing_environment(settings_hash = self.settings, parent_keys = [])
-    with_environment(settings_hash, parent_keys) do |key, value, environment_keys, environment_key|
-      if value.respond_to? :each_pair
+    with_environment(settings_hash, parent_keys,
+      ->(key, value, environment_keys) do
         { key => with_existing_environment(value, environment_keys) }
-      else
+      end,
+      ->(key, value, environment_key) do
         { key => (ENV[environment_key] || value) }
-      end
-    end
+      end)
   end
 
-  def with_environment(settings_hash, parent_keys)
+  def with_environment(settings_hash, parent_keys, hash_block, value_block)
     environment_hash = {}
 
     settings_hash.each_pair do |key, value|
       environment_keys = parent_keys.dup.push(key)
       environment_key  = environment_keys.join('_').upcase
 
-      environment_hash.merge!(yield key, value, environment_keys, environment_key)
+      if value.respond_to? :each_pair
+        environment_hash.merge!(hash_block.call(key, value, environment_keys))
+      else
+        environment_hash.merge!(value_block.call(key, value, environment_key))
+      end
     end
 
     environment_hash
