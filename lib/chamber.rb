@@ -11,6 +11,8 @@ class Chamber
 
     def_delegators :instance, :load,
                               :basepath,
+                              :settings,
+                              :namespaces,
                               :[],
                               :to_environment
 
