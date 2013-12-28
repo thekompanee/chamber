@@ -9,19 +9,19 @@ class Chamber
   class << self
     extend Forwardable
 
-    def_delegators :instance, :load,
+    def_delegators :instance, :[],
                               :basepath,
-                              :settings,
+                              :load,
                               :namespaces,
-                              :[],
+                              :settings,
                               :to_environment
 
     alias_method :env, :instance
   end
 
   attr_accessor :basepath,
-                :settings,
-                :namespaces
+                :namespaces,
+                :settings
 
   def self.namespaces(*args)
     args.each do |namespace|
