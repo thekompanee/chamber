@@ -24,15 +24,10 @@ class   Base
                 :namespaces,
                 :settings
 
-  def self.namespaces(*args)
-    args.each do |namespace|
-      self.instance.add_namespace(namespace)
-    end
-  end
-
   def load(options)
     self.settings.clear
     self.basepath = Pathname.new(options.fetch(:basepath))
+    self.namespaces = options.fetch(:namespaces, {})
 
     load_file_with_namespaces(self.basepath, 'credentials.yml', namespaces)
     load_file_with_namespaces(self.basepath, 'settings.yml',    namespaces)
@@ -49,16 +44,8 @@ class   Base
     settings.respond_to?(name)
   end
 
-  def namespaces
-    @namespaces ||= []
-  end
-
   def settings
     @settings ||= Hashie::Mash.new
-  end
-
-  def add_namespace(namespace)
-    namespaces.push(namespace).uniq!
   end
 
   def to_environment(settings_hash = self.settings, parent_keys = [])
@@ -83,8 +70,8 @@ class   Base
 
     load_file(basefile)
 
-    namespaces.each do |namespace|
-      namespace_value     = self.public_send(namespace)
+    namespaces.each_pair do |namespace, callable|
+      namespace_value     = callable.call
       namespaced_filename = filename.gsub(extension, "-#{namespace_value}#{extension}")
       namespaced_filepath = basefile.dirname + namespaced_filename
 

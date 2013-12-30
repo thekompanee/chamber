@@ -144,8 +144,7 @@ accessing it.  Don't worry, Chamber will take you 98% of the way there.
 Just include it like so:
 
 ```ruby
-class Settings
-  include Chamber::Settings
+class Settings < Chamber::Base
 end
 ```
 
@@ -160,15 +159,9 @@ under specific circumstances, you can use Chamber's namespaces.
 **Example:**
 
 ```ruby
-class Settings
-  include Chamber::Settings
-  
-  namespaces :environment
-  
-  def environment
-    Rails.env
-  end
-end
+Chamber.load( :basepath => '/tmp',
+              :namespaces => {
+                :environment => -> { ::Rails.env } } )
 ```
 
 For this class, it will not only try and load the file `config/settings.yml`,
@@ -177,15 +170,13 @@ where `<environment>` is whatever Rails environment you happen to be running.
 
 #### Multiple Namespaces
 
-Multiple namespaces can be defined by passing multiple items to the namespace
-method:
+Multiple namespaces can be defined by passing multiple items to the loader:
 
 ```ruby
-class Settings
-  include Chamber::Settings
-  
-  namespaces :environment, :hostname
-end
+Chamber.load( :basepath => '/tmp',
+              :namespaces => {
+                :environment => -> { ::Rails.env },
+                :hostname    => -> { ENV['HOST'] } } )
 ```
 
 When accessed within the `test` environment on a system named `tumbleweed`, it
@@ -216,7 +207,7 @@ smtp:
   server: "testserver.com"
 ```
 
-The when you access the value with `Settings[:smtp][:server]` you will receive
+The when you access the value with `Chamber[:smtp][:server]` you will receive
 `testserver.com`.
 
 ## Best Practices
@@ -275,7 +266,7 @@ smtp:
   headers:
     X-MYAPP-NAME: My Application Name
     X-MYAPP-STUFF: Other Stuff
-    
+
 # config/settings/smtp-staging.yml
 
 smtp:
@@ -286,10 +277,10 @@ smtp:
 Now you can access both `username` and `headers` off of `smtp` like so:
 
 ```ruby
-Settings[:smtp][:headers]
+Chamber[:smtp][:headers]
 # => { X-MYAPP-NAME: 'My Application Name', X-MYAPP-STUFF: 'Other Stuff' }
 
-Settings[:smtp][:password]
+Chamber[:smtp][:password]
 # => my_test_password
 ```
 

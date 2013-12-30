@@ -1,6 +1,6 @@
 require 'bundler'
 
-class Chamber
+module Chamber
   class HerokuConfiguration
     attr_accessor :heroku_application,
                   :variables
