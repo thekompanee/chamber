@@ -9,6 +9,7 @@ File.open('/tmp/settings.yml', 'w+') do |file|
 test:
   my_setting: my_value
   my_dynamic_setting: <%= 1 + 1 %>
+  my_ftp_url: ftp://<%= Chamber[:test][:my_username] %>:<%= Chamber[:test][:my_password] %>@127.0.0.1
   another_level:
     setting_one: 1
     setting_two: 2
@@ -18,6 +19,14 @@ test:
         - item 2
         - item 3
       a_scalar: 'hello'
+  HEREDOC
+end
+
+File.open('/tmp/credentials.yml', 'w+') do |file|
+  file.puts <<-HEREDOC
+test:
+  my_username: username
+  my_password: password
   HEREDOC
 end
 
@@ -186,6 +195,14 @@ describe Chamber, :singletons => [Chamber, CustomSettings] do
       'TEST_ANOTHER_LEVEL_SETTING_TWO'          => '2',
       'TEST_MY_DYNAMIC_SETTING'                 => '2',
       'TEST_MY_SETTING'                         => 'my_value',
+      'TEST_MY_FTP_URL'                         => 'ftp://username:password@127.0.0.1',
+      'TEST_MY_PASSWORD'                        => 'password',
+      'TEST_MY_SETTING'                         => 'my_value',
+      'TEST_MY_USERNAME'                        => 'username',
     )
+  end
+
+  it 'can use data from credentials in subsequently loaded files' do
+    expect(Chamber[:test][:my_ftp_url]).to eql 'ftp://username:password@127.0.0.1'
   end
 end
