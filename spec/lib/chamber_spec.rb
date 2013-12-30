@@ -41,6 +41,14 @@ other:
   HEREDOC
 end
 
+File.open('/tmp/settings/some_settings_file.yml', 'w+') do |file|
+  file.puts <<-HEREDOC
+blue:
+  my_settings_for_inline_namespace: my_value_for_inline_namespace
+my_non_inline_namespaced_setting: my_value_for_non_inline_namespace
+  HEREDOC
+end
+
 File.open('/tmp/settings/sub_settings.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 sub_settings:
@@ -198,6 +206,29 @@ describe Chamber, :singletons => [Chamber::Base] do
     expect(Chamber['sub_settings']['my_namespaced_sub_setting']).to eql 'my_namespaced_sub_setting_value'
   end
 
+  it 'loads namespaced settings if they are inline in a non-namespaced filename' do
+    Chamber.load( :basepath   => '/tmp',
+                  :namespaces => {
+                    :my_namespace => -> { 'blue' } } )
+
+    expect(Chamber['my_settings_for_inline_namespace']).to eql 'my_value_for_inline_namespace'
+  end
+
+  it 'does not load non-namespaced data from a file if inline namespaces are found' do
+    Chamber.load( :basepath   => '/tmp',
+                  :namespaces => {
+                    :my_namespace => -> { 'blue' } } )
+
+    expect(Chamber['my_non_inline_namespaced_setting']).not_to eql 'my_value_for_non_inline_namespace'
+  end
+
+  it 'loads the entire inline namespaced file if no namespaces are passed in since it does not know they are namespaced' do
+    Chamber.load(:basepath => '/tmp')
+
+    expect(Chamber['blue']['my_settings_for_inline_namespace']).to eql 'my_value_for_inline_namespace'
+    expect(Chamber['my_non_inline_namespaced_setting']).to         eql 'my_value_for_non_inline_namespace'
+  end
+
   it 'can convert the settings to their environment variable versions' do
     Chamber.load(:basepath => '/tmp')
 
@@ -213,6 +244,8 @@ describe Chamber, :singletons => [Chamber::Base] do
       'TEST_MY_PASSWORD'                        => 'password',
       'TEST_MY_SETTING'                         => 'my_value',
       'TEST_MY_USERNAME'                        => 'username',
+      'BLUE_MY_SETTINGS_FOR_INLINE_NAMESPACE'   => 'my_value_for_inline_namespace',
+      'MY_NON_INLINE_NAMESPACED_SETTING'        => 'my_value_for_non_inline_namespace',
     )
   end
 

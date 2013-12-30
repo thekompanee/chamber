@@ -69,19 +69,37 @@ class   Base
     basefile  = path + filename
     extension = basefile.extname
 
-    load_file(basefile)
+    load_file(basefile, namespaces)
 
     namespaces.each_pair do |namespace, callable|
       namespace_value     = callable.call
       namespaced_filename = filename.gsub(extension, "-#{namespace_value}#{extension}")
       namespaced_filepath = basefile.dirname + namespaced_filename
 
-      load_file(namespaced_filepath)
+      load_file(namespaced_filepath, namespaces)
     end
   end
 
-  def load_file(file_path)
-    settings.merge! processed_settings(file_path)
+  def load_file(file_path, namespaces)
+    full_settings_from_file = processed_settings(file_path)
+
+    namespaced_settings = Hashie::Mash.new
+
+    file_settings_are_namespaced = namespaces.any? do |namespace, callable|
+                                     full_settings_from_file.has_key? callable.call
+                                   end
+
+    if file_settings_are_namespaced
+      namespaces.each_pair do |namespace, callable|
+        namespace_value = callable.call
+
+        namespaced_settings.merge! full_settings_from_file.fetch(namespace_value, {})
+      end
+    else
+      namespaced_settings = full_settings_from_file
+    end
+
+    settings.merge! namespaced_settings
   end
 
   def processed_settings(file_path)
