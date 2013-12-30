@@ -26,7 +26,8 @@ class   Base
 
   def load(options)
     self.settings.clear
-    self.basepath = Pathname.new(options.fetch(:basepath))
+
+    self.basepath   = Pathname.new(options.fetch(:basepath))
     self.namespaces = options.fetch(:namespaces, {})
 
     load_file_with_namespaces(self.basepath, 'credentials.yml', namespaces)
@@ -84,9 +85,9 @@ class   Base
   end
 
   def processed_settings(file_path)
-    file_contents      = File.read(file_path.to_s)
-    erb_result         = ERB.new(file_contents).result
-    yaml_contents      = YAML.load(erb_result)
+    file_contents = File.read(file_path.to_s)
+    erb_result    = ERB.new(file_contents).result
+    yaml_contents = YAML.load(erb_result)
 
     with_existing_environment(yaml_contents)
   rescue Errno::ENOENT
