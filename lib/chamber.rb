@@ -1,4 +1,5 @@
 require 'chamber/base'
+require 'chamber/rails'
 
 module Chamber
   def self.method_missing(name, *args)
