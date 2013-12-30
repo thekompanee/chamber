@@ -31,11 +31,11 @@ class Chamber
 
   def load(options)
     self.settings.clear
-    self.basepath = options.fetch(:basepath)
+    self.basepath = Pathname.new(options.fetch(:basepath))
 
     load_file_with_namespaces(self.basepath, 'credentials.yml', namespaces)
     load_file_with_namespaces(self.basepath, 'settings.yml',    namespaces)
-    load_directory("#{self.basepath}/settings")
+    load_directory(self.basepath + 'settings')
   end
 
   def method_missing(name, *args)
@@ -106,12 +106,21 @@ class Chamber
   end
 
   def load_directory(directory)
-    Dir[directory + '/*.yml'].each do |file|
-      dirname   = Pathname.new(File.dirname(file))
-      filename  = File.basename(file)
-
-      load_file_with_namespaces(dirname, filename, namespaces) unless filename.match(/\-/)
+    base_filenames(directory).each do |filename|
+      load_file_with_namespaces(directory, filename, namespaces)
     end
+  end
+
+  def base_filenames(directory)
+    base_filenames = []
+
+    Dir[directory + '*.yml'].each do |file|
+      filename = File.basename(file)
+
+      base_filenames << filename.sub(/\-.*(?=\.yml\z)/, '')
+    end
+
+    base_filenames.uniq
   end
 
   def with_existing_environment(settings_hash = self.settings, parent_keys = [])

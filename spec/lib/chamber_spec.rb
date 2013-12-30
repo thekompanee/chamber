@@ -55,6 +55,13 @@ sub_settings:
   HEREDOC
 end
 
+File.open('/tmp/settings/only_namespaced_settings-blue.yml', 'w+') do |file|
+  file.puts <<-HEREDOC
+only_namespaced_sub_settings:
+  another_sub_setting: namespaced
+  HEREDOC
+end
+
 class CustomSettings < Chamber
   def my_namespace
     'blue'
@@ -139,6 +146,13 @@ describe Chamber, :singletons => [Chamber, CustomSettings] do
     Chamber.namespaces :first_namespace_call
 
     expect(Chamber.instance.namespaces).to eql [:first_namespace_call]
+  end
+
+  it 'will load settings files which are only namespaced' do
+    CustomSettings.namespaces :my_namespace
+    CustomSettings.load(:basepath => '/tmp')
+
+    expect(CustomSettings[:only_namespaced_sub_settings][:another_sub_setting]).to eql 'namespaced'
   end
 
   it 'clears all settings each time the settings are loaded' do
