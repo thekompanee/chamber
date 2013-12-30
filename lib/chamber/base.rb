@@ -136,7 +136,7 @@ class   Base
         { key => with_existing_environment(value, environment_keys) }
       end,
       ->(key, value, environment_key) do
-        { key => (ENV[environment_key] || value) }
+        { key => convert_value(ENV[environment_key] || value) }
       end)
   end
 
@@ -155,6 +155,23 @@ class   Base
     end
 
     environment_hash
+  end
+
+  def convert_value(value)
+    return nil if value.nil?
+
+    if value.is_a? String
+      case value
+      when 'false', 'f', 'no'
+        false
+      when 'true', 't', 'yes'
+        true
+      else
+        value
+      end
+    else
+      value
+    end
   end
 end
 end
