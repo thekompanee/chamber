@@ -8,6 +8,7 @@ File.open('/tmp/settings.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 test:
   my_setting: my_value
+  my_boolean: "false"
   my_dynamic_setting: <%= 1 + 1 %>
   my_ftp_url: ftp://<%= Chamber[:test][:my_username] %>:<%= Chamber[:test][:my_password] %>@127.0.0.1
   another_level:
@@ -244,9 +245,14 @@ describe Chamber, :singletons => [Chamber::Base] do
       'TEST_MY_PASSWORD'                        => 'password',
       'TEST_MY_SETTING'                         => 'my_value',
       'TEST_MY_USERNAME'                        => 'username',
+      'TEST_MY_BOOLEAN'                         => 'false',
       'BLUE_MY_SETTINGS_FOR_INLINE_NAMESPACE'   => 'my_value_for_inline_namespace',
       'MY_NON_INLINE_NAMESPACED_SETTING'        => 'my_value_for_non_inline_namespace',
     )
+  end
+
+  it 'can convert boolean-like strings to actual booleans' do
+    expect(Chamber[:test][:my_boolean]).to be_a FalseClass
   end
 
   it 'can use data from credentials in subsequently loaded files' do
