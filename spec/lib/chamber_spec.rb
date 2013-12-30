@@ -62,7 +62,7 @@ only_namespaced_sub_settings:
   HEREDOC
 end
 
-class CustomSettings < Chamber
+class CustomSettings < Chamber::Base
   def my_namespace
     'blue'
   end
@@ -72,7 +72,7 @@ class CustomSettings < Chamber
   end
 end
 
-describe Chamber, :singletons => [Chamber, CustomSettings] do
+describe Chamber, :singletons => [Chamber::Base, CustomSettings] do
   before(:each) { Chamber.load(:basepath => '/tmp') }
 
   it 'knows how to load itself with a path string' do
