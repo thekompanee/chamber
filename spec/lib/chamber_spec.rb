@@ -62,17 +62,7 @@ only_namespaced_sub_settings:
   HEREDOC
 end
 
-class CustomSettings < Chamber::Base
-  def my_namespace
-    'blue'
-  end
-
-  def non_existant_namespace
-    'unknown'
-  end
-end
-
-describe Chamber, :singletons => [Chamber::Base, CustomSettings] do
+describe Chamber, :singletons => [Chamber::Base] do
   before(:each) { Chamber.load(:basepath => '/tmp') }
 
   it 'knows how to load itself with a path string' do
@@ -127,32 +117,38 @@ describe Chamber, :singletons => [Chamber::Base, CustomSettings] do
   end
 
   it 'can load files based on the namespace passed in' do
-    CustomSettings.namespaces :my_namespace
-    CustomSettings.load(:basepath => '/tmp')
+    Chamber.load( :basepath   => '/tmp',
+                  :namespaces => {
+                    :my_namespace => -> { 'blue' } } )
 
-    expect(CustomSettings.instance.other.everything).to eql 'works'
-    expect(CustomSettings.instance.test.my_dynamic_setting).to eql 2
+    expect(Chamber.instance.other.everything).to eql 'works'
+    expect(Chamber.instance.test.my_dynamic_setting).to eql 2
   end
 
   it 'loads multiple namespaces if it is called twice' do
-    Chamber.namespaces :first_namespace_call
-    Chamber.namespaces :second_namespace_call
+    Chamber.load( :basepath   => '/tmp',
+                  :namespaces => {
+                    :first_namespace_call  => -> { false },
+                    :second_namespace_call => -> { false }, } )
 
-    expect(Chamber.instance.namespaces).to eql [:first_namespace_call, :second_namespace_call]
+    expect(Chamber.instance.namespaces.keys).to eql [:first_namespace_call, :second_namespace_call]
   end
 
   it 'does not load the same namespace twice' do
-    Chamber.namespaces :first_namespace_call
-    Chamber.namespaces :first_namespace_call
+    Chamber.load( :basepath   => '/tmp',
+                  :namespaces => {
+                    :first_namespace_call => -> { false },
+                    :first_namespace_call => -> { false }, } )
 
-    expect(Chamber.instance.namespaces).to eql [:first_namespace_call]
+    expect(Chamber.instance.namespaces.keys).to eql [:first_namespace_call]
   end
 
   it 'will load settings files which are only namespaced' do
-    CustomSettings.namespaces :my_namespace
-    CustomSettings.load(:basepath => '/tmp')
+    Chamber.load( :basepath   => '/tmp',
+                  :namespaces => {
+                    :my_namespace => -> { 'blue' } } )
 
-    expect(CustomSettings[:only_namespaced_sub_settings][:another_sub_setting]).to eql 'namespaced'
+    expect(Chamber[:only_namespaced_sub_settings][:another_sub_setting]).to eql 'namespaced'
   end
 
   it 'clears all settings each time the settings are loaded' do
@@ -169,18 +165,21 @@ describe Chamber, :singletons => [Chamber::Base, CustomSettings] do
   end
 
   it 'does not raise an exception if a namespaced file does not exist' do
-    CustomSettings.namespaces :non_existant_namespace
+    Chamber.load( :basepath   => '/tmp',
+                  :namespaces => {
+                    :non_existant_namespace => -> { false } } )
 
-    expect { CustomSettings.load(:basepath => '/tmp') }.not_to raise_error
+    expect { Chamber.load(:basepath => '/tmp') }.not_to raise_error
   end
 
   it 'merges (not overrides) subsequent settings' do
-    CustomSettings.namespaces :my_namespace
-    CustomSettings.load(:basepath => '/tmp')
+    Chamber.load( :basepath   => '/tmp',
+                  :namespaces => {
+                    :my_namespace => -> { 'blue' } } )
 
-    expect(CustomSettings.instance.test.my_setting).to                eql 'my_value'
-    expect(CustomSettings.instance.test.my_other_setting).to          eql 'my_other_value'
-    expect(CustomSettings.instance.test.another_level.setting_one).to eql 3
+    expect(Chamber.instance.test.my_setting).to                eql 'my_value'
+    expect(Chamber.instance.test.my_other_setting).to          eql 'my_other_value'
+    expect(Chamber.instance.test.another_level.setting_one).to eql 3
   end
 
   it 'loads YAML files from the "settings" directory under the base directory if any exist' do
@@ -192,16 +191,17 @@ describe Chamber, :singletons => [Chamber::Base, CustomSettings] do
   end
 
   it 'loads namespaced YAML files in the "settings" directory if they correspond to a value namespace' do
-    CustomSettings.namespaces :my_namespace
-    CustomSettings.load(:basepath => '/tmp')
+    Chamber.load( :basepath   => '/tmp',
+                  :namespaces => {
+                    :my_namespace => -> { 'blue' } } )
 
-    expect(CustomSettings['sub_settings']['my_namespaced_sub_setting']).to eql 'my_namespaced_sub_setting_value'
+    expect(Chamber['sub_settings']['my_namespaced_sub_setting']).to eql 'my_namespaced_sub_setting_value'
   end
 
   it 'can convert the settings to their environment variable versions' do
-    CustomSettings.load(:basepath => '/tmp')
+    Chamber.load(:basepath => '/tmp')
 
-    expect(CustomSettings.to_environment).to eql(
+    expect(Chamber.to_environment).to eql(
       'SUB_SETTINGS_MY_SUB_SETTING'             => 'my_sub_setting_value',
       'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY' => '["item 1", "item 2", "item 3"]',
       'TEST_ANOTHER_LEVEL_LEVEL_THREE_A_SCALAR' => 'hello',
