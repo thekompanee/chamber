@@ -33,7 +33,7 @@ class Chamber
     self.settings.clear
     self.basepath = options.fetch(:basepath)
 
-    load_file_with_namespaces(self.basepath, 'settings.yml', namespaces)
+    load_file_with_namespaces(self.basepath, 'settings.yml',    namespaces)
     load_directory("#{self.basepath}/settings")
   end
 
