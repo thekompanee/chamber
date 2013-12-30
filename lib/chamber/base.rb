@@ -36,7 +36,7 @@ class   Base
 
     load_file_with_namespaces(self.basepath, 'credentials.yml', namespaces)
     load_file_with_namespaces(self.basepath, 'settings.yml',    namespaces)
-    load_directory(self.basepath + 'settings')
+    load_directory(self.basepath + 'settings', namespaces)
   end
 
   def method_missing(name, *args)
@@ -106,7 +106,7 @@ class   Base
     {}
   end
 
-  def load_directory(directory)
+  def load_directory(directory, namespaces)
     base_filenames(directory).each do |filename|
       load_file_with_namespaces(directory, filename, namespaces)
     end
