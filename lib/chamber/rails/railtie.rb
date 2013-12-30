@@ -2,7 +2,7 @@ module  Chamber
 module  Rails
 class   Railtie < ::Rails::Railtie
   initializer 'chamber.load', before: :load_environment_config do
-    Chamber.load(:basepath => Rails.root.join('config'))
+    Chamber::Base.load(:basepath => Rails.root.join('config'))
   end
 
   rake_tasks do
