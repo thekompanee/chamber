@@ -168,6 +168,69 @@ For this class, it will not only try and load the file `config/settings.yml`,
 it will _also_ try and load the file `config/settings-<environment>.yml`
 where `<environment>` is whatever Rails environment you happen to be running.
 
+#### Inline Namespaces
+
+If having a file per namespace value isn't your thang, you can inline your
+namespaces.  Taking the example from above, rather than having `settings.yml`,
+`settings-development.yml`, `settings-test.yml`, `settings-staging.yml` and
+`settings-production.yml`, you could do something like this:
+
+```yaml
+# settings.yml
+
+development:
+  smtp:
+    username: my_development_username
+    password: my_development_password`
+
+test:
+  smtp:
+    username: my_test_username
+    password: my_test_password`
+
+staging:
+  smtp:
+    username: my_staging_username
+    password: my_staging_password`
+
+production:
+  smtp:
+    username: my_production_username
+    password: my_production_password`
+```
+
+You can even mix and match.
+
+```yaml
+# settings.yml
+
+development:
+  smtp:
+    username: my_development_username
+    password: my_development_password`
+
+test:
+  smtp:
+    username: my_test_username
+    password: my_test_password`
+
+staging:
+  smtp:
+    username: my_staging_username
+    password: my_staging_password`
+```
+
+```yaml
+# settings-production.yml
+
+smtp:
+  username: my_production_username
+  password: my_production_password`
+````
+
+The above will yield the same results, but allows you to keep the production
+values in a separate file which can be secured separately.
+
 #### Multiple Namespaces
 
 Multiple namespaces can be defined by passing multiple items to the loader:
@@ -241,7 +304,7 @@ private file that stores all of your credentials.
 
 I recommend adding a pattern like this to `.gitignore`:
 
-```gitignore
+```
 # Ignore the environment-specific files that contain the real credentials:
 /config/credentials.yml
 /config/credentials-*.yml
