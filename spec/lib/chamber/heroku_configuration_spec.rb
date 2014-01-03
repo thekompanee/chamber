@@ -2,7 +2,7 @@ require 'rspectacular'
 require 'chamber/heroku_configuration'
 require 'chamber'
 
-module    Chamber
+class     Chamber
 describe  HerokuConfiguration do
   it 'can push configuration to Heroku' do
     heroku_configuration = HerokuConfiguration.new  :variables => {

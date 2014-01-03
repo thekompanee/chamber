@@ -1,12 +1,73 @@
-require 'chamber/base'
+require 'singleton'
+require 'forwardable'
+require 'chamber/file_set'
 require 'chamber/rails'
 
-module Chamber
-  def self.method_missing(name, *args)
-    Chamber::Base.public_send(name, *args)
+class  Chamber
+  include Singleton
+
+  class << self
+    extend Forwardable
+
+    def_delegators  :instance,  :[],
+                                :basepath,
+                                :load,
+                                :namespaces,
+                                :settings,
+                                :to_environment
+
+    alias_method    :env,       :instance
   end
 
-  def self.respond_to_missing(name, *args)
-    Chamber::Base.respond_to? name
+  attr_accessor :basepath,
+                :files
+
+  def load(options)
+    self.settings   = nil
+    self.basepath   = options.fetch(:basepath)
+    self.files      = FileSet.new       files: [
+                                          self.basepath + 'credentials*.yml',
+                                          self.basepath + 'settings*.yml',
+                                          self.basepath + 'settings' ],
+                                        namespaces:
+                                          options.fetch(:namespaces, {})
+  end
+
+  def namespaces
+    settings.namespaces
+  end
+
+  def settings
+    @settings ||= -> do
+      @settings = Settings.new
+
+      files.to_settings do |parsed_settings|
+        @settings.merge! parsed_settings
+      end
+
+      @settings
+    end.call
+  end
+
+  def method_missing(name, *args)
+    if settings.respond_to?(name)
+      return settings.public_send(name, *args)
+    end
+
+    super
+  end
+
+  def respond_to_missing?(name, include_private = false)
+    settings.respond_to?(name, include_private)
+  end
+
+  protected
+
+  attr_writer :settings
+
+  private
+
+  def basepath=(pathlike)
+    @basepath = Pathname.new(::File.expand_path(pathlike))
   end
 end
