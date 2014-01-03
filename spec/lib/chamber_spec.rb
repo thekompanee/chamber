@@ -71,7 +71,7 @@ only_namespaced_sub_settings:
   HEREDOC
 end
 
-describe Chamber, :singletons => [Chamber::Base] do
+describe Chamber, :singletons => [Chamber] do
   before(:each) { Chamber.load(:basepath => '/tmp') }
 
   it 'knows how to load itself with a path string' do
@@ -84,16 +84,6 @@ describe Chamber, :singletons => [Chamber::Base] do
     Chamber.load(:basepath => Pathname.new('/tmp'))
 
     expect(Chamber.basepath.to_s).to eql '/tmp'
-  end
-
-  it 'loads settings from a settings.yml file' do
-    allow(File).to receive(:read).
-                   and_return 'file: "settings.yml"'
-
-    Chamber.load(:basepath => '/tmp')
-
-    expect(File).to have_received(:read).
-                    with('/tmp/settings.yml')
   end
 
   it 'processes settings files through ERB before YAML' do
@@ -137,19 +127,19 @@ describe Chamber, :singletons => [Chamber::Base] do
   it 'loads multiple namespaces if it is called twice' do
     Chamber.load( :basepath   => '/tmp',
                   :namespaces => {
-                    :first_namespace_call  => -> { false },
-                    :second_namespace_call => -> { false }, } )
+                    :first_namespace_call  => -> { :first },
+                    :second_namespace_call => -> { :second }, } )
 
-    expect(Chamber.instance.namespaces.keys).to eql [:first_namespace_call, :second_namespace_call]
+    expect(Chamber.instance.namespaces.to_a).to eql [:first, :second]
   end
 
   it 'does not load the same namespace twice' do
     Chamber.load( :basepath   => '/tmp',
                   :namespaces => {
-                    :first_namespace_call => -> { false },
-                    :first_namespace_call => -> { false }, } )
+                    :first_namespace_call => -> { :first },
+                    :first_namespace_call => -> { :first }, } )
 
-    expect(Chamber.instance.namespaces.keys).to eql [:first_namespace_call]
+    expect(Chamber.instance.namespaces.to_a).to eql [:first]
   end
 
   it 'will load settings files which are only namespaced' do
@@ -161,12 +151,15 @@ describe Chamber, :singletons => [Chamber::Base] do
   end
 
   it 'clears all settings each time the settings are loaded' do
-    allow(Chamber.instance.settings).to receive(:clear)
+    Chamber.load( :basepath   => '/tmp',
+                  :namespaces => {
+                    :my_namespace => -> { 'blue' } } )
+
+    expect(Chamber[:only_namespaced_sub_settings][:another_sub_setting]).to eql 'namespaced'
 
     Chamber.load(:basepath => '/tmp')
 
-    expect(Chamber.instance.settings).to  have_received(:clear).
-                                          once
+    expect(Chamber[:only_namespaced_sub_settings]).to be_nil
   end
 
   it 'still raises an error if you try to send a message which the settings hash does not understand' do
