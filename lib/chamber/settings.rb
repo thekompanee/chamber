@@ -21,6 +21,12 @@ class   Settings
     self.namespaces = (namespaces + other.namespaces) if other.respond_to? :namespaces
   end
 
+  def eql?(other)
+    other.is_a?(        Chamber::Settings)  &&
+    self.data        == other.data          &&
+    self.namespaces  == other.namespaces
+  end
+
   def to_hash
     data
   end
