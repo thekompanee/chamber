@@ -466,6 +466,7 @@ Chamber[:smtp][:password]
 
 ## Alternatives
 
+* [dotenv](https://github.com/bkeepers/dotenv)
 * [figaro](https://github.com/laserlemon/figaro)
 * [idkfa](https://github.com/bendyworks/idkfa)
 * [settingslogic](https://github.com/binarylogic/settingslogic)
