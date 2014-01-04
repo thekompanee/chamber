@@ -369,6 +369,56 @@ smtp:
 The when you access the value with `Chamber[:smtp][:server]` you will receive
 `testserver.com`.
 
+### Basic Boolean Conversion
+
+One of the things that is a huge pain when dealing with environment variables is
+that they can only be strings.  Unfortunately this is kind of a problem for
+settings which you would like to use to set whether a specific item is enabled
+or disabled.  Because this:
+
+```yaml
+# settings.yml
+
+my_feature:
+  enabled: false
+```
+
+```ruby
+if Chamber.env.my_feature.enabled?
+  # Do stuff with my feature
+end
+```
+
+Will always return true because `false` becomes `'false'` on Heroku which, as
+far as Ruby is concerned, is `true`.  Now, you completely omit the `enabled`
+key, however this causes issues if you would like to audit your settings (say
+for each environment) to make sure they are all the same.  Some will have the
+`enabled` setting and some will not, which will give you false positives.
+
+You could work around it by doing this:
+
+```ruby
+if Chamber.env.my_feature.enabled == 'true'
+  # Do stuff with my feature
+end
+```
+
+but that looks awful.
+
+To solve this problem, Chamber reviews all of your settings values and, if they
+are any of the following exact strings (case insensitive):
+
+* 'false'
+* 'f'
+* 'no'
+* 'true'
+* 't'
+* 'yes'
+
+The value will be converted to the proper Boolean value.  In which case the
+above `Chamber.env.my_feature.enabled?` will work as expected and your
+environment audit will pass.
+
 ### In Order to Add Advanced Functionality
 
 In any case that you need to set configuration options or do advanced post
