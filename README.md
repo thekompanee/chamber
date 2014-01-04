@@ -153,6 +153,47 @@ using methods:
 Chamber.env.smtp.server
 ```
 
+### Predicate Methods
+
+When using object notation, all settings have `?` and `_` predicate methods
+defined on them.  They work like so:
+
+#### '?' Predicates Check For Falsity
+
+```ruby
+  Chamber.env.my_setting                    # => nil
+  Chamber.env.my_setting?                   # => false
+
+  Chamber.env.my_other_setting              # => false
+  Chamber.env.my_other_setting?             # => false
+
+  Chamber.env.another_setting               # => 'my value'
+  Chamber.env.another_setting?              # => true
+```
+
+#### '\_' Predicates Allow for Multi-Level Testing
+
+```ruby
+  Chamber.env.empty?                        # => true
+  Chamber.env.my_setting_group_.my_setting? # => false
+```
+
+#### 'key?' Checks For Existence
+
+The `?` method will return false if a key has been set to false or nil. In order
+to check if a key has been set at all, use the `key?('some_key')` method
+instead.
+
+Notice the difference:
+
+```ruby
+  Chamber.env.my_setting                    # => false
+  Chamber.env.my_setting?                   # => false
+
+  Chamber.env.key?('my_setting')            # => true
+  Chamber.env.key?('my_non_existent_key')   # => false
+```
+
 ### In Order to Add Advanced Functionality
 
 In any case that you need to set configuration options or do advanced post
