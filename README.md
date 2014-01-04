@@ -247,22 +247,6 @@ production:
   hostname_with_subdomain: production.example.com:3000
 ```
 
-### In Order to Add Advanced Functionality
-
-In any case that you need to set configuration options or do advanced post
-processing on your YAML data, you'll want to create your own object for
-accessing it.  Don't worry, Chamber will take you 98% of the way there.
-
-Just include it like so:
-
-```ruby
-class Settings < Chamber
-end
-```
-
-Now, rather than using `Chamber[:application_host]` to access your
-environment, you can simply use `Settings[:application_host]`.
-
 ### Namespacing
 
 If, when running your app, you would like to have certain files loaded only
@@ -384,6 +368,22 @@ smtp:
 
 The when you access the value with `Chamber[:smtp][:server]` you will receive
 `testserver.com`.
+
+### In Order to Add Advanced Functionality
+
+In any case that you need to set configuration options or do advanced post
+processing on your YAML data, you'll want to create your own object for
+accessing it.  Don't worry, Chamber will take you 98% of the way there.
+
+Just include it like so:
+
+```ruby
+class Settings < Chamber
+end
+```
+
+Now, rather than using `Chamber[:application_host]` to access your
+environment, you can simply use `Settings[:application_host]`.
 
 ## Best Practices
 
