@@ -2,9 +2,9 @@ require 'rspectacular'
 require 'chamber'
 require 'fileutils'
 
-FileUtils.mkdir '/tmp/settings' unless File.exist? '/tmp/settings'
+FileUtils.mkdir_p '/tmp/chamber/settings' unless File.exist? '/tmp/chamber/settings'
 
-File.open('/tmp/settings.yml', 'w+') do |file|
+File.open('/tmp/chamber/settings.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 test:
   my_setting: my_value
@@ -23,7 +23,7 @@ test:
   HEREDOC
 end
 
-File.open('/tmp/credentials.yml', 'w+') do |file|
+File.open('/tmp/chamber/credentials.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 test:
   my_username: username
@@ -31,7 +31,7 @@ test:
   HEREDOC
 end
 
-File.open('/tmp/settings-blue.yml', 'w+') do |file|
+File.open('/tmp/chamber/settings-blue.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 test:
   my_other_setting: my_other_value
@@ -42,7 +42,7 @@ other:
   HEREDOC
 end
 
-File.open('/tmp/settings/some_settings_file.yml', 'w+') do |file|
+File.open('/tmp/chamber/settings/some_settings_file.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 blue:
   my_settings_for_inline_namespace: my_value_for_inline_namespace
@@ -50,21 +50,21 @@ my_non_inline_namespaced_setting: my_value_for_non_inline_namespace
   HEREDOC
 end
 
-File.open('/tmp/settings/sub_settings.yml', 'w+') do |file|
+File.open('/tmp/chamber/settings/sub_settings.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 sub_settings:
   my_sub_setting: my_sub_setting_value
   HEREDOC
 end
 
-File.open('/tmp/settings/sub_settings-blue.yml', 'w+') do |file|
+File.open('/tmp/chamber/settings/sub_settings-blue.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 sub_settings:
   my_namespaced_sub_setting: my_namespaced_sub_setting_value
   HEREDOC
 end
 
-File.open('/tmp/settings/only_namespaced_settings-blue.yml', 'w+') do |file|
+File.open('/tmp/chamber/settings/only_namespaced_settings-blue.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 only_namespaced_sub_settings:
   another_sub_setting: namespaced
@@ -72,18 +72,18 @@ only_namespaced_sub_settings:
 end
 
 describe Chamber, :singletons => [Chamber] do
-  before(:each) { Chamber.load(:basepath => '/tmp') }
+  before(:each) { Chamber.load(:basepath => '/tmp/chamber') }
 
   it 'knows how to load itself with a path string' do
-    Chamber.load(:basepath => '/tmp')
+    Chamber.load(:basepath => '/tmp/chamber')
 
-    expect(Chamber.basepath.to_s).to eql '/tmp'
+    expect(Chamber.basepath.to_s).to eql '/tmp/chamber'
   end
 
   it 'knows how to load itself with a path object' do
-    Chamber.load(:basepath => Pathname.new('/tmp'))
+    Chamber.load(:basepath => Pathname.new('/tmp/chamber'))
 
-    expect(Chamber.basepath.to_s).to eql '/tmp'
+    expect(Chamber.basepath.to_s).to eql '/tmp/chamber'
   end
 
   it 'processes settings files through ERB before YAML' do
@@ -106,7 +106,7 @@ describe Chamber, :singletons => [Chamber] do
     ENV['TEST_MY_SETTING'] = 'some_other_value'
     ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = 'something'
 
-    Chamber.load(:basepath => '/tmp')
+    Chamber.load(:basepath => '/tmp/chamber')
     expect(Chamber.instance.test.my_setting).to eql 'some_other_value'
     expect(Chamber.instance.test.another_level.level_three.an_array).to eql 'something'
     expect(Chamber.instance.test.my_dynamic_setting).to eql 2
@@ -116,7 +116,7 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'can load files based on the namespace passed in' do
-    Chamber.load( :basepath   => '/tmp',
+    Chamber.load( :basepath   => '/tmp/chamber',
                   :namespaces => {
                     :my_namespace => -> { 'blue' } } )
 
@@ -125,7 +125,7 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'loads multiple namespaces if it is called twice' do
-    Chamber.load( :basepath   => '/tmp',
+    Chamber.load( :basepath   => '/tmp/chamber',
                   :namespaces => {
                     :first_namespace_call  => -> { :first },
                     :second_namespace_call => -> { :second }, } )
@@ -134,7 +134,7 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'does not load the same namespace twice' do
-    Chamber.load( :basepath   => '/tmp',
+    Chamber.load( :basepath   => '/tmp/chamber',
                   :namespaces => {
                     :first_namespace_call => -> { :first },
                     :first_namespace_call => -> { :first }, } )
@@ -143,7 +143,7 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'will load settings files which are only namespaced' do
-    Chamber.load( :basepath   => '/tmp',
+    Chamber.load( :basepath   => '/tmp/chamber',
                   :namespaces => {
                     :my_namespace => -> { 'blue' } } )
 
@@ -151,13 +151,13 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'clears all settings each time the settings are loaded' do
-    Chamber.load( :basepath   => '/tmp',
+    Chamber.load( :basepath   => '/tmp/chamber',
                   :namespaces => {
                     :my_namespace => -> { 'blue' } } )
 
     expect(Chamber[:only_namespaced_sub_settings][:another_sub_setting]).to eql 'namespaced'
 
-    Chamber.load(:basepath => '/tmp')
+    Chamber.load(:basepath => '/tmp/chamber')
 
     expect(Chamber[:only_namespaced_sub_settings]).to be_nil
   end
@@ -167,15 +167,15 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'does not raise an exception if a namespaced file does not exist' do
-    Chamber.load( :basepath   => '/tmp',
+    Chamber.load( :basepath   => '/tmp/chamber',
                   :namespaces => {
                     :non_existant_namespace => -> { false } } )
 
-    expect { Chamber.load(:basepath => '/tmp') }.not_to raise_error
+    expect { Chamber.load(:basepath => '/tmp/chamber') }.not_to raise_error
   end
 
   it 'merges (not overrides) subsequent settings' do
-    Chamber.load( :basepath   => '/tmp',
+    Chamber.load( :basepath   => '/tmp/chamber',
                   :namespaces => {
                     :my_namespace => -> { 'blue' } } )
 
@@ -193,7 +193,7 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'loads namespaced YAML files in the "settings" directory if they correspond to a value namespace' do
-    Chamber.load( :basepath   => '/tmp',
+    Chamber.load( :basepath   => '/tmp/chamber',
                   :namespaces => {
                     :my_namespace => -> { 'blue' } } )
 
@@ -201,7 +201,7 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'loads namespaced settings if they are inline in a non-namespaced filename' do
-    Chamber.load( :basepath   => '/tmp',
+    Chamber.load( :basepath   => '/tmp/chamber',
                   :namespaces => {
                     :my_namespace => -> { 'blue' } } )
 
@@ -209,7 +209,7 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'does not load non-namespaced data from a file if inline namespaces are found' do
-    Chamber.load( :basepath   => '/tmp',
+    Chamber.load( :basepath   => '/tmp/chamber',
                   :namespaces => {
                     :my_namespace => -> { 'blue' } } )
 
@@ -217,14 +217,14 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'loads the entire inline namespaced file if no namespaces are passed in since it does not know they are namespaced' do
-    Chamber.load(:basepath => '/tmp')
+    Chamber.load(:basepath => '/tmp/chamber')
 
     expect(Chamber['blue']['my_settings_for_inline_namespace']).to eql 'my_value_for_inline_namespace'
     expect(Chamber['my_non_inline_namespaced_setting']).to         eql 'my_value_for_non_inline_namespace'
   end
 
   it 'can convert the settings to their environment variable versions' do
-    Chamber.load(:basepath => '/tmp')
+    Chamber.load(:basepath => '/tmp/chamber')
 
     expect(Chamber.to_environment).to eql(
       'SUB_SETTINGS_MY_SUB_SETTING'             => 'my_sub_setting_value',
