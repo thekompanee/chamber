@@ -14,10 +14,10 @@ describe  FileSet do
 
     file_set = FileSet.new files: '/tmp/settings'
 
-    expect(file_set.send(:files)).to eql  [
-                                            Pathname.new('/tmp/settings/another_settings_file.yml'),
-                                            Pathname.new('/tmp/settings/some_settings_file.yml'),
-                                          ]
+    expect(file_set.filenames).to eql  [
+                                         '/tmp/settings/another_settings_file.yml',
+                                         '/tmp/settings/some_settings_file.yml',
+                                       ]
 
     ::FileUtils.rm_rf('/tmp/settings')
   end
@@ -28,10 +28,10 @@ describe  FileSet do
 
     file_set = FileSet.new files: '/tmp/settings/*.yml'
 
-    expect(file_set.send(:files)).to eql  [
-                                            Pathname.new('/tmp/settings/another_settings_file.yml'),
-                                            Pathname.new('/tmp/settings/some_settings_file.yml'),
-                                          ]
+    expect(file_set.filenames).to eql  [
+                                         '/tmp/settings/another_settings_file.yml',
+                                         '/tmp/settings/some_settings_file.yml',
+                                       ]
 
     ::FileUtils.rm_rf('/tmp/settings')
   end
@@ -42,7 +42,9 @@ describe  FileSet do
     file_set = FileSet.new files:      '/tmp/settings/settings-blue.yml',
                            namespaces: ['blue']
 
-    expect(file_set.send(:files)).to eql [Pathname.new('/tmp/settings/settings-blue.yml')]
+    expect(file_set.filenames).to eql [
+                                        '/tmp/settings/settings-blue.yml'
+                                      ]
 
     ::FileUtils.rm_f('/tmp/settings/settings-blue.yml')
   end
@@ -53,7 +55,7 @@ describe  FileSet do
     file_set = FileSet.new files:      '/tmp/settings/settings-blue.yml',
                            namespaces: ['green']
 
-    expect(file_set.send(:files)).to be_empty
+    expect(file_set.filenames).to be_empty
 
     ::FileUtils.rm_f('/tmp/settings/settings-blue.yml')
   end
@@ -66,7 +68,9 @@ describe  FileSet do
                                     '/tmp/settings.yml',
                                   ]
 
-    expect(file_set.send(:files)).to eql [Pathname.new('/tmp/settings.yml')]
+    expect(file_set.filenames).to eql [
+                                        '/tmp/settings.yml'
+                                      ]
 
     ::FileUtils.rm_f('/tmp/settings.yml')
   end
@@ -80,10 +84,10 @@ describe  FileSet do
                                     '/tmp/settings/*.yml',
                                   ]
 
-    expect(file_set.send(:files)).to eql  [
-                                            Pathname.new('/tmp/settings.yml'),
-                                            Pathname.new('/tmp/settings/new_file.yml'),
-                                          ]
+    expect(file_set.filenames).to eql  [
+                                         '/tmp/settings.yml',
+                                         '/tmp/settings/new_file.yml',
+                                       ]
 
     ::FileUtils.rm_rf('/tmp/settings*')
   end
@@ -91,11 +95,11 @@ describe  FileSet do
   it 'can consider file paths as Pathnames' do
     ::File.new('/tmp/settings.yml', 'w+')
 
-    file_set = FileSet.new files: Pathname.new('/tmp/settings.yml')
+    file_set = FileSet.new files: '/tmp/settings.yml'
 
-    expect(file_set.send(:files)).to eql  [
-                                            Pathname.new('/tmp/settings.yml'),
-                                          ]
+    expect(file_set.filenames).to eql  [
+                                         '/tmp/settings.yml',
+                                       ]
 
     ::FileUtils.rm_rf('/tmp/settings*')
   end
@@ -107,18 +111,18 @@ describe  FileSet do
     file_set = FileSet.new files:      '/tmp/settings/settings*.yml',
                            namespaces: ['blue', 'green']
 
-    expect(file_set.send(:files)).to eql  [
-                                            Pathname.new('/tmp/settings/settings-blue.yml'),
-                                            Pathname.new('/tmp/settings/settings-green.yml'),
-                                          ]
+    expect(file_set.filenames).to eql  [
+                                         '/tmp/settings/settings-blue.yml',
+                                         '/tmp/settings/settings-green.yml',
+                                       ]
 
     file_set = FileSet.new files:      '/tmp/settings/settings*.yml',
                            namespaces: ['green', 'blue']
 
-    expect(file_set.send(:files)).to eql  [
-                                            Pathname.new('/tmp/settings/settings-green.yml'),
-                                            Pathname.new('/tmp/settings/settings-blue.yml'),
-                                          ]
+    expect(file_set.filenames).to eql  [
+                                         '/tmp/settings/settings-green.yml',
+                                         '/tmp/settings/settings-blue.yml',
+                                       ]
 
     ::FileUtils.rm_f('/tmp/settings/settings*.yml')
   end
@@ -130,10 +134,10 @@ describe  FileSet do
     file_set = FileSet.new files:      '/tmp/settings*.yml',
                            namespaces: ['blue']
 
-    expect(file_set.send(:files)).to eql  [
-                                            Pathname.new('/tmp/settings.yml'),
-                                            Pathname.new('/tmp/settings-blue.yml'),
-                                          ]
+    expect(file_set.filenames).to eql  [
+                                         '/tmp/settings.yml',
+                                         '/tmp/settings-blue.yml',
+                                       ]
 
     ::FileUtils.rm_f('/tmp/settings*.yml')
   end
@@ -145,10 +149,10 @@ describe  FileSet do
     file_set = FileSet.new files:      '/tmp/settings*.yml',
                            namespaces: ['blue']
 
-    expect(file_set.send(:files)).to eql  [
-                                            Pathname.new('/tmp/settings.yml'),
-                                            Pathname.new('/tmp/settings-blue.yml'),
-                                          ]
+    expect(file_set.filenames).to eql  [
+                                         '/tmp/settings.yml',
+                                         '/tmp/settings-blue.yml',
+                                       ]
 
     ::FileUtils.rm_f('/tmp/settings*.yml')
   end
@@ -161,10 +165,24 @@ describe  FileSet do
                                    '/tmp/settings/settings*.yml'],
                            namespaces: ['development']
 
-    expect(file_set.send(:files)).to eql [
-                                           Pathname.new('/tmp/settings/credentials-development.yml'),
-                                           Pathname.new('/tmp/settings/settings.yml'),
-                                         ]
+    expect(file_set.filenames).to eql [
+                                        '/tmp/settings/credentials-development.yml',
+                                        '/tmp/settings/settings.yml',
+                                      ]
+
+    ::FileUtils.rm_rf('/tmp/settings')
+  end
+
+  it 'can display the filenames which were considered for the settings values' do
+    ::File.new('/tmp/settings/some_settings_file.yml', 'w+')
+    ::File.new('/tmp/settings/another_settings_file.yml', 'w+')
+
+    file_set = FileSet.new files: '/tmp/settings/*.yml'
+
+    expect(file_set.filenames).to eql  [
+                                         '/tmp/settings/another_settings_file.yml',
+                                         '/tmp/settings/some_settings_file.yml',
+                                       ]
 
     ::FileUtils.rm_rf('/tmp/settings')
   end

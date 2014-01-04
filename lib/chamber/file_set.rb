@@ -116,6 +116,18 @@ class   FileSet
   end
 
   ###
+  # Internal: Returns an Array of the ordered list of files that was processed
+  # by Chamber in order to get the resulting settings values.  This is useful
+  # for debugging if a given settings value isn't quite what you anticipated it
+  # should be.
+  #
+  # Returns an Array of file path strings
+  #
+  def filenames
+    @filenames ||= files.map(&:to_s)
+  end
+
+  ###
   # Internal: Converts the FileSet into a Settings object which represents all
   # the settings specified in all of the files in the FileSet.
   #
