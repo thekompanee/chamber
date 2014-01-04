@@ -9,12 +9,11 @@ describe  HerokuConfiguration do
                                                       'TEST_VAR'         => 'MY_VALUE',
                                                     }
 
-    allow(heroku_configuration).to receive(:`).
-                                   and_return(true)
+    allow(heroku_configuration).to receive(:system)
 
     heroku_configuration.push
 
-    expect(heroku_configuration).to have_received(:`).
+    expect(heroku_configuration).to have_received(:system).
                                     with 'heroku config:set TEST_VAR=MY_VALUE'
   end
 
@@ -24,24 +23,22 @@ describe  HerokuConfiguration do
                                                       'ANOTHER_TEST_VAR' => 'ANOTHER_VALUE',
                                                     }
 
-    allow(heroku_configuration).to receive(:`).
-                                   and_return(true)
+    allow(heroku_configuration).to receive(:system)
 
     heroku_configuration.push
 
-    expect(heroku_configuration).to have_received(:`).
+    expect(heroku_configuration).to have_received(:system).
                                     with 'heroku config:set TEST_VAR=MY_VALUE ANOTHER_TEST_VAR=ANOTHER_VALUE'
   end
 
   it 'can push the configuration for a specific app' do
     heroku_configuration = HerokuConfiguration.new :app => 'test_app'
 
-    allow(heroku_configuration).to receive(:`).
-                                   and_return(true)
+    allow(heroku_configuration).to receive(:system)
 
     heroku_configuration.push
 
-    expect(heroku_configuration).to have_received(:`).
+    expect(heroku_configuration).to have_received(:system).
                                     with 'heroku config:set  --app test_app'
   end
 end
