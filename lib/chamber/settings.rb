@@ -43,6 +43,7 @@ class   Settings
 
   protected
 
+  attr_reader :raw_data
   attr_writer :namespaces
 
   def data
@@ -50,21 +51,33 @@ class   Settings
   end
 
   def data=(raw_data)
-    raw_data = Hashie::Mash.new(raw_data)
+    @raw_data = Hashie::Mash.new(raw_data)
 
-    non_environment_data =  if raw_data.keys.any? { |key| namespaces.include? key }
-                              only_namespaced_data = Hashie::Mash.new
-
-                              namespaces.each do |namespace|
-                                only_namespaced_data.merge! raw_data[namespace]
+    namespace_checked_data =  if data_is_namespaced?
+                                namespace_filtered_data
+                              else
+                                self.raw_data
                               end
 
-                              only_namespaced_data
-                            else
-                              raw_data
-                            end
+    @data = SystemEnvironment.inject_into(namespace_checked_data)
+  end
 
-    @data = SystemEnvironment.inject_into(non_environment_data)
+  private
+
+  def data_is_namespaced?
+    @data_is_namespaced ||= raw_data.keys.any? { |key| namespaces.include? key }
+  end
+
+  def namespace_filtered_data
+    @namespace_filtered_data ||= -> do
+      data = Hashie::Mash.new
+
+      namespaces.each do |namespace|
+        data.merge!(raw_data[namespace]) if raw_data[namespace]
+      end
+
+      data
+    end.call
   end
 end
 end
