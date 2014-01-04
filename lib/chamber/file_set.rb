@@ -116,7 +116,37 @@ class   FileSet
   end
 
   ###
-  # Internal:
+  # Internal: Converts the FileSet into a Settings object which represents all
+  # the settings specified in all of the files in the FileSet.
+  #
+  # This can be used in one of two ways. You may either specify a block which
+  # will be passed each file's settings as they are converted, or you can choose
+  # not to pass a block, in which case it will pass back a single completed
+  # Settings object to the caller.
+  #
+  # The reason the block version is used in Chamber.settings is because we want
+  # to be able to load each settings file as it's processed so that we can use
+  # those already-processed settings in subsequently processed settings files.
+  #
+  # Examples:
+  #
+  #   ###
+  #   # Specifying a Block
+  #   #
+  #   file_set = FileSet.new files: [ '/path/to/my/settings.yml' ]
+  #
+  #   file_set.to_settings do |settings|
+  #     # do stuff with each settings
+  #   end
+  #
+  #
+  #   ###
+  #   # No Block Specified
+  #   #
+  #   file_set = FileSet.new files: [ '/path/to/my/settings.yml' ]
+  #   file_set.to_settings
+  #
+  #   # => <Chamber::Settings>
   #
   def to_settings
     clean_settings = Settings.new(:namespaces => namespaces)
