@@ -17,11 +17,7 @@ class  HerokuConfiguration
   def heroku(command)
     with_app = heroku_application ? " --app #{heroku_application}" : ""
 
-    `heroku #{command}#{with_app}`
-  end
-
-  def `(command)
-    Bundler.with_clean_env { super }
+    Bundler.with_clean_env { system("heroku #{command}#{with_app}") }
   end
 
   private
