@@ -1,4 +1,3 @@
-require 'set'
 require 'chamber/namespace_set'
 require 'chamber/file'
 require 'chamber/settings'
@@ -163,13 +162,19 @@ class   FileSet
   #
   def files
     @files ||= -> do
-      non_namespaced_files = all_files - namespaced_files
-      relevant_files       = non_namespaced_files + relevant_namespaced_files
+      sorted_relevant_files = []
 
-      relevant_files.map! { |file| File.new(path:        file,
-                                            namespaces:  namespaces) }
+      file_globs.each do |glob|
+        current_glob_files  = Pathname.glob(glob)
+        relevant_glob_files = relevant_files & current_glob_files
 
-      Set.new relevant_files
+        relevant_glob_files.map! { |file| File.new( path:        file,
+                                                    namespaces:  namespaces) }
+
+        sorted_relevant_files += relevant_glob_files
+      end
+
+      sorted_relevant_files.uniq
     end.call
   end
 
@@ -177,6 +182,14 @@ class   FileSet
 
   def all_files
     @all_files ||= Pathname.glob(file_globs)
+  end
+
+  def non_namespaced_files
+    @non_namespaced_files ||= all_files - namespaced_files
+  end
+
+  def relevant_files
+    @relevant_files ||= non_namespaced_files + relevant_namespaced_files
   end
 
   def file_globs
