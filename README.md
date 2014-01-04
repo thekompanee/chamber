@@ -194,6 +194,59 @@ Notice the difference:
   Chamber.env.key?('my_non_existent_key')   # => false
 ```
 
+### ERB Preprocessing
+
+One of the nice things about Chamber is that it runs each settings file through
+ERB before it tries to parse it as YAML.  The main benefit of this is that you
+can use settings from previous files in ERB for later files.  This is mainly
+used if you follow our convention of putting all of your sensitive information
+in your `credentials.yml` file.
+
+Example:
+
+```yaml
+# credentials.yml
+
+production:
+  my_secret_key: 123456789
+```
+
+```erb
+<%# settings.yml %>
+
+production:
+  my_url: http://my_username:<%= Chamber[:my_secret_key] %>@my-url.com
+```
+
+Because Chamber always processes `credentials` settings files before anything
+else, this works.
+
+But it's all ERB so you can do as much crazy ERB stuff in your settings files as
+you'd like:
+
+```erb
+<%# settings.yml %>
+
+<% %w{development test production}.each do |environment| %>
+<%= environment %>:
+  hostname_with_subdomain: <%= environment %>.example.com:3000
+
+<% end %>
+```
+
+Would result in the following settings being set:
+
+```yaml
+development:
+  hostname_with_subdomain: development.example.com:3000
+
+test:
+  hostname_with_subdomain: test.example.com:3000
+
+production:
+  hostname_with_subdomain: production.example.com:3000
+```
+
 ### In Order to Add Advanced Functionality
 
 In any case that you need to set configuration options or do advanced post
