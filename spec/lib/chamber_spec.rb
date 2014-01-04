@@ -251,4 +251,8 @@ describe Chamber, :singletons => [Chamber] do
   it 'can use data from credentials in subsequently loaded files' do
     expect(Chamber[:test][:my_ftp_url]).to eql 'ftp://username:password@127.0.0.1'
   end
+
+  it 'can notify properly whether it responds to messages if the underlying settings does' do
+    expect(Chamber.env.respond_to?(:sub_settings)).to be_a TrueClass
+  end
 end
