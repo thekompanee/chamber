@@ -130,7 +130,7 @@ will use that before any values inside of the config files.
 Simply run:
 
 ```sh
-rake chamber:push:heroku
+rake chamber:heroku:push
 ```
 
 And all of your settings will be converted to environment variable versions
@@ -139,7 +139,7 @@ and set on your Heroku app.
 If you have more than one Heroku app, you can pass it to the rake task like so:
 
 ```sh
-rake chamber:push:heroku --app my_heroku_app_name
+rake chamber:heroku:push --app my_heroku_app_name
 ```
 
 ## Advanced Usage
