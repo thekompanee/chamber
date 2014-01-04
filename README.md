@@ -28,7 +28,8 @@ $ gem install chamber
 
 If you're running a Rails app, by default Chamber will look for all of:
 
-* A file in `config/settings.yml`
+* The file `config/credentials.yml`
+* The file `config/settings.yml`
 * A set of YAML files in the `config/settings` directory
 
 The YAML data will be loaded and you will have access to the settings
@@ -50,8 +51,12 @@ can be accessed as follows:
 ```ruby
 Chamber[:smtp][:server]
 # => example.com
+```
 
-Chamber[:smtp][:server]
+or
+
+```ruby
+Chamber.env.smtp.server
 # => example.com
 ```
 
@@ -103,11 +108,24 @@ variable.
 
 ## Deploying to Heroku
 
-If you're deploying to Heroku, they won't let you read config files. Instead,
-all config settings must be stored in environment variables.  Well, if your
-settings are in config files, but you need to have them as environment variables,
-that seems like a tedious process.  Weeeellll, not really.  Chamber provides
-a rake task to automatically process this for you.
+If you're deploying to Heroku, they won't let you upload custom config files. If
+you do not have your config files all stored in your repo (which you shouldn't
+if some of the information is sensitive), it becomes more difficult to gain
+access to that information on Heroku.
+
+To solve this problem, Heroku allows you to set environment variables in your
+application.  Unfortunately this has the nasty side effect of being a pain to
+deal with.  For one, you have to deal with environment variables with unweildy
+names.  For another, it makes the organization of those variables difficult.
+
+Fortunately, Chamber allows you to organize your environment variables in
+separate files and access them in easily using hash or object notation, however
+at the same time, it provides a convenient Rake task for pushing all of those
+configuration settings up to Heroku as environment variables.
+
+When Chamber accesses those same hash/object notated config values, it will
+first look to see if an associated environment variable exists.  If it does, it
+will use that before any values inside of the config files.
 
 Simply run:
 
@@ -170,7 +188,7 @@ where `<environment>` is whatever Rails environment you happen to be running.
 
 #### Inline Namespaces
 
-If having a file per namespace value isn't your thang, you can inline your
+If having a file per namespace value isn't your thing, you can inline your
 namespaces.  Taking the example from above, rather than having `settings.yml`,
 `settings-development.yml`, `settings-test.yml`, `settings-staging.yml` and
 `settings-production.yml`, you could do something like this:
