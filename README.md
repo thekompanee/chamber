@@ -78,6 +78,11 @@ Chamber.env.smtp.server
 # => example.com
 ```
 
+### Keeping Your Settings Files Secure
+
+Check out [Keeping Private Settings Private](#keeping-private-settings-private)
+below.
+
 ### Existing Environment Variables (aka Heroku)
 
 If deploying to a system which has all of your environment variables already
@@ -491,7 +496,7 @@ private file that stores all of your credentials.
 
 ### Ignoring Settings Files
 
-I recommend adding a pattern like this to `.gitignore`:
+We recommend adding the following to your `.gitignore` file:
 
 ```
 # Ignore the environment-specific files that contain the real credentials:
@@ -500,6 +505,14 @@ I recommend adding a pattern like this to `.gitignore`:
 
 # But don't ignore the example file that shows the structure:
 !/config/credentials-example.yml
+```
+
+Along with any namespace-specific exclusions.  For example, if you're using
+Rails, you may want to exclude some of your environment-specific files:
+
+```
+*-staging.yml
+*-production.yml
 ```
 
 ### Full Example
