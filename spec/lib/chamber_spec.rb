@@ -271,4 +271,16 @@ describe Chamber, :singletons => [Chamber] do
 
     expect(Chamber.filenames).to be_empty
   end
+
+  it 'can render itself as a string even if it has not been loaded' do
+    Singleton.__init__(Chamber)
+
+    expect(Chamber.to_s).to eql ''
+  end
+
+  it 'can determine settings even if it has not been loaded' do
+    Singleton.__init__(Chamber)
+
+    expect(Chamber.settings.to_hash).to eql({})
+  end
 end
