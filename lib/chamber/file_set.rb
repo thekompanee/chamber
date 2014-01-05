@@ -223,7 +223,7 @@ class   FileSet
   private
 
   def all_files
-    @all_files ||= Pathname.glob(file_globs)
+    @all_files ||= Pathname.glob(file_globs).sort
   end
 
   def non_namespaced_files
