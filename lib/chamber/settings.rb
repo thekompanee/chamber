@@ -34,10 +34,10 @@ class   Settings
   #     'MY_SUB_SETTING_MY_SUB_SUB_SETTING_2' => 'my sub value 2',
   #   }
   #
-  # Returns a Hash
+  # Returns a Hash sorted alphabetically by the names of the keys
   #
   def to_environment
-    SystemEnvironment.extract_from(data)
+    Hash[SystemEnvironment.extract_from(data).sort]
   end
 
   ###

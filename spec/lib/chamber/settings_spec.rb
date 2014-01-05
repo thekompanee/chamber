@@ -32,13 +32,30 @@ describe  Settings do
 
   it 'knows how to convert itself into an environment hash' do
     allow(SystemEnvironment).to receive(:extract_from).
-                                and_return :environment
+                                and_return(:environment => :development)
 
     settings = Settings.new(settings: {setting: 'value'})
 
-    expect(settings.to_environment).to  eql :environment
+    expect(settings.to_environment).to  eql(:environment => :development)
     expect(SystemEnvironment).to        have_received(:extract_from).
                                         with(Hashie::Mash.new setting: 'value')
+  end
+
+  it 'sorts environment variables by name when converted to an environment hash so that they are easier to parse for humans' do
+    allow(SystemEnvironment).to receive(:extract_from).
+                                and_return('c' => 'value',
+                                           'd' => 'value',
+                                           'a' => 'value',
+                                           'e' => 'value',
+                                           'b' => 'value',)
+
+    settings = Settings.new(settings: { setting: 'value' })
+
+    expect(settings.to_environment.to_a).to eql([['a', 'value'],
+                                                 ['b', 'value'],
+                                                 ['c', 'value'],
+                                                 ['d', 'value'],
+                                                 ['e', 'value']])
   end
 
   it 'can merge itself with a hash' do
