@@ -12,6 +12,7 @@ class  Chamber
     def_delegators  :instance,  :[],
                                 :basepath,
                                 :load,
+                                :filenames,
                                 :namespaces,
                                 :settings,
                                 :to_environment
@@ -31,6 +32,10 @@ class  Chamber
                                           self.basepath + 'settings' ],
                                         namespaces:
                                           options.fetch(:namespaces, {})
+  end
+
+  def filenames
+    self.files.filenames
   end
 
   def namespaces
