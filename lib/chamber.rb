@@ -16,7 +16,8 @@ class  Chamber
                                 :namespaces,
                                 :settings,
                                 :to_environment,
-                                :to_hash
+                                :to_hash,
+                                :to_s
 
     alias_method    :env,       :instance
   end
@@ -65,6 +66,10 @@ class  Chamber
 
   def respond_to_missing?(name, include_private = false)
     settings.respond_to?(name, include_private)
+  end
+
+  def to_s(*args)
+    settings.to_s(*args)
   end
 
   protected

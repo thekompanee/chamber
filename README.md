@@ -400,6 +400,33 @@ smtp:
 The when you access the value with `Chamber[:smtp][:server]` you will receive
 `testserver.com`.
 
+### Outputting Your Settings
+
+Chamber makes it dead simple to output your environment settings in a variety of
+formats.
+
+The simplest is:
+
+```ruby
+Chamber.to_s
+# => MY_SETTING="my value" MY_OTHER_SETTING="my other value"
+```
+
+But you can pass other options to customize the string:
+
+* `pair_separator`
+* `value_surrounder`
+* `name_value_separator`
+
+```ruby
+Chamber.to_s pair_separator:        "\n",
+             value_surrounder:      "'",
+             name_value_separator:  ': '
+# =>
+MY_SETTING: 'my value'
+MY_OTHER_SETTING: 'my other value'
+```
+
 ### Basic Boolean Conversion
 
 One of the things that is a huge pain when dealing with environment variables is

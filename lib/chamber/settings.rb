@@ -41,6 +41,30 @@ class   Settings
   end
 
   ###
+  # Internal: Converts a Settings object into a String with a format that will
+  # work well when working with the shell.
+  #
+  # Examples:
+  #
+  #   Settings.new( settings: {
+  #                   my_key:       'my value',
+  #                   my_other_key: 'my other value',
+  #                 } ).to_s
+  #   # => 'MY_KEY="my value" MY_OTHER_KEY="my other value"'
+  #
+  def to_s(options = {})
+    pair_separator       = options[:pair_separator]       || ' '
+    value_surrounder     = options[:value_surrounder]     || '"'
+    name_value_separator = options[:name_value_separator] || '='
+
+    pairs = to_environment.to_a.map do |pair|
+      %Q{#{pair[0]}#{name_value_separator}#{value_surrounder}#{pair[1]}#{value_surrounder}}
+    end
+
+    pairs.join(pair_separator)
+  end
+
+  ###
   # Internal: Merges a Settings object with another Settings object or
   # a hash-like object.
   #
