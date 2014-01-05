@@ -244,8 +244,8 @@ production:
   my_url: http://my_username:<%= Chamber[:my_secret_key] %>@my-url.com
 ```
 
-Because Chamber always processes `credentials` settings files before anything
-else, this works.
+Because by default Chamber processes `credentials` settings files before
+anything else, this works.
 
 But it's all ERB so you can do as much crazy ERB stuff in your settings files as
 you'd like:
@@ -416,10 +416,11 @@ end
 ```
 
 Will always return true because `false` becomes `'false'` on Heroku which, as
-far as Ruby is concerned, is `true`.  Now, you completely omit the `enabled`
-key, however this causes issues if you would like to audit your settings (say
-for each environment) to make sure they are all the same.  Some will have the
-`enabled` setting and some will not, which will give you false positives.
+far as Ruby is concerned, is `true`.  Now, you could completely omit the
+`enabled` key, however this causes issues if you would like to audit your
+settings (say for each environment) to make sure they are all the same.  Some
+will have the `enabled` setting and some will not, which will give you false
+positives.
 
 You could work around it by doing this:
 
