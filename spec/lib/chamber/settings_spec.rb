@@ -58,6 +58,19 @@ describe  Settings do
                                                  ['e', 'value']])
   end
 
+  it 'can convert itself into a string' do
+    allow(SystemEnvironment).to receive(:extract_from).
+                                and_return('C' => 'cv',
+                                           'D' => 'dv',
+                                           'A' => 'av',
+                                           'E' => 'ev',
+                                           'B' => 'bv',)
+
+    settings = Settings.new(settings: { setting: 'value' })
+
+    expect(settings.to_s).to eql %Q{A="av" B="bv" C="cv" D="dv" E="ev"}
+  end
+
   it 'can merge itself with a hash' do
     settings = Settings.new(settings: {setting: 'value'})
     settings.merge!(other_setting: 'another value')
