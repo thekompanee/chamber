@@ -1,90 +1,88 @@
-require 'erb'
-require 'hashie'
-require 'yaml'
+require 'singleton'
+require 'forwardable'
+require 'chamber/file_set'
+require 'chamber/rails'
 
-require 'chamber/version'
+class  Chamber
+  include Singleton
 
-module Chamber
-  class ChamberInvalidOptionError < ArgumentError; end
+  class << self
+    extend Forwardable
 
-  def source(filename, options={})
-    assert_valid_keys(options)
+    def_delegators  :instance,  :[],
+                                :basepath,
+                                :load,
+                                :filenames,
+                                :namespaces,
+                                :settings,
+                                :to_environment,
+                                :to_hash,
+                                :to_s
 
-    add_source(filename, options)
+    alias_method    :env,       :instance
   end
 
-  def load!
-    sources.each do |source|
-      filename, options = source
+  attr_accessor :basepath,
+                :files
 
-      load_source!(filename, options)
-    end
+  def load(options)
+    self.settings = nil
+    self.basepath = options[:basepath] || ''
+    file_patterns = options[:files] || [
+                      self.basepath + 'credentials*.yml',
+                      self.basepath + 'settings*.yml',
+                      self.basepath + 'settings' ]
+    self.files    = FileSet.new files:      file_patterns,
+                                namespaces: options.fetch(:namespaces, {})
   end
 
-  def clear!
-    @chamber_instance = nil
-    @chamber_sources = nil
+  def filenames
+    self.files.filenames
   end
 
-  def reload!
-    @chamber_instance = nil
-    load!
+  def namespaces
+    settings.namespaces
   end
 
-  def instance
-    @chamber_instance ||= Hashie::Mash.new
-  end
+  def settings
+    @settings ||= -> do
+      @settings = Settings.new
 
-  def method_missing(method_name, *args, &block)
-    instance.public_send(method_name, *args, &block)
-  end
-
-  alias_method :env, :instance
-
-private
-
-  def assert_valid_keys(options)
-    unknown_keys = options.keys - [:namespace, :override_from_environment]
-
-    raise(ChamberInvalidOptionError, options) unless unknown_keys.empty?
-  end
-
-  def sources
-    @chamber_sources ||= []
-  end
-
-  def add_source(filename, options)
-    sources << [filename, options]
-  end
-
-  def load_source!(filename, options)
-    return unless File.exists?(filename)
-
-    hash = hash_from_source(filename, options[:namespace])
-    if options[:override_from_environment]
-      override_from_environment!(hash)
-    end
-
-    instance.deep_merge!(hash)
-  end
-
-  def hash_from_source(filename, namespace)
-    contents = open(filename).read
-    hash = YAML.load(ERB.new(contents).result).to_hash || {}
-    hash = Hashie::Mash.new(hash)
-
-    namespace ? hash.fetch(namespace) : hash
-  end
-
-  def override_from_environment!(hash)
-    hash.each_pair do |key, value|
-      next unless value.is_a?(Hash)
-
-      if value.environment
-        hash[key] = ENV[value.environment]
-      else
-        override_from_environment!(value)
+      files.to_settings do |parsed_settings|
+        @settings.merge! parsed_settings
       end
+
+      @settings
+    end.call
+  end
+
+  def method_missing(name, *args)
+    if settings.respond_to?(name)
+      return settings.public_send(name, *args)
     end
+
+    super
+  end
+
+  def respond_to_missing?(name, include_private = false)
+    settings.respond_to?(name, include_private)
+  end
+
+  def to_s(*args)
+    settings.to_s(*args)
+  end
+
+  protected
+
+  attr_writer :settings
+
+  def files
+    @files ||= FileSet.new files: []
+  end
+
+  private
+
+  def basepath=(pathlike)
+    @basepath = pathlike == '' ? '' : Pathname.new(::File.expand_path(pathlike))
   end
 end
