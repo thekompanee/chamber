@@ -15,7 +15,8 @@ class  Chamber
                                 :filenames,
                                 :namespaces,
                                 :settings,
-                                :to_environment
+                                :to_environment,
+                                :to_hash
 
     alias_method    :env,       :instance
   end
