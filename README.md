@@ -26,6 +26,8 @@ $ gem install chamber
 
 ## Basic Usage
 
+### Convention Over Configuration
+
 By default Chamber only needs a base path to look for settings files.  From
 that path it will search for:
 
@@ -86,9 +88,8 @@ below.
 ### Existing Environment Variables (aka Heroku)
 
 If deploying to a system which has all of your environment variables already
-set, you're not going to use the values stored in the YAML files.  Instead,
-you're going to want to pull whatever values the environment variables are
-storing.
+set, you're not going to use all of the values stored in the YAML files.
+Instead, you're going to want to pull certain values from environment variables.
 
 **Example:**
 
@@ -130,28 +131,54 @@ deal with.  For one, you have to deal with environment variables with unweildy
 names.  For another, it makes the organization of those variables difficult.
 
 Fortunately, Chamber allows you to organize your environment variables in
-separate files and access them in easily using hash or object notation, however
-at the same time, it provides a convenient Rake task for pushing all of those
+separate files and access them easily using hash or object notation, however at
+the same time, it provides a convenient way to push all of those sensitive
 configuration settings up to Heroku as environment variables.
 
 When Chamber accesses those same hash/object notated config values, it will
 first look to see if an associated environment variable exists.  If it does, it
-will use that before any values inside of the config files.
+will use that in place of any values inside of the config files.
 
 Simply run:
 
 ```sh
-rake chamber:heroku:push
+# In the root folder of your Rails app:
+
+chamber heroku push --preset=rails
+
+# In the root folder of another type of application:
+
+chamber heroku push --basepath=./
 ```
 
 And all of your settings will be converted to environment variable versions
 and set on your Heroku app.
 
-If you have more than one Heroku app, you can pass it to the rake task like so:
+_**Note:** For the full set of options, see [The chamber Command Line
+App](#the-chamber-command-line-app) below._
+
+## Deploying to Travis CI
+
+When deploying to Travis CI, it has similar environment variable requirements as
+Heroku, however Travis allows the encryption of environment variables before
+they are stored in the .travis.yml file.  This allows for that file to be
+checked into git without worrying about prying eyes figuring out your secret
+information.
+
+To execute this, simply run:
 
 ```sh
-rake chamber:heroku:push --app my_heroku_app_name
+chamber travis secure --basepath=./
 ```
+
+This will add `secure` entries into your `.travis.yml` file.  Each one will
+contain one environment variable.
+
+_**Warning:** Each time you execute this command it will delete all secure
+entries under 'env.global' in your `.travis.yml` file._
+
+_**Note:** For the full set of options, see [The chamber Command Line
+App](#the-chamber-command-line-app) below._
 
 ## Advanced Usage
 
@@ -211,8 +238,8 @@ defined on them.  They work like so:
 
 #### 'key?' Checks For Existence
 
-The `?` method will return false if a key has been set to false or nil. In order
-to check if a key has been set at all, use the `key?('some_key')` method
+The `?` method will return false if a key has been set to `false` or `nil`. In
+order to check if a key has been set at all, use the `key?('some_key')` method
 instead.
 
 Notice the difference:
@@ -233,7 +260,7 @@ can use settings from previous files in ERB for later files.  This is mainly
 used if you follow our convention of putting all of your sensitive information
 in your `credentials.yml` file.
 
-Example:
+**Example:**
 
 ```yaml
 # credentials.yml
@@ -422,10 +449,210 @@ But you can pass other options to customize the string:
 Chamber.to_s pair_separator:        "\n",
              value_surrounder:      "'",
              name_value_separator:  ': '
-# =>
-MY_SETTING: 'my value'
-MY_OTHER_SETTING: 'my other value'
+
+# => MY_SETTING: 'my value'
+# => MY_OTHER_SETTING: 'my other value'
 ```
+
+### The chamber Command Line App
+
+Chamber provides a flexible binary that you can use to make working with your
+configurations easier.  Let's take a look:
+
+#### Common Options
+
+Each of the commands described below takes a few common options.
+
+* `--preset` (or `-p`): Allows you to quickly set the basepath, files and/or
+  namespaces for a given situation (eg working with a Rails app).
+
+  **Example:** `--preset=rails`
+
+* `--files` (or `-f`): Allows you to specifically set the file patterns that
+  Chamber should look at in determining where to load settings information from.
+
+  **Example:** `--files=/path/to/my/application/secret.yml /path/to/my/application/settings/*.yml`
+
+* `--basepath` (or `-b`): Sets the base path that Chamber will use to look for
+  its [common settings files](#convention-over-configuration).
+
+  **Example:** `--basepath=/path/to/my/application`
+
+* `--namespaces` (or `-n`): The namespace values which will be considered for
+  loading settings files.
+
+  **Example:** `--namespaces=development`
+
+_**Note:** `--basepath`, `--preset` and `--files` are mutually exclusive._
+
+#### Settings
+
+##### Settings Commands
+
+###### Show
+
+Gives users an easy way of looking at all of the settings that Chamber knows
+about for a given context.  It will be output as a hash of hashes by default.
+
+* `--as-env`: Instead of outputting the settings as a hash of hashes, convert
+  the settings into environment variable-compatible versions.
+
+  **Example:** `--as-env`
+
+**Example:** `chamber settings show -p=rails`
+
+###### Files
+
+Very useful for troubleshooting, this will output all of the files that
+Chamber considers relevant based on the given options passed.
+
+Additionally, the order is significant.  Chamber will load settings from the
+top down so any duplicate items in subsequent entries will override items from
+previous ones.
+
+**Example:** `chamber settings files -p=rails`
+
+###### Compare
+
+Will display a diff of the settings for one set of namespaces vs the settings
+for a second set of namespaces.
+
+This is extremely handy if, for example, you would like to see whether the
+settings you're using for development match up with the settings you're using
+for production, or if you're setting all of the same settings for any two
+environments.
+
+* `--keys-only`: This is the default.  When performing a comparison, only the
+  keys will be considered since values between namespaces will often (and
+  should often) be different.
+
+  **Example:** `--keys-only`, `--no-keys-only`
+
+* `--first`: This is an array of the first set of namespace settings that you
+  would like to compare from.  You can list one or more.
+
+  **Example:** `--first=development`, `--first=development my_host_name`
+
+* `--second`: This is an array of the second set of namespace settings that
+  you would like to compare against that specified by `--first`.  You can list
+  one or more.
+
+  **Example:** `--second=staging`, `--second=staging my_host_name`
+
+**Example:** `chamber settings compare --first=development --second=staging -p=rails`
+
+#### Heroku
+
+As we described above, working with Heroku environment variables is tedious at
+best.  Chamber gives you a few ways to help with that.
+
+_**Note:** I'll be using the `--preset` shorthand `-p` for brevity below but the
+examples will work with any of the other options described
+[above](#common-options)._
+
+##### Heroku Common Options
+
+* `--app` (or `-a`): Heroku application name for which you would like to affect
+  its environment variables.
+
+  **Example:** `--app=my-heroku-app-name`
+
+* `--dry-run` (or `-d`): The command will not actually execute, but will show
+  you a summary of what *would* have happened.
+
+  **Example:** `--dry-run`
+
+* `--only-ignored` (or `-o`): This is the default.  Because Heroku has no issues
+  reading from the config files you have stored in your repo, there is no need
+  to set *all* of your settings as environment variables.  So by default,
+  Chamber will only convert and push those settings which have been gitignored.
+
+  To push everything, use the `--no-only-ignored` flag.
+
+  **Example:** `--only-ignored`, `--no-only-ignored`
+
+##### Heroku Commands
+
+###### Push
+
+As we described above, this command will take your current settings and push
+them to Heroku as environment variables that Chamber will be able to
+understand.
+
+**Example:** `chamber heroku push -a=my-heroku-app -p=rails -n=staging`
+
+_**Note:** To see exactly how Chamber sees your settings as environment variables, see
+the [chamber settings show](#general-settings-commands) command above._
+
+###### Pull
+
+Will display the list of environment variables that you have set on your
+Heroku instance.
+
+This is similar to just executing `heroku config --shell` except that you can
+specify the following option:
+
+* `--into`: The file which the pulled settings will be copied into.  This file
+  *will* be overridden.
+
+  _**Note:** Eventually this will be parsed into YAML that Chamber can load
+  straight away, but for now, it's basically just redirecting the output._
+
+  **Example:** `--into=/path/to/my/app/settings/heroku.yml`
+
+**Example:** `chamber heroku pull -a=my-heroku-app --into=/path/to/my/app/heroku.yml`
+
+###### Diff
+
+Will use git's diff function to display the difference between what Chamber
+knows about locally and what Heroku currently has set.  This is very handy for
+knowing what changes may be made if `chamber heroku push` is executed.
+
+**Example:** `chamber heroku diff -a=my-heroku-app -p=rails -n=staging`
+
+###### Clear
+
+Will remove any environment variables from Heroku that Chamber knows about.
+This is useful for clearing out Chamber-related settings without touching
+Heroku addon-specific items.
+
+**Example:** `chamber heroku clear -a=my-heroku-app -p=rails -n=staging`
+
+#### Travis CI
+
+##### Travis Common Options
+
+* `--dry-run` (or `-d`): The command will not actually execute, but will show
+  you a summary of what *would* have happened.
+
+  **Example:** `--dry-run`
+
+* `--only-ignored` (or `-o`): This is the default.  Because Travis has no issues
+  reading from the config files you have stored in your repo, there is no need
+  to set *all* of your settings as environment variables.  So by default,
+  Chamber will only convert and push those settings which have been gitignored.
+
+  To push everything, use the `--no-only-ignored` flag.
+
+  **Example:** `--only-ignored`, `--no-only-ignored`
+
+##### Travis Commands
+
+###### Secure
+
+Travis CI allows you to use the public key on your Travis repo to encrypt
+items such as environment variables which you would like for Travis to be able
+to have access to, but which you wouldn't necessarily want to be in plain text
+inside of your repo.
+
+This command takes the settings that Chamber knows about, encrypts them, and
+puts them inside of your .travis.yml at which point they can be safely
+committed.
+
+_**Warning:** This will delete *all* of your previous 'secure' entries under
+'env.global' in your .travis.yml file._
+
+**Example:** `chamber travis secure -p=rails -n=continuous_integration`
 
 ### Basic Boolean Conversion
 
@@ -575,11 +802,6 @@ Chamber[:smtp][:headers]
 Chamber[:smtp][:password]
 # => my_test_password
 ```
-
-## Ideas
-
-* Add a rake task for validating environments (do all environments have the same
-  settings?)
 
 ## Alternatives
 
