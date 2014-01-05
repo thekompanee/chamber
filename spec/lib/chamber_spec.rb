@@ -255,4 +255,20 @@ describe Chamber, :singletons => [Chamber] do
   it 'can notify properly whether it responds to messages if the underlying settings does' do
     expect(Chamber.env.respond_to?(:sub_settings)).to be_a TrueClass
   end
+
+  it 'can explicitly specify files without specifying a basepath' do
+    Chamber.load files: ['/tmp/chamber/credentials.yml']
+
+    expect(Chamber.filenames).to eql  ['/tmp/chamber/credentials.yml']
+    expect(Chamber.settings.to_hash).to eql('test' => {
+                                              'my_username' => 'username',
+                                              'my_password' => 'password', } )
+  end
+
+  it 'ignores the basepath if file patterns are explicitly passed in' do
+    Chamber.load basepath:  '/tmp/chamber',
+                 files:     'credentials.yml'
+
+    expect(Chamber.filenames).to be_empty
+  end
 end

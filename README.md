@@ -26,11 +26,29 @@ $ gem install chamber
 
 ## Basic Usage
 
-If you're running a Rails app, by default Chamber will look for all of:
+By default Chamber only needs a base path to look for settings files.  From
+that path it will search for:
 
-* The file `config/credentials.yml`
-* The file `config/settings.yml`
-* A set of YAML files in the `config/settings` directory
+* The file `<basepath>/credentials.yml`
+* The file `<basepath>/settings.yml`
+* A set of files ending in `.yml` in the `<basepath>/settings` directory
+
+### In Plain Old Ruby
+
+```ruby
+Chamber.load basepath: '/path/to/my/application'
+```
+
+### In Rails
+
+If you're running a Rails app, by default Chamber will set the basepath to your
+Rails app's `config` directory, which is the equivalent of:
+
+```ruby
+Chamber.load basepath: Rails.root.join('config')
+```
+
+### Accessing Settings
 
 The YAML data will be loaded and you will have access to the settings
 through the `Chamber` class.
@@ -53,24 +71,12 @@ Chamber[:smtp][:server]
 # => example.com
 ```
 
-or
+or via object notation syntax:
 
 ```ruby
 Chamber.env.smtp.server
 # => example.com
 ```
-
-and will generate the following environment variables if they don't already
-exist:
-
-```sh
-SMTP_SERVER
-SMTP_USERNAME
-SMTP_PASSWORD
-```
-
-If the environment variables *do* already exist, then their values will not
-be overwritten.
 
 ### Existing Environment Variables (aka Heroku)
 
@@ -144,7 +150,27 @@ rake chamber:heroku:push --app my_heroku_app_name
 
 ## Advanced Usage
 
-### Method-Based Environment Variable Access
+### Explicitly Specifying Settings Files
+
+Using convention over configuration, Chamber handles the 90% case by default,
+however there may be times at which you would like to explicitly specify which
+settings files are loaded.  In these cases, Chamber has you covered:
+
+```ruby
+Chamber.load files: [
+                      '/path/to/my/application/chamber/credentials.yml',
+                      '/path/to/my/application/application*.yml',
+                      '/path/to/my/application/chamber/*.yml',
+                    ]
+```
+
+In this case, Chamber will load *only* the `credentials.yml` file *without ever*
+looking for a namespaced file.  Then it will load `application.yml` *and* any
+associated namespaced files.  Finally it will load all \*.yml files in the
+`chamber` directory *except* `credentials.yml` because it has previously been
+loaded.
+
+### Object-Based Environment Variable Access
 
 If you aren't a fan of the hash-based access, you can also access them
 using methods:
