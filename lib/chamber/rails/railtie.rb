@@ -6,10 +6,6 @@ class   Railtie < ::Rails::Railtie
                   :namespaces => {
                     :environment => -> { ::Rails.env } })
   end
-
-  rake_tasks do
-    load 'chamber/tasks/heroku.rake'
-  end
 end
 end
 end

@@ -36,7 +36,6 @@ CHAMBER
   spec.add_runtime_dependency     'thor',           '~> 0.18.1'
   spec.add_runtime_dependency     'hashie',         '~> 2.0'
 
-  spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec',          '~> 2.14'
   spec.add_development_dependency 'rspectacular',   '~> 0.17.0'
   spec.add_development_dependency 'simplecov',      '~> 0.7'
