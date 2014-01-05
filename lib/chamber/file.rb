@@ -1,5 +1,6 @@
 require 'pathname'
 require 'yaml'
+require 'erb'
 
 ###
 # Internal: Represents a single file containing settings information in a given
