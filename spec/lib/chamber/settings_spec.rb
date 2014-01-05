@@ -43,19 +43,19 @@ describe  Settings do
 
   it 'sorts environment variables by name when converted to an environment hash so that they are easier to parse for humans' do
     allow(SystemEnvironment).to receive(:extract_from).
-                                and_return('c' => 'value',
-                                           'd' => 'value',
-                                           'a' => 'value',
-                                           'e' => 'value',
-                                           'b' => 'value',)
+                                and_return('C' => 'value',
+                                           'D' => 'value',
+                                           'A' => 'value',
+                                           'E' => 'value',
+                                           'B' => 'value',)
 
     settings = Settings.new(settings: { setting: 'value' })
 
-    expect(settings.to_environment.to_a).to eql([['a', 'value'],
-                                                 ['b', 'value'],
-                                                 ['c', 'value'],
-                                                 ['d', 'value'],
-                                                 ['e', 'value']])
+    expect(settings.to_environment.to_a).to eql([['A', 'value'],
+                                                 ['B', 'value'],
+                                                 ['C', 'value'],
+                                                 ['D', 'value'],
+                                                 ['E', 'value']])
   end
 
   it 'can convert itself into a string' do
