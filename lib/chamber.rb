@@ -76,6 +76,10 @@ class  Chamber
 
   attr_writer :settings
 
+  def files
+    @files ||= FileSet.new files: []
+  end
+
   private
 
   def basepath=(pathlike)
