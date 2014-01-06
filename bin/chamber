@@ -85,8 +85,20 @@ module  Commands
     end
 
     desc 'diff', 'Displays the difference between what is currently stored in the Heroku application\'s config and what Chamber knows about locally'
+    method_option :only_ignored,
+                  type:     :boolean,
+                  aliases:  '-o',
+                  default:  true,
+                  desc:     'When enabled, the diff will only consider settings contained in files which have been gitignored, the rest will be accessed directly'
     def diff
       ::Chamber::Commands::Chamber.init(options)
+
+      if options[:only_ignored]
+        ignored_settings_files = `git ls-files --other --ignored --exclude-from=.gitignore | sed -e "s|^|${PWD}/|" | grep --colour=never -E '#{::Chamber.filenames.join('|')}'`
+
+        ::Chamber.load  files:       ignored_settings_files.split("\n"),
+                        namespaces:  options[:namespaces]
+      end
 
       current_heroku_config = heroku("config --shell")
       current_local_config  = ::Chamber.to_s(pair_separator:    "\n",
