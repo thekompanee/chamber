@@ -79,6 +79,8 @@ module  Commands
         ::File.open(options[:into], 'w+') do |file|
           file.write current_heroku_config
         end
+      else
+        puts current_heroku_config
       end
     end
 
