@@ -261,7 +261,7 @@ module  Commands
     no_commands do
       def self.init(options)
         if options[:preset] == 'rails'
-          require ::File.expand_path('./config/environment')
+          require ::File.expand_path('./config/application')
 
           options[:basepath]   = Rails.root.join('config')
           options[:namespaces] = options[:namespaces].empty? ? [Rails.env] : options[:namespaces]
