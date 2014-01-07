@@ -4,6 +4,30 @@ Chamber lets you source your settings from an arbitrary number of YAML files tha
 values convention over configuration and has an automatic mechanism for working
 with Heroku's (or anyone else's) ENV variables.
 
+## But What About Those Other Configuration Management Gems?
+
+We reviewed [some other gems](#alternatives), and while each fit a specific need
+and each did some things well, none of them met all of the criteria that we felt
+we (and assumed others) needed.
+
+Our Ten Commandments of Configuration Management
+
+1. Thou shalt be configurable, but use conventions so that configuration isn't
+   necessary
+1. Thou shalt seemlessly work with Heroku or other deployment platforms, where custom
+   settings must be stored in environment variables
+1. Thou shalt seemlessly work with Travis CI and other cloud CI platforms
+1. Thou shalt not force users to use arcane
+   really_long_variable_names_just_to_keep_their_settings_organized
+1. Thou shalt not require users keep a separate repo or cloud share sync just to
+   keep their secure settings updated
+1. Thou shalt not be bound to a single framework like Rails (it should be usable in
+   plain Ruby projects)
+1. Thou shalt have an easy-to-use CLI for scripting
+1. Thou shalt easily integrate with Capistrano for easy configuration deployments
+1. Thou shalt be well documented with full test coverage
+1. Thou shalt not have to worry about accidentally committing secure settings
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -31,7 +55,6 @@ $ gem install chamber
 By default Chamber only needs a base path to look for settings files.  From
 that path it will search for:
 
-* The file `<basepath>/credentials.yml`
 * The file `<basepath>/settings.yml`
 * A set of files ending in `.yml` in the `<basepath>/settings` directory
 
@@ -43,12 +66,8 @@ Chamber.load basepath: '/path/to/my/application'
 
 ### In Rails
 
-If you're running a Rails app, by default Chamber will set the basepath to your
-Rails app's `config` directory, which is the equivalent of:
-
-```ruby
-Chamber.load basepath: Rails.root.join('config')
-```
+You do not have to do anything.  Chamber will auto-configure itself to point to
+the `config` directory.
 
 ### Accessing Settings
 
@@ -80,10 +99,91 @@ Chamber.env.smtp.server
 # => example.com
 ```
 
-### Keeping Your Settings Files Secure
+### Securing Your Settings
 
-Check out [Keeping Private Settings Private](#keeping-private-settings-private)
-below.
+Certain settings you will want to keep from prying eyes.  Unlike other
+configuration management libraries, Chamber doesn't require you to keep those
+files separate.  You can check *everything* into your repo.
+
+Why is keeping your secure files separate a pain?  Because you must keep those
+files in sync between all of your team members who are deploying the app.
+Either you have to use a separate private repo, or you have to use something
+like a Dropbox share.  In either case, you'd then symlink the files from their
+locations into your application.  What. A. Pain.
+
+Chamber uses public/private encryption keys to seemlessly store any of your
+configuration values as encrypted text.  The only file that needs to be synced
+*once* between developers is the private key.  And even that file would only be
+needed by the users deploying the application.  If you're deploying via CI,
+Github, etc, then technically no developer needs it.
+
+#### Setting It Up
+
+1. Create a Public/Private Keypair
+
+```sh
+ssh-keygen -t rsa -C "your_email@example.com" -f ./.chamber_rsa
+```
+
+1. Create a Passphrase
+
+You'll now be asked for a passphrase, enter one and *remember it*. Preferably,
+store it in something like 1Password.
+
+1. Set Proper File Permissions
+
+```sh
+chmod 600 ./.chamber_rsa
+chmod 644 ./.chamber_rsa.pub
+```
+
+1. Add the Private Key to Your gitignore File
+
+```sh
+echo ".chamber_rsa" >> .gitignore
+```
+
+#### Working With Secure Configuration Settings
+
+Once your keypair is created, the hard work is done.  From here on out, Chamber
+makes working with secure settings almost an afterthought.
+
+When you create your configuration YAML file (or add a new setting to an
+existing one), you can format your secure keys like so:
+
+```yaml
+# settings.yml
+
+x_my_secure_key_name_x: 'my secure value'
+```
+
+When Chamber sees this convention (`x_` followed by the key name, followed by
+`_x`), it will automatically look to either encrypt or decrypt the value using
+the public/private keys you generated above into:
+
+```yaml
+# settings.yml
+
+x_my_secure_key_name_x: 8239f293r9283r9823r92hf9823hf9uehfksdhviwuehf923uhrehf9238
+```
+
+However you would still have access the value like so (assuming you had access
+to the private key):
+
+```ruby
+Chamber.env.my_secure_key_name
+# => 'my secure value'
+```
+
+#### Git Commit Hooks
+
+Chamber comes with a git commit hook which will automatically look in your repo
+for standard Chamber settings files and, if it finds what it thinks to be an
+unencrypted value that it believes you meant to be encrpyted, it will abort and
+give you a chance to correct it (along with a command you can copy/paste to
+fix the problem).
+
+Add it to your project like so:
 
 ### Existing Environment Variables (aka Heroku)
 
@@ -202,15 +302,6 @@ associated namespaced files.  Finally it will load all \*.yml files in the
 `chamber` directory *except* `credentials.yml` because it has previously been
 loaded.
 
-### Object-Based Environment Variable Access
-
-If you aren't a fan of the hash-based access, you can also access them
-using methods:
-
-```ruby
-Chamber.env.smtp.server
-```
-
 ### Predicate Methods
 
 When using object notation, all settings have `?` and `_` predicate methods
@@ -313,9 +404,9 @@ under specific circumstances, you can use Chamber's namespaces.
 **Example:**
 
 ```ruby
-Chamber.load( :basepath => '/tmp',
+Chamber.load( :basepath => Rails.root.join('config'),
               :namespaces => {
-                :environment => -> { ::Rails.env } } )
+                :environment => ::Rails.env } )
 ```
 
 For this class, it will not only try and load the file `config/settings.yml`,
@@ -383,17 +474,50 @@ smtp:
 ````
 
 The above will yield the same results, but allows you to keep the production
-values in a separate file which can be secured separately.
+values in a separate file which can be secured separately. Although I would
+recommend keeping everything together and just [encrpyting your sensitive
+info](#securing-your-settings)
+
+If you would like to have items shared among namespaces, you can easily use
+YAML's built-in merge functionality to do that for you:
+
+```yaml
+# settings.yml
+
+default: &shared
+  smtp:
+    headers:
+      X-MYAPP-NAME: My Application Name
+      X-MYAPP-STUFF: Other Stuff
+
+development:
+  <<: *shared
+  smtp:
+    username: my_development_username
+    password: my_development_password`
+
+test:
+  <<: *shared
+  smtp:
+    username: my_test_username
+    password: my_test_password`
+
+staging:
+  <<: *shared
+  smtp:
+    username: my_staging_username
+    password: my_staging_password`
+```
 
 #### Multiple Namespaces
 
 Multiple namespaces can be defined by passing multiple items to the loader:
 
 ```ruby
-Chamber.load( :basepath => '/tmp',
+Chamber.load( :basepath => Rails.root.join('config'),
               :namespaces => {
-                :environment => -> { ::Rails.env },
-                :hostname    => -> { ENV['HOST'] } } )
+                :environment => ::Rails.env,
+                :hostname    => ENV['HOST'] } )
 ```
 
 When accessed within the `test` environment on a system named `tumbleweed`, it
@@ -562,14 +686,15 @@ examples will work with any of the other options described
 
   **Example:** `--dry-run`
 
-* `--only-ignored` (or `-o`): This is the default.  Because Heroku has no issues
+* `--secure-only` (or `-o`): This is the default.  Because Heroku has no issues
   reading from the config files you have stored in your repo, there is no need
   to set *all* of your settings as environment variables.  So by default,
-  Chamber will only convert and push those settings which have been gitignored.
+  Chamber will only convert and push those settings which have been gitignored
+  or those which have been encrpyted.
 
-  To push everything, use the `--no-only-ignored` flag.
+  To push everything, use the `--skip-secure-only` flag.
 
-  **Example:** `--only-ignored`, `--no-only-ignored`
+  **Example:** `--secure-only`, `--skip-secure-only`
 
 ##### Heroku Commands
 
@@ -627,14 +752,15 @@ Heroku addon-specific items.
 
   **Example:** `--dry-run`
 
-* `--only-ignored` (or `-o`): This is the default.  Because Travis has no issues
+* `--secure-only` (or `-o`): This is the default.  Because Travis has no issues
   reading from the config files you have stored in your repo, there is no need
   to set *all* of your settings as environment variables.  So by default,
-  Chamber will only convert and push those settings which have been gitignored.
+  Chamber will only convert and push those settings which have been gitignored
+  or those which have been encrpyted.
 
-  To push everything, use the `--no-only-ignored` flag.
+  To push everything, use the `--skip-secure-only` flag.
 
-  **Example:** `--only-ignored`, `--no-only-ignored`
+  **Example:** `--secure-only`, `--skip-secure-only`
 
 ##### Travis Commands
 
@@ -723,51 +849,11 @@ environment, you can simply use `Settings[:application_host]`.
 
 ## Best Practices
 
-### Why Do We Need Chamber?
-
-> Don't store sensitive information in git.
-
-A better way to say it is that you should store sensitive information separate
-from non-sensitive information.  There's nothing inherently wrong with storing
-sensitive information in git.  You just wouldn't want to store it in a public
-repository.
-
-If it weren't for this concern, managing settings would be trivial, easily
-solved use any number of approaches; e.g., [like using YAML and ERB in an
-initializer](http://urgetopunt.com/rails/2009/09/12/yaml-config-with-erb.html).
-
 ### Organizing Your Settings
 
-We recommend starting with a single `config/settings.yml` file. Once this file
-begins to become too unwieldy, you can begin to extract common options (let's
-say SMTP settings) into another file (perhaps `config/settings/smtp.yml`).
-
-### Keeping Private Settings Private
-
-Obviously the greater the number of files which need to be kept private the more
-difficult it is to manage the settings.  Therefore we suggest beginning with one
-private file that stores all of your credentials.
-
-### Ignoring Settings Files
-
-We recommend adding the following to your `.gitignore` file:
-
-```
-# Ignore the environment-specific files that contain the real credentials:
-/config/credentials.yml
-/config/credentials-*.yml
-
-# But don't ignore the example file that shows the structure:
-!/config/credentials-example.yml
-```
-
-Along with any namespace-specific exclusions.  For example, if you're using
-Rails, you may want to exclude some of your environment-specific files:
-
-```
-*-staging.yml
-*-production.yml
-```
+We recommend starting with a single `settings.yml` file. Once this file begins
+to become too unwieldy, you can begin to extract common options (let's say SMTP
+settings) into another file (perhaps `settings/smtp.yml`).
 
 ### Full Example
 
@@ -778,29 +864,48 @@ Let's walk through how you might use Chamber to configure your SMTP settings:
 
 stuff:
   not: "Not Related to SMTP"
-
-# config/settings/smtp.yml
-
-smtp:
-  headers:
-    X-MYAPP-NAME: My Application Name
-    X-MYAPP-STUFF: Other Stuff
-
-# config/settings/smtp-staging.yml
-
-smtp:
-  username: my_test_user
-  password: my_test_password
 ```
 
-Now you can access both `username` and `headers` off of `smtp` like so:
+```yaml
+# config/settings/smtp.yml
+
+default: &shared
+  smtp:
+    headers:
+      X-MYAPP-NAME: My Application Name
+      X-MYAPP-STUFF: Other Stuff
+
+development:
+  <<: *shared
+  smtp:
+    username: my_dev_user
+    password: my_dev_password
+
+staging:
+  <<: *shared
+  smtp:
+    x_username_x: my_staging_user
+    x_password_x: my_staging_password
+
+production:
+  <<: *shared
+  smtp:
+    x_username_x: my_production_user
+    x_password_x: my_production_password
+```
+
+Now, assuming you're running in staging, you can access both `username` and
+`headers` off of `smtp` like so:
 
 ```ruby
 Chamber[:smtp][:headers]
 # => { X-MYAPP-NAME: 'My Application Name', X-MYAPP-STUFF: 'Other Stuff' }
 
+Chamber[:smtp][:username]
+# => my_staging_username
+
 Chamber[:smtp][:password]
-# => my_test_password
+# => my_staging_password
 ```
 
 ## Alternatives
@@ -810,9 +915,11 @@ Chamber[:smtp][:password]
 * [idkfa](https://github.com/bendyworks/idkfa)
 * [settingslogic](https://github.com/binarylogic/settingslogic)
 
-### Others?
+## Thanks
 
-I'd love to hear of other gems and/or approaches to settings!
+Special thanks to all those gem authors above @binarylogic, @bendyworks,
+@laserlemon and @bkeepers.  They gave us the inspiration to write this gem and
+we would have made a lot more mistakes without them paving the way.  Thanks all!
 
 ## Contributing
 
