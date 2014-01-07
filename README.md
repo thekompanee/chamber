@@ -607,6 +607,13 @@ Each of the commands described below takes a few common options.
 
   **Example:** `--namespaces=development`
 
+* `--keypair` (or `-k`): The path to the keypair to use for
+  encryption/decryption. This is optional unless you have secure settings. You
+  only have to point it to the public key. It will assume that the private key
+  is the filename of the public key with any extension removed.
+
+  **Example:** `--keypair=/path/to/my/app/my_project_rsa.pub`
+
 _**Note:** `--basepath`, `--preset` and `--files` are mutually exclusive._
 
 #### Settings
@@ -623,6 +630,9 @@ about for a given context.  It will be output as a hash of hashes by default.
 
   **Example:** `--as-env`
 
+* `--auto-decrypt`: This is the default if the keypair provided includes
+  a private key. Otherwise this is disabled.
+
 **Example:** `chamber settings show -p=rails`
 
 ###### Files
@@ -635,6 +645,33 @@ top down so any duplicate items in subsequent entries will override items from
 previous ones.
 
 **Example:** `chamber settings files -p=rails`
+
+###### Secure
+
+Will verify that any items which are marked as secure (eg `x_my_setting_x`) have
+secure values.  If it appears that one does not, the user will be prompted as to
+whether or not they would like to encrpyt it.
+
+Items which are marked as secure can specify this convention `x__my_setting__x`
+to tell Chamber to always assume that the value is encrpyted, even if it appears
+that it is not.
+
+This command differs from other tasks in that it will process all files that
+match Chamber's conventions and not just those which match the passed in
+namespaces.
+
+* `--auto-encrypt`: Will automatically encrypt any values which Chamber feels
+  are unencrypted.
+
+  **Example:** `--auto-encrypt`, `--skip-auto-encrypt`
+
+* `--verify`: If the user has access to the private key, Chamber can decrypt the
+  value and ensure it matches the original value. This is useful to doublecheck
+  that the keypairs belong together.
+
+  **Example:** `--verify`, `--skip-verify`
+
+**Example:** `chamber settings secure -p=rails --verify --auto-encrypt`
 
 ###### Compare
 
@@ -704,6 +741,11 @@ As we described above, this command will take your current settings and push
 them to Heroku as environment variables that Chamber will be able to
 understand.
 
+* `--strict`: This is the default. If strict mode is enabled and there are both
+  secure settings *and* the private key cannot be found, the command will abort.
+
+  **Example:** `--strict`, `--no-strict`
+
 **Example:** `chamber heroku push -a=my-heroku-app -p=rails -n=staging`
 
 _**Note:** To see exactly how Chamber sees your settings as environment variables, see
@@ -761,6 +803,11 @@ Heroku addon-specific items.
   To push everything, use the `--skip-secure-only` flag.
 
   **Example:** `--secure-only`, `--skip-secure-only`
+
+* `--strict`: This is the default. If strict mode is enabled and there are both
+  secure settings *and* the private key cannot be found, the command will abort.
+
+  **Example:** `--strict`, `--no-strict`
 
 ##### Travis Commands
 
