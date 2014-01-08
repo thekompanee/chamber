@@ -15,15 +15,15 @@ class   Settings
   attr_reader :namespaces
 
   def initialize(options = {})
-    self.filters    = options.fetch(:filters,     [
-                                                    Filters::NamespaceFilter,
+    self.filters        = options.fetch(:filters,         [
+                                                            Filters::NamespaceFilter,
                                                             Filters::DecryptionFilter,
-                                                    Filters::EnvironmentFilter,
-                                                    Filters::BooleanConversionFilter,
-                                                  ])
-    self.namespaces = options.fetch(:namespaces,  NamespaceSet.new)
+                                                            Filters::EnvironmentFilter,
+                                                            Filters::BooleanConversionFilter,
+                                                          ])
+    self.namespaces     = options.fetch(:namespaces,      NamespaceSet.new)
     self.decryption_key = options.fetch(:decryption_key,  nil)
-    self.data       = options.fetch(:settings,    Hashie::Mash.new)
+    self.data           = options.fetch(:settings,        Hashie::Mash.new)
   end
 
   ###
@@ -97,14 +97,9 @@ class   Settings
   # Returns a Settings
   #
   def merge!(other)
-    self.data       = data.merge(other.to_hash)
-    self.namespaces = (namespaces + other.namespaces) if other.respond_to? :namespaces
-  end
-
-  def eql?(other)
-    other.is_a?(        Chamber::Settings)  &&
-    self.data        == other.data          &&
-    self.namespaces  == other.namespaces
+    self.decryption_key = decryption_key || other.decryption_key
+    self.namespaces     = (namespaces + other.namespaces) if other.respond_to? :namespaces
+    self.data           = data.merge(other.to_hash)
   end
 
   ###
@@ -116,6 +111,12 @@ class   Settings
   #
   def to_hash
     data.dup
+  end
+
+  def eql?(other)
+    other.is_a?(        Chamber::Settings)  &&
+    self.data        == other.data          &&
+    self.namespaces  == other.namespaces
   end
 
   def method_missing(name, *args)
