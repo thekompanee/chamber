@@ -94,7 +94,7 @@ class   Settings
   #     'my_other_setting'  => 'my other value',
   #   }
   #
-  # Returns a Hash
+  # Returns a Settings
   #
   def merge!(other)
     self.data       = data.merge(other.to_hash)
