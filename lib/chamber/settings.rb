@@ -107,8 +107,15 @@ class   Settings
     self.namespaces  == other.namespaces
   end
 
+  ###
+  # Internal: Returns the Settings data as a Hash for easy manipulation.
+  # Changes made to the hash will *not* be reflected in the original Settings
+  # object.
+  #
+  # Returns a Hash
+  #
   def to_hash
-    data
+    data.dup
   end
 
   def method_missing(name, *args)

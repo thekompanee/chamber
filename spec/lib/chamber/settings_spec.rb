@@ -140,5 +140,14 @@ describe  Settings do
 
     expect(settings.to_hash).to eql('my_encrypted_setting' => 'hello')
   end
+
+  it 'does not allow manipulation of the internal setting hash when converted to a Hash' do
+    settings = Settings.new(settings: {setting: 'value'})
+
+    settings_hash = settings.to_hash
+    settings_hash[:setting] = 'foo'
+
+    expect(settings.setting).to eql 'value'
+  end
 end
 end
