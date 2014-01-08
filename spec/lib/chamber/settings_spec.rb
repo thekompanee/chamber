@@ -131,5 +131,14 @@ describe  Settings do
     expect(settings.to_hash).to eql('namespace_setting'       => 'value',
                                     'other_namespace_setting' => 'value')
   end
+
+  it 'can decrypt a setting if it finds a secure key' do
+    settings = Settings.new(settings:   {
+                              _secure_my_encrypted_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ=='
+                            },
+                            decryption_key: './spec/spec_key')
+
+    expect(settings.to_hash).to eql('my_encrypted_setting' => 'hello')
+  end
 end
 end
