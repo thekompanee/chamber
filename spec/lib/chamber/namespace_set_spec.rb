@@ -7,28 +7,28 @@ describe  NamespaceSet do
     namespace_set = NamespaceSet.new( environment:  :development,
                                       hostname:     'my host')
 
-    expect(namespace_set).to eq [:development, 'my host']
+    expect(namespace_set).to eq ['development', 'my host']
   end
 
   it 'can create a set from an array' do
     namespace_set = NamespaceSet.new([:development,
                                       'my host'])
 
-    expect(namespace_set).to eq [:development, 'my host']
+    expect(namespace_set).to eq ['development', 'my host']
   end
 
   it 'can create a set from a set' do
     original_set  = Set[:development, 'my host']
     namespace_set = NamespaceSet.new(original_set)
 
-    expect(namespace_set).to eq [:development, 'my host']
+    expect(namespace_set).to eq ['development', 'my host']
   end
 
   it 'can turn itself into an array' do
     namespace_set = NamespaceSet.new([:development, 'my host'])
 
-    expect(namespace_set.to_ary).to eq [:development, 'my host']
-    expect(namespace_set.to_a).to   eq [:development, 'my host']
+    expect(namespace_set.to_ary).to eq ['development', 'my host']
+    expect(namespace_set.to_a).to   eq ['development', 'my host']
   end
 
   it 'can combine itself with an array' do
@@ -36,7 +36,7 @@ describe  NamespaceSet do
     other_set     = Set['other value', 3]
     combined_set  = namespace_set + other_set
 
-    expect(combined_set).to eq [:development, 'my host', 'other value', 3]
+    expect(combined_set).to eq ['development', 'my host', 'other value', '3']
   end
 
   it 'does not modify the set in place if combining with another array' do
@@ -52,13 +52,13 @@ describe  NamespaceSet do
     other_set     = (1..3)
     combined_set  = namespace_set + other_set
 
-    expect(combined_set).to eq [:development, 'my host', 1, 2, 3]
+    expect(combined_set).to eq ['development', 'my host', '1', '2', '3']
   end
 
   it 'does not allow duplicate items' do
     namespace_set = NamespaceSet.new([:development, :development])
 
-    expect(namespace_set).to eq [:development]
+    expect(namespace_set).to eq ['development']
   end
 
   it 'will process a value by executing it if it is a callable' do

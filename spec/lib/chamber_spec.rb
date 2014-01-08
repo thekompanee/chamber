@@ -130,7 +130,7 @@ describe Chamber, :singletons => [Chamber] do
                     :first_namespace_call  => -> { :first },
                     :second_namespace_call => -> { :second }, } )
 
-    expect(Chamber.instance.namespaces.to_a).to eql [:first, :second]
+    expect(Chamber.instance.namespaces.to_a).to eql ['first', 'second']
   end
 
   it 'does not load the same namespace twice' do
@@ -139,7 +139,7 @@ describe Chamber, :singletons => [Chamber] do
                     :first_namespace_call => -> { :first },
                     :first_namespace_call => -> { :first }, } )
 
-    expect(Chamber.instance.namespaces.to_a).to eql [:first]
+    expect(Chamber.instance.namespaces.to_a).to eql ['first']
   end
 
   it 'will load settings files which are only namespaced' do
