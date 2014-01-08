@@ -1,4 +1,3 @@
-require 'hashie/mash'
 require 'chamber/environmentable'
 
 ###
@@ -7,60 +6,6 @@ require 'chamber/environmentable'
 #
 class   Chamber
 module  SystemEnvironment
-
-  ###
-  # Internal: Allows the existing environment to be injected into the passed in
-  # hash.  The hash that is passed in is *not* modified, instead a new hash is
-  # returned.
-  #
-  # Examples:
-  #
-  #   ###
-  #   # Injects the current environment variables
-  #   #
-  #   ENV['LEVEL_ONE_1_LEVEL_TWO_1']               = 'env value 1'
-  #   ENV['LEVEL_ONE_1_LEVEL_TWO_2_LEVEL_THREE_1'] = 'env value 2'
-  #
-  #   SystemEnvironment.inject_into(
-  #     level_one_1: {
-  #       level_two_1: 'value 1',
-  #       level_two_2: {
-  #         level_three_1: 'value 2' } } )
-  #
-  #   # => {
-  #     'level_one_1' => {
-  #       'level_two_1' => 'env value 1',
-  #       'level_two_2' => {
-  #         'level_three_1' => 'env value 2',
-  #   }
-  #
-  #   ###
-  #   # Can inject environment variables if said variables are prefixed
-  #   #
-  #   ENV['PREFIX_LEVEL_TWO_1'] = 'env value 1'
-  #   ENV['PREFIX_LEVEL_TWO_2'] = 'env value 2'
-  #
-  #   SystemEnvironment.inject_into({
-  #                                   level_two_1: 'value 1',
-  #                                   level_two_2: 'value 2'
-  #                                 },
-  #                                 ['prefix'])
-  #
-  #   # => {
-  #     'level_two_1' => 'env value 1',
-  #     'level_two_2' => 'env value 2',
-  #   }
-  #
-  #
-  def self.inject_into(settings = {}, parent_keys = [])
-    with_environment(settings, parent_keys,
-      ->(key, value, environment_keys) do
-        { key => inject_into(value, environment_keys) }
-      end,
-      ->(key, value, environment_key) do
-        { key => convert_value(ENV[environment_key] || value) }
-      end)
-  end
   extend Environmentable
 
   ###
@@ -105,25 +50,6 @@ module  SystemEnvironment
       ->(key, value, environment_key) do
         { environment_key => value.to_s }
       end)
-  end
-
-  private
-
-  def self.convert_value(value)
-    return nil if value.nil?
-
-    if value.is_a? String
-      case value
-      when 'false', 'f', 'no'
-        false
-      when 'true', 't', 'yes'
-        true
-      else
-        value
-      end
-    else
-      value
-    end
   end
 end
 end
