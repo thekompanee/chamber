@@ -2,6 +2,7 @@ require 'hashie/mash'
 require 'chamber/system_environment'
 require 'chamber/namespace_set'
 require 'chamber/filters/namespace_filter'
+require 'chamber/filters/decryption_filter'
 require 'chamber/filters/environment_filter'
 require 'chamber/filters/boolean_conversion_filter'
 
@@ -16,10 +17,12 @@ class   Settings
   def initialize(options = {})
     self.filters    = options.fetch(:filters,     [
                                                     Filters::NamespaceFilter,
+                                                            Filters::DecryptionFilter,
                                                     Filters::EnvironmentFilter,
                                                     Filters::BooleanConversionFilter,
                                                   ])
     self.namespaces = options.fetch(:namespaces,  NamespaceSet.new)
+    self.decryption_key = options.fetch(:decryption_key,  nil)
     self.data       = options.fetch(:settings,    Hashie::Mash.new)
   end
 
@@ -120,7 +123,8 @@ class   Settings
 
   protected
 
-  attr_accessor :filters
+  attr_accessor :filters,
+                :decryption_key
   attr_reader   :raw_data
   attr_writer   :namespaces
 
@@ -131,8 +135,9 @@ class   Settings
   def data=(raw_data)
     @raw_data = Hashie::Mash.new(raw_data)
     @data     = filters.reduce(raw_data) do |filtered_data, filter|
-                  filter.execute(data:        filtered_data,
-                                 namespaces:  self.namespaces)
+                  filter.execute( data:           filtered_data,
+                                  namespaces:     self.namespaces,
+                                  decryption_key: self.decryption_key)
                 end
   end
 end
