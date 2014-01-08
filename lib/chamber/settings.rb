@@ -1,6 +1,9 @@
 require 'hashie/mash'
 require 'chamber/system_environment'
 require 'chamber/namespace_set'
+require 'chamber/filters/namespace_filter'
+require 'chamber/filters/environment_filter'
+require 'chamber/filters/boolean_conversion_filter'
 
 ###
 # Internal: Represents the base settings storage needed for Chamber.
@@ -11,6 +14,11 @@ class   Settings
   attr_reader :namespaces
 
   def initialize(options = {})
+    self.filters    = options.fetch(:filters,     [
+                                                    Filters::NamespaceFilter,
+                                                    Filters::EnvironmentFilter,
+                                                    Filters::BooleanConversionFilter,
+                                                  ])
     self.namespaces = options.fetch(:namespaces,  NamespaceSet.new)
     self.data       = options.fetch(:settings,    Hashie::Mash.new)
   end
@@ -112,8 +120,9 @@ class   Settings
 
   protected
 
-  attr_reader :raw_data
-  attr_writer :namespaces
+  attr_accessor :filters
+  attr_reader   :raw_data
+  attr_writer   :namespaces
 
   def data
     @data ||= Hashie::Mash.new
@@ -121,32 +130,10 @@ class   Settings
 
   def data=(raw_data)
     @raw_data = Hashie::Mash.new(raw_data)
-
-    namespace_checked_data =  if data_is_namespaced?
-                                namespace_filtered_data
-                              else
-                                self.raw_data
-                              end
-
-    @data = SystemEnvironment.inject_into(namespace_checked_data)
-  end
-
-  private
-
-  def data_is_namespaced?
-    @data_is_namespaced ||= raw_data.keys.any? { |key| namespaces.include? key }
-  end
-
-  def namespace_filtered_data
-    @namespace_filtered_data ||= -> do
-      data = Hashie::Mash.new
-
-      namespaces.each do |namespace|
-        data.merge!(raw_data[namespace]) if raw_data[namespace]
-      end
-
-      data
-    end.call
+    @data     = filters.reduce(raw_data) do |filtered_data, filter|
+                  filter.execute(data:        filtered_data,
+                                 namespaces:  self.namespaces)
+                end
   end
 end
 end
