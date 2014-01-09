@@ -97,15 +97,18 @@ describe  Settings do
   it 'can convert itself into a hash' do
     settings = Settings.new(settings: {setting: 'value'})
 
-    expect(settings.to_hash).to eql('setting' => 'value')
+    expect(settings.to_hash).to     eql('setting' => 'value')
+    expect(settings.to_hash).to     be_a Hash
+    expect(settings.to_hash).not_to be_a Hashie::Mash
   end
 
   it 'does not allow manipulation of the internal setting hash when converted to a Hash' do
     settings = Settings.new(settings: {setting: 'value'})
 
     settings_hash = settings.to_hash
-    settings_hash[:setting] = 'foo'
+    settings_hash['setting'] = 'foo'
 
+    expect(settings.send(:data).object_id).not_to eql settings_hash.object_id
     expect(settings.setting).to eql 'value'
   end
 

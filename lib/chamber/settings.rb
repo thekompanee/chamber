@@ -110,7 +110,7 @@ class   Settings
   # Returns a Hash
   #
   def to_hash
-    data.dup
+    data.to_hash
   end
 
   def eql?(other)
