@@ -42,10 +42,6 @@ class  Chamber
     self.files.filenames
   end
 
-  def namespaces
-    settings.namespaces
-  end
-
   def settings
     @settings ||= -> do
       @settings = Settings.new(decryption_key: self.decryption_key)
