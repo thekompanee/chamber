@@ -22,9 +22,9 @@ class  Chamber
     alias_method    :env,       :instance
   end
 
-  attr_accessor :basepath,
-                :files,
-                :decryption_key
+  attr_reader :basepath,
+              :files,
+              :decryption_key
 
   def load(options)
     self.settings       = nil
@@ -70,13 +70,15 @@ class  Chamber
     settings.to_s(*args)
   end
 
-  protected
-
-  attr_writer :settings
-
   def files
     @files ||= FileSet.new files: []
   end
+
+  protected
+
+  attr_writer :decryption_key,
+              :files,
+              :settings
 
   private
 
