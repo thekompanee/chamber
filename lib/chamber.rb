@@ -26,14 +26,14 @@ class  Chamber
                 :files
 
   def load(options)
-    self.settings = nil
-    self.basepath = options[:basepath] || ''
-    file_patterns = options[:files] || [
-                      self.basepath + 'credentials*.yml',
-                      self.basepath + 'settings*.yml',
-                      self.basepath + 'settings' ]
-    self.files    = FileSet.new files:      file_patterns,
-                                namespaces: options.fetch(:namespaces, {})
+    self.settings       = nil
+    self.basepath       = options[:basepath] || ''
+    file_patterns       = options[:files] || [
+                            self.basepath + 'credentials*.yml',
+                            self.basepath + 'settings*.yml',
+                            self.basepath + 'settings' ]
+    self.files          = FileSet.new files:      file_patterns,
+                                      namespaces: options.fetch(:namespaces, {})
   end
 
   def filenames
