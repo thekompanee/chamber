@@ -135,6 +135,11 @@ class   NamespaceSet
   #   namespace_set.namespaces
   #   # => ['development']
   #
+  #   # Can be set to a single value
+  #   namespace_set.namespaces  = 'development'
+  #   namespace_set.namespaces
+  #   # => ['development']
+  #
   #   # Can be set to a callable
   #   namespace_set.namespaces  = { environment:  -> { 'called' } }
   #   namespace_set.namespaces
@@ -146,10 +151,14 @@ class   NamespaceSet
   #   # => ['namespace_value']
   #
   def namespaces=(raw_namespaces)
-    namespace_values =  if raw_namespaces.respond_to? :values
-                          raw_namespaces.values
+    namespace_values =  if raw_namespaces.respond_to? :map
+                          if raw_namespaces.respond_to? :values
+                            raw_namespaces.values
+                          else
+                            raw_namespaces
+                          end
                         else
-                          raw_namespaces
+                          [raw_namespaces]
                         end
 
     @namespaces = Set.new namespace_values.map do |value|
