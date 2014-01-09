@@ -1,86 +1,38 @@
-require 'singleton'
-require 'forwardable'
-require 'chamber/file_set'
+require 'chamber/configuration'
 require 'chamber/rails'
 
 class  Chamber
-  include Singleton
-
-  class << self
-    extend Forwardable
-
-    def_delegators  :instance,  :[],
-                                :basepath,
-                                :load,
-                                :filenames,
-                                :namespaces,
-                                :settings,
-                                :to_environment,
-                                :to_hash,
-                                :to_s
-
-    alias_method    :env,       :instance
+  def self.load(options = {})
+    self.config = Configuration.new(options)
   end
 
-  attr_reader :basepath,
-              :files,
-              :decryption_key
-
-  def load(options)
-    self.settings       = nil
-    self.basepath       = options[:basepath] || ''
-    self.decryption_key = options[:decryption_key]
-    file_patterns       = options[:files] || [
-                            self.basepath + 'credentials*.yml',
-                            self.basepath + 'settings*.yml',
-                            self.basepath + 'settings' ]
-    self.files          = FileSet.new files:      file_patterns,
-                                      namespaces: options.fetch(:namespaces, {})
+  def self.filenames
+    config.files.filenames
   end
 
-  def settings
-    @settings ||= -> do
-      @settings = Settings.new(decryption_key: self.decryption_key)
-
-      files.to_settings do |parsed_settings|
-        @settings = @settings.merge(parsed_settings)
-      end
-
-      @settings
-    end.call
+  def self.to_s
+    config.to_s
   end
 
-  def filenames
-    self.files.filenames
+  def self.env
+    config.settings
   end
 
-  def files
-    @files ||= FileSet.new files: []
-  end
+class << self
+  attr_reader   :config
 
-  def to_s(*args)
-    settings.to_s(*args)
-  end
+  protected
+
+  attr_writer   :config
 
   def method_missing(name, *args)
-    return settings.public_send(name, *args) if settings.respond_to?(name)
+    return config.settings.public_send(name, *args) if config.settings.respond_to?(name)
 
     super
   end
 
   def respond_to_missing?(name, include_private = false)
-    settings.respond_to?(name, include_private)
+    config.settings.respond_to?(name, include_private)
   end
-
-  protected
-
-  attr_writer :decryption_key,
-              :files,
-              :settings
-
-  private
-
-  def basepath=(pathlike)
-    @basepath = pathlike == '' ? '' : Pathname.new(::File.expand_path(pathlike))
-  end
+end
 end
