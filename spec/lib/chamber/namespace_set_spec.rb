@@ -24,6 +24,12 @@ describe  NamespaceSet do
     expect(namespace_set).to eq ['development', 'my host']
   end
 
+  it 'can create itself using square-bracket notation' do
+    namespace_set = NamespaceSet[:development, 'my host']
+
+    expect(namespace_set).to eq ['development', 'my host']
+  end
+
   it 'can turn itself into an array' do
     namespace_set = NamespaceSet.new([:development, 'my host'])
 
