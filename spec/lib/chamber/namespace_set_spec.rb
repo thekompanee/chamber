@@ -54,7 +54,7 @@ describe  NamespaceSet do
     original_set  = NamespaceSet[:development, 'my host']
     namespace_set = NamespaceSet.new(original_set)
 
-    expect(namespace_set.send(:namespaces)).not_to be_a NamespaceSet
+    expect(namespace_set.send(:raw_namespaces)).not_to be_a NamespaceSet
   end
 
   it 'can turn itself into an array' do
@@ -67,6 +67,16 @@ describe  NamespaceSet do
   it 'can combine itself with an array' do
     namespace_set = NamespaceSet[:development, 'my host']
     other_set     = Set['other value', 3]
+
+    combined_set  = namespace_set + other_set
+
+    expect(combined_set).to eq ['development', 'my host', 'other value', '3']
+  end
+
+  it 'can combine itself with another NamespaceSet' do
+    namespace_set = NamespaceSet[:development, 'my host']
+    other_set     = NamespaceSet['other value', 3]
+
     combined_set  = namespace_set + other_set
 
     expect(combined_set).to eq ['development', 'my host', 'other value', '3']

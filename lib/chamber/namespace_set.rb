@@ -155,6 +155,14 @@ class   NamespaceSet
                     end
   end
 
+  def raw_namespaces=(raw_namespaces)
+    @raw_namespaces = if raw_namespaces.is_a? NamespaceSet
+                        raw_namespaces.to_ary
+                      else
+                        raw_namespaces
+                      end
+  end
+
   private
 
   def namespace_values
