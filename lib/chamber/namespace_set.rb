@@ -130,6 +130,11 @@ class   NamespaceSet
   #   namespace_set.namespaces
   #   # => ['development', 'my host']
   #
+  #   # Can be set to a NamespaceSet
+  #   namespace_set.namespaces  = NamespaceSet.new('development')
+  #   namespace_set.namespaces
+  #   # => ['development']
+  #
   #   # Can be set to a callable
   #   namespace_set.namespaces  = { environment:  -> { 'called' } }
   #   namespace_set.namespaces
