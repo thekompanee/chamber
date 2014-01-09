@@ -5,27 +5,27 @@ class     Chamber
 describe  Settings do
   it 'can verify that it is equal to another Settings object' do
     settings        = Settings.new( settings:   {setting: 'value'},
-                                    namespaces: NamespaceSet.new(['good']))
+                                    namespaces: ['good'])
     other_settings  = Settings.new( settings:   {setting: 'value'},
-                                    namespaces: NamespaceSet.new(['good']))
+                                    namespaces: ['good'])
 
     expect(settings).to eql other_settings
   end
 
   it 'does not consider itself equal if the namespaces are not equal' do
     settings        = Settings.new( settings:   {setting: 'value'},
-                                    namespaces: NamespaceSet.new(['good']))
+                                    namespaces: ['good'])
     other_settings  = Settings.new( settings:   {setting: 'value'},
-                                    namespaces: NamespaceSet.new(['bad']))
+                                    namespaces: ['bad'])
 
     expect(settings).not_to eql other_settings
   end
 
   it 'does not consider itself equal if the settings are not equal' do
     settings        = Settings.new( settings:   {setting: 'value'},
-                                    namespaces: NamespaceSet.new(['good']))
+                                    namespaces: ['good'])
     other_settings  = Settings.new( settings:   {setting: 'value 1'},
-                                    namespaces: NamespaceSet.new(['good']))
+                                    namespaces: ['good'])
 
     expect(settings).not_to eql other_settings
   end
@@ -81,17 +81,17 @@ describe  Settings do
 
   it 'can merge itself with Settings' do
     settings       = Settings.new(settings:   {setting:       'value'},
-                                  namespaces: NamespaceSet.new(['good']))
+                                  namespaces: ['good'])
 
     other_settings = Settings.new(settings:   {other_setting: 'another value'},
-                                  namespaces: NamespaceSet.new(['bad']))
+                                  namespaces: ['bad'])
 
     settings.merge!(other_settings)
 
     expect(settings).to eql Settings.new( settings:   {
                                             setting:        'value',
                                             other_setting:  'another value' },
-                                          namespaces: NamespaceSet.new(['good', 'bad']))
+                                          namespaces: ['good', 'bad'])
   end
 
   it 'can convert itself into a hash' do
@@ -135,7 +135,7 @@ describe  Settings do
                                 other_namespace_setting:  'value' },
                               non_namespace_setting:  'other value'
                             },
-                            namespaces: NamespaceSet.new(['namespace_value', 'other_namespace_value']))
+                            namespaces: ['namespace_value', 'other_namespace_value'])
 
     expect(settings.to_hash).to eql('namespace_setting'       => 'value',
                                     'other_namespace_setting' => 'value')
