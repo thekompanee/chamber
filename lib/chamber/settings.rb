@@ -15,15 +15,17 @@ class   Settings
   attr_reader :namespaces
 
   def initialize(options = {})
-    self.filters        = options.fetch(:filters,         [
-                                                            Filters::NamespaceFilter,
-                                                            Filters::DecryptionFilter,
-                                                            Filters::EnvironmentFilter,
-                                                            Filters::BooleanConversionFilter,
-                                                          ])
     self.namespaces       = options.fetch(:namespaces,      [])
     self.decryption_key   = options.fetch(:decryption_key,  nil)
     self.raw_data         = options.fetch(:settings,        {})
+    self.pre_filters      = options.fetch(:pre_filters,     [
+                                                              Filters::NamespaceFilter,
+                                                            ])
+    self.post_filters     = options.fetch(:post_filters,    [
+                                                              Filters::DecryptionFilter,
+                                                              Filters::EnvironmentFilter,
+                                                              Filters::BooleanConversionFilter,
+                                                            ])
   end
 
   ###
@@ -153,7 +155,8 @@ class   Settings
 
   protected
 
-  attr_accessor :filters,
+  attr_accessor :pre_filters,
+                :post_filters,
                 :decryption_key,
                 :raw_data
 
@@ -165,12 +168,20 @@ class   Settings
     @namespaces = NamespaceSet.new(raw_namespaces)
   end
 
+  def raw_data
+    @filtered_raw_data  ||= pre_filters.reduce(@raw_data) do |filtered_data, filter|
+                              filter.execute( data:           filtered_data,
+                                              namespaces:     self.namespaces,
+                                              decryption_key: self.decryption_key)
+                            end
+  end
+
   def data
-    @data ||= filters.reduce(raw_data) do |filtered_data, filter|
-                filter.execute( data:           filtered_data,
-                                namespaces:     self.namespaces,
-                                decryption_key: self.decryption_key)
-              end
+    @data               ||= post_filters.reduce(raw_data) do |filtered_data, filter|
+                              filter.execute( data:           filtered_data,
+                                              namespaces:     self.namespaces,
+                                              decryption_key: self.decryption_key)
+                            end
   end
 end
 end
