@@ -23,6 +23,13 @@ test:
   HEREDOC
 end
 
+File.open('/tmp/chamber/secure.yml', 'w+') do |file|
+  file.puts <<-HEREDOC
+test:
+  _secure_my_encrpyted_setting: cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==
+  HEREDOC
+end
+
 File.open('/tmp/chamber/credentials.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 test:
@@ -282,5 +289,12 @@ describe Chamber, :singletons => [Chamber] do
     Singleton.__init__(Chamber)
 
     expect(Chamber.settings.to_hash).to eql({})
+  end
+
+  it 'can unencrpyt an already encrpyted value if it has access to the private key' do
+    Chamber.load(files:           '/tmp/chamber/secure.yml',
+                 decryption_key:  './spec/spec_key')
+
+    expect(Chamber.env.test.my_encrpyted_setting).to eql 'hello'
   end
 end

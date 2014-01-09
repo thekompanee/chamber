@@ -23,11 +23,13 @@ class  Chamber
   end
 
   attr_accessor :basepath,
-                :files
+                :files,
+                :decryption_key
 
   def load(options)
     self.settings       = nil
     self.basepath       = options[:basepath] || ''
+    self.decryption_key = options[:decryption_key]
     file_patterns       = options[:files] || [
                             self.basepath + 'credentials*.yml',
                             self.basepath + 'settings*.yml',
@@ -46,10 +48,10 @@ class  Chamber
 
   def settings
     @settings ||= -> do
-      @settings = Settings.new
+      @settings = Settings.new(decryption_key: self.decryption_key)
 
       files.to_settings do |parsed_settings|
-        @settings.merge! parsed_settings
+        @settings = @settings.merge(parsed_settings)
       end
 
       @settings
