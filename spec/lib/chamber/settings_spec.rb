@@ -140,8 +140,8 @@ describe  Settings do
                             },
                             namespaces: ['namespace_value', 'other_namespace_value'])
 
-    expect(settings.to_hash).to eql('namespace_setting'       => 'value',
-                                    'other_namespace_setting' => 'value')
+    expect(settings).to eq('namespace_setting' => 'value',
+                             'other_namespace_setting' => 'value')
   end
 
   it 'can decrypt a setting if it finds a secure key' do
@@ -150,7 +150,7 @@ describe  Settings do
                             },
                             decryption_key: './spec/spec_key')
 
-    expect(settings.to_hash).to eql('my_encrypted_setting' => 'hello')
+    expect(settings).to eq('my_encrypted_setting' => 'hello')
   end
 
   it 'can check if it is equal to other items which can be converted into hashes' do
