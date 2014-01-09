@@ -20,6 +20,20 @@ class   NamespaceSet
   end
 
   ###
+  # Internal: Allows for more compact NamespaceSet creation by giving a list of
+  # namespace values.
+  #
+  # Examples:
+  #
+  #   NamespaceSet['development', -> { ENV['HOST'] }]
+  #
+  # Returns a new NamespaceSet
+  #
+  def self.[](*namespace_values)
+    self.new(namespace_values)
+  end
+
+  ###
   # Internal: Allows a NamespaceSet to be combined with some other array-like
   # object.
   #
