@@ -21,9 +21,9 @@ class   Settings
                                                             Filters::EnvironmentFilter,
                                                             Filters::BooleanConversionFilter,
                                                           ])
-    self.namespaces     = options.fetch(:namespaces,      [])
-    self.decryption_key = options.fetch(:decryption_key,  nil)
-    self.raw_data       = options.fetch(:settings,        {})
+    self.namespaces       = options.fetch(:namespaces,      [])
+    self.decryption_key   = options.fetch(:decryption_key,  nil)
+    self.raw_data         = options.fetch(:settings,        {})
   end
 
   ###
@@ -158,7 +158,7 @@ class   Settings
                 :raw_data
 
   def raw_data=(new_raw_data)
-    @raw_data = Hashie::Mash.new(new_raw_data)
+    @raw_data   = Hashie::Mash.new(new_raw_data)
   end
 
   def namespaces=(raw_namespaces)
