@@ -38,10 +38,6 @@ class  Chamber
                                       namespaces: options.fetch(:namespaces, {})
   end
 
-  def filenames
-    self.files.filenames
-  end
-
   def settings
     @settings ||= -> do
       @settings = Settings.new(decryption_key: self.decryption_key)
@@ -54,24 +50,26 @@ class  Chamber
     end.call
   end
 
-  def method_missing(name, *args)
-    if settings.respond_to?(name)
-      return settings.public_send(name, *args)
-    end
-
-    super
+  def filenames
+    self.files.filenames
   end
 
-  def respond_to_missing?(name, include_private = false)
-    settings.respond_to?(name, include_private)
+  def files
+    @files ||= FileSet.new files: []
   end
 
   def to_s(*args)
     settings.to_s(*args)
   end
 
-  def files
-    @files ||= FileSet.new files: []
+  def method_missing(name, *args)
+    return settings.public_send(name, *args) if settings.respond_to?(name)
+
+    super
+  end
+
+  def respond_to_missing?(name, include_private = false)
+    settings.respond_to?(name, include_private)
   end
 
   protected
