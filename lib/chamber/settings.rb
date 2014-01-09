@@ -123,6 +123,11 @@ class   Settings
     self.to_hash == other.to_hash
   end
 
+  ###
+  # Internal: Determines whether a Settings is equal to another Settings.
+  #
+  # Returns a Boolean
+  #
   def eql?(other)
     other.is_a?(        Chamber::Settings)  &&
     self.data        == other.data          &&
