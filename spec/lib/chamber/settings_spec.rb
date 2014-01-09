@@ -152,5 +152,11 @@ describe  Settings do
 
     expect(settings.to_hash).to eql('my_encrypted_setting' => 'hello')
   end
+
+  it 'can check if it is equal to other items which can be converted into hashes' do
+    settings = Settings.new(settings: {setting: 'value'})
+
+    expect(settings).to eq('setting' => 'value')
+  end
 end
 end
