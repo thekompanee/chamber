@@ -78,19 +78,19 @@ only_namespaced_sub_settings:
   HEREDOC
 end
 
-describe Chamber, :singletons => [Chamber] do
+describe Chamber do
   before(:each) { Chamber.load(:basepath => '/tmp/chamber') }
 
   it 'knows how to load itself with a path string' do
     Chamber.load(:basepath => '/tmp/chamber')
 
-    expect(Chamber.basepath.to_s).to eql '/tmp/chamber'
+    expect(Chamber.config.basepath.to_s).to eql '/tmp/chamber'
   end
 
   it 'knows how to load itself with a path object' do
     Chamber.load(:basepath => Pathname.new('/tmp/chamber'))
 
-    expect(Chamber.basepath.to_s).to eql '/tmp/chamber'
+    expect(Chamber.config.basepath.to_s).to eql '/tmp/chamber'
   end
 
   it 'processes settings files through ERB before YAML' do
@@ -102,11 +102,11 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'can access the settings through method-based access' do
-    expect(Chamber.instance.test.my_setting).to eql 'my_value'
+    expect(Chamber.test.my_setting).to eql 'my_value'
   end
 
-  it 'can access the instance via "env"' do
-    expect(Chamber.instance.test.my_setting).to eql 'my_value'
+  it 'can access the config via "env"' do
+    expect(Chamber.env.test.my_setting).to eql 'my_value'
   end
 
   it 'prefers values stored in environment variables over those in the YAML files' do
@@ -114,9 +114,9 @@ describe Chamber, :singletons => [Chamber] do
     ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = 'something'
 
     Chamber.load(:basepath => '/tmp/chamber')
-    expect(Chamber.instance.test.my_setting).to eql 'some_other_value'
-    expect(Chamber.instance.test.another_level.level_three.an_array).to eql 'something'
-    expect(Chamber.instance.test.my_dynamic_setting).to eql 2
+    expect(Chamber.test.my_setting).to eql 'some_other_value'
+    expect(Chamber.test.another_level.level_three.an_array).to eql 'something'
+    expect(Chamber.test.my_dynamic_setting).to eql 2
 
     ENV.delete 'TEST_MY_SETTING'
     ENV.delete 'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'
@@ -127,8 +127,8 @@ describe Chamber, :singletons => [Chamber] do
                   :namespaces => {
                     :my_namespace => -> { 'blue' } } )
 
-    expect(Chamber.instance.other.everything).to        eql 'works'
-    expect(Chamber.instance.test.my_dynamic_setting).to eql 2
+    expect(Chamber.other.everything).to        eql 'works'
+    expect(Chamber.test.my_dynamic_setting).to eql 2
   end
 
   it 'loads multiple namespaces if it is called twice' do
@@ -137,7 +137,7 @@ describe Chamber, :singletons => [Chamber] do
                     :first_namespace_call  => -> { :first },
                     :second_namespace_call => -> { :second }, } )
 
-    expect(Chamber.instance.namespaces.to_a).to eql ['first', 'second']
+    expect(Chamber.namespaces.to_a).to eql ['first', 'second']
   end
 
   it 'does not load the same namespace twice' do
@@ -146,7 +146,7 @@ describe Chamber, :singletons => [Chamber] do
                     :first_namespace_call => -> { :first },
                     :first_namespace_call => -> { :first }, } )
 
-    expect(Chamber.instance.namespaces.to_a).to eql ['first']
+    expect(Chamber.namespaces.to_a).to eql ['first']
   end
 
   it 'will load settings files which are only namespaced' do
@@ -170,7 +170,7 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'still raises an error if you try to send a message which the settings hash does not understand' do
-    expect{ Chamber.instance.i_do_not_know }.to raise_error NoMethodError
+    expect{ Chamber.config.i_do_not_know }.to raise_error NoMethodError
   end
 
   it 'does not raise an exception if a namespaced file does not exist' do
@@ -186,13 +186,13 @@ describe Chamber, :singletons => [Chamber] do
                   :namespaces => {
                     :my_namespace => -> { 'blue' } } )
 
-    expect(Chamber.instance.test.my_setting).to                eql 'my_value'
-    expect(Chamber.instance.test.my_other_setting).to          eql 'my_other_value'
-    expect(Chamber.instance.test.another_level.setting_one).to eql 3
+    expect(Chamber.test.my_setting).to                eql 'my_value'
+    expect(Chamber.test.my_other_setting).to          eql 'my_other_value'
+    expect(Chamber.test.another_level.setting_one).to eql 3
   end
 
   it 'loads YAML files from the "settings" directory under the base directory if any exist' do
-    expect(Chamber.instance.sub_settings.my_sub_setting).to eql 'my_sub_setting_value'
+    expect(Chamber.sub_settings.my_sub_setting).to eql 'my_sub_setting_value'
   end
 
   it 'does not load YAML files from the "settings" directory if it is namespaced' do
@@ -260,16 +260,16 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'can notify properly whether it responds to messages if the underlying settings does' do
-    expect(Chamber.env.respond_to?(:sub_settings)).to be_a TrueClass
+    expect(Chamber.respond_to?(:sub_settings)).to be_a TrueClass
   end
 
   it 'can explicitly specify files without specifying a basepath' do
     Chamber.load files: ['/tmp/chamber/credentials.yml']
 
-    expect(Chamber.filenames).to eql  ['/tmp/chamber/credentials.yml']
-    expect(Chamber.settings.to_hash).to eql('test' => {
-                                              'my_username' => 'username',
-                                              'my_password' => 'password', } )
+    expect(Chamber.filenames).to    eql ['/tmp/chamber/credentials.yml']
+    expect(Chamber.to_hash).to  eql('test' => {
+                                      'my_username' => 'username',
+                                      'my_password' => 'password', } )
   end
 
   it 'ignores the basepath if file patterns are explicitly passed in' do
@@ -280,21 +280,21 @@ describe Chamber, :singletons => [Chamber] do
   end
 
   it 'can render itself as a string even if it has not been loaded' do
-    Singleton.__init__(Chamber)
+    Chamber.load
 
     expect(Chamber.to_s).to eql ''
   end
 
   it 'can determine settings even if it has not been loaded' do
-    Singleton.__init__(Chamber)
+    Chamber.load
 
-    expect(Chamber.settings.to_hash).to eql({})
+    expect(Chamber.to_hash).to eql({})
   end
 
   it 'can unencrpyt an already encrpyted value if it has access to the private key' do
     Chamber.load(files:           '/tmp/chamber/secure.yml',
                  decryption_key:  './spec/spec_key')
 
-    expect(Chamber.env.test.my_encrpyted_setting).to eql 'hello'
+    expect(Chamber.test.my_encrpyted_setting).to eql 'hello'
   end
 end
