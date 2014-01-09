@@ -16,7 +16,7 @@ class   NamespaceSet
   # Internal: Creates a new NamespaceSet from arrays, hashes and sets.
   #
   def initialize(raw_namespaces = {})
-    self.namespaces = raw_namespaces
+    self.raw_namespaces = raw_namespaces
   end
 
   ###
@@ -108,9 +108,7 @@ class   NamespaceSet
 
   protected
 
-  def namespaces
-    @namespaces ||= Set.new
-  end
+  attr_accessor :raw_namespaces
 
   ###
   # Internal: Sets the namespaces for the set from a variety of objects and
@@ -122,6 +120,7 @@ class   NamespaceSet
   #
   #   # Can be set to an array
   #   namespace_set.namespaces  = %w{namespace_value_1 namespace_value_2}
+  #   namespace_set.namespaces
   #   # => ['namespace_value_1', 'namespace_value_2']
   #
   #   # Can be set to a hash
@@ -150,20 +149,24 @@ class   NamespaceSet
   #   namespace_set.namespaces
   #   # => ['namespace_value']
   #
-  def namespaces=(raw_namespaces)
-    namespace_values =  if raw_namespaces.respond_to? :map
-                          if raw_namespaces.respond_to? :values
-                            raw_namespaces.values
-                          else
-                            raw_namespaces
-                          end
-                        else
-                          [raw_namespaces]
-                        end
+  def namespaces
+    @namespaces ||= Set.new namespace_values.map do |value|
+                      (value.respond_to?(:call) ? value.call : value).to_s
+                    end
+  end
 
-    @namespaces = Set.new namespace_values.map do |value|
-                    (value.respond_to?(:call) ? value.call : value).to_s
-                  end
+  private
+
+  def namespace_values
+    if raw_namespaces.respond_to? :map
+      if raw_namespaces.respond_to? :values
+        raw_namespaces.values
+      else
+        raw_namespaces
+      end
+    else
+      [raw_namespaces]
+    end
   end
 end
 end
