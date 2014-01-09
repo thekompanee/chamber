@@ -92,7 +92,7 @@ class   NamespaceSet
   # Returns a Boolean
   #
   def ==(other)
-    self.to_ary.eql? other.to_ary
+    self.to_a.eql? other.to_a
   end
 
   ###
