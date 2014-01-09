@@ -37,6 +37,12 @@ describe  NamespaceSet do
     expect(namespace_set).to eq ['development', 'my host']
   end
 
+  it 'can create itself from a single value' do
+    namespace_set = NamespaceSet.new(:development)
+
+    expect(namespace_set).to eq ['development']
+  end
+
   it 'when creating itself from another NamespaceSet, it creates a new NamespaceSet' do
     original_set  = NamespaceSet[:development, 'my host']
     namespace_set = NamespaceSet.new(original_set)
