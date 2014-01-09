@@ -72,26 +72,37 @@ describe  Settings do
   end
 
   it 'can merge itself with a hash' do
-    settings = Settings.new(settings: {setting: 'value'})
-    settings.merge!(other_setting: 'another value')
+    settings        = Settings.new(settings: {setting: 'value'})
+    other_settings  = { other_setting: 'another value' }
 
-    expect(settings.to_hash).to eql Hashie::Mash.new( setting:        'value',
-                                                      other_setting:  'another value')
+    merged_settings = settings.merge(other_settings)
+
+    expect(merged_settings).to eq('setting'       => 'value',
+                                   'other_setting' => 'another value')
   end
 
   it 'can merge itself with Settings' do
     settings       = Settings.new(settings:   {setting:       'value'},
                                   namespaces: ['good'])
-
     other_settings = Settings.new(settings:   {other_setting: 'another value'},
                                   namespaces: ['bad'])
 
-    settings.merge!(other_settings)
+    merged_settings = settings.merge(other_settings)
 
-    expect(settings).to eql Settings.new( settings:   {
-                                            setting:        'value',
-                                            other_setting:  'another value' },
-                                          namespaces: ['good', 'bad'])
+    expect(merged_settings).to eql Settings.new(settings:   {
+                                                  setting:        'value',
+                                                  other_setting:  'another value' },
+                                                namespaces: ['good', 'bad'])
+  end
+
+  it 'does not manipulate the existing Settings but instead returns a new one' do
+    settings       = Settings.new(settings:   {setting:       'value'})
+    other_settings = Settings.new(settings:   {other_setting: 'another value'})
+
+    merged_settings = settings.merge(other_settings)
+
+    expect(merged_settings.object_id).not_to eql settings.object_id
+    expect(merged_settings.object_id).not_to eql other_settings.object_id
   end
 
   it 'can convert itself into a hash' do

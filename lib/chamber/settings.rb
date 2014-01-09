@@ -23,7 +23,7 @@ class   Settings
                                                           ])
     self.namespaces     = options.fetch(:namespaces,      [])
     self.decryption_key = options.fetch(:decryption_key,  nil)
-    self.data           = options.fetch(:settings,        Hashie::Mash.new)
+    self.raw_data       = options.fetch(:settings,        {})
   end
 
   ###
@@ -79,14 +79,14 @@ class   Settings
   # Internal: Merges a Settings object with another Settings object or
   # a hash-like object.
   #
-  # Also, if merging Settings, it will merge the namespaces as well.
+  # Also, if merging Settings, it will merge all other Settings data as well.
   #
   # Example:
   #
   #   settings        = Settings.new settings: { my_setting:        'my value' }
   #   other_settings  = Settings.new settings: { my_other_setting:  'my other value' }
   #
-  #   settings.merge! other_settings
+  #   settings.merge other_settings
   #
   #   settings
   #   # => {
@@ -94,12 +94,19 @@ class   Settings
   #     'my_other_setting'  => 'my other value',
   #   }
   #
-  # Returns a Settings
+  # Returns a new Settings object
   #
-  def merge!(other)
-    self.decryption_key = decryption_key || other.decryption_key
-    self.namespaces     = (namespaces + other.namespaces) if other.respond_to? :namespaces
-    self.data           = data.merge(other.to_hash)
+  def merge(other)
+    other_settings = if other.is_a? Settings
+                       other
+                     elsif other.is_a? Hash
+                       Settings.new(settings: other)
+                     end
+
+    Settings.new(
+      decryption_key: decryption_key || other_settings.decryption_key,
+      namespaces:     (namespaces + other_settings.namespaces),
+      settings:       raw_data.merge(other_settings.raw_data))
   end
 
   ###
@@ -147,25 +154,23 @@ class   Settings
   protected
 
   attr_accessor :filters,
-                :decryption_key
-  attr_reader   :raw_data
-  attr_writer   :namespaces
+                :decryption_key,
+                :raw_data
+
+  def raw_data=(new_raw_data)
+    @raw_data = Hashie::Mash.new(new_raw_data)
+  end
 
   def namespaces=(raw_namespaces)
     @namespaces = NamespaceSet.new(raw_namespaces)
   end
 
   def data
-    @data ||= Hashie::Mash.new
-  end
-
-  def data=(raw_data)
-    @raw_data = Hashie::Mash.new(raw_data)
-    @data     = filters.reduce(raw_data) do |filtered_data, filter|
-                  filter.execute( data:           filtered_data,
-                                  namespaces:     self.namespaces,
-                                  decryption_key: self.decryption_key)
-                end
+    @data ||= filters.reduce(raw_data) do |filtered_data, filter|
+                filter.execute( data:           filtered_data,
+                                namespaces:     self.namespaces,
+                                decryption_key: self.decryption_key)
+              end
   end
 end
 end
