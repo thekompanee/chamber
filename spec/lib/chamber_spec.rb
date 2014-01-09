@@ -120,7 +120,7 @@ describe Chamber, :singletons => [Chamber] do
                   :namespaces => {
                     :my_namespace => -> { 'blue' } } )
 
-    expect(Chamber.instance.other.everything).to eql 'works'
+    expect(Chamber.instance.other.everything).to        eql 'works'
     expect(Chamber.instance.test.my_dynamic_setting).to eql 2
   end
 
