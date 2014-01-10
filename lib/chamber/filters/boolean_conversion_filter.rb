@@ -1,4 +1,4 @@
-class   Chamber
+module  Chamber
 module  Filters
 class   BooleanConversionFilter
 

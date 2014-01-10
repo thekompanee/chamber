@@ -107,7 +107,7 @@ require 'chamber/settings'
 #   FileSet.new(files:      '/tmp/settings/*.json',
 #               namespaces: %w{blue green})
 #
-class   Chamber
+module  Chamber
 class   FileSet
 
   def initialize(options = {})

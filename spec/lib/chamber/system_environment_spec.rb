@@ -1,7 +1,7 @@
 require 'rspectacular'
 require 'chamber/system_environment'
 
-class     Chamber
+module    Chamber
 describe  SystemEnvironment do
   it 'can extract environment variables based on a hash that is passed in' do
     source_hash = {

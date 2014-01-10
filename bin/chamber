@@ -7,7 +7,7 @@ require 'chamber'
 require 'yaml'
 require 'tempfile'
 
-class   Chamber
+module  Chamber
 module  Commands
   class Heroku < Thor
     class_option :app,

@@ -1,7 +1,7 @@
 require 'rspectacular'
 require 'chamber/filters/environment_filter'
 
-class     Chamber
+module    Chamber
 module    Filters
 describe  EnvironmentFilter do
   it 'can extract data from the environment if an existing variable matches the composite key' do

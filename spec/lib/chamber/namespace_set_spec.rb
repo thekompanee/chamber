@@ -1,7 +1,7 @@
 require 'rspectacular'
 require 'chamber/namespace_set'
 
-class     Chamber
+module    Chamber
 describe  NamespaceSet do
   it 'can create a set from from a hash' do
     namespace_set = NamespaceSet.new( environment:  :development,

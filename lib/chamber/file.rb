@@ -6,7 +6,7 @@ require 'erb'
 # Internal: Represents a single file containing settings information in a given
 # file set.
 #
-class   Chamber
+module  Chamber
 class   File < Pathname
 
   ###

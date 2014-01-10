@@ -10,7 +10,7 @@ def create_tempfile_with_content(content)
   tempfile
 end
 
-class     Chamber
+module    Chamber
 describe  File do
   it 'can convert file contents to settings' do
     tempfile      = create_tempfile_with_content %Q({ test: settings })

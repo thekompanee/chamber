@@ -1,7 +1,7 @@
 require 'rspectacular'
 require 'chamber/filters/boolean_conversion_filter'
 
-class     Chamber
+module    Chamber
 module    Filters
 describe  BooleanConversionFilter do
   it 'can convert string boolean values into TrueClass and FalseClass even if they are deeply nested' do

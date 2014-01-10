@@ -1,6 +1,6 @@
 require 'hashie/mash'
 
-class   Chamber
+module  Chamber
 module  Environmentable
   def with_environment(settings, parent_keys, hash_block, value_block)
     environment_hash = Hashie::Mash.new

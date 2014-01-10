@@ -4,7 +4,7 @@ require 'chamber/environmentable'
 # Internal: Gives access to the existing environment for importing/exporting
 # values.
 #
-class   Chamber
+module  Chamber
 module  SystemEnvironment
   extend Environmentable
 

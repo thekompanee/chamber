@@ -887,7 +887,8 @@ accessing it.  Don't worry, Chamber will take you 98% of the way there.
 Just include it like so:
 
 ```ruby
-class Settings < Chamber
+class Settings
+  extend Chamber
 end
 ```
 

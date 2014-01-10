@@ -9,7 +9,7 @@ require 'chamber/filters/boolean_conversion_filter'
 ###
 # Internal: Represents the base settings storage needed for Chamber.
 #
-class   Chamber
+module  Chamber
 class   Settings
 
   attr_reader :namespaces

@@ -1,6 +1,6 @@
 require 'chamber/file_set'
 
-class   Chamber
+module  Chamber
 class   Configuration
   attr_accessor :basepath,
                 :decryption_key,

@@ -1,6 +1,6 @@
 require 'chamber/environmentable'
 
-class   Chamber
+module  Chamber
 module  Filters
 class   EnvironmentFilter
   include Environmentable
