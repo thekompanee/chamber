@@ -111,8 +111,8 @@ module  Chamber
 class   FileSet
 
   def initialize(options = {})
-    self.namespaces = options.fetch(:namespaces, {})
-    self.paths      = options.fetch(:files)
+    self.namespaces     = options.fetch(:namespaces, {})
+    self.paths          = options.fetch(:files)
   end
 
   ###

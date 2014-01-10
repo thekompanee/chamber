@@ -7,7 +7,7 @@ class   Configuration
                 :files
 
   def initialize(options = {})
-    self.basepath       = options[:basepath] || ''
+    self.basepath       = options[:basepath]        || ''
     self.decryption_key = options[:decryption_key]
     file_patterns       = options[:files] || [
                             self.basepath + 'credentials*.yml',
