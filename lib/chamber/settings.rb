@@ -143,16 +143,6 @@ class   Settings
     self.namespaces  == other.namespaces
   end
 
-  def method_missing(name, *args)
-    return data.public_send(name, *args) if data.respond_to?(name)
-
-    super
-  end
-
-  def respond_to_missing?(name, include_private = false)
-    data.respond_to?(name, include_private)
-  end
-
   protected
 
   attr_accessor :pre_filters,
@@ -182,6 +172,18 @@ class   Settings
                                               namespaces:     self.namespaces,
                                               decryption_key: self.decryption_key)
                             end
+  end
+
+  public
+
+  def method_missing(name, *args)
+    return data.public_send(name, *args) if data.respond_to?(name)
+
+    super
+  end
+
+  def respond_to_missing?(name, include_private = false)
+    data.respond_to?(name, include_private)
   end
 end
 end
