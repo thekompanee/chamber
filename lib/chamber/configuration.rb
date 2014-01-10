@@ -1,36 +1,27 @@
-require 'chamber/file_set'
-
 module  Chamber
 class   Configuration
   attr_accessor :basepath,
                 :decryption_key,
-                :files
+                :files,
+                :namespaces
 
   def initialize(options = {})
     self.basepath       = options[:basepath]        || ''
+    self.namespaces     = options[:namespaces]      || []
     self.decryption_key = options[:decryption_key]
-    file_patterns       = options[:files] || [
-                            self.basepath + 'credentials*.yml',
-                            self.basepath + 'settings*.yml',
-                            self.basepath + 'settings' ]
-    self.files          = FileSet.new files:      file_patterns,
-                                      namespaces: options.fetch(:namespaces, {})
+    self.files          = options[:files]           || [
+                        self.basepath + 'credentials*.yml',
+                        self.basepath + 'settings*.yml',
+                        self.basepath + 'settings' ]
   end
 
-  def settings
-    @settings ||= -> do
-      @settings = Settings.new(decryption_key: self.decryption_key)
-
-      files.to_settings do |parsed_settings|
-        @settings = @settings.merge(parsed_settings)
-      end
-
-      @settings
-    end.call
-  end
-
-  def to_s
-    settings.to_s
+  def to_hash
+    {
+      basepath:       self.basepath,
+      decryption_key: self.decryption_key,
+      files:          self.files,
+      namespaces:     self.namespaces,
+    }
   end
 
   def basepath=(pathlike)

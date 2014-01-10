@@ -105,7 +105,7 @@ describe Chamber do
     expect(Chamber.test.my_setting).to eql 'my_value'
   end
 
-  it 'can access the config via "env"' do
+  it 'can access the settings via "env"' do
     expect(Chamber.env.test.my_setting).to eql 'my_value'
   end
 
@@ -170,7 +170,7 @@ describe Chamber do
   end
 
   it 'still raises an error if you try to send a message which the settings hash does not understand' do
-    expect{ Chamber.config.i_do_not_know }.to raise_error NoMethodError
+    expect{ Chamber.env.i_do_not_know }.to raise_error NoMethodError
   end
 
   it 'does not raise an exception if a namespaced file does not exist' do
