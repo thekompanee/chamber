@@ -121,27 +121,27 @@ Github, etc, then technically no developer needs it.
 
 1. Create a Public/Private Keypair
 
-```sh
-ssh-keygen -t rsa -C "your_email@example.com" -f ./.chamber_rsa
-```
+  ```sh
+  ssh-keygen -t rsa -C "your_email@example.com" -f ./.chamber_rsa
+  ```
 
 1. Create a Passphrase
 
-You'll now be asked for a passphrase, enter one and *remember it*. Preferably,
-store it in something like 1Password.
+  You'll now be asked for a passphrase, enter one and *remember it*. Preferably,
+  store it in something like 1Password.
 
 1. Set Proper File Permissions
 
-```sh
-chmod 600 ./.chamber_rsa
-chmod 644 ./.chamber_rsa.pub
-```
+  ```sh
+  chmod 600 ./.chamber_rsa
+  chmod 644 ./.chamber_rsa.pub
+  ```
 
 1. Add the Private Key to Your gitignore File
 
-```sh
-echo ".chamber_rsa" >> .gitignore
-```
+  ```sh
+  echo ".chamber_rsa" >> .gitignore
+  ```
 
 #### Working With Secure Configuration Settings
 
