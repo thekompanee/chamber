@@ -156,17 +156,17 @@ existing one), you can format your secure keys like so:
 ```yaml
 # settings.yml
 
-x_my_secure_key_name_x: 'my secure value'
+_secure_my_secure_key_name: 'my secure value'
 ```
 
-When Chamber sees this convention (`x_` followed by the key name, followed by
-`_x`), it will automatically look to either encrypt or decrypt the value using
-the public/private keys you generated above into:
+When Chamber sees this convention (`_secure_` followed by the key name), it will
+automatically look to either encrypt or decrypt the value using the
+public/private keys you generated above into:
 
 ```yaml
 # settings.yml
 
-x_my_secure_key_name_x: 8239f293r9283r9823r92hf9823hf9uehfksdhviwuehf923uhrehf9238
+_secure_my_secure_key_name: 8239f293r9283r9823r92hf9823hf9uehfksdhviwuehf923uhrehf9238
 ```
 
 However you would still have access the value like so (assuming you had access
@@ -650,13 +650,13 @@ previous ones.
 
 ###### Secure
 
-Will verify that any items which are marked as secure (eg `x_my_setting_x`) have
-secure values.  If it appears that one does not, the user will be prompted as to
-whether or not they would like to encrpyt it.
+Will verify that any items which are marked as secure (eg `_secure_my_setting`)
+have secure values.  If it appears that one does not, the user will be prompted
+as to whether or not they would like to encrpyt it.
 
-Items which are marked as secure can specify this convention `x__my_setting__x`
-to tell Chamber to always assume that the value is encrpyted, even if it appears
-that it is not.
+Items which are marked as secure can specify this convention
+`__secure_my_setting` to tell Chamber to always assume that the value is
+encrpyted, even if it appears that it is not.
 
 This command differs from other tasks in that it will process all files that
 match Chamber's conventions and not just those which match the passed in
@@ -934,14 +934,14 @@ development:
 staging:
   <<: *shared
   smtp:
-    x_username_x: my_staging_user
-    x_password_x: my_staging_password
+    _secure_username: my_staging_user
+    _secure_password: my_staging_password
 
 production:
   <<: *shared
   smtp:
-    x_username_x: my_production_user
-    x_password_x: my_production_password
+    _secure_username: my_production_user
+    _secure_password: my_production_password
 ```
 
 Now, assuming you're running in staging, you can access both `username` and
