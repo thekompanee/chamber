@@ -1,8 +1,8 @@
 # Chamber [![Build Status](https://travis-ci.org/m5rk/chamber.png)](https://travis-ci.org/m5rk/chamber) [![Code Climate](https://codeclimate.com/github/m5rk/chamber.png)](https://codeclimate.com/github/m5rk/chamber)
 
-Chamber lets you source your settings from an arbitrary number of YAML files that
-values convention over configuration and has an automatic mechanism for working
-with Heroku's (or anyone else's) ENV variables.
+Chamber is the auto-encrypting, extremely organizable, Heroku-loving, CLI-having,
+non-extra-repo-needing, non-Rails-specific-ing, CI-serving configuration
+management library.
 
 ## But What About Those Other Configuration Management Gems?
 
