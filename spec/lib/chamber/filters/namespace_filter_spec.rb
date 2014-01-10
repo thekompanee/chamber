@@ -2,7 +2,7 @@ require 'rspectacular'
 require 'chamber/filters/namespace_filter'
 require 'chamber/namespace_set'
 
-class     Chamber
+module    Chamber
 module    Filters
 describe  NamespaceFilter do
   it 'can filter settings data based on the settings namespaces' do

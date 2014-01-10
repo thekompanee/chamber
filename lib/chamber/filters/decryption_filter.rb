@@ -3,7 +3,7 @@ require 'base64'
 require 'hashie/mash'
 require 'chamber/errors/undecryptable_value_error'
 
-class   Chamber
+module  Chamber
 module  Filters
 class   DecryptionFilter
   SECURE_KEY_TOKEN      = %r{\A_secure_}

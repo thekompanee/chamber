@@ -1,7 +1,7 @@
 require 'chamber/configuration'
 require 'chamber/rails'
 
-class  Chamber
+module  Chamber
   def self.load(options = {})
     self.config = Configuration.new(options)
   end

@@ -1,6 +1,6 @@
 require 'hashie/mash'
 
-class   Chamber
+module  Chamber
 module  Filters
 class   NamespaceFilter
   def initialize(options = {})

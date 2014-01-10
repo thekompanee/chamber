@@ -8,7 +8,7 @@ require 'set'
 # a NamespaceSet from either an array-like or hash-like object and the ability
 # to allow callables to be passed which will then be executed.
 #
-class   Chamber
+module  Chamber
 class   NamespaceSet
   include Enumerable
 

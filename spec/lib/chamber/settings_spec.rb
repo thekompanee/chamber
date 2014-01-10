@@ -1,7 +1,7 @@
 require 'rspectacular'
 require 'chamber/settings'
 
-class     Chamber
+module    Chamber
 describe  Settings do
   it 'can verify that it is equal to another Settings object' do
     settings        = Settings.new( settings:   {setting: 'value'},

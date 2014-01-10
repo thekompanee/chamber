@@ -1,7 +1,7 @@
 require 'rspectacular'
 require 'chamber/filters/decryption_filter'
 
-class     Chamber
+module    Chamber
 module    Filters
 describe  DecryptionFilter do
   it 'will attempt to decrypt values which are marked as "secure"' do
