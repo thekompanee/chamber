@@ -10,7 +10,9 @@ We reviewed [some other gems](#alternatives), and while each fit a specific need
 and each did some things well, none of them met all of the criteria that we felt
 we (and assumed others) needed.
 
-Our Ten Commandments of Configuration Management
+<img src="https://akiajm7spx4gtbhaxe3qcomhaystacksoftwarearp.s3.amazonaws.com/photos/readmes/ten-commandments.png" align="right" />
+
+**Our Ten Commandments of Configuration Management**
 
 1. Thou shalt be configurable, but use conventions so that configuration isn't
    necessary
