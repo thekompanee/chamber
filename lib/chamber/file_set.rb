@@ -113,6 +113,8 @@ class   FileSet
   def initialize(options = {})
     self.namespaces     = options.fetch(:namespaces, {})
     self.paths          = options.fetch(:files)
+    self.clean_settings = Settings.new  :namespaces     => namespaces,
+                                        :decryption_key => options[:decryption_key]
   end
 
   ###
@@ -161,13 +163,9 @@ class   FileSet
   #   # => <Chamber::Settings>
   #
   def to_settings
-    clean_settings = Settings.new(:namespaces => namespaces)
-
-    files.each_with_object(clean_settings) do |file, settings|
-      if block_given?
-        yield file.to_settings
-      else
-        settings.merge!(file.to_settings)
+    files.reduce(clean_settings) do |settings, file|
+      settings.merge(file.to_settings).tap do |merged|
+        yield merged if block_given?
       end
     end
   end
@@ -176,6 +174,7 @@ class   FileSet
 
   attr_reader   :namespaces,
                 :paths
+  attr_accessor :clean_settings
 
   ###
   # Internal: Allows the paths for the FileSet to be set. It can either be an
