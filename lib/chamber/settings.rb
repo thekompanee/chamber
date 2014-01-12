@@ -160,18 +160,23 @@ class   Settings
 
   def raw_data
     @filtered_raw_data  ||= pre_filters.reduce(@raw_data) do |filtered_data, filter|
-                              filter.execute( data:           filtered_data,
-                                              namespaces:     self.namespaces,
-                                              decryption_key: self.decryption_key)
+                              filter.execute({data: filtered_data}.
+                                              merge(metadata))
                             end
   end
 
   def data
     @data               ||= post_filters.reduce(raw_data) do |filtered_data, filter|
-                              filter.execute( data:           filtered_data,
-                                              namespaces:     self.namespaces,
-                                              decryption_key: self.decryption_key)
+                              filter.execute({data: filtered_data}.
+                                              merge(metadata))
                             end
+  end
+
+  def metadata
+    {
+      namespaces:     self.namespaces,
+      decryption_key: self.decryption_key,
+    }
   end
 
   public
