@@ -2,6 +2,7 @@ module  Chamber
 class   Configuration
   attr_accessor :basepath,
                 :decryption_key,
+                :encryption_key,
                 :files,
                 :namespaces
 
@@ -9,6 +10,7 @@ class   Configuration
     self.basepath       = options[:basepath]        || ''
     self.namespaces     = options[:namespaces]      || []
     self.decryption_key = options[:decryption_key]
+    self.encryption_key = options[:encryption_key]
     self.files          = options[:files]           || [
                         self.basepath + 'credentials*.yml',
                         self.basepath + 'settings*.yml',
@@ -19,6 +21,7 @@ class   Configuration
     {
       basepath:       self.basepath,
       decryption_key: self.decryption_key,
+      encryption_key: self.encryption_key,
       files:          self.files,
       namespaces:     self.namespaces,
     }
