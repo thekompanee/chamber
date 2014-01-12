@@ -164,6 +164,31 @@ describe  Settings do
     expect(settings).to eq('my_encrypted_setting' => 'hello')
   end
 
+  it 'can encrypt a setting if it finds a secure key' do
+    settings = Settings.new(settings:   {
+                              _secure_my_encrypted_setting: 'hello'
+                            },
+                            encryption_key: './spec/spec_key.pub',
+                            pre_filters:    [],
+                            post_filters:   [ Filters::EncryptionFilter ])
+
+    expect(settings._secure_my_encrypted_setting).to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
+  end
+
+  it 'can encrypt a settings without explicitly having to have a filter passed' do
+    settings = Settings.new(settings:   {
+                              _secure_my_encrypted_setting: 'hello'
+                            },
+                            decryption_key: './spec/spec_key',
+                            encryption_key: './spec/spec_key.pub')
+
+    expect(settings).to eq('my_encrypted_setting' => 'hello')
+
+    secure_settings = settings.secure
+
+    expect(secure_settings._secure_my_encrypted_setting).to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
+  end
+
   it 'can check if it is equal to other items which can be converted into hashes' do
     settings = Settings.new(settings: {setting: 'value'})
 
