@@ -170,6 +170,10 @@ class   FileSet
     end
   end
 
+  def secure
+    files.each(&:secure)
+  end
+
   protected
 
   attr_reader   :namespaces,
