@@ -172,6 +172,8 @@ module  Commands
   end
 
   class Settings < Thor
+    include Thor::Actions
+
     desc 'show', 'Displays the list of settings and their values'
     method_option :as_env,
                   type:     :boolean,
@@ -238,6 +240,21 @@ module  Commands
                             end
 
       system("git diff --no-index #{first_config_file} #{second_config_file}")
+    end
+
+    desc 'init', 'Sets Chamber up matching best practices for secure configuration management'
+    def init
+      ::Chamber::Commands::Chamber.init(options)
+
+      key = OpenSSL::PKey::RSA.new(2048)
+      create_file "#{options[:basepath]}/.chamber.pem",     key.to_pem
+      create_file "#{options[:basepath]}/.chamber.pub.pem", key.public_key.to_pem
+
+      unless ::File.read('./.gitignore').match /^.chamber.pem$/
+        append_to_file './.gitignore', '.chamber.pem'
+      end
+
+      create_file "#{options[:basepath]}/settings.yml", ''
     end
   end
 
