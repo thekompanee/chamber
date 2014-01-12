@@ -111,7 +111,7 @@ module  Chamber
 class   FileSet
 
   def initialize(options = {})
-    self.namespaces     = options.fetch(:namespaces, {})
+    self.namespaces     = options[:namespaces] || {}
     self.paths          = options.fetch(:files)
     self.clean_settings = Settings.new  :namespaces     => namespaces,
                                         :decryption_key => options[:decryption_key]
