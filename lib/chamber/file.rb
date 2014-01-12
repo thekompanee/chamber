@@ -70,6 +70,12 @@ class   File < Pathname
                            encryption_key:  encryption_key)
   end
 
+  def secure
+    secure_settings = to_settings.secure
+
+    ::File.write self, YAML.dump(secure_settings.to_hash)
+  end
+
   protected
 
   attr_accessor :namespaces,
