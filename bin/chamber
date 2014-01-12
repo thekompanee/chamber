@@ -298,8 +298,8 @@ module  Commands
         if options[:preset] == 'rails'
           require ::File.expand_path('./config/application')
 
-          options[:basepath]   = Rails.root.join('config')
-          options[:namespaces] = options[:namespaces].empty? ? [Rails.env] : options[:namespaces]
+          options[:basepath]       = Rails.root.join('config')
+          options[:namespaces]     = options[:namespaces].empty? ? [Rails.env] : options[:namespaces]
           options[:encryption_key] = options[:encryption_key] ? options[:encryption_key] : Rails.root.join('.chamber.pub.pem')
           options[:decryption_key] = options[:decryption_key] ? options[:decryption_key] : Rails.root.join('.chamber.pem')
         end
