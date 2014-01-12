@@ -112,8 +112,9 @@ class   FileSet
 
   def initialize(options = {})
     self.namespaces     = options[:namespaces] || {}
+    self.decryption_key = options[:decryption_key]
+    self.encryption_key = options[:encryption_key]
     self.paths          = options.fetch(:files)
-    self.clean_settings = Settings.new options
   end
 
   ###
@@ -162,7 +163,7 @@ class   FileSet
   #   # => <Chamber::Settings>
   #
   def to_settings
-    files.reduce(clean_settings) do |settings, file|
+    files.reduce(Settings.new) do |settings, file|
       settings.merge(file.to_settings).tap do |merged|
         yield merged if block_given?
       end
@@ -173,7 +174,8 @@ class   FileSet
 
   attr_reader   :namespaces,
                 :paths
-  attr_accessor :clean_settings
+  attr_accessor :decryption_key,
+                :encryption_key
 
   ###
   # Internal: Allows the paths for the FileSet to be set. It can either be an
@@ -209,7 +211,9 @@ class   FileSet
         relevant_glob_files = relevant_files & current_glob_files
 
         relevant_glob_files.map! { |file| File.new( path:           file,
-                                                    namespaces:     namespaces) }
+                                                    namespaces:     namespaces,
+                                                    decryption_key: decryption_key,
+                                                    encryption_key: encryption_key) }
 
         sorted_relevant_files += relevant_glob_files
       end
