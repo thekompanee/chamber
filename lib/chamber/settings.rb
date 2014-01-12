@@ -15,17 +15,17 @@ class   Settings
   attr_reader :namespaces
 
   def initialize(options = {})
-    self.namespaces       = options.fetch(:namespaces,      [])
-    self.decryption_key   = options.fetch(:decryption_key,  nil)
-    self.raw_data         = options.fetch(:settings,        {})
-    self.pre_filters      = options.fetch(:pre_filters,     [
-                                                              Filters::NamespaceFilter,
-                                                            ])
-    self.post_filters     = options.fetch(:post_filters,    [
-                                                              Filters::DecryptionFilter,
-                                                              Filters::EnvironmentFilter,
-                                                              Filters::BooleanConversionFilter,
-                                                            ])
+    self.namespaces       = options[:namespaces]      ||  []
+    self.raw_data         = options[:settings]        ||  {}
+    self.decryption_key   = options[:decryption_key]
+    self.pre_filters      = options[:pre_filters]     ||  [
+                                                            Filters::NamespaceFilter,
+                                                          ]
+    self.post_filters     = options[:post_filters]    ||  [
+                                                            Filters::DecryptionFilter,
+                                                            Filters::EnvironmentFilter,
+                                                            Filters::BooleanConversionFilter,
+                                                          ]
   end
 
   ###
