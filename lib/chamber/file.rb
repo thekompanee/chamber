@@ -38,6 +38,8 @@ class   File < Pathname
   #
   def initialize(options = {})
     self.namespaces     = options[:namespaces] || {}
+    self.decryption_key = options[:decryption_key]
+    self.encryption_key = options[:encryption_key]
 
     super options.fetch(:path)
   end
@@ -63,12 +65,16 @@ class   File < Pathname
   #
   def to_settings
     @data ||= Settings.new(settings:        file_contents_hash,
-                           namespaces:      namespaces)
+                           namespaces:      namespaces,
+                           decryption_key:  decryption_key,
+                           encryption_key:  encryption_key)
   end
 
   protected
 
-  attr_accessor :namespaces
+  attr_accessor :namespaces,
+                :decryption_key,
+                :encryption_key
 
   private
 
