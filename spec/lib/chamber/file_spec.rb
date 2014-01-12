@@ -1,6 +1,7 @@
 require 'rspectacular'
 require 'chamber/file'
 require 'chamber/settings'
+require 'chamber/filters/encryption_filter'
 require 'tempfile'
 
 def create_tempfile_with_content(content)
@@ -99,6 +100,18 @@ describe  File do
                                    namespaces:     {},
                                    decryption_key: nil,
                                    encryption_key: nil)
+  end
+
+  it 'can securely encrypt the settings contained in a file' do
+    tempfile      = create_tempfile_with_content %Q({ _secure_setting: hello })
+    settings_file = File.new  path:           tempfile.path,
+                              encryption_key: './spec/spec_key.pub'
+
+    settings_file.secure
+
+    settings_file = File.new  path:           tempfile.path
+
+    expect(settings_file.to_settings.send(:raw_data)['_secure_setting']).to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
 end
 end
