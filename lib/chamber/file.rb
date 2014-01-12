@@ -37,7 +37,7 @@ class   File < Pathname
   #   # => <Chamber::File>
   #
   def initialize(options = {})
-    self.namespaces = options[:namespaces] || {}
+    self.namespaces     = options[:namespaces] || {}
 
     super options.fetch(:path)
   end
@@ -62,8 +62,8 @@ class   File < Pathname
   # ```
   #
   def to_settings
-    @data ||= Settings.new(settings:    file_contents_hash,
-                           namespaces:  namespaces)
+    @data ||= Settings.new(settings:        file_contents_hash,
+                           namespaces:      namespaces)
   end
 
   protected
