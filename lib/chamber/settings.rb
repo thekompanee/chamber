@@ -2,6 +2,7 @@ require 'hashie/mash'
 require 'chamber/system_environment'
 require 'chamber/namespace_set'
 require 'chamber/filters/namespace_filter'
+require 'chamber/filters/encryption_filter'
 require 'chamber/filters/decryption_filter'
 require 'chamber/filters/environment_filter'
 require 'chamber/filters/boolean_conversion_filter'
@@ -18,6 +19,7 @@ class   Settings
     self.namespaces       = options[:namespaces]      ||  []
     self.raw_data         = options[:settings]        ||  {}
     self.decryption_key   = options[:decryption_key]
+    self.encryption_key   = options[:encryption_key]
     self.pre_filters      = options[:pre_filters]     ||  [
                                                             Filters::NamespaceFilter,
                                                           ]
@@ -106,6 +108,7 @@ class   Settings
                      end
 
     Settings.new(
+      encryption_key: encryption_key || other_settings.encryption_key,
       decryption_key: decryption_key || other_settings.decryption_key,
       namespaces:     (namespaces + other_settings.namespaces),
       settings:       raw_data.merge(other_settings.raw_data))
@@ -143,10 +146,23 @@ class   Settings
     self.namespaces  == other.namespaces
   end
 
+  def secure
+    secured_raw_data = Filters::EncryptionFilter.execute( data:           @raw_data,
+                                                          encryption_key: encryption_key)
+
+    Settings.new( {
+                    settings:     secured_raw_data,
+                    pre_filters:  [],
+                    post_filters: [],
+                  }.
+                  merge(metadata))
+  end
+
   protected
 
   attr_accessor :pre_filters,
                 :post_filters,
+                :encryption_key,
                 :decryption_key,
                 :raw_data
 
@@ -176,6 +192,7 @@ class   Settings
     {
       namespaces:     self.namespaces,
       decryption_key: self.decryption_key,
+      encryption_key: self.encryption_key,
     }
   end
 
