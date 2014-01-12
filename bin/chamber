@@ -277,6 +277,12 @@ module  Commands
                   aliases:  '-p',
                   enum:     ['rails'],
                   desc:     'Used to quickly assign a given scenario to the chamber command (eg Rails apps)'
+    class_option  :decryption_key,
+                  type:     :string,
+                  desc:     'The path to or contents of the private key associated with the project (typically .chamber.pem)'
+    class_option  :encryption_key,
+                  type:     :string,
+                  desc:     'The path to or contents of the public key associated with the project (typically .chamber.pub.pem)'
 
     desc 'settings SUBCOMMAND ...ARGS', 'For working with Chamber settings'
     subcommand 'settings',  ::Chamber::Commands::Settings
@@ -294,6 +300,8 @@ module  Commands
 
           options[:basepath]   = Rails.root.join('config')
           options[:namespaces] = options[:namespaces].empty? ? [Rails.env] : options[:namespaces]
+          options[:encryption_key] = options[:encryption_key] ? options[:encryption_key] : Rails.root.join('.chamber.pub.pem')
+          options[:decryption_key] = options[:decryption_key] ? options[:decryption_key] : Rails.root.join('.chamber.pem')
         end
 
         ::Chamber.load  basepath:   options[:basepath],
