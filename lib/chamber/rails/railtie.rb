@@ -1,4 +1,4 @@
-class   Chamber
+module  Chamber
 module  Rails
 class   Railtie < ::Rails::Railtie
   initializer 'chamber.load', before: :load_environment_config do

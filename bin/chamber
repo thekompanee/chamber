@@ -7,7 +7,7 @@ require 'chamber'
 require 'yaml'
 require 'tempfile'
 
-class   Chamber
+module  Chamber
 module  Commands
   class Heroku < Thor
     class_option :app,
@@ -172,6 +172,8 @@ module  Commands
   end
 
   class Settings < Thor
+    include Thor::Actions
+
     desc 'show', 'Displays the list of settings and their values'
     method_option :as_env,
                   type:     :boolean,
@@ -239,9 +241,37 @@ module  Commands
 
       system("git diff --no-index #{first_config_file} #{second_config_file}")
     end
+
+    desc 'secure', 'Secures any values which appear to need to be encrypted in any of the settings files which match irrespective of namespaces'
+    def secure
+      options[:namespaces] = ['*']
+
+      ::Chamber::Commands::Chamber.init(options)
+
+      ::Chamber.files.secure
+    end
+
+    desc 'init', 'Sets Chamber up matching best practices for secure configuration management'
+    def init
+      ::Chamber::Commands::Chamber.init(options)
+
+      key = OpenSSL::PKey::RSA.new(2048)
+      create_file "#{options[:rootpath]}/.chamber.pem",     key.to_pem
+      create_file "#{options[:rootpath]}/.chamber.pub.pem", key.public_key.to_pem
+
+      unless ::File.read('./.gitignore').match /^.chamber.pem$/
+        append_to_file './.gitignore', '.chamber.pem'
+      end
+
+      create_file "#{options[:basepath]}/settings.yml", ''
+    end
   end
 
   class Chamber < Thor
+    class_option  :rootpath,
+                  type:     :string,
+                  default:  ENV['PWD'],
+                  desc:     'The root filepath of the application'
     class_option  :basepath,
                   type:     :string,
                   aliases:  '-b',
@@ -260,6 +290,12 @@ module  Commands
                   aliases:  '-p',
                   enum:     ['rails'],
                   desc:     'Used to quickly assign a given scenario to the chamber command (eg Rails apps)'
+    class_option  :decryption_key,
+                  type:     :string,
+                  desc:     'The path to or contents of the private key associated with the project (typically .chamber.pem)'
+    class_option  :encryption_key,
+                  type:     :string,
+                  desc:     'The path to or contents of the public key associated with the project (typically .chamber.pub.pem)'
 
     desc 'settings SUBCOMMAND ...ARGS', 'For working with Chamber settings'
     subcommand 'settings',  ::Chamber::Commands::Settings
@@ -275,13 +311,18 @@ module  Commands
         if options[:preset] == 'rails'
           require ::File.expand_path('./config/application')
 
-          options[:basepath]   = Rails.root.join('config')
-          options[:namespaces] = options[:namespaces].empty? ? [Rails.env] : options[:namespaces]
+          options[:rootpath]       = Rails.root
+          options[:basepath]       = Rails.root.join('config')
+          options[:namespaces]     = options[:namespaces].empty? ? [Rails.env] : options[:namespaces]
+          options[:encryption_key] = options[:encryption_key] ? options[:encryption_key] : Rails.root.join('.chamber.pub.pem')
+          options[:decryption_key] = options[:decryption_key] ? options[:decryption_key] : Rails.root.join('.chamber.pem')
         end
 
-        ::Chamber.load  basepath:   options[:basepath],
-                        files:      options[:files],
-                        namespaces: options[:namespaces]
+        ::Chamber.load  basepath:       options[:basepath],
+                        files:          options[:files],
+                        namespaces:     options[:namespaces],
+                        encryption_key: options[:encryption_key],
+                        decryption_key: options[:decryption_key]
       end
     end
   end

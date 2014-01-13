@@ -6,7 +6,7 @@ require 'erb'
 # Internal: Represents a single file containing settings information in a given
 # file set.
 #
-class   Chamber
+module  Chamber
 class   File < Pathname
 
   ###
@@ -37,7 +37,9 @@ class   File < Pathname
   #   # => <Chamber::File>
   #
   def initialize(options = {})
-    self.namespaces = options[:namespaces] || {}
+    self.namespaces     = options[:namespaces] || {}
+    self.decryption_key = options[:decryption_key]
+    self.encryption_key = options[:encryption_key]
 
     super options.fetch(:path)
   end
@@ -62,13 +64,23 @@ class   File < Pathname
   # ```
   #
   def to_settings
-    @data ||= Settings.new(settings:    file_contents_hash,
-                           namespaces:  namespaces)
+    @data ||= Settings.new(settings:        file_contents_hash,
+                           namespaces:      namespaces,
+                           decryption_key:  decryption_key,
+                           encryption_key:  encryption_key)
+  end
+
+  def secure
+    secure_settings = to_settings.secure
+
+    ::File.open(self, 'w') { |file| file.write YAML.dump(secure_settings.to_hash) }
   end
 
   protected
 
-  attr_accessor :namespaces
+  attr_accessor :namespaces,
+                :decryption_key,
+                :encryption_key
 
   private
 

@@ -8,7 +8,7 @@ require 'set'
 # a NamespaceSet from either an array-like or hash-like object and the ability
 # to allow callables to be passed which will then be executed.
 #
-class   Chamber
+module  Chamber
 class   NamespaceSet
   include Enumerable
 
@@ -16,7 +16,21 @@ class   NamespaceSet
   # Internal: Creates a new NamespaceSet from arrays, hashes and sets.
   #
   def initialize(raw_namespaces = {})
-    self.namespaces = raw_namespaces
+    self.raw_namespaces = raw_namespaces
+  end
+
+  ###
+  # Internal: Allows for more compact NamespaceSet creation by giving a list of
+  # namespace values.
+  #
+  # Examples:
+  #
+  #   NamespaceSet['development', -> { ENV['HOST'] }]
+  #
+  # Returns a new NamespaceSet
+  #
+  def self.[](*namespace_values)
+    self.new(namespace_values)
   end
 
   ###
@@ -78,7 +92,7 @@ class   NamespaceSet
   # Returns a Boolean
   #
   def ==(other)
-    self.to_ary.eql? other.to_ary
+    self.to_a.eql? other.to_a
   end
 
   ###
@@ -88,15 +102,13 @@ class   NamespaceSet
   # Returns a Boolean
   #
   def eql?(other)
-    other.is_a?(        Chamber::NamespaceSet)  &&
+    other.is_a?(        NamespaceSet)  &&
     self.namespaces  == other.namespaces
   end
 
   protected
 
-  def namespaces
-    @namespaces ||= Set.new
-  end
+  attr_accessor :raw_namespaces
 
   ###
   # Internal: Sets the namespaces for the set from a variety of objects and
@@ -108,6 +120,7 @@ class   NamespaceSet
   #
   #   # Can be set to an array
   #   namespace_set.namespaces  = %w{namespace_value_1 namespace_value_2}
+  #   namespace_set.namespaces
   #   # => ['namespace_value_1', 'namespace_value_2']
   #
   #   # Can be set to a hash
@@ -115,6 +128,16 @@ class   NamespaceSet
   #                                 hostname:     'my host' }
   #   namespace_set.namespaces
   #   # => ['development', 'my host']
+  #
+  #   # Can be set to a NamespaceSet
+  #   namespace_set.namespaces  = NamespaceSet.new('development')
+  #   namespace_set.namespaces
+  #   # => ['development']
+  #
+  #   # Can be set to a single value
+  #   namespace_set.namespaces  = 'development'
+  #   namespace_set.namespaces
+  #   # => ['development']
   #
   #   # Can be set to a callable
   #   namespace_set.namespaces  = { environment:  -> { 'called' } }
@@ -126,16 +149,32 @@ class   NamespaceSet
   #   namespace_set.namespaces
   #   # => ['namespace_value']
   #
-  def namespaces=(raw_namespaces)
-    namespace_values =  if raw_namespaces.respond_to? :values
-                          raw_namespaces.values
-                        else
-                          raw_namespaces
-                        end
+  def namespaces
+    @namespaces ||= Set.new namespace_values.map do |value|
+                      (value.respond_to?(:call) ? value.call : value).to_s
+                    end
+  end
 
-    @namespaces = Set.new namespace_values.map do |value|
-                    value.respond_to?(:call) ? value.call : value
-                  end
+  def raw_namespaces=(raw_namespaces)
+    @raw_namespaces = if raw_namespaces.is_a? NamespaceSet
+                        raw_namespaces.to_ary
+                      else
+                        raw_namespaces
+                      end
+  end
+
+  private
+
+  def namespace_values
+    if raw_namespaces.respond_to? :map
+      if raw_namespaces.respond_to? :values
+        raw_namespaces.values
+      else
+        raw_namespaces
+      end
+    else
+      [raw_namespaces]
+    end
   end
 end
 end
