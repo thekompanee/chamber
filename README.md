@@ -50,6 +50,24 @@ Or install it yourself as:
 $ gem install chamber
 ```
 
+Once the gem is installed, you'll want to add it to your project.  To do this,
+type:
+
+```sh
+chamber init
+```
+
+This creates a public/private keypair for you to use with your project.  The
+private key will be called `.chamber.pem`.  The public key will be called
+`.chamber.pem.pub`.
+
+`.chamber.pem` will be added to your gitignore file so that it is not
+accidentally checked in.  *Keep this file safe* since anyone who has it will be
+able to decrypt any settings that Chamber encrypts for you.
+
+Lastly, it will create a sample `settings.yml` file for you which you should
+modify as needed.
+
 ## Basic Usage
 
 ### Convention Over Configuration
