@@ -12,6 +12,10 @@ module  Chamber
     instance.files.filenames
   end
 
+  def files
+    instance.files
+  end
+
   def to_s
     instance.settings.to_s
   end
