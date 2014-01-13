@@ -1,18 +1,33 @@
 require 'hashie/mash'
 require 'chamber/system_environment'
 require 'chamber/namespace_set'
+require 'chamber/filters/namespace_filter'
+require 'chamber/filters/encryption_filter'
+require 'chamber/filters/decryption_filter'
+require 'chamber/filters/environment_filter'
+require 'chamber/filters/boolean_conversion_filter'
 
 ###
 # Internal: Represents the base settings storage needed for Chamber.
 #
-class   Chamber
+module  Chamber
 class   Settings
 
   attr_reader :namespaces
 
   def initialize(options = {})
-    self.namespaces = options.fetch(:namespaces,  NamespaceSet.new)
-    self.data       = options.fetch(:settings,    Hashie::Mash.new)
+    self.namespaces       = options[:namespaces]      ||  []
+    self.raw_data         = options[:settings]        ||  {}
+    self.decryption_key   = options[:decryption_key]
+    self.encryption_key   = options[:encryption_key]
+    self.pre_filters      = options[:pre_filters]     ||  [
+                                                            Filters::NamespaceFilter,
+                                                          ]
+    self.post_filters     = options[:post_filters]    ||  [
+                                                            Filters::DecryptionFilter,
+                                                            Filters::EnvironmentFilter,
+                                                            Filters::BooleanConversionFilter,
+                                                          ]
   end
 
   ###
@@ -68,14 +83,14 @@ class   Settings
   # Internal: Merges a Settings object with another Settings object or
   # a hash-like object.
   #
-  # Also, if merging Settings, it will merge the namespaces as well.
+  # Also, if merging Settings, it will merge all other Settings data as well.
   #
   # Example:
   #
   #   settings        = Settings.new settings: { my_setting:        'my value' }
   #   other_settings  = Settings.new settings: { my_other_setting:  'my other value' }
   #
-  #   settings.merge! other_settings
+  #   settings.merge other_settings
   #
   #   settings
   #   # => {
@@ -83,22 +98,105 @@ class   Settings
   #     'my_other_setting'  => 'my other value',
   #   }
   #
-  # Returns a Hash
+  # Returns a new Settings object
   #
-  def merge!(other)
-    self.data       = data.merge(other.to_hash)
-    self.namespaces = (namespaces + other.namespaces) if other.respond_to? :namespaces
+  def merge(other)
+    other_settings = if other.is_a? Settings
+                       other
+                     elsif other.is_a? Hash
+                       Settings.new(settings: other)
+                     end
+
+    Settings.new(
+      encryption_key: encryption_key || other_settings.encryption_key,
+      decryption_key: decryption_key || other_settings.decryption_key,
+      namespaces:     (namespaces + other_settings.namespaces),
+      settings:       raw_data.merge(other_settings.raw_data))
   end
 
+  ###
+  # Internal: Returns the Settings data as a Hash for easy manipulation.
+  # Changes made to the hash will *not* be reflected in the original Settings
+  # object.
+  #
+  # Returns a Hash
+  #
+  def to_hash
+    data.to_hash
+  end
+
+  ###
+  # Internal: Determines whether a Settings is equal to another hash-like
+  # object.
+  #
+  # Returns a Boolean
+  #
+  def ==(other)
+    self.to_hash == other.to_hash
+  end
+
+  ###
+  # Internal: Determines whether a Settings is equal to another Settings.
+  #
+  # Returns a Boolean
+  #
   def eql?(other)
     other.is_a?(        Chamber::Settings)  &&
     self.data        == other.data          &&
     self.namespaces  == other.namespaces
   end
 
-  def to_hash
-    data
+  def secure
+    secured_raw_data = Filters::EncryptionFilter.execute( data:           @raw_data,
+                                                          encryption_key: encryption_key)
+
+    Settings.new( {
+                    settings:     secured_raw_data,
+                    pre_filters:  [],
+                    post_filters: [],
+                  }.
+                  merge(metadata))
   end
+
+  protected
+
+  attr_accessor :pre_filters,
+                :post_filters,
+                :encryption_key,
+                :decryption_key,
+                :raw_data
+
+  def raw_data=(new_raw_data)
+    @raw_data   = Hashie::Mash.new(new_raw_data)
+  end
+
+  def namespaces=(raw_namespaces)
+    @namespaces = NamespaceSet.new(raw_namespaces)
+  end
+
+  def raw_data
+    @filtered_raw_data  ||= pre_filters.reduce(@raw_data) do |filtered_data, filter|
+                              filter.execute({data: filtered_data}.
+                                              merge(metadata))
+                            end
+  end
+
+  def data
+    @data               ||= post_filters.reduce(raw_data) do |filtered_data, filter|
+                              filter.execute({data: filtered_data}.
+                                              merge(metadata))
+                            end
+  end
+
+  def metadata
+    {
+      namespaces:     self.namespaces,
+      decryption_key: self.decryption_key,
+      encryption_key: self.encryption_key,
+    }
+  end
+
+  public
 
   def method_missing(name, *args)
     return data.public_send(name, *args) if data.respond_to?(name)
@@ -108,45 +206,6 @@ class   Settings
 
   def respond_to_missing?(name, include_private = false)
     data.respond_to?(name, include_private)
-  end
-
-  protected
-
-  attr_reader :raw_data
-  attr_writer :namespaces
-
-  def data
-    @data ||= Hashie::Mash.new
-  end
-
-  def data=(raw_data)
-    @raw_data = Hashie::Mash.new(raw_data)
-
-    namespace_checked_data =  if data_is_namespaced?
-                                namespace_filtered_data
-                              else
-                                self.raw_data
-                              end
-
-    @data = SystemEnvironment.inject_into(namespace_checked_data)
-  end
-
-  private
-
-  def data_is_namespaced?
-    @data_is_namespaced ||= raw_data.keys.any? { |key| namespaces.include? key }
-  end
-
-  def namespace_filtered_data
-    @namespace_filtered_data ||= -> do
-      data = Hashie::Mash.new
-
-      namespaces.each do |namespace|
-        data.merge!(raw_data[namespace]) if raw_data[namespace]
-      end
-
-      data
-    end.call
   end
 end
 end
