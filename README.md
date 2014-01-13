@@ -654,10 +654,6 @@ Will verify that any items which are marked as secure (eg `_secure_my_setting`)
 have secure values.  If it appears that one does not, the user will be prompted
 as to whether or not they would like to encrpyt it.
 
-Items which are marked as secure can specify this convention
-`__secure_my_setting` to tell Chamber to always assume that the value is
-encrpyted, even if it appears that it is not.
-
 This command differs from other tasks in that it will process all files that
 match Chamber's conventions and not just those which match the passed in
 namespaces.
@@ -667,13 +663,7 @@ namespaces.
 
   **Example:** `--auto-encrypt`, `--skip-auto-encrypt`
 
-* `--verify`: If the user has access to the private key, Chamber can decrypt the
-  value and ensure it matches the original value. This is useful to doublecheck
-  that the keypairs belong together.
-
-  **Example:** `--verify`, `--skip-verify`
-
-**Example:** `chamber settings secure -p=rails --verify --auto-encrypt`
+**Example:** `chamber settings secure -p=rails --auto-encrypt`
 
 ###### Compare
 
