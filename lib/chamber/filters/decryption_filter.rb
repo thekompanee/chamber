@@ -28,11 +28,10 @@ class   DecryptionFilter
 
     raw_data.each_pair do |key, value|
       if value.respond_to? :each_pair
-        settings[key] = execute(value)
-      else
+        value = execute(value)
+      elsif value.respond_to? :match
         if key.match(SECURE_KEY_TOKEN)
           key   = key.to_s.sub(SECURE_KEY_TOKEN, '')
-
           value = if value.match(BASE64_STRING_PATTERN)
                     raise Errors::UndecryptableValueError.new("#{key} appears to need decrypting but the decryption key is not available.") if decryption_key.nil?
 
@@ -46,9 +45,9 @@ class   DecryptionFilter
         else
           key = key.to_s
         end
-
-        settings[key] = value
       end
+
+      settings[key] = value
     end
 
     settings
