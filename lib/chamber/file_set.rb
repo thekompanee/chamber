@@ -107,12 +107,14 @@ require 'chamber/settings'
 #   FileSet.new(files:      '/tmp/settings/*.json',
 #               namespaces: %w{blue green})
 #
-class   Chamber
+module  Chamber
 class   FileSet
 
   def initialize(options = {})
-    self.namespaces = options.fetch(:namespaces, {})
-    self.paths      = options.fetch(:files)
+    self.namespaces     = options[:namespaces] || {}
+    self.decryption_key = options[:decryption_key]
+    self.encryption_key = options[:encryption_key]
+    self.paths          = options.fetch(:files)
   end
 
   ###
@@ -161,21 +163,23 @@ class   FileSet
   #   # => <Chamber::Settings>
   #
   def to_settings
-    clean_settings = Settings.new(:namespaces => namespaces)
-
-    files.each_with_object(clean_settings) do |file, settings|
-      if block_given?
-        yield file.to_settings
-      else
-        settings.merge!(file.to_settings)
+    files.reduce(Settings.new) do |settings, file|
+      settings.merge(file.to_settings).tap do |merged|
+        yield merged if block_given?
       end
     end
+  end
+
+  def secure
+    files.each(&:secure)
   end
 
   protected
 
   attr_reader   :namespaces,
                 :paths
+  attr_accessor :decryption_key,
+                :encryption_key
 
   ###
   # Internal: Allows the paths for the FileSet to be set. It can either be an
@@ -210,8 +214,10 @@ class   FileSet
         current_glob_files  = Pathname.glob(glob)
         relevant_glob_files = relevant_files & current_glob_files
 
-        relevant_glob_files.map! { |file| File.new( path:        file,
-                                                    namespaces:  namespaces) }
+        relevant_glob_files.map! { |file| File.new( path:           file,
+                                                    namespaces:     namespaces,
+                                                    decryption_key: decryption_key,
+                                                    encryption_key: encryption_key) }
 
         sorted_relevant_files += relevant_glob_files
       end

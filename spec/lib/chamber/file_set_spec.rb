@@ -3,7 +3,7 @@ require 'chamber/file_set'
 require 'fileutils'
 
 
-class     Chamber
+module    Chamber
 describe  FileSet do
   before(:each) { FileUtils.mkdir '/tmp/settings' unless ::File.exist? '/tmp/settings' }
   after(:each)  { FileUtils.rm_rf '/tmp/settings' if     ::File.exist? '/tmp/settings' }
