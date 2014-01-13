@@ -304,9 +304,11 @@ module  Commands
           options[:decryption_key] = options[:decryption_key] ? options[:decryption_key] : Rails.root.join('.chamber.pem')
         end
 
-        ::Chamber.load  basepath:   options[:basepath],
-                        files:      options[:files],
-                        namespaces: options[:namespaces]
+        ::Chamber.load  basepath:       options[:basepath],
+                        files:          options[:files],
+                        namespaces:     options[:namespaces],
+                        encryption_key: options[:encryption_key],
+                        decryption_key: options[:decryption_key]
       end
     end
   end
