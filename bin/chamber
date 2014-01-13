@@ -242,6 +242,15 @@ module  Commands
       system("git diff --no-index #{first_config_file} #{second_config_file}")
     end
 
+    desc 'secure', 'Secures any values which appear to need to be encrypted in any of the settings files which match irrespective of namespaces'
+    def secure
+      options[:namespaces] = ['*']
+
+      ::Chamber::Commands::Chamber.init(options)
+
+      ::Chamber.files.secure
+    end
+
     desc 'init', 'Sets Chamber up matching best practices for secure configuration management'
     def init
       ::Chamber::Commands::Chamber.init(options)
