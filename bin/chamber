@@ -247,8 +247,8 @@ module  Commands
       ::Chamber::Commands::Chamber.init(options)
 
       key = OpenSSL::PKey::RSA.new(2048)
-      create_file "#{options[:basepath]}/.chamber.pem",     key.to_pem
-      create_file "#{options[:basepath]}/.chamber.pub.pem", key.public_key.to_pem
+      create_file "#{options[:rootpath]}/.chamber.pem",     key.to_pem
+      create_file "#{options[:rootpath]}/.chamber.pub.pem", key.public_key.to_pem
 
       unless ::File.read('./.gitignore').match /^.chamber.pem$/
         append_to_file './.gitignore', '.chamber.pem'
@@ -259,6 +259,10 @@ module  Commands
   end
 
   class Chamber < Thor
+    class_option  :rootpath,
+                  type:     :string,
+                  default:  ENV['PWD'],
+                  desc:     'The root filepath of the application'
     class_option  :basepath,
                   type:     :string,
                   aliases:  '-b',
@@ -298,6 +302,7 @@ module  Commands
         if options[:preset] == 'rails'
           require ::File.expand_path('./config/application')
 
+          options[:rootpath]       = Rails.root
           options[:basepath]       = Rails.root.join('config')
           options[:namespaces]     = options[:namespaces].empty? ? [Rails.env] : options[:namespaces]
           options[:encryption_key] = options[:encryption_key] ? options[:encryption_key] : Rails.root.join('.chamber.pub.pem')
