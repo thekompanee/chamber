@@ -38,7 +38,7 @@ class   DecryptionFilter
                     decoded_string = Base64.strict_decode64(value)
                     decryption_key.private_decrypt(decoded_string)
                   else
-                    STDERR.puts "WARNING: It appears that you would like to keep your information for #{key} secure, however the value for that setting does not appear to be encrypted.  Make sure you run 'chamber settings secure' before committing."
+                    warn "WARNING: It appears that you would like to keep your information for #{key} secure, however the value for that setting does not appear to be encrypted.  Make sure you run 'chamber settings secure' before committing."
 
                     value
                   end
