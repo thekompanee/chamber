@@ -1,0 +1,28 @@
+---
+development:
+  my_setting: my_dev_value
+  my_boolean: 'false'
+  my_dynamic_setting: 3
+  another_level:
+    setting_one: 1
+    setting_two: 4
+    level_three:
+      an_array:
+      - item 8
+      - item 2
+      - item 0
+      a_scalar: hello
+
+test:
+  my_setting: my_value
+  my_boolean: 'false'
+  my_dynamic_setting: 2
+  another_level:
+    setting_one: 1
+    setting_two: 2
+    level_three:
+      an_array:
+      - item 1
+      - item 2
+      - item 3
+      a_scalar: hello
