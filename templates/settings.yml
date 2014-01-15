@@ -1,0 +1,11 @@
+development:
+  setting:          development_value
+  _secure_setting:  secure_development_value
+
+test:
+  setting:          test_value
+  _secure_setting:  secure_test_value
+
+production:
+  setting:          production_value
+  _secure_setting:  secure_production_value

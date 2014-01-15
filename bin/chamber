@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'chamber/commands'
+require 'chamber/binary/runner'
 
-Chamber::Commands::Chamber.start
+Chamber::Binary::Runner.start
