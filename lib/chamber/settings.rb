@@ -146,16 +146,12 @@ class   Settings
     self.namespaces  == other.namespaces
   end
 
-  def secure
-    secured_raw_data = Filters::EncryptionFilter.execute( data:           @raw_data,
-                                                          encryption_key: encryption_key)
 
-    Settings.new( {
-                    settings:     secured_raw_data,
-                    pre_filters:  [],
-                    post_filters: [],
-                  }.
-                  merge(metadata))
+  def secure
+    Settings.new( metadata.merge(
+                    settings:     @raw_data,
+                    pre_filters:  [Filters::EncryptionFilter],
+                    post_filters: [] ))
   end
 
   protected
