@@ -21,9 +21,15 @@ describe  ContextResolver do
     options = ContextResolver.resolve(files:          'my_files',
                                       namespaces:     'ns')
 
-    expect(options[:basepath]).to       be_nil
     expect(options[:files]).to          eql 'my_files'
     expect(options[:namespaces]).to     eql 'ns'
+  end
+
+  it 'defaults the basepath to the rootpath if none is explicitly set' do
+    options = ContextResolver.resolve(rootpath:       './app',
+                                      namespaces:     'ns')
+
+    expect(options[:basepath].to_s).to  eql './app'
   end
 
   it 'sets the rootpath to the current working directory if none is passed in' do

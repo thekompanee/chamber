@@ -12,7 +12,6 @@ development:
       - item 2
       - item 0
       a_scalar: hello
-
 test:
   my_setting: my_value
   my_boolean: 'false'
