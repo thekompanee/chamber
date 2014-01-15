@@ -26,7 +26,7 @@ we (and assumed others) needed.
 1. Thou shalt not be bound to a single framework like Rails (it should be usable in
    plain Ruby projects)
 1. Thou shalt have an easy-to-use CLI for scripting
-1. Thou shalt easily integrate with Capistrano for easy configuration deployments
+1. Thou shalt easily integrate with Capistrano for deployments
 1. Thou shalt be well documented with full test coverage
 1. Thou shalt not have to worry about accidentally committing secure settings
 
@@ -100,7 +100,7 @@ Given a `settings.yml` file containing:
 
 ```yaml
 smtp:
-  server: "example.com"
+  server:   "example.com"
   username: "my_user"
   password: "my_pass"
 ```
@@ -137,36 +137,10 @@ configuration values as encrypted text.  The only file that needs to be synced
 needed by the users deploying the application.  If you're deploying via CI,
 Github, etc, then technically no developer needs it.
 
-#### Setting It Up
-
-1. Create a Public/Private Keypair
-
-  ```sh
-  ssh-keygen -t rsa -C "your_email@example.com" -f ./.chamber_rsa
-  ```
-
-1. Create a Passphrase
-
-  You'll now be asked for a passphrase, enter one and *remember it*. Preferably,
-  store it in something like 1Password.
-
-1. Set Proper File Permissions
-
-  ```sh
-  chmod 600 ./.chamber_rsa
-  chmod 644 ./.chamber_rsa.pub
-  ```
-
-1. Add the Private Key to Your gitignore File
-
-  ```sh
-  echo ".chamber_rsa" >> .gitignore
-  ```
-
 #### Working With Secure Configuration Settings
 
-Once your keypair is created, the hard work is done.  From here on out, Chamber
-makes working with secure settings almost an afterthought.
+After running `chamber init` as described above, the hard work is done.  From
+here on out, Chamber makes working with secure settings almost an afterthought.
 
 When you create your configuration YAML file (or add a new setting to an
 existing one), you can format your secure keys like so:
@@ -179,7 +153,7 @@ _secure_my_secure_key_name: 'my secure value'
 
 When Chamber sees this convention (`_secure_` followed by the key name), it will
 automatically look to either encrypt or decrypt the value using the
-public/private keys you generated above into:
+public/private keys you generated above into something like:
 
 ```yaml
 # settings.yml
@@ -187,28 +161,18 @@ public/private keys you generated above into:
 _secure_my_secure_key_name: 8239f293r9283r9823r92hf9823hf9uehfksdhviwuehf923uhrehf9238
 ```
 
-However you would still have access the value like so (assuming you had access
-to the private key):
+However you would still be able to access the value like so (assuming you had
+the private key in the application's root):
 
 ```ruby
 Chamber.env.my_secure_key_name
 # => 'my secure value'
 ```
 
-#### Git Commit Hooks
+### Using Existing Environment Variables
 
-Chamber comes with a git commit hook which will automatically look in your repo
-for standard Chamber settings files and, if it finds what it thinks to be an
-unencrypted value that it believes you meant to be encrpyted, it will abort and
-give you a chance to correct it (along with a command you can copy/paste to
-fix the problem).
-
-Add it to your project like so:
-
-### Existing Environment Variables (aka Heroku)
-
-If deploying to a system which has all of your environment variables already
-set, you're not going to use all of the values stored in the YAML files.
+If deploying to a system which has all of your environment variables already set
+(eg Heroku), you're not going to use all of the values stored in the YAML files.
 Instead, you're going to want to pull certain values from environment variables.
 
 **Example:**
@@ -217,7 +181,7 @@ Given a `settings.yml` file containing:
 
 ```yaml
 smtp:
-  server: "example.com"
+  server:   "example.com"
   username: "my_user"
   password: "my_pass"
 ```
@@ -228,7 +192,7 @@ If an environment variable is already set like so:
 export SMTP_SERVER="myotherserverisapentium.com"
 ```
 
-Then when you ask Chamber to give you the SMTP server:
+Then, when you ask Chamber to give you the SMTP server:
 
 ```ruby
 Chamber[:smtp][:server]
@@ -241,14 +205,15 @@ variable.
 ## Deploying to Heroku
 
 If you're deploying to Heroku, they won't let you upload custom config files. If
-you do not have your config files all stored in your repo (which you shouldn't
-if some of the information is sensitive), it becomes more difficult to gain
-access to that information on Heroku.
+you do not have your config files all stored in your repo, or some of your
+settings are encrypted, it becomes more difficult to gain access to that
+information on Heroku.
 
 To solve this problem, Heroku allows you to set environment variables in your
 application.  Unfortunately this has the nasty side effect of being a pain to
 deal with.  For one, you have to deal with environment variables with unweildy
-names.  For another, it makes the organization of those variables difficult.
+names (eg `MY_THIRD_PARTY_SERVICE_DEV_API_KEY`).  For another, it makes the
+organization of those variables difficult.
 
 Fortunately, Chamber allows you to organize your environment variables in
 separate files and access them easily using hash or object notation, however at
@@ -257,18 +222,14 @@ configuration settings up to Heroku as environment variables.
 
 When Chamber accesses those same hash/object notated config values, it will
 first look to see if an associated environment variable exists.  If it does, it
-will use that in place of any values inside of the config files.
+will use that in place of any values inside of the config files as [described
+above](#using-existing-environment-variables).
 
-Simply run:
+To update Heroku with all the proper environment variables so that your app
+works as expected, run the following from the root of your app:
 
 ```sh
-# In the root folder of your Rails app:
-
-chamber heroku push --preset=rails
-
-# In the root folder of another type of application:
-
-chamber heroku push --basepath=./
+chamber heroku push
 ```
 
 And all of your settings will be converted to environment variable versions
@@ -288,7 +249,7 @@ information.
 To execute this, simply run:
 
 ```sh
-chamber travis secure --basepath=./
+chamber travis secure
 ```
 
 This will add `secure` entries into your `.travis.yml` file.  Each one will
@@ -367,28 +328,25 @@ Notice the difference:
 
 One of the nice things about Chamber is that it runs each settings file through
 ERB before it tries to parse it as YAML.  The main benefit of this is that you
-can use settings from previous files in ERB for later files.  This is mainly
-used if you follow our convention of putting all of your sensitive information
-in your `credentials.yml` file.
+can use settings from previous files in ERB for later files.
 
 **Example:**
 
 ```yaml
-# credentials.yml
+# settings.yml
 
 production:
   my_secret_key: 123456789
 ```
 
 ```erb
-<%# settings.yml %>
+<%# settings/some_service-production.yml %>
 
-production:
-  my_url: http://my_username:<%= Chamber[:my_secret_key] %>@my-url.com
+my_service_url: http://my_username:<%= Chamber[:my_secret_key] %>@my-url.com
 ```
 
-Because by default Chamber processes `credentials` settings files before
-anything else, this works.
+Because by default Chamber processes `settings*.yml` settings files before
+anything in the `settings` subdirectory, this works.
 
 But it's all ERB so you can do as much crazy ERB stuff in your settings files as
 you'd like:
@@ -424,7 +382,7 @@ under specific circumstances, you can use Chamber's namespaces.
 **Example:**
 
 ```ruby
-Chamber.load( :basepath => Rails.root.join('config'),
+Chamber.load( :basepath   => Rails.root.join('config'),
               :namespaces => {
                 :environment => ::Rails.env } )
 ```
@@ -504,26 +462,26 @@ YAML's built-in merge functionality to do that for you:
 ```yaml
 # settings.yml
 
-default: &shared
+default: &default
   smtp:
     headers:
       X-MYAPP-NAME: My Application Name
       X-MYAPP-STUFF: Other Stuff
 
 development:
-  <<: *shared
+  <<: *default
   smtp:
     username: my_development_username
     password: my_development_password`
 
 test:
-  <<: *shared
+  <<: *default
   smtp:
     username: my_test_username
     password: my_test_password`
 
 staging:
-  <<: *shared
+  <<: *default
   smtp:
     username: my_staging_username
     password: my_staging_password`
@@ -612,29 +570,63 @@ Each of the commands described below takes a few common options.
 
   **Example:** `--preset=rails`
 
-* `--files` (or `-f`): Allows you to specifically set the file patterns that
-  Chamber should look at in determining where to load settings information from.
+* `--rootpath` (or `-r`): Allows you to quickly set the rootpath of the
+  application. By default this is the directory that the `chamber` executable is
+  run from.
 
-  **Example:** `--files=/path/to/my/application/secret.yml /path/to/my/application/settings/*.yml`
+  **Example:** `--rootpath=/path/to/my/application`
 
 * `--basepath` (or `-b`): Sets the base path that Chamber will use to look for
   its [common settings files](#convention-over-configuration).
 
   **Example:** `--basepath=/path/to/my/application`
 
+* `--files` (or `-f`): Allows you to specifically set the file patterns that
+  Chamber should look at in determining where to load settings information from.
+
+  **Example:** `--files=/path/to/my/application/secret.yml /path/to/my/application/settings/*.yml`
+
 * `--namespaces` (or `-n`): The namespace values which will be considered for
   loading settings files.
 
-  **Example:** `--namespaces=development`
+  **Example:** `--namespaces=development tumbleweed`
 
-* `--keypair` (or `-k`): The path to the keypair to use for
-  encryption/decryption. This is optional unless you have secure settings. You
-  only have to point it to the public key. It will assume that the private key
-  is the filename of the public key with any extension removed.
+* `--encryption-key`: The path to the key which will be used for encryption.
+  This is optional unless you need to secure any settings.
+
+  Additionally you may pass in the actual contents of the key for this option.
 
   **Example:** `--keypair=/path/to/my/app/my_project_rsa.pub`
 
-_**Note:** `--basepath`, `--preset` and `--files` are mutually exclusive._
+* `--decryption-key`: The path to the key which will be used for decryption.
+  This is optional unless you need to decrypt any settings.
+
+  Additionally you may pass in the actual contents of the key for this option.
+
+  **Example:** `--keypair=/path/to/my/app/my_project_rsa`
+
+_**Note:** `--basepath` and `--files` are mutually exclusive. `--files` will
+always take precedence._
+
+#### Somewhat Common Options
+
+_**Note:** Only select commands support the following options. Use `chamber help
+  SUBCOMMAND` to verify if a particular command does._
+
+* `--dry-run` (or `-d`):  The command will not actually execute, but will show
+  you a summary of what *would* have happened.
+
+  **Example:** `--dry-run`
+
+* `--only-secured` (or `-o`): This is the default. Because most systems have no
+  issues reading from the config files you have stored in your repo, there is no
+  need to process *all* of your settings.  So by default, Chamber will only
+  convert, push, etc those settings which have been gitignored or those which
+  have been encrpyted.
+
+  To process everything, use the `--skip-secure-only` flag.
+
+  **Example:** `--secure-only`, `--skip-secure-only`
 
 #### Settings
 
@@ -650,10 +642,7 @@ about for a given context.  It will be output as a hash of hashes by default.
 
   **Example:** `--as-env`
 
-* `--auto-decrypt`: This is the default if the keypair provided includes
-  a private key. Otherwise this is disabled.
-
-**Example:** `chamber settings show -p=rails`
+**Example:** `chamber show --as-env`
 
 ###### Files
 
@@ -664,7 +653,7 @@ Additionally, the order is significant.  Chamber will load settings from the
 top down so any duplicate items in subsequent entries will override items from
 previous ones.
 
-**Example:** `chamber settings files -p=rails`
+**Example:** `chamber files`
 
 ###### Secure
 
@@ -676,12 +665,7 @@ This command differs from other tasks in that it will process all files that
 match Chamber's conventions and not just those which match the passed in
 namespaces.
 
-* `--auto-encrypt`: Will automatically encrypt any values which Chamber feels
-  are unencrypted.
-
-  **Example:** `--auto-encrypt`, `--skip-auto-encrypt`
-
-**Example:** `chamber settings secure -p=rails --auto-encrypt`
+**Example:** `chamber secure`
 
 ###### Compare
 
@@ -710,16 +694,24 @@ environments.
 
   **Example:** `--second=staging`, `--second=staging my_host_name`
 
-**Example:** `chamber settings compare --first=development --second=staging -p=rails`
+**Example:** `chamber compare --first=development --second=staging`
+
+###### Init
+
+Init can be used to initialize a new application/project with everything that
+Chamber needs in order to run properly.  This includes:
+
+* Creating a public/private keypair
+* Setting the proper permissions on the the newly created keypair
+* Adding the private key to the gitignore file
+* Creating a template `settings.yml` file
+
+**Example:** `chamber init`
 
 #### Heroku
 
 As we described above, working with Heroku environment variables is tedious at
 best.  Chamber gives you a few ways to help with that.
-
-_**Note:** I'll be using the `--preset` shorthand `-p` for brevity below but the
-examples will work with any of the other options described
-[above](#common-options)._
 
 ##### Heroku Common Options
 
@@ -727,21 +719,6 @@ examples will work with any of the other options described
   its environment variables.
 
   **Example:** `--app=my-heroku-app-name`
-
-* `--dry-run` (or `-d`): The command will not actually execute, but will show
-  you a summary of what *would* have happened.
-
-  **Example:** `--dry-run`
-
-* `--secure-only` (or `-o`): This is the default.  Because Heroku has no issues
-  reading from the config files you have stored in your repo, there is no need
-  to set *all* of your settings as environment variables.  So by default,
-  Chamber will only convert and push those settings which have been gitignored
-  or those which have been encrpyted.
-
-  To push everything, use the `--skip-secure-only` flag.
-
-  **Example:** `--secure-only`, `--skip-secure-only`
 
 ##### Heroku Commands
 
@@ -751,15 +728,10 @@ As we described above, this command will take your current settings and push
 them to Heroku as environment variables that Chamber will be able to
 understand.
 
-* `--strict`: This is the default. If strict mode is enabled and there are both
-  secure settings *and* the private key cannot be found, the command will abort.
-
-  **Example:** `--strict`, `--no-strict`
-
-**Example:** `chamber heroku push -a=my-heroku-app -p=rails -n=staging`
+**Example:** `chamber heroku push --namespaces=production --app=my-heroku-app`
 
 _**Note:** To see exactly how Chamber sees your settings as environment variables, see
-the [chamber settings show](#general-settings-commands) command above._
+the [chamber settings show](#settings-commands) command above._
 
 ###### Pull
 
@@ -775,9 +747,9 @@ specify the following option:
   _**Note:** Eventually this will be parsed into YAML that Chamber can load
   straight away, but for now, it's basically just redirecting the output._
 
-  **Example:** `--into=/path/to/my/app/settings/heroku.yml`
+  **Example:** `--into=/path/to/my/app/settings/heroku.config`
 
-**Example:** `chamber heroku pull -a=my-heroku-app --into=/path/to/my/app/heroku.yml`
+**Example:** `chamber heroku pull --app=my-heroku-app --into=/path/to/my/app/heroku.config`
 
 ###### Diff
 
@@ -785,7 +757,7 @@ Will use git's diff function to display the difference between what Chamber
 knows about locally and what Heroku currently has set.  This is very handy for
 knowing what changes may be made if `chamber heroku push` is executed.
 
-**Example:** `chamber heroku diff -a=my-heroku-app -p=rails -n=staging`
+**Example:** `chamber heroku diff --namespaces=production --app=my-heroku-app`
 
 ###### Clear
 
@@ -793,40 +765,18 @@ Will remove any environment variables from Heroku that Chamber knows about.
 This is useful for clearing out Chamber-related settings without touching
 Heroku addon-specific items.
 
-**Example:** `chamber heroku clear -a=my-heroku-app -p=rails -n=staging`
+**Example:** `chamber heroku clear --namespaces=production --app=my-heroku-app`
 
 #### Travis CI
-
-##### Travis Common Options
-
-* `--dry-run` (or `-d`): The command will not actually execute, but will show
-  you a summary of what *would* have happened.
-
-  **Example:** `--dry-run`
-
-* `--secure-only` (or `-o`): This is the default.  Because Travis has no issues
-  reading from the config files you have stored in your repo, there is no need
-  to set *all* of your settings as environment variables.  So by default,
-  Chamber will only convert and push those settings which have been gitignored
-  or those which have been encrpyted.
-
-  To push everything, use the `--skip-secure-only` flag.
-
-  **Example:** `--secure-only`, `--skip-secure-only`
-
-* `--strict`: This is the default. If strict mode is enabled and there are both
-  secure settings *and* the private key cannot be found, the command will abort.
-
-  **Example:** `--strict`, `--no-strict`
 
 ##### Travis Commands
 
 ###### Secure
 
-Travis CI allows you to use the public key on your Travis repo to encrypt
-items such as environment variables which you would like for Travis to be able
-to have access to, but which you wouldn't necessarily want to be in plain text
-inside of your repo.
+Travis CI allows you to use the public key on your Travis repo to encrypt items
+as environment variables which you would like for Travis to be able to have
+access to, but which you wouldn't necessarily want to be in plain text inside of
+your repo.
 
 This command takes the settings that Chamber knows about, encrypts them, and
 puts them inside of your .travis.yml at which point they can be safely
@@ -835,7 +785,7 @@ committed.
 _**Warning:** This will delete *all* of your previous 'secure' entries under
 'env.global' in your .travis.yml file._
 
-**Example:** `chamber travis secure -p=rails -n=continuous_integration`
+**Example:** `chamber travis secure --namespaces=continuous_integration`
 
 ### Basic Boolean Conversion
 
@@ -857,12 +807,12 @@ if Chamber.env.my_feature.enabled?
 end
 ```
 
-Will always return true because `false` becomes `'false'` on Heroku which, as
-far as Ruby is concerned, is `true`.  Now, you could completely omit the
-`enabled` key, however this causes issues if you would like to audit your
-settings (say for each environment) to make sure they are all the same.  Some
-will have the `enabled` setting and some will not, which will give you false
-positives.
+Now because environment variables are always strings, `false` becomes `'false'`.
+And because, as far as Ruby is concerned, any `String` is `true`, `enabled?`
+would return `true`.  Now, you could completely omit the `enabled` key, however
+this causes issues if you would like to audit your settings (say for each
+environment) to make sure they are all the same.  Some will have the `enabled`
+setting and some will not, which will give you false positives.
 
 You could work around it by doing this:
 
@@ -872,7 +822,7 @@ if Chamber.env.my_feature.enabled == 'true'
 end
 ```
 
-but that looks awful.
+but that looks awful and isn't very idomatic.
 
 To solve this problem, Chamber reviews all of your settings values and, if they
 are any of the following exact strings (case insensitive):
