@@ -8,24 +8,12 @@ module  Chamber
     self.instance = Instance.new(options)
   end
 
-  def filenames
-    instance.files.filenames
-  end
-
-  def files
-    instance.files
-  end
-
-  def to_s
-    instance.settings.to_s
+  def to_s(options = {})
+    instance.to_s(options)
   end
 
   def env
     instance.settings
-  end
-
-  def config
-    instance.configuration
   end
 
   protected
@@ -41,12 +29,12 @@ module  Chamber
   public
 
   def method_missing(name, *args)
-    return instance.settings.public_send(name, *args) if instance.settings.respond_to?(name)
+    return instance.public_send(name, *args) if instance.respond_to?(name)
 
     super
   end
 
   def respond_to_missing?(name, include_private = false)
-    instance.settings.respond_to?(name, include_private)
+    instance.respond_to?(name, include_private)
   end
 end

@@ -84,13 +84,13 @@ describe Chamber do
   it 'knows how to load itself with a path string' do
     Chamber.load(:basepath => '/tmp/chamber')
 
-    expect(Chamber.config.basepath.to_s).to eql '/tmp/chamber'
+    expect(Chamber.configuration.basepath.to_s).to eql '/tmp/chamber'
   end
 
   it 'knows how to load itself with a path object' do
     Chamber.load(:basepath => Pathname.new('/tmp/chamber'))
 
-    expect(Chamber.config.basepath.to_s).to eql '/tmp/chamber'
+    expect(Chamber.configuration.basepath.to_s).to eql '/tmp/chamber'
   end
 
   it 'processes settings files through ERB before YAML' do
