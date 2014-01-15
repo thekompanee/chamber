@@ -22,6 +22,8 @@ class   ContextResolver
 
         options[:namespaces]   = [::Rails.env]
       end
+    else
+      options[:basepath]     ||= options[:rootpath]
     end
 
     options
