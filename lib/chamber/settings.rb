@@ -6,6 +6,7 @@ require 'chamber/filters/encryption_filter'
 require 'chamber/filters/decryption_filter'
 require 'chamber/filters/environment_filter'
 require 'chamber/filters/boolean_conversion_filter'
+require 'chamber/filters/secure_filter'
 
 ###
 # Internal: Represents the base settings storage needed for Chamber.
@@ -146,6 +147,11 @@ class   Settings
     self.namespaces  == other.namespaces
   end
 
+  def secured
+    Settings.new( metadata.merge(
+                    settings:     raw_data,
+                    pre_filters:  [Filters::SecureFilter]))
+  end
 
   def secure
     Settings.new( metadata.merge(
