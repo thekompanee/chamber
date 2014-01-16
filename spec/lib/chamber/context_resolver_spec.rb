@@ -1,19 +1,18 @@
 require 'rspectacular'
-require 'chamber/commands/context_resolver'
+require 'chamber/context_resolver'
 
 module    Chamber
 module    Commands
 describe  ContextResolver do
-  let(:rails_2_path) { ::File.expand_path('../../../../rails-2-test', __FILE__) }
-  let(:rails_3_path) { ::File.expand_path('../../../../rails-3-test', __FILE__) }
-  let(:rails_4_path) { ::File.expand_path('../../../../rails-4-test', __FILE__) }
+  let(:rails_2_path) { ::File.expand_path('../../../rails-2-test', __FILE__) }
+  let(:rails_3_path) { ::File.expand_path('../../../rails-3-test', __FILE__) }
+  let(:rails_4_path) { ::File.expand_path('../../../rails-4-test', __FILE__) }
 
   it 'does not attempt to do any resolution if all valid options are passed in' do
     options = ContextResolver.resolve(basepath:       'my_path',
                                       namespaces:     'ns')
 
-    expect(options[:basepath]).to       eql 'my_path'
-    expect(options[:files]).to          be_nil
+    expect(options[:basepath].to_s).to  eql 'my_path'
     expect(options[:namespaces]).to     eql 'ns'
   end
 
@@ -30,6 +29,20 @@ describe  ContextResolver do
                                       namespaces:     'ns')
 
     expect(options[:basepath].to_s).to  eql './app'
+  end
+
+  it 'always sets the basepath to a Pathname even if it is passed in as a String' do
+    options = ContextResolver.resolve(basepath: './app')
+
+    expect(options[:basepath]).to be_a Pathname
+  end
+
+  it 'sets the default files if none are passed in' do
+    options = ContextResolver.resolve(basepath: './app')
+
+    expect(options[:files].map(&:to_s)).to eql [  './app/credentials*.yml',
+                                                  './app/settings*.yml',
+                                                  './app/settings' ]
   end
 
   it 'sets the rootpath to the current working directory if none is passed in' do
