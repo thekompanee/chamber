@@ -1,5 +1,4 @@
 module  Chamber
-module  Commands
 class   ContextResolver
 
   def initialize(options = {})
@@ -25,6 +24,12 @@ class   ContextResolver
     else
       options[:basepath]     ||= options[:rootpath]
     end
+
+    options[:basepath]         = Pathname.new(options[:basepath])
+
+    options[:files]          ||= [ options[:basepath] + 'credentials*.yml',
+                                   options[:basepath] + 'settings*.yml',
+                                   options[:basepath] + 'settings' ]
 
     options
   rescue LoadError
@@ -67,6 +72,5 @@ class   ContextResolver
     options[:rootpath].join('script', 'rails').exist? ||
     options[:rootpath].join('script', 'console').exist?
   end
-end
 end
 end

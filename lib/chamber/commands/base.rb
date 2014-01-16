@@ -1,4 +1,3 @@
-require 'chamber/commands/context_resolver'
 require 'chamber/instance'
 
 module  Chamber
@@ -6,8 +5,6 @@ module  Commands
 class   Base
 
   def initialize(options = {})
-    options       = ContextResolver.resolve(options)
-
     self.chamber  = Chamber::Instance.new options
     self.shell    = options[:shell]
     self.rootpath = options[:rootpath]

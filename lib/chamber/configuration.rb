@@ -1,3 +1,5 @@
+require 'chamber/context_resolver'
+
 module  Chamber
 class   Configuration
   attr_accessor :basepath,
@@ -7,14 +9,13 @@ class   Configuration
                 :namespaces
 
   def initialize(options = {})
-    self.basepath       = options[:basepath]        || ''
-    self.namespaces     = options[:namespaces]      || []
+    options             = ContextResolver.resolve(options)
+
+    self.basepath       = options[:basepath]
+    self.namespaces     = options[:namespaces]
     self.decryption_key = options[:decryption_key]
     self.encryption_key = options[:encryption_key]
-    self.files          = options[:files]           || [
-                        self.basepath + 'credentials*.yml',
-                        self.basepath + 'settings*.yml',
-                        self.basepath + 'settings' ]
+    self.files          = options[:files]
   end
 
   def to_hash
@@ -25,10 +26,6 @@ class   Configuration
       files:          self.files,
       namespaces:     self.namespaces,
     }
-  end
-
-  def basepath=(pathlike)
-    @basepath = pathlike == '' ? '' : Pathname.new(::File.expand_path(pathlike))
   end
 end
 end
