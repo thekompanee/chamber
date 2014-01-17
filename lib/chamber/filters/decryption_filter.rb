@@ -33,8 +33,12 @@ class   DecryptionFilter
         if key.match(SECURE_KEY_TOKEN)
           key   = key.to_s.sub(SECURE_KEY_TOKEN, '')
           value = if value.match(BASE64_STRING_PATTERN)
-                    decoded_string = Base64.strict_decode64(value)
-                    decryption_key.private_decrypt(decoded_string)
+                    if decryption_key.nil?
+                      value
+                    else
+                      decoded_string = Base64.strict_decode64(value)
+                      decryption_key.private_decrypt(decoded_string)
+                    end
                   else
                     warn "WARNING: It appears that you would like to keep your information for #{key} secure, however the value for that setting does not appear to be encrypted.  Make sure you run 'chamber settings secure' before committing."
 
