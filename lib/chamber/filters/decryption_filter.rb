@@ -33,8 +33,6 @@ class   DecryptionFilter
         if key.match(SECURE_KEY_TOKEN)
           key   = key.to_s.sub(SECURE_KEY_TOKEN, '')
           value = if value.match(BASE64_STRING_PATTERN)
-                    raise Errors::UndecryptableValueError.new("#{key} appears to need decrypting but the decryption key is not available.") if decryption_key.nil?
-
                     decoded_string = Base64.strict_decode64(value)
                     decryption_key.private_decrypt(decoded_string)
                   else
