@@ -1,5 +1,6 @@
 require 'rspectacular'
 require 'chamber/commands/secure'
+require 'fileutils'
 
 module    Chamber
 module    Commands
@@ -11,6 +12,7 @@ describe  Secure do
                                encryption_key: rootpath + '../spec_key'} }
 
   it 'can return values formatted as environment variables' do
+    ::FileUtils.mkdir_p rootpath + 'settings' unless ::File.exist? rootpath + 'settings'
     ::File.open(settings_filename, 'w') do |file|
       file.write <<-HEREDOC
 test:
