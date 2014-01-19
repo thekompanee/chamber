@@ -5,7 +5,8 @@ require 'fileutils'
 
 module    Chamber
 describe  FileSet do
-  before(:each) { FileUtils.mkdir '/tmp/settings' unless ::File.exist? '/tmp/settings' }
+  before(:each) { FileUtils.mkdir '/tmp/settings' unless ::File.exist? '/tmp/settings'
+                  FileUtils.mkdir '/tmp/dash-set' unless ::File.exist? '/tmp/dash-set' }
   after(:each)  { FileUtils.rm_rf '/tmp/settings' if     ::File.exist? '/tmp/settings' }
 
   it 'can consider directories containing YAML files' do
@@ -58,6 +59,19 @@ describe  FileSet do
     expect(file_set.filenames).to be_empty
 
     ::FileUtils.rm_f('/tmp/settings/settings-blue.yml')
+  end
+
+  it 'does not consider non-namespaced files which have dashes in their paths as namespaced' do
+    ::File.new('/tmp/dash-set/settings.yml', 'w+')
+
+    file_set = FileSet.new files:      '/tmp/dash-set/settings*.yml',
+                           namespaces: ['blue']
+
+    expect(file_set.filenames).to eql [
+                                        '/tmp/dash-set/settings.yml'
+                                      ]
+
+    ::FileUtils.rm_r('/tmp/dash-set/settings.yml')
   end
 
   it 'removes any duplicate files' do

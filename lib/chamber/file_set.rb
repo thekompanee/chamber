@@ -252,7 +252,7 @@ class   FileSet
 
   def namespaced_files
     @namespaced_files ||= all_files.select do |file|
-                            file.fnmatch? '*-*'
+                            file.basename.fnmatch? '*-*'
                           end
   end
 
@@ -261,7 +261,7 @@ class   FileSet
 
     namespaces.each do |namespace|
       file_holder << namespaced_files.select do |file|
-                       file.fnmatch? "*-#{namespace}.???"
+                       file.basename.fnmatch? "*-#{namespace}.???"
                      end
     end
 
