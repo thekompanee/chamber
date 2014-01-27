@@ -8,7 +8,7 @@ class   Initialize < Chamber::Commands::Base
   def initialize(options = {})
     super
 
-    self.basepath = options[:basepath]
+    self.basepath = Chamber.configuration.basepath
   end
 
   def call
@@ -19,7 +19,7 @@ class   Initialize < Chamber::Commands::Base
     `chmod 644 #{public_key_filepath}`
 
     unless ::File.read(gitignore_filepath).match(/^.chamber.pem$/)
-      shell.append_to_file gitignore_filepath, private_key_filepath.basename
+      shell.append_to_file gitignore_filepath, private_key_filepath.basename.to_s
     end
 
     shell.copy_file settings_template_filepath, settings_filepath
