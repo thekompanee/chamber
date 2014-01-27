@@ -22,7 +22,7 @@ class   Initialize < Chamber::Commands::Base
       shell.append_to_file gitignore_filepath, private_key_filepath.basename.to_s
     end
 
-    shell.copy_file settings_template_filepath, settings_filepath
+    shell.copy_file 'settings.yml', settings_filepath
   end
 
   def self.call(options = {})
@@ -32,14 +32,6 @@ class   Initialize < Chamber::Commands::Base
   protected
 
   attr_accessor :basepath
-
-  def settings_template_filepath
-    @settings_template_filepath ||= templates_path + 'settings.yml'
-  end
-
-  def templates_path
-    @templates_path             ||= Pathname.new(::File.expand_path('../../../../templates', __FILE__))
-  end
 
   def settings_filepath
     @settings_filepath          ||= basepath + 'settings.yml'
