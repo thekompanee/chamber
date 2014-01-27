@@ -12,6 +12,8 @@ module  Binary
 class   Runner < Thor
   include Thor::Actions
 
+  source_root ::File.expand_path('../../../../templates', __FILE__)
+
   class_option  :rootpath,
                 type:     :string,
                 aliases:  '-r',

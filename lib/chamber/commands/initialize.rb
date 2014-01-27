@@ -1,5 +1,4 @@
 require 'openssl'
-require 'fileutils'
 require 'chamber/commands/base'
 
 module  Chamber
@@ -23,10 +22,7 @@ class   Initialize < Chamber::Commands::Base
       shell.append_to_file gitignore_filepath, private_key_filepath.basename.to_s
     end
 
-    unless settings_filepath.exist?
-      puts "Creating #{settings_filepath} Settings Template"
-      FileUtils.copy_file settings_template_filepath, settings_filepath
-    end
+    shell.copy_file settings_template_filepath, settings_filepath
   end
 
   def self.call(options = {})
