@@ -28,7 +28,7 @@ CHAMBER
   spec.extra_rdoc_files           = %w[README.md LICENSE]
 
   #= Manifest =#
-  spec.files                      = Dir.glob('lib/**/*')
+  spec.files                      = Dir.glob('{lib,templates}/**/*')
   spec.test_files                 = Dir.glob('{test,spec,features}/**/*')
   spec.executables                = Dir.glob('bin/*').map{ |f| File.basename(f) }
   spec.require_paths              = ['lib']
