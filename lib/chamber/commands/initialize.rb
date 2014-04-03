@@ -24,6 +24,7 @@ class   Initialize < Chamber::Commands::Base
      
     #Git pre-commit hook setup 
     if ::File.exists?(git_precommit_path)
+      
       unless ::File.read(git_precommit_path).match(/^bundle exec chamber secure$/)
         shell.append_to_file git_precommit_path, "\nbundle exec chamber secure"
       end
