@@ -1,8 +1,10 @@
+require 'hashie/mash'
+
 module  Chamber
 class   ContextResolver
 
   def initialize(options = {})
-    self.options = options.dup
+    self.options = Hashie::Mash.new(options)
   end
 
   def resolve

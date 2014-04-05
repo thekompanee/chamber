@@ -45,6 +45,14 @@ describe  ContextResolver do
                                                   './app/settings' ]
   end
 
+  it 'can handle if keys are passed as strings' do
+    options = ContextResolver.resolve('files'      =>  'my_files',
+                                      'namespaces' =>  'ns')
+
+    expect(options[:files]).to          eql 'my_files'
+    expect(options[:namespaces]).to     eql 'ns'
+  end
+
   it 'sets the rootpath to the current working directory if none is passed in' do
     allow(Pathname).to  receive(:pwd).
                         and_return('my_dir')
