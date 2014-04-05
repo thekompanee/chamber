@@ -1,9 +1,12 @@
 language: ruby
 cache: bundler
 rvm:
-  - 2.1.1
-  - 2.1.0
-  - 2.0.0
-  - 1.9.3
-  - 1.9.2
+- 2.1.1
+- 2.1.0
+- 2.0.0
+- 1.9.3
+- 1.9.2
 script: bundle exec rspec spec
+env:
+  global:
+    secure: kBCnfwyeUmQhO9JyBBD4Su8S7Xc10MDyJKoUcExiPjHXsLOIuu9uj1glEbEHg26XEqPlitc3qULswiy0HrGVdr9CqE3Qs1Q5yX0F3/Us5UJFf5w7dqBFpub+NkQS7dyzm/U5qVMkPrdVCNm0fxPyZP0zVQ8YyKHlM6iSjI7Rf68=
