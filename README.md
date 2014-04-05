@@ -20,7 +20,7 @@ we (and assumed others) needed.
    settings must be stored in environment variables
 1. Thou shalt seemlessly work with Travis CI and other cloud CI platforms
 1. Thou shalt not force users to use arcane
-   really_long_variable_names_just_to_keep_their_settings_organized
+   long_variable_names_just_to_keep_their_settings_organized
 1. Thou shalt not require users keep a separate repo or cloud share sync just to
    keep their secure settings updated
 1. Thou shalt not be bound to a single framework like Rails (it should be usable in
