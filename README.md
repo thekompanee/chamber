@@ -1,4 +1,4 @@
-# Chamber [![Build Status](https://travis-ci.org/m5rk/chamber.png)](https://travis-ci.org/m5rk/chamber) [![Code Climate](https://codeclimate.com/github/m5rk/chamber.png)](https://codeclimate.com/github/m5rk/chamber)
+# Chamber [![Build Status](https://travis-ci.org/thekompanee/chamber.png)](https://travis-ci.org/thekompanee/chamber) [![Code Climate](https://codeclimate.com/github/thekompanee/chamber.png)](https://codeclimate.com/github/thekompanee/chamber)
 
 Chamber is the auto-encrypting, extremely organizable, Heroku-loving, CLI-having,
 non-extra-repo-needing, non-Rails-specific-ing, CI-serving configuration
