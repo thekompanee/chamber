@@ -205,7 +205,7 @@ describe  Settings do
     secured_settings = settings.secured
 
     expect(secured_settings.my_encrypted_setting).to  eql 'hello'
-    expect(secured_settings.my_insecure_setting?).to  be_false
+    expect(secured_settings.my_insecure_setting?).to  eql false
   end
 end
 end

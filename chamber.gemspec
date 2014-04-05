@@ -33,10 +33,10 @@ CHAMBER
   spec.executables                = Dir.glob('bin/*').map{ |f| File.basename(f) }
   spec.require_paths              = ['lib']
 
-  spec.add_runtime_dependency     'thor',           '~> 0.18.1'
-  spec.add_runtime_dependency     'hashie',         '~> 2.0'
+  spec.add_runtime_dependency     'thor',                       '~> 0.18.1'
+  spec.add_runtime_dependency     'hashie',                     '~> 2.0'
 
-  spec.add_development_dependency 'rspec',          '~> 2.14'
-  spec.add_development_dependency 'rspectacular',   '~> 0.17.0'
-  spec.add_development_dependency 'simplecov',      '~> 0.7.0'
+  spec.add_development_dependency 'rspec',                      '~> 3.0.0.beta'
+  spec.add_development_dependency 'rspectacular',               '~> 0.23.0'
+  spec.add_development_dependency 'codeclimate-test-reporter',  '~> 0.3.0'
 end
