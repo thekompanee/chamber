@@ -86,6 +86,10 @@ class   Runner < Thor
   method_option :only_sensitive,
                 type:     :boolean,
                 default:  true
+  method_option :dry_run,
+                type:     :boolean,
+                aliases:  '-d',
+                desc:     'Does not actually encrypt anything, but instead displays what values would be encrypted'
   def secure
     Commands::Secure.call(options)
   end
