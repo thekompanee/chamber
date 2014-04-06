@@ -83,6 +83,9 @@ class   Runner < Thor
   end
 
   desc 'secure', 'Secures any values which appear to need to be encrypted in any of the settings files which match irrespective of namespaces'
+  method_option :only_sensitive,
+                type:     :boolean,
+                default:  true
   def secure
     Commands::Secure.call(options)
   end
