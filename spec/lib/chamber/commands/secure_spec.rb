@@ -9,7 +9,8 @@ describe  Secure do
   let(:settings_filename) { rootpath + 'settings' + 'unencrypted.yml' }
   let(:options)           { {  basepath:       rootpath,
                                rootpath:       rootpath,
-                               encryption_key: rootpath + '../spec_key'} }
+                               encryption_key: rootpath + '../spec_key',
+                               shell:          double.as_null_object } }
 
   it 'can return values formatted as environment variables' do
     ::FileUtils.mkdir_p rootpath + 'settings' unless ::File.exist? rootpath + 'settings'
@@ -20,7 +21,7 @@ test:
 HEREDOC
     end
 
-    files = Secure.call(options)
+    Secure.call(options)
 
     expect(::File.read(settings_filename)).to match %r{_secure_my_unencrpyted_setting: [A-Za-z0-9\+\/]{342}==}
 
