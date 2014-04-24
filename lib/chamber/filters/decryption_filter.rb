@@ -40,7 +40,7 @@ class   DecryptionFilter
                       decryption_key.private_decrypt(decoded_string)
                     end
                   else
-                    warn "WARNING: It appears that you would like to keep your information for #{key} secure, however the value for that setting does not appear to be encrypted.  Make sure you run 'chamber settings secure' before committing."
+                    warn "WARNING: It appears that you would like to keep your information for #{key} secure, however the value for that setting does not appear to be encrypted. Make sure you run 'chamber secure' before committing."
 
                     value
                   end
