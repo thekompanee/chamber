@@ -229,7 +229,7 @@ class   FileSet
   private
 
   def all_files
-    @all_files ||= Pathname.glob(file_globs).sort
+    @all_files ||= file_globs.map { |fg| Pathname.glob(fg) }.flatten.uniq.sort
   end
 
   def non_namespaced_files
