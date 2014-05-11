@@ -21,6 +21,19 @@ class   Initialize < Chamber::Commands::Base
     unless ::File.read(gitignore_filepath).match(/^.chamber.pem$/)
       shell.append_to_file gitignore_filepath, private_key_filepath.basename.to_s
     end
+     
+    #Git pre-commit hook setup 
+    if ::File.exists?(git_precommit_path)
+
+      unless ::File.read(git_precommit_path).match(/^bundle exec chamber secure$/)
+        shell.append_to_file git_precommit_path, "\n/bin/bash \"${PWD}/.git/hooks/chamber-hook.sh\""
+      end
+    else
+      shell.copy_file precommit_template_filepath, git_precommit_path
+      `chmod +x #{git_precommit_path}`
+    end  
+
+    shell.copy_file precommit_chamber_hook_filepath, git_chamber_hook_path
 
     shell.copy_file settings_template_filepath, settings_filepath
   end
@@ -37,6 +50,14 @@ class   Initialize < Chamber::Commands::Base
     @settings_template_filepath ||= templates_path + 'settings.yml'
   end
 
+  def precommit_template_filepath
+    @precommit_template_filepath ||= templates_path + 'pre-commit'
+  end  
+
+  def precommit_chamber_hook_filepath
+    @precommit_chamber_hook_filepath ||= templates_path + 'chamber-hook.sh'
+  end  
+  
   def templates_path
     @templates_path             ||= Pathname.new(::File.expand_path('../../../../templates', __FILE__))
   end
@@ -57,6 +78,14 @@ class   Initialize < Chamber::Commands::Base
     @public_key_filepath        ||= rootpath + '.chamber.pub.pem'
   end
 
+  def git_precommit_path
+    @git_precommit_path          ||= rootpath + '.git/hooks/pre-commit'
+  end 
+
+  def git_chamber_hook_path
+    @git_chamber_hook_path          ||= rootpath + '.git/hooks/chamber-hook.sh'
+  end  
+  
   def rsa_key
     @rsa_key                    ||= OpenSSL::PKey::RSA.new(2048)
   end
