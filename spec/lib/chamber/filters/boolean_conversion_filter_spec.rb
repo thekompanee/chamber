@@ -21,6 +21,7 @@ describe  BooleanConversionFilter do
                                                   non_boolean:        Time.utc(2012, 8, 1),
                                                   nilly:              nil, },
                                                 false_boolean:        'false',
+                                                nilly:                nil,
                                                 non_boolean:          [1, 2, 3] })
 
     expect(filtered_data).to eql( true_boolean:       true,
@@ -37,6 +38,7 @@ describe  BooleanConversionFilter do
                                     non_boolean:        Time.utc(2012, 8, 1),
                                     nilly:              nil, },
                                   false_boolean:        false,
+                                  nilly:                nil,
                                   non_boolean:          [1, 2, 3] )
   end
 end
