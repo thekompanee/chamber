@@ -19,8 +19,6 @@ class   BooleanConversionFilter
       if value.respond_to? :each_pair
         execute(value)
       else
-        break if value.nil?
-
         settings[key] = if value.is_a? String
                           case value
                           when 'false', 'f', 'no'
