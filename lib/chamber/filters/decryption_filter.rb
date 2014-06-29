@@ -30,18 +30,21 @@ class   DecryptionFilter
       if value.respond_to? :each_pair
         value = execute(value)
       elsif key.match(SECURE_KEY_TOKEN) && value.respond_to?(:match)
-          value = if value.match(BASE64_STRING_PATTERN)
-                    if decryption_key.nil?
-                      value
-                    else
-                      decoded_string = Base64.strict_decode64(value)
-                      decryption_key.private_decrypt(decoded_string)
-                    end
-                  else
-                    warn "WARNING: It appears that you would like to keep your information for #{key} secure, however the value for that setting does not appear to be encrypted. Make sure you run 'chamber secure' before committing."
-
+        value = if value.match(BASE64_STRING_PATTERN)
+                  if decryption_key.nil?
                     value
+                  else
+                    decoded_string = Base64.strict_decode64(value)
+                    decryption_key.private_decrypt(decoded_string)
                   end
+                else
+                  warn 'WARNING: It appears that you would like to keep your ' \
+                      "information for #{key} secure, however the value for that " \
+                      'setting does not appear to be encrypted. Make sure you run ' \
+                      "'chamber secure' before committing."
+
+                  value
+                end
       end
 
       settings[key] = value
