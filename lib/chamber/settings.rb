@@ -7,6 +7,7 @@ require 'chamber/filters/decryption_filter'
 require 'chamber/filters/environment_filter'
 require 'chamber/filters/boolean_conversion_filter'
 require 'chamber/filters/secure_filter'
+require 'chamber/filters/translate_secure_keys_filter'
 
 ###
 # Internal: Represents the base settings storage needed for Chamber.
@@ -26,6 +27,7 @@ class   Settings
                                                           ]
     self.post_filters     = options[:post_filters]    ||  [
                                                             Filters::DecryptionFilter,
+                                                            Filters::TranslateSecureKeysFilter,
                                                             Filters::EnvironmentFilter,
                                                             Filters::BooleanConversionFilter,
                                                           ]
