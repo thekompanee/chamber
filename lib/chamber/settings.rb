@@ -84,6 +84,17 @@ class   Settings
   end
 
   ###
+  # Internal: Returns the Settings data as a Hash for easy manipulation.
+  # Changes made to the hash will *not* be reflected in the original Settings
+  # object.
+  #
+  # Returns a Hash
+  #
+  def to_hash
+    data.to_hash
+  end
+
+  ###
   # Internal: Merges a Settings object with another Settings object or
   # a hash-like object.
   #
@@ -116,17 +127,6 @@ class   Settings
       decryption_key: decryption_key || other_settings.decryption_key,
       namespaces:     (namespaces + other_settings.namespaces),
       settings:       raw_data.merge(other_settings.raw_data))
-  end
-
-  ###
-  # Internal: Returns the Settings data as a Hash for easy manipulation.
-  # Changes made to the hash will *not* be reflected in the original Settings
-  # object.
-  #
-  # Returns a Hash
-  #
-  def to_hash
-    data.to_hash
   end
 
   ###
