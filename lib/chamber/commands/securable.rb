@@ -31,11 +31,15 @@ module  Securable
   end
 
   def secured_settings
-    ignored_settings_instance.settings.merge(current_settings.secured)
+    ignored_settings.merge(current_settings.secured)
   end
 
   def current_settings
     current_settings_instance.settings
+  end
+
+  def ignored_settings
+    ignored_settings_instance.settings
   end
 
   def ignored_settings_filepaths
