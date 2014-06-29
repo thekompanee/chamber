@@ -147,7 +147,7 @@ class   Settings
     self.namespaces  == other.namespaces
   end
 
-  def secured
+  def securable
     Settings.new( metadata.merge(
                     settings:     raw_data,
                     pre_filters:  [Filters::SecureFilter]))

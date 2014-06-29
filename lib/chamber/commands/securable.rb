@@ -24,14 +24,14 @@ module  Securable
 
   def securable_environment_variables
     if only_sensitive
-      secured_settings.to_environment
+      securable_settings.to_environment
     else
       current_settings.to_environment
     end
   end
 
-  def secured_settings
-    ignored_settings.merge(current_settings.secured)
+  def securable_settings
+    ignored_settings.merge(current_settings.securable)
   end
 
   def current_settings
