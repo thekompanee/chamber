@@ -209,5 +209,20 @@ describe  Settings do
     expect(secured_settings.my_unencrypted_setting).to  eql 'nifty'
     expect(secured_settings.my_insecure_setting?).to    eql false
   end
+
+  it 'can filter unencrypted settings' do
+    settings = Settings.new(settings: {
+                              _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
+                              _secure_my_unencrypted_setting: 'nifty',
+                              my_insecure_setting:            'goodbye',
+                            },
+                            decryption_key: './spec/spec_key')
+
+    secured_settings = settings.insecure
+
+    expect(secured_settings.my_encrypted_setting?).to   eql false
+    expect(secured_settings.my_unencrypted_setting).to  eql 'nifty'
+    expect(secured_settings.my_insecure_setting?).to    eql false
+  end
 end
 end
