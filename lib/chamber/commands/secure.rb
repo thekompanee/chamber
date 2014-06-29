@@ -11,9 +11,7 @@ class   Secure < Chamber::Commands::Base
 
   def call
     disable_warnings do
-      securable_environment_variables.each do |key, value|
-        next if value.match %r{\A[A-Za-z0-9\+\/]{342}==\z}
-
+      insecure_environment_variables.each do |key, value|
         if dry_run
           shell.say_status 'encrypt', key, :blue
         else

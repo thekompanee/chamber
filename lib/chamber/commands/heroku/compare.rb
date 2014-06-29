@@ -17,8 +17,8 @@ class   Compare < Chamber::Commands::Base
       secured_settings.to_s(pair_separator:   "\n",
                             value_surrounder: '')
     else
-      all_settings.to_s(pair_separator:   "\n",
-                        value_surrounder: '')
+      current_settings.to_s(pair_separator:   "\n",
+                            value_surrounder: '')
     end
   end
 

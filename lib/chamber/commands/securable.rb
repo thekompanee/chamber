@@ -12,7 +12,7 @@ module  Securable
                                         merge(files: ignored_settings_filepaths).
                                         reject { |k, v| k == 'basepath' }
     self.ignored_settings_instance  = Chamber::Instance.new(ignored_settings_options)
-    self.all_settings_instance      = Chamber::Instance.new(options)
+    self.current_settings_instance  = Chamber::Instance.new(options)
     self.only_sensitive             = options[:only_sensitive]
   end
 
@@ -20,22 +20,30 @@ module  Securable
 
   attr_accessor :only_sensitive,
                 :ignored_settings_instance,
-                :all_settings_instance
+                :current_settings_instance
 
   def securable_environment_variables
     if only_sensitive
-      secured_settings.to_environment
+      securable_settings.to_environment
     else
-      all_settings.to_environment
+      current_settings.to_environment
     end
   end
 
-  def secured_settings
-    ignored_settings_instance.settings.merge(all_settings.secured)
+  def insecure_environment_variables
+    securable_settings.insecure.to_environment
   end
 
-  def all_settings
-    all_settings_instance.settings
+  def securable_settings
+    ignored_settings.merge(current_settings.securable)
+  end
+
+  def current_settings
+    current_settings_instance.settings
+  end
+
+  def ignored_settings
+    ignored_settings_instance.settings
   end
 
   def ignored_settings_filepaths
