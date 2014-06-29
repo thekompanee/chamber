@@ -1,5 +1,4 @@
 require 'hashie/mash'
-require 'chamber/system_environment'
 require 'chamber/namespace_set'
 require 'chamber/filters/namespace_filter'
 require 'chamber/filters/encryption_filter'
@@ -56,7 +55,9 @@ class   Settings
   # Returns a Hash sorted alphabetically by the names of the keys
   #
   def to_environment
-    Hash[SystemEnvironment.extract_from(data).sort]
+    to_concatenated_name_hash('_').each_with_object({}) do |pair, env_hash|
+      env_hash[pair[0].upcase] = pair[1].to_s
+    end
   end
 
   ###
@@ -72,12 +73,15 @@ class   Settings
   #   # => 'MY_KEY="my value" MY_OTHER_KEY="my other value"'
   #
   def to_s(options = {})
-    pair_separator       = options[:pair_separator]       || ' '
-    value_surrounder     = options[:value_surrounder]     || '"'
-    name_value_separator = options[:name_value_separator] || '='
+    hierarchical_separator = options[:hierarchical_separator] || '_'
+    pair_separator         = options[:pair_separator]         || ' '
+    value_surrounder       = options[:value_surrounder]       || '"'
+    name_value_separator   = options[:name_value_separator]   || '='
 
-    pairs = to_environment.to_a.map do |pair|
-      %Q{#{pair[0]}#{name_value_separator}#{value_surrounder}#{pair[1]}#{value_surrounder}}
+    concatenated_name_hash = to_concatenated_name_hash(hierarchical_separator)
+
+    pairs = concatenated_name_hash.to_a.map do |key, value|
+      %Q{#{key.upcase}#{name_value_separator}#{value_surrounder}#{value}#{value_surrounder}}
     end
 
     pairs.join(pair_separator)
@@ -134,6 +138,18 @@ class   Settings
     end
 
     flattened_name_hash
+  end
+
+  def to_concatenated_name_hash(hierarchical_separator = '_')
+    concatenated_name_hash = {}
+
+    to_flattened_name_hash.each_pair do |flattened_name, value|
+      concatenated_name = flattened_name.join(hierarchical_separator)
+
+      concatenated_name_hash[concatenated_name] = value
+    end
+
+    concatenated_name_hash.sort
   end
 
   ###

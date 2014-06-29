@@ -31,25 +31,33 @@ describe  Settings do
   end
 
   it 'knows how to convert itself into an environment hash' do
-    allow(SystemEnvironment).to receive(:extract_from).
-                                and_return(:environment => :development)
+    settings = Settings.new(settings: {
+                              my_setting: 'value',
+                              level_1:    {
+                                level_2:    {
+                                  some_setting: 'hello',
+                                  another:      'goodbye',
+                                },
+                                body:       'gracias',
+                              },
+                              there:      'was not that easy?',
+                            })
 
-    settings = Settings.new(settings: {setting: 'value'})
-
-    expect(settings.to_environment).to  eql(:environment => :development)
-    expect(SystemEnvironment).to        have_received(:extract_from).
-                                        with(Hashie::Mash.new setting: 'value')
+    expect(settings.to_environment).to  eql(
+      'MY_SETTING'                   => 'value',
+      'LEVEL_1_LEVEL_2_SOME_SETTING' => 'hello',
+      'LEVEL_1_LEVEL_2_ANOTHER'      => 'goodbye',
+      'LEVEL_1_BODY'                 => 'gracias',
+      'THERE'                        => 'was not that easy?',
+    )
   end
 
   it 'sorts environment variables by name when converted to an environment hash so that they are easier to parse for humans' do
-    allow(SystemEnvironment).to receive(:extract_from).
-                                and_return('C' => 'value',
-                                           'D' => 'value',
-                                           'A' => 'value',
-                                           'E' => 'value',
-                                           'B' => 'value',)
-
-    settings = Settings.new(settings: { setting: 'value' })
+    settings = Settings.new(settings: { 'C' => 'value',
+                                        'D' => 'value',
+                                        'A' => 'value',
+                                        'E' => 'value',
+                                        'B' => 'value' })
 
     expect(settings.to_environment.to_a).to eql([['A', 'value'],
                                                  ['B', 'value'],
@@ -59,16 +67,46 @@ describe  Settings do
   end
 
   it 'can convert itself into a string' do
-    allow(SystemEnvironment).to receive(:extract_from).
-                                and_return('C' => 'cv',
-                                           'D' => 'dv',
-                                           'A' => 'av',
-                                           'E' => 'ev',
-                                           'B' => 'bv',)
+    settings = Settings.new(settings: {
+                              my_setting: 'value',
+                              level_1:    {
+                                level_2:    {
+                                  some_setting: 'hello',
+                                  another:      'goodbye',
+                                },
+                                body:       'gracias',
+                              },
+                              there:      'was not that easy?',
+                            })
 
-    settings = Settings.new(settings: { setting: 'value' })
+    expect(settings.to_s).to eql %Q{LEVEL_1_BODY="gracias" LEVEL_1_LEVEL_2_ANOTHER="goodbye" LEVEL_1_LEVEL_2_SOME_SETTING="hello" MY_SETTING="value" THERE="was not that easy?"}
+  end
 
-    expect(settings.to_s).to eql %Q{A="av" B="bv" C="cv" D="dv" E="ev"}
+  it 'can convert itself into a string with custom options' do
+    settings = Settings.new(settings: {
+                              my_setting: 'value',
+                              level_1:    {
+                                level_2:    {
+                                  some_setting: 'hello',
+                                  another:      'goodbye',
+                                },
+                                body:       'gracias',
+                              },
+                              there:      'was not that easy?',
+                            })
+
+    settings_string = settings.to_s hierarchical_separator: '/',
+                                    pair_separator:         "\n",
+                                    value_surrounder:       "'",
+                                    name_value_separator:   ': '
+
+    expect(settings_string).to eql <<-HEREDOC.chomp
+LEVEL_1/BODY: 'gracias'
+LEVEL_1/LEVEL_2/ANOTHER: 'goodbye'
+LEVEL_1/LEVEL_2/SOME_SETTING: 'hello'
+MY_SETTING: 'value'
+THERE: 'was not that easy?'
+HEREDOC
   end
 
   it 'can merge itself with a hash' do

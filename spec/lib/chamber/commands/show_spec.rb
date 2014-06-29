@@ -12,8 +12,8 @@ describe  Show do
   it 'can return values formatted as environment variables' do
     expect(Show.call(options.merge(as_env: true))).to eql(
 <<-HEREDOC.chomp
-ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY="["item 1", "item 2", "item 3"]"
 ANOTHER_LEVEL_LEVEL_THREE_A_SCALAR="hello"
+ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY="["item 1", "item 2", "item 3"]"
 ANOTHER_LEVEL_SETTING_ONE="1"
 ANOTHER_LEVEL_SETTING_TWO="2"
 MY_BOOLEAN="false"
