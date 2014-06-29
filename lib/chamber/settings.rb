@@ -95,6 +95,48 @@ class   Settings
   end
 
   ###
+  # Internal: Returns a hash which contains the flattened name hierarchy of the
+  # setting as the keys and the values of each setting as the value.
+  #
+  # Examples:
+  #   Settings.new(settings: {
+  #                  my_setting: 'value',
+  #                  there:      'was not that easy?',
+  #                  level_1:    {
+  #                    level_2:    {
+  #                      some_setting: 'hello',
+  #                      another:      'goodbye',
+  #                    },
+  #                    body:       'gracias',
+  #                  },
+  #                }).to_flattened_name_hash
+  #   # => {
+  #     ['my_setting']                         => 'value',
+  #     ['there']                              => 'was not that easy?',
+  #     ['level_1', 'level_2', 'some_setting'] => 'hello',
+  #     ['level_1', 'level_2', 'another']      => 'goodbye',
+  #     ['level_1', 'body']                    => 'gracias',
+  #   }
+  #
+  # Returns a Hash
+  #
+  def to_flattened_name_hash(hash = data, parent_keys = [])
+    flattened_name_hash = {}
+
+    hash.each_pair do |key, value|
+      flattened_name_components = parent_keys.dup.push(key)
+
+      if value.respond_to?(:each_pair)
+        flattened_name_hash.merge! to_flattened_name_hash(value, flattened_name_components)
+      else
+        flattened_name_hash[flattened_name_components] = value
+      end
+    end
+
+    flattened_name_hash
+  end
+
+  ###
   # Internal: Merges a Settings object with another Settings object or
   # a hash-like object.
   #

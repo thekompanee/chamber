@@ -113,6 +113,30 @@ describe  Settings do
     expect(settings.to_hash).not_to be_a Hashie::Mash
   end
 
+  it 'can convert itself into a hash with flattened names' do
+    settings = Settings.new(settings: {
+                              my_setting: 'value',
+                              level_1:    {
+                                level_2:    {
+                                  some_setting: 'hello',
+                                  another:      'goodbye',
+                                },
+                                body:       'gracias',
+                              },
+                              there:      'was not that easy?',
+                            })
+
+    expect(settings.to_flattened_name_hash).to     eql(
+      ['my_setting']                         => 'value',
+      ['level_1', 'level_2', 'some_setting'] => 'hello',
+      ['level_1', 'level_2', 'another']      => 'goodbye',
+      ['level_1', 'body']                    => 'gracias',
+      ['there']                              => 'was not that easy?',
+    )
+    expect(settings.to_flattened_name_hash).to     be_a Hash
+    expect(settings.to_flattened_name_hash).not_to be_a Hashie::Mash
+  end
+
   it 'does not allow manipulation of the internal setting hash when converted to a Hash' do
     settings = Settings.new(settings: {setting: 'value'})
 
