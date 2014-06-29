@@ -8,6 +8,7 @@ require 'chamber/filters/environment_filter'
 require 'chamber/filters/boolean_conversion_filter'
 require 'chamber/filters/secure_filter'
 require 'chamber/filters/translate_secure_keys_filter'
+require 'chamber/filters/insecure_filter'
 
 ###
 # Internal: Represents the base settings storage needed for Chamber.
@@ -159,6 +160,14 @@ class   Settings
     Settings.new( metadata.merge(
                     settings:     @raw_data,
                     pre_filters:  [Filters::EncryptionFilter],
+                    post_filters: [] ))
+  end
+
+  def insecure
+    Settings.new( metadata.merge(
+                    settings:     @raw_data,
+                    pre_filters:  [Filters::InsecureFilter,
+                                   Filters::TranslateSecureKeysFilter],
                     post_filters: [] ))
   end
 
