@@ -29,9 +29,7 @@ class   DecryptionFilter
     raw_data.each_pair do |key, value|
       if value.respond_to? :each_pair
         value = execute(value)
-      elsif value.respond_to? :match
-        if key.match(SECURE_KEY_TOKEN)
-          key   = key.to_s.sub(SECURE_KEY_TOKEN, '')
+      elsif key.match(SECURE_KEY_TOKEN) && value.respond_to?(:match)
           value = if value.match(BASE64_STRING_PATTERN)
                     if decryption_key.nil?
                       value
@@ -44,9 +42,6 @@ class   DecryptionFilter
 
                     value
                   end
-        else
-          key = key.to_s
-        end
       end
 
       settings[key] = value
