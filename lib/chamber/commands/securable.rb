@@ -30,6 +30,10 @@ module  Securable
     end
   end
 
+  def insecure_environment_variables
+    securable_settings.insecure.to_environment
+  end
+
   def securable_settings
     ignored_settings.merge(current_settings.securable)
   end
