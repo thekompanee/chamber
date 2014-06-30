@@ -71,7 +71,7 @@ class   File < Pathname
   end
 
   def secure
-    secure_settings = to_settings.secure
+    secure_settings = to_settings.secure.send(:raw_data)
 
     ::File.open(self, 'w') { |file| file.write YAML.dump(secure_settings.to_hash) }
   end

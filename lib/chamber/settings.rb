@@ -216,17 +216,16 @@ class   Settings
 
   def secure
     Settings.new( metadata.merge(
-                    settings:     @raw_data,
+                    settings:     raw_data,
                     pre_filters:  [Filters::EncryptionFilter],
-                    post_filters: [] ))
+                    post_filters: [Filters::TranslateSecureKeysFilter] ))
   end
 
   def insecure
     Settings.new( metadata.merge(
-                    settings:     @raw_data,
-                    pre_filters:  [Filters::InsecureFilter,
-                                   Filters::TranslateSecureKeysFilter],
-                    post_filters: [] ))
+                    settings:     raw_data,
+                    pre_filters:  [Filters::InsecureFilter],
+                    post_filters: [Filters::TranslateSecureKeysFilter] ))
   end
 
   protected
