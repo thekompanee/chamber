@@ -36,7 +36,7 @@ CHAMBER
   spec.add_runtime_dependency     'thor',                       '~> 0.19.1'
   spec.add_runtime_dependency     'hashie',                     '~> 2.0.5'
 
-  spec.add_development_dependency 'rspec',                      '~> 3.0.0.beta'
-  spec.add_development_dependency 'rspectacular',               '~> 0.23.0'
+  spec.add_development_dependency 'rspec',                      '~> 3.0'
+  spec.add_development_dependency 'rspectacular',               '~> 0.46'
   spec.add_development_dependency 'codeclimate-test-reporter',  '~> 0.3.0'
 end
