@@ -71,9 +71,20 @@ class   File < Pathname
   end
 
   def secure
-    secure_settings = to_settings.secure.send(:raw_data)
+    insecure_settings = to_settings.insecure.to_flattened_name_hash
+    secure_settings   = to_settings.insecure.secure.to_flattened_name_hash
+    file_contents     = self.read
 
-    ::File.open(self, 'w') { |file| file.write YAML.dump(secure_settings.to_hash) }
+    insecure_settings.each_pair do |name_pieces, value|
+      secure_value = secure_settings[name_pieces]
+
+      file_contents.
+        sub!(
+          /^(\s*)_secure_#{name_pieces.last}(\s*):(\s*)['"]?#{value}['"]?$/,
+          "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}")
+    end
+
+    self.write(file_contents)
   end
 
   protected
