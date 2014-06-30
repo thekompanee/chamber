@@ -103,7 +103,9 @@ describe  File do
   end
 
   it 'can securely encrypt the settings contained in a file' do
-    tempfile      = create_tempfile_with_content %Q({ _secure_setting: hello })
+    tempfile      = create_tempfile_with_content <<-HEREDOC
+_secure_setting: hello
+HEREDOC
     settings_file = File.new  path:           tempfile.path,
                               encryption_key: './spec/spec_key.pub'
 
@@ -112,6 +114,60 @@ describe  File do
     settings_file = File.new  path:           tempfile.path
 
     expect(settings_file.to_settings.send(:raw_data)['_secure_setting']).to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
+  end
+
+  it 'does not encrypt the settings contained in a file which are already secure' do
+    tempfile      = create_tempfile_with_content <<-HEREDOC
+_secure_setting: hello
+_secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
+HEREDOC
+
+    settings_file = File.new  path:           tempfile.path,
+                              encryption_key: './spec/spec_key.pub'
+
+    settings_file.secure
+
+    settings_file = File.new  path:           tempfile.path
+
+    expect(settings_file.to_settings.send(:raw_data)['_secure_setting']).to       match Filters::EncryptionFilter::BASE64_STRING_PATTERN
+    expect(settings_file.to_settings.send(:raw_data)['_secure_other_setting']).to eql   "g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw=="
+  end
+
+  it 'does not rewrite the entire file but only the encrypted settings' do
+    tempfile      = create_tempfile_with_content <<-HEREDOC
+default:
+  stuff: &default
+    _secure_setting:       hello
+    _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
+
+other:
+  stuff:
+    <<: *default
+    _secure_another_setting: "Thanks for all the fish"
+    regular_setting:         <%= 1 + 1 %>
+HEREDOC
+
+    settings_file = File.new  path:           tempfile.path,
+                              encryption_key: './spec/spec_key.pub'
+
+    settings_file.secure
+
+    file_contents                  = ::File.read(tempfile.path)
+    secure_setting_encoded         = file_contents[/    _secure_setting:       ([A-Za-z0-9\+\/]{342}==)$/, 1]
+    secure_another_setting_encoded = file_contents[/    _secure_another_setting: ([A-Za-z0-9\+\/]{342}==)$/, 1]
+
+    expect(::File.read(tempfile.path)).to eql <<-HEREDOC
+default:
+  stuff: &default
+    _secure_setting:       #{secure_setting_encoded}
+    _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
+
+other:
+  stuff:
+    <<: *default
+    _secure_another_setting: #{secure_another_setting_encoded}
+    regular_setting:         <%= 1 + 1 %>
+HEREDOC
   end
 end
 end
