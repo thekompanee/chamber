@@ -5,27 +5,31 @@ require 'fileutils'
 module    Chamber
 module    Commands
 describe  Secure do
-  let(:rootpath)          { Pathname.new(::File.expand_path('./spec/fixtures')) }
-  let(:settings_filename) { rootpath + 'settings' + 'unencrypted.yml' }
-  let(:options)           { {  basepath:       rootpath,
+  let(:rootpath)           { Pathname.new(::File.expand_path('./spec/fixtures')) }
+  let(:settings_directory) { rootpath + 'settings' }
+  let(:settings_filename)  { settings_directory + 'unencrypted.yml' }
+  let(:options)            { { basepath:       rootpath,
                                rootpath:       rootpath,
                                encryption_key: rootpath + '../spec_key',
                                shell:          double.as_null_object } }
 
+  before(:each) do
+    ::FileUtils.mkdir_p settings_directory unless ::File.exist? settings_directory
+  end
+
+  after(:each) do
+    ::FileUtils.rm_rf(settings_directory) if ::File.exist? settings_directory
+  end
+
   it 'can return values formatted as environment variables' do
-    ::FileUtils.mkdir_p rootpath + 'settings' unless ::File.exist? rootpath + 'settings'
-    ::File.open(settings_filename, 'w') do |file|
-      file.write <<-HEREDOC
+    settings_filename.write <<-HEREDOC
 test:
   _secure_my_unencrpyted_setting: hello
 HEREDOC
-    end
 
     Secure.call(options)
 
-    expect(::File.read(settings_filename)).to match %r{_secure_my_unencrpyted_setting: [A-Za-z0-9\+\/]{342}==}
-
-    ::File.delete(settings_filename)
+    expect(settings_filename.read).to match %r{_secure_my_unencrpyted_setting: [A-Za-z0-9\+\/]{342}==}
   end
 end
 end
