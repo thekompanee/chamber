@@ -1,3 +1,4 @@
+require 'chamber/rubinius_fix'
 require 'chamber/instance'
 require 'chamber/rails'
 
