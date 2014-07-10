@@ -1,4 +1,5 @@
 require 'thor'
+require 'chamber/rubinius_fix'
 require 'chamber/binary/travis'
 require 'chamber/binary/heroku'
 require 'chamber/commands/show'
