@@ -143,7 +143,8 @@ After running `chamber init` as described above, the hard work is done.  From
 here on out, Chamber makes working with secure settings almost an afterthought.
 
 When you create your configuration YAML file (or add a new setting to an
-existing one), you can format your secure keys like so:
+existing one), you can add a secure key by prefixing the key name with
+`_secure_`, like so:
 
 ```yaml
 # settings.yml
@@ -151,9 +152,14 @@ existing one), you can format your secure keys like so:
 _secure_my_secure_key_name: 'my secure value'
 ```
 
-When Chamber sees this convention (`_secure_` followed by the key name), it will
-automatically look to either encrypt or decrypt the value using the
-public/private keys you generated above into something like:
+To encrypt the secret with your key pair, use the `chamber secure` command:
+
+```sh
+$ chamber secure
+```
+
+This will replace the plaintext secret with an encrypted version, looking
+something like this:
 
 ```yaml
 # settings.yml
@@ -161,8 +167,9 @@ public/private keys you generated above into something like:
 _secure_my_secure_key_name: 8239f293r9283r9823r92hf9823hf9uehfksdhviwuehf923uhrehf9238
 ```
 
-However you would still be able to access the value like so (assuming you had
-the private key in the application's root):
+Now, only users with the private key file can access the secret value. Once
+the private key is in your application's root directory, you can access the
+secret by name:
 
 ```ruby
 Chamber.env.my_secure_key_name
