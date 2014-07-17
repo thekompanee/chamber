@@ -16,9 +16,9 @@ we (and assumed others) needed.
 
 1. Thou shalt be configurable, but use conventions so that configuration isn't
    necessary
-1. Thou shalt seemlessly work with Heroku or other deployment platforms, where custom
+1. Thou shalt seamlessly work with Heroku or other deployment platforms, where custom
    settings must be stored in environment variables
-1. Thou shalt seemlessly work with Travis CI and other cloud CI platforms
+1. Thou shalt seamlessly work with Travis CI and other cloud CI platforms
 1. Thou shalt not force users to use arcane
    long_variable_names_just_to_keep_their_settings_organized
 1. Thou shalt not require users keep a separate repo or cloud share sync just to
@@ -131,7 +131,7 @@ Either you have to use a separate private repo, or you have to use something
 like a Dropbox share.  In either case, you'd then symlink the files from their
 locations into your application.  What. A. Pain.
 
-Chamber uses public/private encryption keys to seemlessly store any of your
+Chamber uses public/private encryption keys to seamlessly store any of your
 configuration values as encrypted text.  The only file that needs to be synced
 *once* between developers is the private key.  And even that file would only be
 needed by the users deploying the application.  If you're deploying via CI,
@@ -218,7 +218,7 @@ information on Heroku.
 
 To solve this problem, Heroku allows you to set environment variables in your
 application.  Unfortunately this has the nasty side effect of being a pain to
-deal with.  For one, you have to deal with environment variables with unweildy
+deal with.  For one, you have to deal with environment variables with unwieldy
 names (eg `MY_THIRD_PARTY_SERVICE_DEV_API_KEY`).  For another, it makes the
 organization of those variables difficult.
 
@@ -829,7 +829,7 @@ if Chamber.env.my_feature.enabled == 'true'
 end
 ```
 
-but that looks awful and isn't very idomatic.
+but that looks awful and isn't very idiomatic.
 
 To solve this problem, Chamber reviews all of your settings values and, if they
 are any of the following exact strings (case insensitive):
