@@ -1,5 +1,6 @@
 require 'pathname'
 require 'openssl'
+require 'chamber/configuration'
 require 'chamber/commands/base'
 
 module  Chamber
