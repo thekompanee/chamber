@@ -1,3 +1,4 @@
+require 'pathname'
 require 'openssl'
 require 'chamber/commands/base'
 
