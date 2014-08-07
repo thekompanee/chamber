@@ -28,9 +28,10 @@ class     EncryptionFilter
     raw_data.each_pair do |key, value|
       if value.respond_to? :each_pair
         value = execute(value)
-      elsif value.respond_to? :match
-        if key.match(SECURE_KEY_TOKEN) && !value.match(BASE64_STRING_PATTERN)
-          encrypted_string = encryption_key.public_encrypt(value)
+      elsif key.match(SECURE_KEY_TOKEN)
+        unless value.respond_to?(:match) && value.match(BASE64_STRING_PATTERN)
+          marshalled       = Marshal.dump(value)
+          encrypted_string = encryption_key.public_encrypt(marshalled)
           value            = Base64.strict_encode64(encrypted_string)
         end
       end
