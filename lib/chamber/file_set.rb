@@ -1,3 +1,4 @@
+require 'pathname'
 require 'chamber/namespace_set'
 require 'chamber/file'
 require 'chamber/settings'
