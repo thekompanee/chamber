@@ -1,6 +1,6 @@
 require 'pathname'
 
-unless Pathname.new('foo').respond_to? :write
+unless Pathname.instance_methods.include?(:write)
   class Pathname
     def write(*args)
       IO.write @path, *args
