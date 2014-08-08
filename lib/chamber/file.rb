@@ -76,11 +76,14 @@ class   File < Pathname
     file_contents     = self.read
 
     insecure_settings.each_pair do |name_pieces, value|
-      secure_value = secure_settings[name_pieces]
+      secure_value  = secure_settings[name_pieces]
+
+      escaped_name  = Regexp.escape(name_pieces.last)
+      escaped_value = Regexp.escape(value)
 
       file_contents.
         sub!(
-          /^(\s*)_secure_#{name_pieces.last}(\s*):(\s*)['"]?#{value}['"]?$/,
+          /^(\s*)_secure_#{escaped_name}(\s*):(\s*)['"]?#{escaped_value}['"]?$/,
           "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}")
     end
 
