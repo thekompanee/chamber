@@ -169,5 +169,25 @@ other:
     regular_setting:         <%= 1 + 1 %>
 HEREDOC
   end
+
+  it 'when rewriting the file, can handle names and values with regex special characters' do
+    tempfile      = create_tempfile_with_content <<-HEREDOC
+stuff:
+  _secure_another+_setting: "Thanks for +all the fish"
+HEREDOC
+
+    settings_file = File.new  path:           tempfile.path,
+                              encryption_key: './spec/spec_key.pub'
+
+    settings_file.secure
+
+    file_contents                  = ::File.read(tempfile.path)
+    secure_another_setting_encoded = file_contents[/  _secure_another\+_setting: ([A-Za-z0-9\+\/]{342}==)$/, 1]
+
+    expect(::File.read(tempfile.path)).to eql <<-HEREDOC
+stuff:
+  _secure_another+_setting: #{secure_another_setting_encoded}
+HEREDOC
+  end
 end
 end
