@@ -1,0 +1,156 @@
+AllCops:
+  RunRailsCops: true
+  Include:
+    - '**/Rakefile'
+    - '**/Thorfile'
+    - '**/config.ru'
+    - '**/thor.gemspec'
+
+  Exclude:
+    - '**/*.gemspec'
+    - '**/Gemfile'
+    - '**/config/deploy.rb'
+    - '**/config/initializers/*'
+    - '**/config/unicorn.rb'
+    - '**/db/migrate/**/*'
+    - '**/db/schema.rb'
+    - '**/spec/dummy/**/*'
+    - 'bin/rails'
+
+AlignHash:
+  EnforcedHashRocketStyle:  'table'
+  EnforcedColonStyle:       'table'
+
+AlignParameters:
+  EnforcedStyle:            'with_first_parameter'
+
+ParameterLists:
+  Max:              5
+  CountKeywordArgs: true
+
+MethodLength:
+  CountComments: false
+  Max:           15
+
+ClassLength:
+  CountComments: false
+  Max:           100
+
+# Avoid more than `Max` levels of nesting.
+BlockNesting:
+  Max: 3
+
+Blocks:
+  Exclude:
+    - 'app/controllers/**/*.rb'
+
+BlockAlignment:
+  Exclude:
+    - 'app/controllers/**/*.rb'
+
+# Indentation of when/else
+CaseIndentation:
+  IndentWhenRelativeTo: end
+  IndentOneStep:        false
+
+CollectionMethods:
+  PreferredMethods:
+    collect:  'map'
+    inject:   'reduce'
+    find:     'find'
+    find_all: 'select'
+
+CyclomaticComplexity:
+  Max: 10
+
+Documentation:
+  Exclude:
+    - '**/spec/**/*_spec.rb'
+    - '**/config/application.rb'
+    - '**/app/controllers/application_controller.rb'
+
+# Allow dots at the end of lines
+DotPosition:
+  EnforcedStyle: 'trailing'
+
+EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
+
+# Don't require magic comment at the top of every file
+Encoding:
+  Enabled: false
+
+IndentHash:
+  EnforcedStyle: 'special_inside_parentheses'
+
+# Limit line length
+LineLength:
+  Max: 90
+  Exclude:
+    - '**/config/routes.rb'
+    - '**/config/application.rb'
+    - '**/config/environments/**/*'
+
+MultilineBlockChain:
+  Exclude:
+    - '**/spec/**/*_spec.rb'
+
+# Force underscores to separate number groups
+NumericLiterals:
+  MinDigits: 5
+
+PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%':  '{}'
+    '%i': '{}'
+    '%q': '{}'
+    '%Q': '{}'
+    '%r': '{}'
+    '%s': '{}'
+    '%w': '{}'
+    '%W': '{}'
+    '%x': '{}'
+
+PredicateName:
+  NamePrefixBlacklist:
+    - 'is'
+    - 'was'
+    - 'have'
+
+RaiseArgs:
+  Enabled: false
+
+RegexpLiteral:
+  MaxSlashes: 0
+
+SingleLineMethods:
+  AllowIfMethodIsEmpty: true
+
+# No spaces inside hash literals
+SpaceInsideHashLiteralBraces:
+  EnforcedStyleForEmptyBraces: 'no_space'
+
+SingleSpaceBeforeFirstArg:
+  Enabled: false
+
+SpaceBeforeFirstArg:
+  Enabled: true
+
+StringLiterals:
+  Exclude:
+    - '**/config/application.rb'
+    - '**/config/environments/**/*'
+
+Rails/Output:
+  Exclude:
+    - '**/Rakefile'
+
+TrailingComma:
+  Enabled: false
+  # EnforcedStyleForMultiline: 'comma'
+
+IndentationWidth:
+  Enabled: false
+
+Documentation:
+  Enabled: false
