@@ -1,3 +1,14 @@
+Version v2.4.0 - September 23, 2014
+================================================================================
+
+  Uncategorized
+  ------------------------------------------------------------------------------
+  * Allow hashie to be upgraded to 3.x
+
+  Docs
+  ------------------------------------------------------------------------------
+  * Add CHANGELOG
+
 Version v2.3.2 - August 8, 2014
 ================================================================================
 
@@ -213,11 +224,27 @@ Version v2.0.0 - January 15, 2014
     equality easier
   * Add note to the README about the CLI interface for encryption/decryption
   * Proposed README updates
+
+Version v1.0.3 - January 6, 2014
+================================================================================
+
   * The heroku diff command needed to take ignored files into account as well to
     stop from giving false positives
+
+Version v1.0.2 - January 6, 2014
+================================================================================
+
   * Loading 'environment' wasn't executing the proper initializer hook that the
     Chamber Railtie needed, loading 'application' works
+
+Version v1.0.1 - January 5, 2014
+================================================================================
+
   * Fix the 'heroku pull' command not displaying variables
+
+Version v1.0.0 - January 5, 2014
+================================================================================
+
   * Manually sort the globbed files. It appears that having them be returned
     alphabetically is system-dependent
   * Fix an issue where, if Chamber had not yet been loaded, a bunch of methods
