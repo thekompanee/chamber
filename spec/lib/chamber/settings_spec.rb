@@ -209,7 +209,7 @@ HEREDOC
                                 namespace_setting:        'value' },
                               other_namespace_value:  {
                                 other_namespace_setting:  'value' },
-                              non_namespace_setting:  'other value'
+                              non_namespace_setting:  'other value',
                             },
                             namespaces: ['namespace_value', 'other_namespace_value'])
 
@@ -219,7 +219,7 @@ HEREDOC
 
   it 'can decrypt a setting if it finds a secure key' do
     settings = Settings.new(settings:   {
-                              _secure_my_encrypted_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ=='
+                              _secure_my_encrypted_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
                             },
                             decryption_key: './spec/spec_key')
 
@@ -228,7 +228,7 @@ HEREDOC
 
   it 'can encrypt a setting if it finds a secure key' do
     settings = Settings.new(settings:   {
-                              _secure_my_encrypted_setting: 'hello'
+                              _secure_my_encrypted_setting: 'hello',
                             },
                             encryption_key: './spec/spec_key.pub',
                             pre_filters:    [],
@@ -239,7 +239,7 @@ HEREDOC
 
   it 'can encrypt a settings without explicitly having to have a filter passed' do
     settings = Settings.new(settings:   {
-                              _secure_my_encrypted_setting: 'hello'
+                              _secure_my_encrypted_setting: 'hello',
                             },
                             decryption_key: './spec/spec_key',
                             encryption_key: './spec/spec_key.pub')

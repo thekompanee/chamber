@@ -135,7 +135,7 @@ describe Chamber do
     Chamber.load(basepath: '/tmp/chamber',
                   namespaces: {
                     first_namespace_call: -> { :first },
-                    second_namespace_call: -> { :second }, })
+                    second_namespace_call: -> { :second } })
 
     expect(Chamber.namespaces.to_a).to eql ['first', 'second']
   end
@@ -144,7 +144,7 @@ describe Chamber do
     Chamber.load(basepath: '/tmp/chamber',
                   namespaces: {
                     first_namespace_call: -> { :first },
-                    first_namespace_call: -> { :first }, })
+                    first_namespace_call: -> { :first } })
 
     expect(Chamber.namespaces.to_a).to eql ['first']
   end
@@ -269,7 +269,7 @@ describe Chamber do
     expect(Chamber.filenames).to    eql ['/tmp/chamber/credentials.yml']
     expect(Chamber.to_hash).to  eql('test' => {
                                       'my_username' => 'username',
-                                      'my_password' => 'password', })
+                                      'my_password' => 'password' })
   end
 
   it 'ignores the basepath if file patterns are explicitly passed in' do
