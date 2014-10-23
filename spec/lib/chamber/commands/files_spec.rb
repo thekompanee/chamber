@@ -5,10 +5,10 @@ module    Chamber
 module    Commands
 describe  Files do
   let(:rootpath) { ::File.expand_path('./spec/fixtures') }
-  let(:options)  { 
+  let(:options)  do 
     {  basepath: rootpath,
                       rootpath: rootpath }
-  }
+  end
 
   it 'can return values formatted as environment variables' do
     files = Files.call(options)
