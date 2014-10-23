@@ -1,4 +1,5 @@
 require 'pathname'
+require 'socket'
 require 'hashie/mash'
 
 module  Chamber
@@ -22,7 +23,10 @@ class   ContextResolver
       if options[:namespaces] == []
         require options[:rootpath].join('config', 'application')
 
-        options[:namespaces]   = [::Rails.env]
+        options[:namespaces]   = [
+                                   ::Rails.env,
+                                   Socket.gethostname
+                                 ]
       end
     else
       options[:basepath]     ||= options[:rootpath]
