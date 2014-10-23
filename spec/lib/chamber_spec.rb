@@ -79,16 +79,16 @@ only_namespaced_sub_settings:
 end
 
 describe Chamber do
-  before(:each) { Chamber.load(:basepath => '/tmp/chamber') }
+  before(:each) { Chamber.load(basepath: '/tmp/chamber') }
 
   it 'knows how to load itself with a path string' do
-    Chamber.load(:basepath => '/tmp/chamber')
+    Chamber.load(basepath: '/tmp/chamber')
 
     expect(Chamber.configuration.basepath.to_s).to eql '/tmp/chamber'
   end
 
   it 'knows how to load itself with a path object' do
-    Chamber.load(:basepath => Pathname.new('/tmp/chamber'))
+    Chamber.load(basepath: Pathname.new('/tmp/chamber'))
 
     expect(Chamber.configuration.basepath.to_s).to eql '/tmp/chamber'
   end
@@ -113,7 +113,7 @@ describe Chamber do
     ENV['TEST_MY_SETTING'] = 'some_other_value'
     ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = 'something'
 
-    Chamber.load(:basepath => '/tmp/chamber')
+    Chamber.load(basepath: '/tmp/chamber')
     expect(Chamber.test.my_setting).to eql 'some_other_value'
     expect(Chamber.test.another_level.level_three.an_array).to eql 'something'
     expect(Chamber.test.my_dynamic_setting).to eql 2
@@ -123,48 +123,48 @@ describe Chamber do
   end
 
   it 'can load files based on the namespace passed in' do
-    Chamber.load( :basepath   => '/tmp/chamber',
-                  :namespaces => {
-                    :my_namespace => -> { 'blue' } } )
+    Chamber.load( basepath: '/tmp/chamber',
+                  namespaces: {
+                    my_namespace: -> { 'blue' } } )
 
     expect(Chamber.other.everything).to        eql 'works'
     expect(Chamber.test.my_dynamic_setting).to eql 2
   end
 
   it 'loads multiple namespaces if it is called twice' do
-    Chamber.load( :basepath   => '/tmp/chamber',
-                  :namespaces => {
-                    :first_namespace_call  => -> { :first },
-                    :second_namespace_call => -> { :second }, } )
+    Chamber.load( basepath: '/tmp/chamber',
+                  namespaces: {
+                    first_namespace_call: -> { :first },
+                    second_namespace_call: -> { :second }, } )
 
     expect(Chamber.namespaces.to_a).to eql ['first', 'second']
   end
 
   it 'does not load the same namespace twice' do
-    Chamber.load( :basepath   => '/tmp/chamber',
-                  :namespaces => {
-                    :first_namespace_call => -> { :first },
-                    :first_namespace_call => -> { :first }, } )
+    Chamber.load( basepath: '/tmp/chamber',
+                  namespaces: {
+                    first_namespace_call: -> { :first },
+                    first_namespace_call: -> { :first }, } )
 
     expect(Chamber.namespaces.to_a).to eql ['first']
   end
 
   it 'will load settings files which are only namespaced' do
-    Chamber.load( :basepath   => '/tmp/chamber',
-                  :namespaces => {
-                    :my_namespace => -> { 'blue' } } )
+    Chamber.load( basepath: '/tmp/chamber',
+                  namespaces: {
+                    my_namespace: -> { 'blue' } } )
 
     expect(Chamber[:only_namespaced_sub_settings][:another_sub_setting]).to eql 'namespaced'
   end
 
   it 'clears all settings each time the settings are loaded' do
-    Chamber.load( :basepath   => '/tmp/chamber',
-                  :namespaces => {
-                    :my_namespace => -> { 'blue' } } )
+    Chamber.load( basepath: '/tmp/chamber',
+                  namespaces: {
+                    my_namespace: -> { 'blue' } } )
 
     expect(Chamber[:only_namespaced_sub_settings][:another_sub_setting]).to eql 'namespaced'
 
-    Chamber.load(:basepath => '/tmp/chamber')
+    Chamber.load(basepath: '/tmp/chamber')
 
     expect(Chamber[:only_namespaced_sub_settings]).to be_nil
   end
@@ -174,17 +174,17 @@ describe Chamber do
   end
 
   it 'does not raise an exception if a namespaced file does not exist' do
-    Chamber.load( :basepath   => '/tmp/chamber',
-                  :namespaces => {
-                    :non_existant_namespace => -> { false } } )
+    Chamber.load( basepath: '/tmp/chamber',
+                  namespaces: {
+                    non_existant_namespace: -> { false } } )
 
-    expect { Chamber.load(:basepath => '/tmp/chamber') }.not_to raise_error
+    expect { Chamber.load(basepath: '/tmp/chamber') }.not_to raise_error
   end
 
   it 'merges (not overrides) subsequent settings' do
-    Chamber.load( :basepath   => '/tmp/chamber',
-                  :namespaces => {
-                    :my_namespace => -> { 'blue' } } )
+    Chamber.load( basepath: '/tmp/chamber',
+                  namespaces: {
+                    my_namespace: -> { 'blue' } } )
 
     expect(Chamber.test.my_setting).to                eql 'my_value'
     expect(Chamber.test.my_other_setting).to          eql 'my_other_value'
@@ -200,38 +200,38 @@ describe Chamber do
   end
 
   it 'loads namespaced YAML files in the "settings" directory if they correspond to a value namespace' do
-    Chamber.load( :basepath   => '/tmp/chamber',
-                  :namespaces => {
-                    :my_namespace => -> { 'blue' } } )
+    Chamber.load( basepath: '/tmp/chamber',
+                  namespaces: {
+                    my_namespace: -> { 'blue' } } )
 
     expect(Chamber['sub_settings']['my_namespaced_sub_setting']).to eql 'my_namespaced_sub_setting_value'
   end
 
   it 'loads namespaced settings if they are inline in a non-namespaced filename' do
-    Chamber.load( :basepath   => '/tmp/chamber',
-                  :namespaces => {
-                    :my_namespace => -> { 'blue' } } )
+    Chamber.load( basepath: '/tmp/chamber',
+                  namespaces: {
+                    my_namespace: -> { 'blue' } } )
 
     expect(Chamber['my_settings_for_inline_namespace']).to eql 'my_value_for_inline_namespace'
   end
 
   it 'does not load non-namespaced data from a file if inline namespaces are found' do
-    Chamber.load( :basepath   => '/tmp/chamber',
-                  :namespaces => {
-                    :my_namespace => -> { 'blue' } } )
+    Chamber.load( basepath: '/tmp/chamber',
+                  namespaces: {
+                    my_namespace: -> { 'blue' } } )
 
     expect(Chamber['my_non_inline_namespaced_setting']).not_to eql 'my_value_for_non_inline_namespace'
   end
 
   it 'loads the entire inline namespaced file if no namespaces are passed in since it does not know they are namespaced' do
-    Chamber.load(:basepath => '/tmp/chamber')
+    Chamber.load(basepath: '/tmp/chamber')
 
     expect(Chamber['blue']['my_settings_for_inline_namespace']).to eql 'my_value_for_inline_namespace'
     expect(Chamber['my_non_inline_namespaced_setting']).to         eql 'my_value_for_non_inline_namespace'
   end
 
   it 'can convert the settings to their environment variable versions' do
-    Chamber.load(:basepath => '/tmp/chamber')
+    Chamber.load(basepath: '/tmp/chamber')
 
     expect(Chamber.to_environment).to eql(
       'SUB_SETTINGS_MY_SUB_SETTING'             => 'my_sub_setting_value',
