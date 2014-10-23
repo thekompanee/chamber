@@ -34,9 +34,9 @@ class   ContextResolver
 
     options[:basepath]         = Pathname.new(options[:basepath])
 
-    options[:files]          ||= [ options[:basepath] + 'credentials*.yml',
+    options[:files]          ||= [options[:basepath] + 'credentials*.yml',
                                    options[:basepath] + 'settings*.yml',
-                                   options[:basepath] + 'settings' ]
+                                   options[:basepath] + 'settings']
 
     options
   rescue LoadError
