@@ -5,11 +5,11 @@ module    Chamber
 module    Commands
 describe  Show do
   let(:rootpath) { ::File.expand_path('./spec/fixtures') }
-  let(:options)  { 
+  let(:options)  do 
     {  basepath:   rootpath,
                       rootpath:   rootpath,
                       namespaces: 'test' }
-  }
+  end
 
   it 'can return values formatted as environment variables' do
     expect(Show.call(options.merge(as_env: true))).to eql(
