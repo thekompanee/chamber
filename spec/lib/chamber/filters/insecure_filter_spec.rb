@@ -24,7 +24,7 @@ describe  InsecureFilter do
                                                   secure_setting:  'goodbye',
                                                   secure_group: {
                                                     _secure_nested_setting:  'movie',
-                                                    insecure_nested_setting: 'dinner' }})
+                                                    insecure_nested_setting: 'dinner' } })
 
     expect(filtered_settings._secure_setting).to                      eql 'hello'
     expect(filtered_settings.secure_setting).to                       be_nil
@@ -40,7 +40,7 @@ describe  InsecureFilter do
                                                   secure_group: {
                                                     _secure_nested_setting:       'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
                                                     _secure_other_nested_setting: 'goodbye',
-                                                    insecure_nested_setting:      'dinner' }})
+                                                    insecure_nested_setting:      'dinner' } })
 
     expect(filtered_settings._secure_setting?).to                          eql false
     expect(filtered_settings.secure_setting?).to                           eql false

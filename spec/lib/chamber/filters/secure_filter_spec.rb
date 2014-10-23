@@ -24,7 +24,7 @@ describe  SecureFilter do
                                                 secure_setting:  'goodbye',
                                                 secure_group: {
                                                   _secure_nested_setting:  'movie',
-                                                  insecure_nested_setting: 'dinner' }})
+                                                  insecure_nested_setting: 'dinner' } })
 
     expect(filtered_settings._secure_setting).to                      eql 'hello'
     expect(filtered_settings.secure_setting).to                       be_nil
