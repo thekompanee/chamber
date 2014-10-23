@@ -59,11 +59,11 @@ describe  Settings do
                                         'E' => 'value',
                                         'B' => 'value' })
 
-    expect(settings.to_environment.to_a).to eql([%w(A value),
-                                                 %w(B value),
-                                                 %w(C value),
-                                                 %w(D value),
-                                                 %w(E value)])
+    expect(settings.to_environment.to_a).to eql([%w{A value},
+                                                 %w{B value},
+                                                 %w{C value},
+                                                 %w{D value},
+                                                 %w{E value}])
   end
 
   it 'can convert itself into a string' do
@@ -130,7 +130,7 @@ HEREDOC
     expect(merged_settings).to eql Settings.new(settings:   {
                                                   setting:        'value',
                                                   other_setting:  'another value' },
-                                                namespaces: %w(good bad))
+                                                namespaces: %w{good bad})
   end
 
   it 'does not manipulate the existing Settings but instead returns a new one' do
@@ -166,9 +166,9 @@ HEREDOC
 
     expect(settings.to_flattened_name_hash).to     eql(
       %w{my_setting}                         => 'value',
-      %w(level_1 level_2 some_setting) => 'hello',
-      %w(level_1 level_2 another)      => 'goodbye',
-      %w(level_1 body)                    => 'gracias',
+      %w{level_1 level_2 some_setting} => 'hello',
+      %w{level_1 level_2 another}      => 'goodbye',
+      %w{level_1 body}                    => 'gracias',
       %w{there}                              => 'was not that easy?',
     )
     expect(settings.to_flattened_name_hash).to     be_a Hash
@@ -211,7 +211,7 @@ HEREDOC
                                 other_namespace_setting:  'value' },
                               non_namespace_setting:  'other value',
                             },
-                            namespaces: %w(namespace_value other_namespace_value))
+                            namespaces: %w{namespace_value other_namespace_value})
 
     expect(settings).to eq('namespace_setting' => 'value',
                              'other_namespace_setting' => 'value')

@@ -123,7 +123,7 @@ describe  FileSet do
     ::File.new('/tmp/settings/settings-green.yml', 'w+')
 
     file_set = FileSet.new files:      '/tmp/settings/settings*.yml',
-                           namespaces: %w(blue green)
+                           namespaces: %w{blue green}
 
     expect(file_set.filenames).to eql  [
                                          '/tmp/settings/settings-blue.yml',
@@ -131,7 +131,7 @@ describe  FileSet do
                                        ]
 
     file_set = FileSet.new files:      '/tmp/settings/settings*.yml',
-                           namespaces: %w(green blue)
+                           namespaces: %w{green blue}
 
     expect(file_set.filenames).to eql  [
                                          '/tmp/settings/settings-green.yml',
