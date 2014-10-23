@@ -81,7 +81,7 @@ class   Settings
     concatenated_name_hash = to_concatenated_name_hash(hierarchical_separator)
 
     pairs = concatenated_name_hash.to_a.map do |key, value|
-      %Q{#{key.upcase}#{name_value_separator}#{value_surrounder}#{value}#{value_surrounder}}
+      "#{key.upcase}#{name_value_separator}#{value_surrounder}#{value}#{value_surrounder}"
     end
 
     pairs.join(pair_separator)

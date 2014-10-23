@@ -15,7 +15,7 @@ class   Push < Chamber::Commands::Base
         shell.say_status 'push', key, :blue
       else
         shell.say_status 'push', key, :green
-        shell.say heroku(%Q{config:set #{key}=#{value}})
+        shell.say heroku("config:set #{key}=#{value}")
       end
     end
   end

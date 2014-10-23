@@ -14,7 +14,7 @@ end
 module    Chamber
 describe  File do
   it 'can convert file contents to settings' do
-    tempfile      = create_tempfile_with_content %Q({ test: settings })
+    tempfile      = create_tempfile_with_content "{ test: settings }"
     settings_file = File.new path: tempfile.path
 
     allow(Settings).to receive(:new).
@@ -48,14 +48,14 @@ describe  File do
   end
 
   it 'throws an error when the file contents are malformed' do
-    tempfile      = create_tempfile_with_content %Q({ test : )
+    tempfile      = create_tempfile_with_content "{ test : "
     settings_file = File.new path: tempfile.path
 
     expect { settings_file.to_settings }.to raise_error
   end
 
   it 'passes any namespaces through to the settings' do
-    tempfile      = create_tempfile_with_content %Q({ test: settings })
+    tempfile      = create_tempfile_with_content "{ test: settings }"
     settings_file = File.new  path:       tempfile.path,
                               namespaces: {
                                 environment:  :development }
@@ -73,7 +73,7 @@ describe  File do
   end
 
   it 'can handle files which contain ERB markup' do
-    tempfile      = create_tempfile_with_content %Q({ test: <%= 1 + 1 %> })
+    tempfile      = create_tempfile_with_content "{ test: <%= 1 + 1 %> }"
     settings_file = File.new  path: tempfile.path
 
     allow(Settings).to      receive(:new)

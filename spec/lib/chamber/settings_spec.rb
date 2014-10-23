@@ -79,7 +79,7 @@ describe  Settings do
                               there:      'was not that easy?',
                             })
 
-    expect(settings.to_s).to eql %Q{LEVEL_1_BODY="gracias" LEVEL_1_LEVEL_2_ANOTHER="goodbye" LEVEL_1_LEVEL_2_SOME_SETTING="hello" MY_SETTING="value" THERE="was not that easy?"}
+    expect(settings.to_s).to eql 'LEVEL_1_BODY="gracias" LEVEL_1_LEVEL_2_ANOTHER="goodbye" LEVEL_1_LEVEL_2_SOME_SETTING="hello" MY_SETTING="value" THERE="was not that easy?"'
   end
 
   it 'can convert itself into a string with custom options' do
