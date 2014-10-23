@@ -218,7 +218,8 @@ class   FileSet
         relevant_glob_files.map! { |file| File.new(path:           file,
                                                     namespaces:     namespaces,
                                                     decryption_key: decryption_key,
-                                                    encryption_key: encryption_key) }
+                                                    encryption_key: encryption_key) 
+        }
 
         sorted_relevant_files += relevant_glob_files
       end

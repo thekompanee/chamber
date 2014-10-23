@@ -11,7 +11,8 @@ describe  Secure do
   let(:options)            { { basepath:       rootpath,
                                rootpath:       rootpath,
                                encryption_key: rootpath + '../spec_key',
-                               shell:          double.as_null_object } }
+                               shell:          double.as_null_object } 
+  }
 
   before(:each) do
     ::FileUtils.mkdir_p settings_directory unless ::File.exist? settings_directory

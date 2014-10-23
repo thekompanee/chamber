@@ -6,7 +6,8 @@ require 'fileutils'
 module    Chamber
 describe  FileSet do
   before(:each) { FileUtils.mkdir '/tmp/settings' unless ::File.exist? '/tmp/settings'
-                  FileUtils.mkdir '/tmp/dash-set' unless ::File.exist? '/tmp/dash-set' }
+                  FileUtils.mkdir '/tmp/dash-set' unless ::File.exist? '/tmp/dash-set' 
+  }
   after(:each)  { FileUtils.rm_rf '/tmp/settings' if     ::File.exist? '/tmp/settings' }
 
   it 'can consider directories containing YAML files' do
