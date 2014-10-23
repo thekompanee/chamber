@@ -5,7 +5,8 @@ module    Chamber
 module    Commands
 describe  Files do
   let(:rootpath) { ::File.expand_path('./spec/fixtures') }
-  let(:options)  { {  basepath: rootpath,
+  let(:options)  { 
+    {  basepath: rootpath,
                       rootpath: rootpath }
   }
 

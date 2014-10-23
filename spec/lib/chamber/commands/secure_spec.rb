@@ -8,7 +8,8 @@ describe  Secure do
   let(:rootpath)           { Pathname.new(::File.expand_path('./spec/fixtures')) }
   let(:settings_directory) { rootpath + 'settings' }
   let(:settings_filename)  { settings_directory + 'unencrypted.yml' }
-  let(:options)            { { basepath:       rootpath,
+  let(:options)            { 
+    { basepath:       rootpath,
                                rootpath:       rootpath,
                                encryption_key: rootpath + '../spec_key',
                                shell:          double.as_null_object }
