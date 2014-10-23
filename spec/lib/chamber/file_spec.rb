@@ -153,8 +153,8 @@ HEREDOC
     settings_file.secure
 
     file_contents                  = ::File.read(tempfile.path)
-    secure_setting_encoded         = file_contents[/    _secure_setting:       ([A-Za-z0-9\+\/]{342}==)$/, 1]
-    secure_another_setting_encoded = file_contents[/    _secure_another_setting: ([A-Za-z0-9\+\/]{342}==)$/, 1]
+    secure_setting_encoded         = file_contents[%r{    _secure_setting:       ([A-Za-z0-9\+/]{342}==)$}, 1]
+    secure_another_setting_encoded = file_contents[%r{    _secure_another_setting: ([A-Za-z0-9\+/]{342}==)$}, 1]
 
     expect(::File.read(tempfile.path)).to eql <<-HEREDOC
 default:
@@ -182,7 +182,7 @@ HEREDOC
     settings_file.secure
 
     file_contents                  = ::File.read(tempfile.path)
-    secure_another_setting_encoded = file_contents[/  _secure_another\+_setting: ([A-Za-z0-9\+\/]{342}==)$/, 1]
+    secure_another_setting_encoded = file_contents[%r{  _secure_another\+_setting: ([A-Za-z0-9\+/]{342}==)$}, 1]
 
     expect(::File.read(tempfile.path)).to eql <<-HEREDOC
 stuff:

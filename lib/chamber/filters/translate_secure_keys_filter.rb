@@ -4,7 +4,7 @@ require 'chamber/errors/undecryptable_value_error'
 module  Chamber
 module  Filters
 class   TranslateSecureKeysFilter
-  SECURE_KEY_TOKEN = %r{\A_secure_}
+  SECURE_KEY_TOKEN = /\A_secure_/
 
   def initialize(options = {})
     self.data = options.fetch(:data).dup
