@@ -24,7 +24,7 @@ describe  BooleanConversionFilter do
                                                 nilly:                nil,
                                                 non_boolean:          [1, 2, 3] })
 
-    expect(filtered_data).to eql( true_boolean:       true,
+    expect(filtered_data).to eql(true_boolean:       true,
                                   boolean_group:      {
                                     yes_boolean:        true,
                                     t_boolean:          true,
@@ -39,7 +39,7 @@ describe  BooleanConversionFilter do
                                     nilly:              nil, },
                                   false_boolean:        false,
                                   nilly:                nil,
-                                  non_boolean:          [1, 2, 3] )
+                                  non_boolean:          [1, 2, 3])
   end
 end
 end

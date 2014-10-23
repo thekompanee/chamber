@@ -61,9 +61,9 @@ describe  NamespaceFilter do
                                                     another_namespace_setting_2:  'value 2' },
                                                   non_namespaced_value:           'value 3' },
                                                 namespaces:
-                                                  NamespaceSet.new(['namespace_value', 'other_namespace_value']) )
+                                                  NamespaceSet.new(['namespace_value', 'other_namespace_value']))
 
-    expect(filtered_settings.to_hash).to eql( 'namespace_setting'           => 'value 1',
+    expect(filtered_settings.to_hash).to eql('namespace_setting'           => 'value 1',
                                               'another_namespace_setting'   => 'value 2',
                                               'namespace_setting_1'         => 'value 1',
                                               'another_namespace_setting_2' => 'value 2')

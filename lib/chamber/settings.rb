@@ -203,29 +203,29 @@ class   Settings
   # Returns a Boolean
   #
   def eql?(other)
-    other.is_a?(        Chamber::Settings)  &&
+    other.is_a?(Chamber::Settings)  &&
     self.data        == other.data          &&
     self.namespaces  == other.namespaces
   end
 
   def securable
-    Settings.new( metadata.merge(
+    Settings.new(metadata.merge(
                     settings:     raw_data,
                     pre_filters:  [Filters::SecureFilter]))
   end
 
   def secure
-    Settings.new( metadata.merge(
+    Settings.new(metadata.merge(
                     settings:     raw_data,
                     pre_filters:  [Filters::EncryptionFilter],
-                    post_filters: [Filters::TranslateSecureKeysFilter] ))
+                    post_filters: [Filters::TranslateSecureKeysFilter]))
   end
 
   def insecure
-    Settings.new( metadata.merge(
+    Settings.new(metadata.merge(
                     settings:     raw_data,
                     pre_filters:  [Filters::InsecureFilter],
-                    post_filters: [Filters::TranslateSecureKeysFilter] ))
+                    post_filters: [Filters::TranslateSecureKeysFilter]))
   end
 
   protected
