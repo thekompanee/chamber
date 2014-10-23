@@ -24,7 +24,7 @@ describe  EnvironmentFilter do
                                                 test_setting_group: {
                                                   test_setting_level: {
                                                     test_setting:     'value 1',
-                                                    another_setting:  'value 3', }}})
+                                                    another_setting:  'value 3' }}})
 
     expect(filtered_data.test_setting_group.test_setting_level.another_setting).to eql 'value 3'
 

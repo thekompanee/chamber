@@ -25,7 +25,7 @@ class   ContextResolver
 
         options[:namespaces]   = [
                                    ::Rails.env,
-                                   Socket.gethostname
+                                   Socket.gethostname,
                                  ]
       end
     else

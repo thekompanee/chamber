@@ -44,7 +44,7 @@ describe  FileSet do
                            namespaces: ['blue']
 
     expect(file_set.filenames).to eql [
-                                        '/tmp/settings/settings-blue.yml'
+                                        '/tmp/settings/settings-blue.yml',
                                       ]
 
     ::FileUtils.rm_f('/tmp/settings/settings-blue.yml')
@@ -68,7 +68,7 @@ describe  FileSet do
                            namespaces: ['blue']
 
     expect(file_set.filenames).to eql [
-                                        '/tmp/dash-set/settings.yml'
+                                        '/tmp/dash-set/settings.yml',
                                       ]
 
     ::FileUtils.rm_r('/tmp/dash-set/settings.yml')
@@ -83,7 +83,7 @@ describe  FileSet do
                                   ]
 
     expect(file_set.filenames).to eql [
-                                        '/tmp/settings.yml'
+                                        '/tmp/settings.yml',
                                       ]
 
     ::FileUtils.rm_f('/tmp/settings.yml')
