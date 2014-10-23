@@ -102,7 +102,7 @@ class   NamespaceSet
   # Returns a Boolean
   #
   def eql?(other)
-    other.is_a?(        NamespaceSet)  &&
+    other.is_a?(NamespaceSet)  &&
     self.namespaces  == other.namespaces
   end
 

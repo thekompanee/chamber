@@ -4,27 +4,27 @@ require 'chamber/settings'
 module    Chamber
 describe  Settings do
   it 'can verify that it is equal to another Settings object' do
-    settings        = Settings.new( settings:   {setting: 'value'},
+    settings        = Settings.new(settings:   {setting: 'value'},
                                     namespaces: ['good'])
-    other_settings  = Settings.new( settings:   {setting: 'value'},
+    other_settings  = Settings.new(settings:   {setting: 'value'},
                                     namespaces: ['good'])
 
     expect(settings).to eql other_settings
   end
 
   it 'does not consider itself equal if the namespaces are not equal' do
-    settings        = Settings.new( settings:   {setting: 'value'},
+    settings        = Settings.new(settings:   {setting: 'value'},
                                     namespaces: ['good'])
-    other_settings  = Settings.new( settings:   {setting: 'value'},
+    other_settings  = Settings.new(settings:   {setting: 'value'},
                                     namespaces: ['bad'])
 
     expect(settings).not_to eql other_settings
   end
 
   it 'does not consider itself equal if the settings are not equal' do
-    settings        = Settings.new( settings:   {setting: 'value'},
+    settings        = Settings.new(settings:   {setting: 'value'},
                                     namespaces: ['good'])
-    other_settings  = Settings.new( settings:   {setting: 'value 1'},
+    other_settings  = Settings.new(settings:   {setting: 'value 1'},
                                     namespaces: ['good'])
 
     expect(settings).not_to eql other_settings
