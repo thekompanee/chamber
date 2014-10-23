@@ -14,7 +14,7 @@ end
 module    Chamber
 describe  File do
   it 'can convert file contents to settings' do
-    tempfile      = create_tempfile_with_content "{ test: settings }"
+    tempfile      = create_tempfile_with_content '{ test: settings }'
     settings_file = File.new path: tempfile.path
 
     allow(Settings).to receive(:new).
@@ -48,14 +48,14 @@ describe  File do
   end
 
   it 'throws an error when the file contents are malformed' do
-    tempfile      = create_tempfile_with_content "{ test : "
+    tempfile      = create_tempfile_with_content '{ test : '
     settings_file = File.new path: tempfile.path
 
     expect { settings_file.to_settings }.to raise_error
   end
 
   it 'passes any namespaces through to the settings' do
-    tempfile      = create_tempfile_with_content "{ test: settings }"
+    tempfile      = create_tempfile_with_content '{ test: settings }'
     settings_file = File.new  path:       tempfile.path,
                               namespaces: {
                                 environment:  :development }
@@ -73,7 +73,7 @@ describe  File do
   end
 
   it 'can handle files which contain ERB markup' do
-    tempfile      = create_tempfile_with_content "{ test: <%= 1 + 1 %> }"
+    tempfile      = create_tempfile_with_content '{ test: <%= 1 + 1 %> }'
     settings_file = File.new  path: tempfile.path
 
     allow(Settings).to      receive(:new)
@@ -130,7 +130,7 @@ HEREDOC
     settings_file = File.new  path:           tempfile.path
 
     expect(settings_file.to_settings.send(:raw_data)['_secure_setting']).to       match Filters::EncryptionFilter::BASE64_STRING_PATTERN
-    expect(settings_file.to_settings.send(:raw_data)['_secure_other_setting']).to eql   "g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw=="
+    expect(settings_file.to_settings.send(:raw_data)['_secure_other_setting']).to eql   'g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw=='
   end
 
   it 'does not rewrite the entire file but only the encrypted settings' do
