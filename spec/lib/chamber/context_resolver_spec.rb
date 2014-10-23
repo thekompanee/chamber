@@ -95,32 +95,40 @@ describe  ContextResolver do
   end
 
   it 'sets the information to a Rails preset when the rootpath is a Rails app' do
+    allow(Socket).to receive(:gethostname).and_return 'my_host'
+
     options = ContextResolver.resolve(rootpath: rails_3_path,
                                       preset:   'rails')
 
     expect(options[:basepath].to_s).to  include 'rails-3-test/config'
-    expect(options[:namespaces]).to     eql     ['development']
+    expect(options[:namespaces]).to     eql     %w{development my_host}
   end
 
   it 'sets the basepath if inside a Rails 2 project' do
+    allow(Socket).to receive(:gethostname).and_return 'my_host'
+
     options = ContextResolver.resolve(rootpath: rails_2_path)
 
     expect(options[:basepath].to_s).to  include 'rails-2-test/config'
-    expect(options[:namespaces]).to     eql     ['development']
+    expect(options[:namespaces]).to     eql     %w{development my_host}
   end
 
   it 'sets the basepath if inside a Rails 3 project' do
+    allow(Socket).to receive(:gethostname).and_return 'my_host'
+
     options = ContextResolver.resolve(rootpath: rails_3_path)
 
     expect(options[:basepath].to_s).to  include 'rails-3-test/config'
-    expect(options[:namespaces]).to     eql     ['development']
+    expect(options[:namespaces]).to     eql     %w{development my_host}
   end
 
   it 'sets the basepath if inside a Rails 4 project' do
+    allow(Socket).to receive(:gethostname).and_return 'my_host'
+
     options = ContextResolver.resolve(rootpath: rails_4_path)
 
     expect(options[:basepath].to_s).to  include 'rails-4-test/config'
-    expect(options[:namespaces]).to     eql     ['development']
+    expect(options[:namespaces]).to     eql     %w{development my_host}
   end
 end
 end
