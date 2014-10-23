@@ -2,7 +2,6 @@ require 'rspectacular'
 require 'chamber/file_set'
 require 'fileutils'
 
-
 module    Chamber
 describe  FileSet do
   before(:each) do 
