@@ -109,7 +109,7 @@ describe  NamespaceSet do
 
     expect(namespace_set).to eq ['callable']
 
-    namespace_set = NamespaceSet.new( :my_namespace => -> { 'callable' } )
+    namespace_set = NamespaceSet.new( my_namespace: -> { 'callable' } )
 
     expect(namespace_set).to eq ['callable']
   end
