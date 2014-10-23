@@ -3,7 +3,7 @@ require 'hashie/mash'
 module  Chamber
 module  Filters
 class   SecureFilter
-  SECURE_KEY_TOKEN = %r{\A_secure_}
+  SECURE_KEY_TOKEN = /\A_secure_/
 
   def initialize(options = {})
     self.data = Hashie::Mash.new(options.fetch(:data))

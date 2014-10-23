@@ -6,8 +6,8 @@ require 'chamber/errors/undecryptable_value_error'
 module  Chamber
 module  Filters
 class   DecryptionFilter
-  SECURE_KEY_TOKEN      = %r{\A_secure_}
-  BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9\+\/]{342}==\z}
+  SECURE_KEY_TOKEN      = /\A_secure_/
+  BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9\+/]{342}==\z}
 
   def initialize(options = {})
     self.decryption_key = options.fetch(:decryption_key, nil)

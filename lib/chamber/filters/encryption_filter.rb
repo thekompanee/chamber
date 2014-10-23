@@ -5,7 +5,7 @@ require 'hashie/mash'
 module    Chamber
 module    Filters
 class     EncryptionFilter
-  SECURE_KEY_TOKEN      = %r{\A_secure_}
+  SECURE_KEY_TOKEN      = /\A_secure_/
   BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9\+\/]{342}==\z}
 
   def initialize(options = {})
