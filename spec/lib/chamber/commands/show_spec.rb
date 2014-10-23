@@ -7,7 +7,7 @@ describe  Show do
   let(:rootpath) { ::File.expand_path('./spec/fixtures') }
   let(:options)  { {  basepath:   rootpath,
                       rootpath:   rootpath,
-                      namespaces: 'test' } 
+                      namespaces: 'test' }
   }
 
   it 'can return values formatted as environment variables' do

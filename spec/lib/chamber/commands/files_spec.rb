@@ -6,7 +6,7 @@ module    Commands
 describe  Files do
   let(:rootpath) { ::File.expand_path('./spec/fixtures') }
   let(:options)  { {  basepath: rootpath,
-                      rootpath: rootpath } 
+                      rootpath: rootpath }
   }
 
   it 'can return values formatted as environment variables' do
