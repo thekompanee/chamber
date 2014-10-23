@@ -24,7 +24,7 @@ describe  File do
 
     expect(file_settings).to  eql :settings
     expect(Settings).to       have_received(:new).
-                              with(settings:       {'test' => 'settings'},
+                              with(settings:       { 'test' => 'settings' },
                                    namespaces:     {},
                                    decryption_key: nil,
                                    encryption_key: nil)
@@ -65,7 +65,7 @@ describe  File do
     settings_file.to_settings
 
     expect(Settings).to have_received(:new).
-                        with(settings:    {'test' => 'settings'},
+                        with(settings:    { 'test' => 'settings' },
                               namespaces: {
                                 environment:  :development },
                               decryption_key: nil,
@@ -80,7 +80,7 @@ describe  File do
 
     settings_file.to_settings
     expect(Settings).to have_received(:new).
-                        with(settings:   {'test' => 2},
+                        with(settings:   { 'test' => 2 },
                               namespaces: {},
                               decryption_key: nil,
                               encryption_key: nil)

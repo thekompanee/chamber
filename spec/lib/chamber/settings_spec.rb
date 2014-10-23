@@ -4,27 +4,27 @@ require 'chamber/settings'
 module    Chamber
 describe  Settings do
   it 'can verify that it is equal to another Settings object' do
-    settings        = Settings.new(settings:   {setting: 'value'},
+    settings        = Settings.new(settings:   { setting: 'value' },
                                     namespaces: ['good'])
-    other_settings  = Settings.new(settings:   {setting: 'value'},
+    other_settings  = Settings.new(settings:   { setting: 'value' },
                                     namespaces: ['good'])
 
     expect(settings).to eql other_settings
   end
 
   it 'does not consider itself equal if the namespaces are not equal' do
-    settings        = Settings.new(settings:   {setting: 'value'},
+    settings        = Settings.new(settings:   { setting: 'value' },
                                     namespaces: ['good'])
-    other_settings  = Settings.new(settings:   {setting: 'value'},
+    other_settings  = Settings.new(settings:   { setting: 'value' },
                                     namespaces: ['bad'])
 
     expect(settings).not_to eql other_settings
   end
 
   it 'does not consider itself equal if the settings are not equal' do
-    settings        = Settings.new(settings:   {setting: 'value'},
+    settings        = Settings.new(settings:   { setting: 'value' },
                                     namespaces: ['good'])
-    other_settings  = Settings.new(settings:   {setting: 'value 1'},
+    other_settings  = Settings.new(settings:   { setting: 'value 1' },
                                     namespaces: ['good'])
 
     expect(settings).not_to eql other_settings
@@ -110,7 +110,7 @@ HEREDOC
   end
 
   it 'can merge itself with a hash' do
-    settings        = Settings.new(settings: {setting: 'value'})
+    settings        = Settings.new(settings: { setting: 'value' })
     other_settings  = { other_setting: 'another value' }
 
     merged_settings = settings.merge(other_settings)
@@ -120,9 +120,9 @@ HEREDOC
   end
 
   it 'can merge itself with Settings' do
-    settings       = Settings.new(settings:   {setting:       'value'},
+    settings       = Settings.new(settings:   { setting:       'value' },
                                   namespaces: ['good'])
-    other_settings = Settings.new(settings:   {other_setting: 'another value'},
+    other_settings = Settings.new(settings:   { other_setting: 'another value' },
                                   namespaces: ['bad'])
 
     merged_settings = settings.merge(other_settings)
@@ -134,8 +134,8 @@ HEREDOC
   end
 
   it 'does not manipulate the existing Settings but instead returns a new one' do
-    settings       = Settings.new(settings:   {setting:       'value'})
-    other_settings = Settings.new(settings:   {other_setting: 'another value'})
+    settings       = Settings.new(settings:   { setting:       'value' })
+    other_settings = Settings.new(settings:   { other_setting: 'another value' })
 
     merged_settings = settings.merge(other_settings)
 
@@ -144,7 +144,7 @@ HEREDOC
   end
 
   it 'can convert itself into a hash' do
-    settings = Settings.new(settings: {setting: 'value'})
+    settings = Settings.new(settings: { setting: 'value' })
 
     expect(settings.to_hash).to     eql('setting' => 'value')
     expect(settings.to_hash).to     be_a Hash
@@ -176,7 +176,7 @@ HEREDOC
   end
 
   it 'does not allow manipulation of the internal setting hash when converted to a Hash' do
-    settings = Settings.new(settings: {setting: 'value'})
+    settings = Settings.new(settings: { setting: 'value' })
 
     settings_hash = settings.to_hash
     settings_hash['setting'] = 'foo'
@@ -186,19 +186,19 @@ HEREDOC
   end
 
   it 'allows messages to be passed through to the underlying data' do
-    settings = Settings.new(settings: {setting: 'value'})
+    settings = Settings.new(settings: { setting: 'value' })
 
     expect(settings.setting).to eql 'value'
   end
 
   it 'will still raise an error if the underlying data does not respond to it' do
-    settings = Settings.new(settings: {setting: 'value'})
+    settings = Settings.new(settings: { setting: 'value' })
 
     expect { settings.unknown }.to raise_error NoMethodError
   end
 
   it 'can notify properly whether it responds to messages if the underlying data does' do
-    settings = Settings.new(settings: {setting: 'value'})
+    settings = Settings.new(settings: { setting: 'value' })
 
     expect(settings.respond_to?(:setting)).to be_a TrueClass
   end
@@ -252,7 +252,7 @@ HEREDOC
   end
 
   it 'can check if it is equal to other items which can be converted into hashes' do
-    settings = Settings.new(settings: {setting: 'value'})
+    settings = Settings.new(settings: { setting: 'value' })
 
     expect(settings).to eq('setting' => 'value')
   end

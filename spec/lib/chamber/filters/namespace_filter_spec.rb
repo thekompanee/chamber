@@ -10,7 +10,7 @@ describe  NamespaceFilter do
                                                   namespace_value: {
                                                     namespace_setting: 'value 1' },
                                                   other_namespace_value: {
-                                                    other_namespace_setting: 'value 2' }},
+                                                    other_namespace_setting: 'value 2' } },
                                                 namespaces: [
                                                   'namespace_value',
                                                   'other_namespace_value' ])
@@ -24,7 +24,7 @@ describe  NamespaceFilter do
                                                   namespace_value: {
                                                     namespace_setting: 'value 1' },
                                                   non_namespaced_value: {
-                                                    non_namespaced_setting: 'value 2' }},
+                                                    non_namespaced_setting: 'value 2' } },
                                                 namespaces: [
                                                   'namespace_value' ])
 
@@ -35,7 +35,7 @@ describe  NamespaceFilter do
   it 'ignores namespaces which do not exist in the data' do
     filtered_settings = NamespaceFilter.execute(data: {
                                                   namespace_value: {
-                                                    namespace_setting: 'value 1' }},
+                                                    namespace_setting: 'value 1' } },
                                                 namespaces: [
                                                   'namespace_value',
                                                   'other_namespace_value' ])
