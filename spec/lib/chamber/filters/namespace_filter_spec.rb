@@ -24,7 +24,7 @@ describe  NamespaceFilter do
                                                   non_namespaced_value: {
                                                     non_namespaced_setting: 'value 2' } },
                                                 namespaces: [
-                                                  'namespace_value' ])
+                                                  'namespace_value'])
 
     expect(filtered_settings.namespace_setting).to eql 'value 1'
     expect(filtered_settings.non_namespaced_setting).to be_nil

@@ -232,7 +232,7 @@ HEREDOC
                             },
                             encryption_key: './spec/spec_key.pub',
                             pre_filters:    [],
-                            post_filters:   [ Filters::EncryptionFilter ])
+                            post_filters:   [Filters::EncryptionFilter])
 
     expect(settings._secure_my_encrypted_setting).to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end

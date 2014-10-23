@@ -105,7 +105,7 @@ describe  NamespaceSet do
   end
 
   it 'will process a value by executing it if it is a callable' do
-    namespace_set = NamespaceSet[ -> { 'callable' } ]
+    namespace_set = NamespaceSet[-> { 'callable' }]
 
     expect(namespace_set).to eq ['callable']
 
