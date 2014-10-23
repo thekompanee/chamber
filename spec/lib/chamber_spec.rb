@@ -137,7 +137,7 @@ describe Chamber do
                     first_namespace_call: -> { :first },
                     second_namespace_call: -> { :second } })
 
-    expect(Chamber.namespaces.to_a).to eql ['first', 'second']
+    expect(Chamber.namespaces.to_a).to eql %w(first second)
   end
 
   it 'does not load the same namespace twice' do
