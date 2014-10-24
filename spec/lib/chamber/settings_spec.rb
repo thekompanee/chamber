@@ -5,27 +5,27 @@ module    Chamber
 describe  Settings do
   it 'can verify that it is equal to another Settings object' do
     settings        = Settings.new(settings:   { setting: 'value' },
-                                    namespaces: ['good'])
+                                   namespaces: ['good'])
     other_settings  = Settings.new(settings:   { setting: 'value' },
-                                    namespaces: ['good'])
+                                   namespaces: ['good'])
 
     expect(settings).to eql other_settings
   end
 
   it 'does not consider itself equal if the namespaces are not equal' do
     settings        = Settings.new(settings:   { setting: 'value' },
-                                    namespaces: ['good'])
+                                   namespaces: ['good'])
     other_settings  = Settings.new(settings:   { setting: 'value' },
-                                    namespaces: ['bad'])
+                                   namespaces: ['bad'])
 
     expect(settings).not_to eql other_settings
   end
 
   it 'does not consider itself equal if the settings are not equal' do
     settings        = Settings.new(settings:   { setting: 'value' },
-                                    namespaces: ['good'])
+                                   namespaces: ['good'])
     other_settings  = Settings.new(settings:   { setting: 'value 1' },
-                                    namespaces: ['good'])
+                                   namespaces: ['good'])
 
     expect(settings).not_to eql other_settings
   end
@@ -34,11 +34,11 @@ describe  Settings do
     settings = Settings.new(settings: {
                               my_setting: 'value',
                               level_1:    {
-                                level_2:    {
+                                level_2: {
                                   some_setting: 'hello',
                                   another:      'goodbye',
                                 },
-                                body:       'gracias',
+                                body:    'gracias',
                               },
                               there:      'was not that easy?',
                             })
@@ -70,11 +70,11 @@ describe  Settings do
     settings = Settings.new(settings: {
                               my_setting: 'value',
                               level_1:    {
-                                level_2:    {
+                                level_2: {
                                   some_setting: 'hello',
                                   another:      'goodbye',
                                 },
-                                body:       'gracias',
+                                body:    'gracias',
                               },
                               there:      'was not that easy?',
                             })
@@ -86,11 +86,11 @@ describe  Settings do
     settings = Settings.new(settings: {
                               my_setting: 'value',
                               level_1:    {
-                                level_2:    {
+                                level_2: {
                                   some_setting: 'hello',
                                   another:      'goodbye',
                                 },
-                                body:       'gracias',
+                                body:    'gracias',
                               },
                               there:      'was not that easy?',
                             })
@@ -116,7 +116,7 @@ HEREDOC
     merged_settings = settings.merge(other_settings)
 
     expect(merged_settings).to eq('setting'       => 'value',
-                                   'other_setting' => 'another value')
+                                  'other_setting' => 'another value')
   end
 
   it 'can merge itself with Settings' do
@@ -128,8 +128,8 @@ HEREDOC
     merged_settings = settings.merge(other_settings)
 
     expect(merged_settings).to eql Settings.new(settings:   {
-                                                  setting:        'value',
-                                                  other_setting:  'another value' },
+                                                  setting:       'value',
+                                                  other_setting: 'another value' },
                                                 namespaces: %w{good bad})
   end
 
@@ -155,21 +155,21 @@ HEREDOC
     settings = Settings.new(settings: {
                               my_setting: 'value',
                               level_1:    {
-                                level_2:    {
+                                level_2: {
                                   some_setting: 'hello',
                                   another:      'goodbye',
                                 },
-                                body:       'gracias',
+                                body:    'gracias',
                               },
                               there:      'was not that easy?',
                             })
 
     expect(settings.to_flattened_name_hash).to     eql(
-      %w{my_setting}                         => 'value',
+      %w{my_setting}                   => 'value',
       %w{level_1 level_2 some_setting} => 'hello',
       %w{level_1 level_2 another}      => 'goodbye',
-      %w{level_1 body}                    => 'gracias',
-      %w{there}                              => 'was not that easy?',
+      %w{level_1 body}                 => 'gracias',
+      %w{there}                        => 'was not that easy?',
     )
     expect(settings.to_flattened_name_hash).to     be_a Hash
     expect(settings.to_flattened_name_hash).not_to be_a Hashie::Mash
@@ -205,20 +205,20 @@ HEREDOC
 
   it 'only includes namespaced data if any exists' do
     settings = Settings.new(settings:   {
-                              namespace_value:        {
-                                namespace_setting:        'value' },
-                              other_namespace_value:  {
-                                other_namespace_setting:  'value' },
-                              non_namespace_setting:  'other value',
+                              namespace_value:       {
+                                namespace_setting: 'value' },
+                              other_namespace_value: {
+                                other_namespace_setting: 'value' },
+                              non_namespace_setting: 'other value',
                             },
                             namespaces: %w{namespace_value other_namespace_value})
 
-    expect(settings).to eq('namespace_setting' => 'value',
-                             'other_namespace_setting' => 'value')
+    expect(settings).to eq('namespace_setting'       => 'value',
+                           'other_namespace_setting' => 'value')
   end
 
   it 'can decrypt a setting if it finds a secure key' do
-    settings = Settings.new(settings:   {
+    settings = Settings.new(settings:       {
                               _secure_my_encrypted_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
                             },
                             decryption_key: './spec/spec_key')
@@ -227,7 +227,7 @@ HEREDOC
   end
 
   it 'can encrypt a setting if it finds a secure key' do
-    settings = Settings.new(settings:   {
+    settings = Settings.new(settings:       {
                               _secure_my_encrypted_setting: 'hello',
                             },
                             encryption_key: './spec/spec_key.pub',
@@ -238,7 +238,7 @@ HEREDOC
   end
 
   it 'can encrypt a settings without explicitly having to have a filter passed' do
-    settings = Settings.new(settings:   {
+    settings = Settings.new(settings:       {
                               _secure_my_encrypted_setting: 'hello',
                             },
                             decryption_key: './spec/spec_key',
@@ -258,7 +258,7 @@ HEREDOC
   end
 
   it 'can filter securable settings' do
-    settings = Settings.new(settings: {
+    settings = Settings.new(settings:       {
                               _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
                               _secure_my_unencrypted_setting: 'nifty',
                               my_insecure_setting:            'goodbye',
@@ -273,7 +273,7 @@ HEREDOC
   end
 
   it 'can filter unencrypted settings' do
-    settings = Settings.new(settings: {
+    settings = Settings.new(settings:       {
                               _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
                               _secure_my_unencrypted_setting: 'nifty',
                               my_insecure_setting:            'goodbye',

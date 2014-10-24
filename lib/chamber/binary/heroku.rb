@@ -15,41 +15,41 @@ class   Heroku < Thor
 
   desc 'clear', 'Removes all Heroku environment variables which match settings that Chamber knows about'
   method_option :dry_run,
-                type:     :boolean,
-                aliases:  '-d',
-                desc:     'Does not actually remove anything, but instead displays what would change if cleared'
+                type:    :boolean,
+                aliases: '-d',
+                desc:    'Does not actually remove anything, but instead displays what would change if cleared'
   def clear
     Commands::Heroku::Clear.call(options)
   end
 
   desc 'push', 'Sends settings to Heroku so that they may be used in the application once it is deployed'
   method_option :dry_run,
-                type:     :boolean,
-                aliases:  '-d',
-                desc:     'Does not actually push anything to Heroku, but instead displays what would change if pushed'
+                type:    :boolean,
+                aliases: '-d',
+                desc:    'Does not actually push anything to Heroku, but instead displays what would change if pushed'
   method_option :only_sensitive,
-                type:     :boolean,
-                aliases:  '-o',
-                default:  true,
-                desc:     'When enabled, only settings contained in files which have been gitignored or settings which are marked as "_secure" will be pushed'
+                type:    :boolean,
+                aliases: '-o',
+                default: true,
+                desc:    'When enabled, only settings contained in files which have been gitignored or settings which are marked as "_secure" will be pushed'
   def push
     Commands::Heroku::Push.call(options)
   end
 
   desc 'pull', 'Retrieves the environment variables for the application and stores them in a temporary file'
   method_option :into,
-                type:     :string,
-                desc:     'The file into which the Heroku config information should be stored. This file WILL BE OVERRIDDEN.'
+                type: :string,
+                desc: 'The file into which the Heroku config information should be stored. This file WILL BE OVERRIDDEN.'
   def pull
     puts Commands::Heroku::Pull.call(options)
   end
 
   desc 'compare', 'Displays the difference between what is currently stored in the Heroku application\'s config and what Chamber knows about locally'
   method_option :only_sensitive,
-                type:     :boolean,
-                aliases:  '-o',
-                default:  true,
-                desc:     'When enabled, the diff will only consider settings contained in files which have been gitignored or settings which are marked as "_secure"'
+                type:    :boolean,
+                aliases: '-o',
+                default: true,
+                desc:    'When enabled, the diff will only consider settings contained in files which have been gitignored or settings which are marked as "_secure"'
   def compare
     Commands::Heroku::Compare.call(options)
   end

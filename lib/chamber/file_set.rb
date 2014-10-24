@@ -216,9 +216,9 @@ class   FileSet
 
         relevant_glob_files.map! do |file|
           File.new(path:           file,
-                                                    namespaces:     namespaces,
-                                                    decryption_key: decryption_key,
-                                                    encryption_key: encryption_key)
+                   namespaces:     namespaces,
+                   decryption_key: decryption_key,
+                   encryption_key: encryption_key)
         end
 
         sorted_relevant_files += relevant_glob_files

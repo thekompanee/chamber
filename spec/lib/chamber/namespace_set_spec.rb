@@ -4,8 +4,8 @@ require 'chamber/namespace_set'
 module    Chamber
 describe  NamespaceSet do
   it 'can create a set from from a hash' do
-    namespace_set = NamespaceSet.new(environment:  :development,
-                                      hostname:     'my host')
+    namespace_set = NamespaceSet.new(environment: :development,
+                                     hostname:    'my host')
 
     expect(namespace_set).to eq ['development', 'my host']
   end

@@ -10,7 +10,7 @@ describe  EnvironmentFilter do
     filtered_data = EnvironmentFilter.execute(data: {
                                                 test_setting_group: {
                                                   test_setting_level: {
-                                                    test_setting:   'value 1' } } })
+                                                    test_setting: 'value 1' } } })
 
     expect(filtered_data.test_setting_group.test_setting_level.test_setting).to eql 'value 2'
 
@@ -23,8 +23,8 @@ describe  EnvironmentFilter do
     filtered_data = EnvironmentFilter.execute(data: {
                                                 test_setting_group: {
                                                   test_setting_level: {
-                                                    test_setting:     'value 1',
-                                                    another_setting:  'value 3' } } })
+                                                    test_setting:    'value 1',
+                                                    another_setting: 'value 3' } } })
 
     expect(filtered_data.test_setting_group.test_setting_level.another_setting).to eql 'value 3'
 
