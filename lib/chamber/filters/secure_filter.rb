@@ -24,9 +24,7 @@ class   SecureFilter
       secure_value  = if value.respond_to? :each_pair
                         execute(value)
                       elsif key.respond_to? :match
-                        if key.match(SECURE_KEY_TOKEN)
-                          value
-                        end
+                        value if key.match(SECURE_KEY_TOKEN)
                       end
 
       settings[key] = secure_value unless secure_value.nil?
