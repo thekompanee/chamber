@@ -11,7 +11,7 @@ class   Secure < Chamber::Commands::Base
 
   def call
     disable_warnings do
-      insecure_environment_variables.each do |key, value|
+      insecure_environment_variables.each do |key, _value|
         if dry_run
           shell.say_status 'encrypt', key, :blue
         else

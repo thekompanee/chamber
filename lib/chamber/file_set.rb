@@ -110,7 +110,6 @@ require 'chamber/settings'
 #
 module  Chamber
 class   FileSet
-
   def initialize(options = {})
     self.namespaces     = options[:namespaces] || {}
     self.decryption_key = options[:decryption_key]
@@ -208,17 +207,19 @@ class   FileSet
   # duplicates removed.
   #
   def files
-    @files ||= -> do
+    @files ||= lambda do
       sorted_relevant_files = []
 
       file_globs.each do |glob|
         current_glob_files  = Pathname.glob(glob)
         relevant_glob_files = relevant_files & current_glob_files
 
-        relevant_glob_files.map! { |file| File.new( path:           file,
-                                                    namespaces:     namespaces,
-                                                    decryption_key: decryption_key,
-                                                    encryption_key: encryption_key) }
+        relevant_glob_files.map! do |file|
+          File.new(path:           file,
+                   namespaces:     namespaces,
+                   decryption_key: decryption_key,
+                   encryption_key: encryption_key)
+        end
 
         sorted_relevant_files += relevant_glob_files
       end
@@ -243,18 +244,18 @@ class   FileSet
 
   def file_globs
     @file_globs ||= paths.map do |path|
-                      if path.directory?
-                        path + '*.yml'
-                      else
-                        path
-                      end
-                    end
+      if path.directory?
+        path + '*.yml'
+      else
+        path
+      end
+    end
   end
 
   def namespaced_files
     @namespaced_files ||= all_files.select do |file|
-                            file.basename.fnmatch? '*-*'
-                          end
+      file.basename.fnmatch? '*-*'
+    end
   end
 
   def relevant_namespaced_files
@@ -262,8 +263,8 @@ class   FileSet
 
     namespaces.each do |namespace|
       file_holder << namespaced_files.select do |file|
-                       file.basename.fnmatch? "*-#{namespace}.???"
-                     end
+        file.basename.fnmatch? "*-#{namespace}.???"
+      end
     end
 
     file_holder.flatten

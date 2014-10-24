@@ -4,13 +4,12 @@ require 'chamber/instance'
 module  Chamber
 module  Commands
 module  Securable
-
   def initialize(options = {})
     super
 
     ignored_settings_options        = options.
                                         merge(files: ignored_settings_filepaths).
-                                        reject { |k, v| k == 'basepath' }
+                                        reject { |k, _v| k == 'basepath' }
     self.ignored_settings_instance  = Chamber::Instance.new(ignored_settings_options)
     self.current_settings_instance  = Chamber::Instance.new(options)
     self.only_sensitive             = options[:only_sensitive]
@@ -47,9 +46,15 @@ module  Securable
   end
 
   def ignored_settings_filepaths
-    shell_escaped_chamber_filenames = chamber.filenames.map { |filename| Shellwords.escape(filename) }
+    shell_escaped_chamber_filenames = chamber.filenames.map do |filename|
+      Shellwords.escape(filename)
+    end
 
-    `git ls-files --other --ignored --exclude-from=.gitignore | sed -e "s|^|#{Shellwords.escape(rootpath.to_s)}/|" | grep --colour=never -E '#{shell_escaped_chamber_filenames.join('|')}'`.split("\n")
+    `
+      git ls-files --other --ignored --exclude-from=.gitignore |
+      sed -e "s|^|#{Shellwords.escape(rootpath.to_s)}/|" |
+      grep --colour=never -E '#{shell_escaped_chamber_filenames.join('|')}'
+    `.split("\n")
   end
 end
 end

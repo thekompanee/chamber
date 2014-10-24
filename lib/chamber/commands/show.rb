@@ -4,7 +4,6 @@ require 'chamber/commands/base'
 module  Chamber
 module  Commands
 class   Show < Chamber::Commands::Base
-
   def initialize(options = {})
     super
 
@@ -12,7 +11,14 @@ class   Show < Chamber::Commands::Base
   end
 
   def call
-    as_env ? chamber.to_s(pair_separator: "\n") : PP.pp(chamber.to_hash, StringIO.new, 60).string.chomp
+    if as_env
+      chamber.to_s(pair_separator: "\n")
+    else
+      PP.
+      pp(chamber.to_hash, StringIO.new, 60).
+      string.
+      chomp
+    end
   end
 
   protected
