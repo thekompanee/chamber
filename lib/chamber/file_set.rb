@@ -214,7 +214,7 @@ class   FileSet
         current_glob_files  = Pathname.glob(glob)
         relevant_glob_files = relevant_files & current_glob_files
 
-        relevant_glob_files.map! do |file| 
+        relevant_glob_files.map! do |file|
           File.new(path:           file,
                                                     namespaces:     namespaces,
                                                     decryption_key: decryption_key,
