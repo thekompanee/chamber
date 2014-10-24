@@ -22,14 +22,14 @@ class   Settings
     self.decryption_key   = options[:decryption_key]
     self.encryption_key   = options[:encryption_key]
     self.pre_filters      = options[:pre_filters]     ||  [
-                                                            Filters::NamespaceFilter,
-                                                          ]
+      Filters::NamespaceFilter,
+    ]
     self.post_filters     = options[:post_filters]    ||  [
-                                                            Filters::DecryptionFilter,
-                                                            Filters::TranslateSecureKeysFilter,
-                                                            Filters::EnvironmentFilter,
-                                                            Filters::BooleanConversionFilter,
-                                                          ]
+      Filters::DecryptionFilter,
+      Filters::TranslateSecureKeysFilter,
+      Filters::EnvironmentFilter,
+      Filters::BooleanConversionFilter,
+    ]
   end
 
   ###
