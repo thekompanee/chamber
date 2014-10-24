@@ -9,24 +9,26 @@ describe  ContextResolver do
   let(:rails_4_path) { ::File.expand_path('../../../rails-4-test', __FILE__) }
 
   it 'does not attempt to do any resolution if all valid options are passed in' do
-    options = ContextResolver.resolve(basepath:       'my_path',
-                                      namespaces:     'ns')
+    options = ContextResolver.resolve(basepath:   'my_path',
+                                      namespaces: 'ns')
 
     expect(options[:basepath].to_s).to  eql 'my_path'
     expect(options[:namespaces]).to     eql 'ns'
   end
 
-  it 'does not attempt to do any resolution if files are passed in in place of a basepath' do
-    options = ContextResolver.resolve(files:          'my_files',
-                                      namespaces:     'ns')
+  it 'does not attempt to do any resolution if files are passed in in place of a ' \
+     'basepath' do
+
+    options = ContextResolver.resolve(files:      'my_files',
+                                      namespaces: 'ns')
 
     expect(options[:files]).to          eql 'my_files'
     expect(options[:namespaces]).to     eql 'ns'
   end
 
   it 'defaults the basepath to the rootpath if none is explicitly set' do
-    options = ContextResolver.resolve(rootpath:       './app',
-                                      namespaces:     'ns')
+    options = ContextResolver.resolve(rootpath:   './app',
+                                      namespaces: 'ns')
 
     expect(options[:basepath].to_s).to  eql './app'
   end
@@ -40,14 +42,14 @@ describe  ContextResolver do
   it 'sets the default files if none are passed in' do
     options = ContextResolver.resolve(basepath: './app')
 
-    expect(options[:files].map(&:to_s)).to eql [  './app/credentials*.yml',
-                                                  './app/settings*.yml',
-                                                  './app/settings' ]
+    expect(options[:files].map(&:to_s)).to eql ['./app/credentials*.yml',
+                                                './app/settings*.yml',
+                                                './app/settings']
   end
 
   it 'can handle if keys are passed as strings' do
-    options = ContextResolver.resolve('files'      =>  'my_files',
-                                      'namespaces' =>  'ns')
+    options = ContextResolver.resolve('files'      => 'my_files',
+                                      'namespaces' => 'ns')
 
     expect(options[:files]).to          eql 'my_files'
     expect(options[:namespaces]).to     eql 'ns'

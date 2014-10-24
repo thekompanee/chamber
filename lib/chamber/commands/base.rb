@@ -4,7 +4,6 @@ require 'chamber/instance'
 module  Chamber
 module  Commands
 class   Base
-
   def initialize(options = {})
     self.chamber  = Chamber::Instance.new options
     self.shell    = options[:shell]
@@ -13,7 +12,7 @@ class   Base
   end
 
   def self.call(options = {})
-    self.new(options).call
+    new(options).call
   end
 
   protected

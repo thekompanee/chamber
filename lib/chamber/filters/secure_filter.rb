@@ -3,14 +3,14 @@ require 'hashie/mash'
 module  Chamber
 module  Filters
 class   SecureFilter
-  SECURE_KEY_TOKEN = %r{\A_secure_}
+  SECURE_KEY_TOKEN = /\A_secure_/
 
   def initialize(options = {})
     self.data = Hashie::Mash.new(options.fetch(:data))
   end
 
   def self.execute(options = {})
-    self.new(options).send(:execute)
+    new(options).send(:execute)
   end
 
   protected
@@ -24,9 +24,7 @@ class   SecureFilter
       secure_value  = if value.respond_to? :each_pair
                         execute(value)
                       elsif key.respond_to? :match
-                        if key.match(SECURE_KEY_TOKEN)
-                          value
-                        end
+                        value if key.match(SECURE_KEY_TOKEN)
                       end
 
       settings[key] = secure_value unless secure_value.nil?

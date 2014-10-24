@@ -18,7 +18,7 @@ class   Compare < Chamber::Commands::Base
   end
 
   def self.call(options = {})
-    self.new(options).call
+    new(options).call
   end
 
   protected

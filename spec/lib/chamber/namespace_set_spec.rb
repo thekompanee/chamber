@@ -4,8 +4,8 @@ require 'chamber/namespace_set'
 module    Chamber
 describe  NamespaceSet do
   it 'can create a set from from a hash' do
-    namespace_set = NamespaceSet.new( environment:  :development,
-                                      hostname:     'my host')
+    namespace_set = NamespaceSet.new(environment: :development,
+                                     hostname:    'my host')
 
     expect(namespace_set).to eq ['development', 'my host']
   end
@@ -50,7 +50,9 @@ describe  NamespaceSet do
     expect(namespace_set.object_id).not_to eq original_set.object_id
   end
 
-  it 'when creating itself from another NamespaceSet, it does not nest the NamespaceSets' do
+  it 'when creating itself from another NamespaceSet, it does not nest the ' \
+     'NamespaceSets' do
+
     original_set  = NamespaceSet[:development, 'my host']
     namespace_set = NamespaceSet.new(original_set)
 
@@ -105,11 +107,11 @@ describe  NamespaceSet do
   end
 
   it 'will process a value by executing it if it is a callable' do
-    namespace_set = NamespaceSet[ -> { 'callable' } ]
+    namespace_set = NamespaceSet[-> { 'callable' }]
 
     expect(namespace_set).to eq ['callable']
 
-    namespace_set = NamespaceSet.new( :my_namespace => -> { 'callable' } )
+    namespace_set = NamespaceSet.new(my_namespace: -> { 'callable' })
 
     expect(namespace_set).to eq ['callable']
   end

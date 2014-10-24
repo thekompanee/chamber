@@ -4,7 +4,6 @@ require 'hashie/mash'
 
 module  Chamber
 class   ContextResolver
-
   def initialize(options = {})
     self.options = Hashie::Mash.new(options)
   end
@@ -24,9 +23,9 @@ class   ContextResolver
         require options[:rootpath].join('config', 'application')
 
         options[:namespaces]   = [
-                                   ::Rails.env,
-                                   Socket.gethostname
-                                 ]
+          ::Rails.env,
+          Socket.gethostname,
+        ]
       end
     else
       options[:basepath]     ||= options[:rootpath]
@@ -34,9 +33,9 @@ class   ContextResolver
 
     options[:basepath]         = Pathname.new(options[:basepath])
 
-    options[:files]          ||= [ options[:basepath] + 'credentials*.yml',
-                                   options[:basepath] + 'settings*.yml',
-                                   options[:basepath] + 'settings' ]
+    options[:files]          ||= [options[:basepath] + 'credentials*.yml',
+                                  options[:basepath] + 'settings*.yml',
+                                  options[:basepath] + 'settings']
 
     options
   rescue LoadError
@@ -44,7 +43,7 @@ class   ContextResolver
   end
 
   def self.resolve(options = {})
-    self.new(options).resolve
+    new(options).resolve
   end
 
   protected
@@ -52,9 +51,7 @@ class   ContextResolver
   attr_accessor :options
 
   def resolve_preset
-    if in_a_rails_project?
-      'rails'
-    end
+    'rails' if in_a_rails_project?
   end
 
   def resolve_encryption_key(key)

@@ -20,11 +20,11 @@ class   Configuration
 
   def to_hash
     {
-      basepath:       self.basepath,
-      decryption_key: self.decryption_key,
-      encryption_key: self.encryption_key,
-      files:          self.files,
-      namespaces:     self.namespaces,
+      basepath:       basepath,
+      decryption_key: decryption_key,
+      encryption_key: encryption_key,
+      files:          files,
+      namespaces:     namespaces,
     }
   end
 end

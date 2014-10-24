@@ -14,7 +14,6 @@ require 'chamber/filters/insecure_filter'
 #
 module  Chamber
 class   Settings
-
   attr_reader :namespaces
 
   def initialize(options = {})
@@ -23,14 +22,14 @@ class   Settings
     self.decryption_key   = options[:decryption_key]
     self.encryption_key   = options[:encryption_key]
     self.pre_filters      = options[:pre_filters]     ||  [
-                                                            Filters::NamespaceFilter,
-                                                          ]
+      Filters::NamespaceFilter,
+    ]
     self.post_filters     = options[:post_filters]    ||  [
-                                                            Filters::DecryptionFilter,
-                                                            Filters::TranslateSecureKeysFilter,
-                                                            Filters::EnvironmentFilter,
-                                                            Filters::BooleanConversionFilter,
-                                                          ]
+      Filters::DecryptionFilter,
+      Filters::TranslateSecureKeysFilter,
+      Filters::EnvironmentFilter,
+      Filters::BooleanConversionFilter,
+    ]
   end
 
   ###
@@ -81,7 +80,7 @@ class   Settings
     concatenated_name_hash = to_concatenated_name_hash(hierarchical_separator)
 
     pairs = concatenated_name_hash.to_a.map do |key, value|
-      %Q{#{key.upcase}#{name_value_separator}#{value_surrounder}#{value}#{value_surrounder}}
+      "#{key.upcase}#{name_value_separator}#{value_surrounder}#{value}#{value_surrounder}"
     end
 
     pairs.join(pair_separator)
@@ -131,7 +130,8 @@ class   Settings
       flattened_name_components = parent_keys.dup.push(key)
 
       if value.respond_to?(:each_pair)
-        flattened_name_hash.merge! to_flattened_name_hash(value, flattened_name_components)
+        flattened_name_hash.merge! to_flattened_name_hash(value,
+                                                          flattened_name_components)
       else
         flattened_name_hash[flattened_name_components] = value
       end
@@ -194,7 +194,7 @@ class   Settings
   # Returns a Boolean
   #
   def ==(other)
-    self.to_hash == other.to_hash
+    to_hash == other.to_hash
   end
 
   ###
@@ -203,29 +203,29 @@ class   Settings
   # Returns a Boolean
   #
   def eql?(other)
-    other.is_a?(        Chamber::Settings)  &&
-    self.data        == other.data          &&
-    self.namespaces  == other.namespaces
+    other.is_a?(Chamber::Settings)  &&
+    data        == other.data          &&
+    namespaces  == other.namespaces
   end
 
   def securable
-    Settings.new( metadata.merge(
-                    settings:     raw_data,
-                    pre_filters:  [Filters::SecureFilter]))
+    Settings.new(metadata.merge(
+                    settings:    raw_data,
+                    pre_filters: [Filters::SecureFilter]))
   end
 
   def secure
-    Settings.new( metadata.merge(
+    Settings.new(metadata.merge(
                     settings:     raw_data,
                     pre_filters:  [Filters::EncryptionFilter],
-                    post_filters: [Filters::TranslateSecureKeysFilter] ))
+                    post_filters: [Filters::TranslateSecureKeysFilter]))
   end
 
   def insecure
-    Settings.new( metadata.merge(
+    Settings.new(metadata.merge(
                     settings:     raw_data,
                     pre_filters:  [Filters::InsecureFilter],
-                    post_filters: [Filters::TranslateSecureKeysFilter] ))
+                    post_filters: [Filters::TranslateSecureKeysFilter]))
   end
 
   protected
@@ -245,24 +245,24 @@ class   Settings
   end
 
   def raw_data
-    @filtered_raw_data  ||= pre_filters.reduce(@raw_data) do |filtered_data, filter|
-                              filter.execute({data: filtered_data}.
-                                              merge(metadata))
-                            end
+    @filtered_raw_data ||= pre_filters.reduce(@raw_data) do |filtered_data, filter|
+      filter.execute({ data: filtered_data }.
+                     merge(metadata))
+    end
   end
 
   def data
-    @data               ||= post_filters.reduce(raw_data) do |filtered_data, filter|
-                              filter.execute({data: filtered_data}.
-                                              merge(metadata))
-                            end
+    @data ||= post_filters.reduce(raw_data) do |filtered_data, filter|
+      filter.execute({ data: filtered_data }.
+                     merge(metadata))
+    end
   end
 
   def metadata
     {
-      namespaces:     self.namespaces,
-      decryption_key: self.decryption_key,
-      encryption_key: self.encryption_key,
+      namespaces:     namespaces,
+      decryption_key: decryption_key,
+      encryption_key: encryption_key,
     }
   end
 

@@ -8,10 +8,12 @@ describe  Secure do
   let(:rootpath)           { Pathname.new(::File.expand_path('./spec/fixtures')) }
   let(:settings_directory) { rootpath + 'settings' }
   let(:settings_filename)  { settings_directory + 'unencrypted.yml' }
-  let(:options)            { { basepath:       rootpath,
-                               rootpath:       rootpath,
-                               encryption_key: rootpath + '../spec_key',
-                               shell:          double.as_null_object } }
+  let(:options)            do
+    { basepath:       rootpath,
+      rootpath:       rootpath,
+      encryption_key: rootpath + '../spec_key',
+      shell:          double.as_null_object }
+  end
 
   before(:each) do
     ::FileUtils.mkdir_p settings_directory unless ::File.exist? settings_directory
@@ -29,7 +31,8 @@ HEREDOC
 
     Secure.call(options)
 
-    expect(settings_filename.read).to match %r{_secure_my_unencrpyted_setting: [A-Za-z0-9\+\/]{342}==}
+    expect(settings_filename.read).
+    to match %r{_secure_my_unencrpyted_setting: [A-Za-z0-9\+\/]{342}==}
   end
 end
 end

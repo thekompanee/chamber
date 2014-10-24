@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 AllCops:
   Enabled:      true
   RunRailsCops: true
@@ -359,3 +357,5 @@ Rails/ScopeArgs:
 Rails/Validation:
   Include:
     - 'app/models/**/*.rb'
+
+inherit_from: .rubocop_todo.yml

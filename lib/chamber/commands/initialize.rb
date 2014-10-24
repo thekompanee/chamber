@@ -6,7 +6,6 @@ require 'chamber/commands/base'
 module  Chamber
 module  Commands
 class   Initialize < Chamber::Commands::Base
-
   def initialize(options = {})
     super
 
@@ -28,7 +27,7 @@ class   Initialize < Chamber::Commands::Base
   end
 
   def self.call(options = {})
-    self.new(options).call
+    new(options).call
   end
 
   protected
@@ -40,7 +39,12 @@ class   Initialize < Chamber::Commands::Base
   end
 
   def templates_path
-    @templates_path             ||= Pathname.new(::File.expand_path('../../../../templates', __FILE__))
+    @templates_path             ||= gem_path + 'templates'
+  end
+
+  def gem_path
+    @gem_path                   ||= Pathname.new(
+                                      ::File.expand_path('../../../..', __FILE__))
   end
 
   def settings_filepath
