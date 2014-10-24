@@ -15,7 +15,7 @@ class   DecryptionFilter
   end
 
   def self.execute(options = {})
-    self.new(options).send(:execute)
+    new(options).send(:execute)
   end
 
   protected

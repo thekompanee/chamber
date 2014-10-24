@@ -30,7 +30,7 @@ class   NamespaceSet
   # Returns a new NamespaceSet
   #
   def self.[](*namespace_values)
-    self.new(namespace_values)
+    new(namespace_values)
   end
 
   ###
@@ -92,7 +92,7 @@ class   NamespaceSet
   # Returns a Boolean
   #
   def ==(other)
-    self.to_a.eql? other.to_a
+    to_a.eql? other.to_a
   end
 
   ###
@@ -103,7 +103,7 @@ class   NamespaceSet
   #
   def eql?(other)
     other.is_a?(NamespaceSet)  &&
-    self.namespaces  == other.namespaces
+    namespaces  == other.namespaces
   end
 
   protected
