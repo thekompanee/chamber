@@ -4,7 +4,7 @@ require 'fileutils'
 
 module    Chamber
 describe  FileSet do
-  before(:each) do 
+  before(:each) do
     FileUtils.mkdir '/tmp/settings' unless ::File.exist? '/tmp/settings'
     FileUtils.mkdir '/tmp/dash-set' unless ::File.exist? '/tmp/dash-set'
   end
@@ -62,7 +62,9 @@ describe  FileSet do
     ::FileUtils.rm_f('/tmp/settings/settings-blue.yml')
   end
 
-  it 'does not consider non-namespaced files which have dashes in their paths as namespaced' do
+  it 'does not consider non-namespaced files which have dashes in their paths as ' \
+     'namespaced' do
+
     ::File.new('/tmp/dash-set/settings.yml', 'w+')
 
     file_set = FileSet.new files:      '/tmp/dash-set/settings*.yml',
@@ -172,7 +174,9 @@ describe  FileSet do
     ::FileUtils.rm_f('/tmp/settings*.yml')
   end
 
-  it 'considers each glob independently, placing non-namespaced and namespaced versions of the globs files above those in subsequent globs' do
+  it 'considers each glob independently, placing non-namespaced and namespaced ' \
+     'versions of the globs files above those in subsequent globs' do
+
     ::File.new('/tmp/settings/credentials-development.yml', 'w+')
     ::File.new('/tmp/settings/settings.yml', 'w+')
 
@@ -214,7 +218,9 @@ describe  FileSet do
     ::FileUtils.rm_f('/tmp/settings.yml')
   end
 
-  it 'can convert settings without yielding to the block by using an intermediate settings object' do
+  it 'can convert settings without yielding to the block by using an intermediate ' \
+     'settings object' do
+
     ::File.new('/tmp/settings.yml', 'w+')
 
     file_set = FileSet.new files: '/tmp/settings.yml'

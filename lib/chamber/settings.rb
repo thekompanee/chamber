@@ -130,7 +130,8 @@ class   Settings
       flattened_name_components = parent_keys.dup.push(key)
 
       if value.respond_to?(:each_pair)
-        flattened_name_hash.merge! to_flattened_name_hash(value, flattened_name_components)
+        flattened_name_hash.merge! to_flattened_name_hash(value,
+                                                          flattened_name_components)
       else
         flattened_name_hash[flattened_name_components] = value
       end

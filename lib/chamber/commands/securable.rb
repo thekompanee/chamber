@@ -46,9 +46,15 @@ module  Securable
   end
 
   def ignored_settings_filepaths
-    shell_escaped_chamber_filenames = chamber.filenames.map { |filename| Shellwords.escape(filename) }
+    shell_escaped_chamber_filenames = chamber.filenames.map do |filename|
+      Shellwords.escape(filename)
+    end
 
-    `git ls-files --other --ignored --exclude-from=.gitignore | sed -e "s|^|#{Shellwords.escape(rootpath.to_s)}/|" | grep --colour=never -E '#{shell_escaped_chamber_filenames.join('|')}'`.split("\n")
+    `
+      git ls-files --other --ignored --exclude-from=.gitignore |
+      sed -e "s|^|#{Shellwords.escape(rootpath.to_s)}/|" |
+      grep --colour=never -E '#{shell_escaped_chamber_filenames.join('|')}'
+    `.split("\n")
   end
 end
 end

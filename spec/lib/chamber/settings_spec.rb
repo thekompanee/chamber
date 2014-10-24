@@ -52,7 +52,9 @@ describe  Settings do
     )
   end
 
-  it 'sorts environment variables by name when converted to an environment hash so that they are easier to parse for humans' do
+  it 'sorts environment variables by name when converted to an environment hash so ' \
+     'that they are easier to parse for humans' do
+
     settings = Settings.new(settings: { 'C' => 'value',
                                         'D' => 'value',
                                         'A' => 'value',
@@ -79,7 +81,13 @@ describe  Settings do
                               there:      'was not that easy?',
                             })
 
-    expect(settings.to_s).to eql 'LEVEL_1_BODY="gracias" LEVEL_1_LEVEL_2_ANOTHER="goodbye" LEVEL_1_LEVEL_2_SOME_SETTING="hello" MY_SETTING="value" THERE="was not that easy?"'
+    expect(settings.to_s).to eql %w{
+      LEVEL_1_BODY="gracias"
+      LEVEL_1_LEVEL_2_ANOTHER="goodbye"
+      LEVEL_1_LEVEL_2_SOME_SETTING="hello"
+      MY_SETTING="value"
+      THERE="was not that easy?"
+    }.join(' ')
   end
 
   it 'can convert itself into a string with custom options' do
@@ -175,7 +183,9 @@ HEREDOC
     expect(settings.to_flattened_name_hash).not_to be_a Hashie::Mash
   end
 
-  it 'does not allow manipulation of the internal setting hash when converted to a Hash' do
+  it 'does not allow manipulation of the internal setting hash when converted to ' \
+     'a Hash' do
+
     settings = Settings.new(settings: { setting: 'value' })
 
     settings_hash = settings.to_hash
@@ -218,10 +228,18 @@ HEREDOC
   end
 
   it 'can decrypt a setting if it finds a secure key' do
-    settings = Settings.new(settings:       {
-                              _secure_my_encrypted_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
-                            },
-                            decryption_key: './spec/spec_key')
+    settings = Settings.new(
+      settings:       {
+        _secure_my_encrypted_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYTha' \
+                                      'V4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4ak' \
+                                      'un6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkE' \
+                                      'jY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8M' \
+                                      'v4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/' \
+                                      '1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86' \
+                                      'wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmU' \
+                                      'p2Y0H1jPgGkBKQJKArfQ==',
+      },
+      decryption_key: './spec/spec_key')
 
     expect(settings).to eq('my_encrypted_setting' => 'hello')
   end
@@ -234,7 +252,8 @@ HEREDOC
                             pre_filters:    [],
                             post_filters:   [Filters::EncryptionFilter])
 
-    expect(settings._secure_my_encrypted_setting).to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
+    expect(settings._secure_my_encrypted_setting).to match \
+      Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
 
   it 'can encrypt a settings without explicitly having to have a filter passed' do
@@ -248,7 +267,8 @@ HEREDOC
 
     secure_settings = settings.secure
 
-    expect(secure_settings.my_encrypted_setting).to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
+    expect(secure_settings.my_encrypted_setting).to match \
+      Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
 
   it 'can check if it is equal to other items which can be converted into hashes' do
@@ -258,12 +278,20 @@ HEREDOC
   end
 
   it 'can filter securable settings' do
-    settings = Settings.new(settings:       {
-                              _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
-                              _secure_my_unencrypted_setting: 'nifty',
-                              my_insecure_setting:            'goodbye',
-                            },
-                            decryption_key: './spec/spec_key')
+    settings = Settings.new(
+      settings:       {
+        _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYTha' \
+                                        'V4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4ak' \
+                                        'un6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkE' \
+                                        'jY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8M' \
+                                        'v4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/' \
+                                        '1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86' \
+                                        'wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmU' \
+                                        'p2Y0H1jPgGkBKQJKArfQ==',
+        _secure_my_unencrypted_setting: 'nifty',
+        my_insecure_setting:            'goodbye',
+      },
+      decryption_key: './spec/spec_key')
 
     secured_settings = settings.securable
 
@@ -273,12 +301,20 @@ HEREDOC
   end
 
   it 'can filter unencrypted settings' do
-    settings = Settings.new(settings:       {
-                              _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
-                              _secure_my_unencrypted_setting: 'nifty',
-                              my_insecure_setting:            'goodbye',
-                            },
-                            decryption_key: './spec/spec_key')
+    settings = Settings.new(
+      settings:       {
+        _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYTha' \
+                                        'V4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4ak' \
+                                        'un6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkE' \
+                                        'jY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8M' \
+                                        'v4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/' \
+                                        '1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86' \
+                                        'wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmU' \
+                                        'p2Y0H1jPgGkBKQJKArfQ==',
+        _secure_my_unencrypted_setting: 'nifty',
+        my_insecure_setting:            'goodbye',
+      },
+      decryption_key: './spec/spec_key')
 
     secured_settings = settings.insecure
 

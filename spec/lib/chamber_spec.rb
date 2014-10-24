@@ -2,6 +2,7 @@ require 'rspectacular'
 require 'chamber'
 require 'fileutils'
 
+# rubocop:disable Metrics/LineLength
 FileUtils.mkdir_p '/tmp/chamber/settings' unless File.exist? '/tmp/chamber/settings'
 
 File.open('/tmp/chamber/settings.yml', 'w+') do |file|
@@ -169,7 +170,9 @@ describe Chamber do
     expect(Chamber[:only_namespaced_sub_settings]).to be_nil
   end
 
-  it 'still raises an error if you try to send a message which the settings hash does not understand' do
+  it 'still raises an error if you try to send a message which the settings hash ' \
+     'does not understand' do
+
     expect { Chamber.env.i_do_not_know }.to raise_error NoMethodError
   end
 
@@ -191,7 +194,9 @@ describe Chamber do
     expect(Chamber.test.another_level.setting_one).to eql 3
   end
 
-  it 'loads YAML files from the "settings" directory under the base directory if any exist' do
+  it 'loads YAML files from the "settings" directory under the base directory if ' \
+     'any exist' do
+
     expect(Chamber.sub_settings.my_sub_setting).to eql 'my_sub_setting_value'
   end
 
@@ -199,7 +204,9 @@ describe Chamber do
     expect(Chamber['sub_settings-namespaced']).to be_nil
   end
 
-  it 'loads namespaced YAML files in the "settings" directory if they correspond to a value namespace' do
+  it 'loads namespaced YAML files in the "settings" directory if they correspond to ' \
+     'a value namespace' do
+
     Chamber.load(basepath:   '/tmp/chamber',
                  namespaces: {
                    my_namespace: -> { 'blue' } })
@@ -223,7 +230,9 @@ describe Chamber do
     expect(Chamber['my_non_inline_namespaced_setting']).not_to eql 'my_value_for_non_inline_namespace'
   end
 
-  it 'loads the entire inline namespaced file if no namespaces are passed in since it does not know they are namespaced' do
+  it 'loads the entire inline namespaced file if no namespaces are passed in since ' \
+     'it does not know they are namespaced' do
+
     Chamber.load(basepath: '/tmp/chamber')
 
     expect(Chamber['blue']['my_settings_for_inline_namespace']).to eql 'my_value_for_inline_namespace'
@@ -259,7 +268,9 @@ describe Chamber do
     expect(Chamber[:test][:my_ftp_url]).to eql 'ftp://username:password@127.0.0.1'
   end
 
-  it 'can notify properly whether it responds to messages if the underlying settings does' do
+  it 'can notify properly whether it responds to messages if the underlying ' \
+     'settings does' do
+
     expect(Chamber.respond_to?(:sub_settings)).to be_a TrueClass
   end
 
@@ -298,3 +309,4 @@ describe Chamber do
     expect(Chamber.test.my_encrpyted_setting).to eql 'hello'
   end
 end
+# rubocop:enable Metrics/LineLength
