@@ -27,27 +27,13 @@ class   DecryptionFilter
     settings = Hashie::Mash.new
 
     raw_data.each_pair do |key, value|
-      if value.respond_to? :each_pair
-        value = execute(value)
-      elsif key.match(SECURE_KEY_TOKEN) && value.respond_to?(:match)
-        value = if value.match(BASE64_STRING_PATTERN)
-                  if decryption_key.nil?
-                    value
-                  else
-                    decoded_string = Base64.strict_decode64(value)
-                    decryption_key.private_decrypt(decoded_string)
-                  end
-                else
-                  warn 'WARNING: It appears that you would like to keep your ' \
-                       "information for #{key} secure, however the value for that " \
-                       'setting does not appear to be encrypted. Make sure you run ' \
-                       "'chamber secure' before committing."
-
-                  value
-                end
-      end
-
-      settings[key] = value
+      settings[key] = if value.respond_to? :each_pair
+                        execute(value)
+                      elsif key.match(SECURE_KEY_TOKEN) && value.respond_to?(:match)
+                        read_or_decrypt(key, value)
+                      else
+                        value
+                      end
     end
 
     settings
@@ -63,6 +49,30 @@ class   DecryptionFilter
                       end
 
     @decryption_key = OpenSSL::PKey::RSA.new(key_content)
+  end
+
+  private
+
+  def read_or_decrypt(key, value)
+    if value.match(BASE64_STRING_PATTERN)
+      decrypt(value)
+    else
+      warn 'WARNING: It appears that you would like to keep your ' \
+           "information for #{key} secure, however the value for that " \
+           'setting does not appear to be encrypted. Make sure you run ' \
+           "'chamber secure' before committing."
+
+      value
+    end
+  end
+
+  def decrypt(value)
+    if decryption_key.nil?
+      value
+    else
+      decoded_string = Base64.strict_decode64(value)
+      decryption_key.private_decrypt(decoded_string)
+    end
   end
 end
 end
