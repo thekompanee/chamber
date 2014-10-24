@@ -7,15 +7,16 @@ class   Show < Chamber::Commands::Base
   def initialize(options = {})
     super
 
-    self.as_env = options[:as_env]
+    self.as_env      = options[:as_env]
+    self.only_secure = options[:only_secure]
   end
 
   def call
     if as_env
-      chamber.to_s(pair_separator: "\n")
+      settings.to_s(pair_separator: "\n")
     else
       PP.
-      pp(chamber.to_hash, StringIO.new, 60).
+      pp(settings.to_hash, StringIO.new, 60).
       string.
       chomp
     end
@@ -23,7 +24,16 @@ class   Show < Chamber::Commands::Base
 
   protected
 
-  attr_accessor :as_env
+  attr_accessor :as_env,
+                :only_secure
+
+  def settings
+    @settings ||= if only_secure
+                    chamber.settings.securable
+                  else
+                    chamber.settings
+                  end
+  end
 end
 end
 end

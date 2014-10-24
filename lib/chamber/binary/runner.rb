@@ -74,6 +74,14 @@ class   Runner < Thor
                 desc:    'Whether the displayed settings should be environment ' \
                          'variable compatible'
 
+  desc 'only_secure', 'Only show secured/securable settings'
+
+  method_option :only_secure,
+                type:    :boolean,
+                aliases: '-s',
+                desc:    'Only displays the settings that are/should be secured. ' \
+                         'Useful for debugging.'
+
   def show
     puts Commands::Show.call(options)
   end
