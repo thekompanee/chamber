@@ -244,17 +244,17 @@ class   Settings
   end
 
   def raw_data
-    @filtered_raw_data  ||= pre_filters.reduce(@raw_data) do |filtered_data, filter|
-                              filter.execute({ data: filtered_data }.
-                                              merge(metadata))
-                            end
+    @filtered_raw_data ||= pre_filters.reduce(@raw_data) do |filtered_data, filter|
+      filter.execute({ data: filtered_data }.
+                     merge(metadata))
+    end
   end
 
   def data
-    @data               ||= post_filters.reduce(raw_data) do |filtered_data, filter|
-                              filter.execute({ data: filtered_data }.
-                                              merge(metadata))
-                            end
+    @data ||= post_filters.reduce(raw_data) do |filtered_data, filter|
+      filter.execute({ data: filtered_data }.
+                     merge(metadata))
+    end
   end
 
   def metadata
