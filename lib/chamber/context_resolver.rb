@@ -44,7 +44,7 @@ class   ContextResolver
   end
 
   def self.resolve(options = {})
-    self.new(options).resolve
+    new(options).resolve
   end
 
   protected

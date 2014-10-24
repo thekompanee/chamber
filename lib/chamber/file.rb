@@ -73,7 +73,7 @@ class   File < Pathname
   def secure
     insecure_settings = to_settings.insecure.to_flattened_name_hash
     secure_settings   = to_settings.insecure.secure.to_flattened_name_hash
-    file_contents     = self.read
+    file_contents     = read
 
     insecure_settings.each_pair do |name_pieces, value|
       secure_value  = secure_settings[name_pieces]
@@ -87,7 +87,7 @@ class   File < Pathname
           "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}")
     end
 
-    self.write(file_contents)
+    write(file_contents)
   end
 
   protected
@@ -99,7 +99,7 @@ class   File < Pathname
   private
 
   def file_contents_hash
-    file_contents = self.read
+    file_contents = read
     erb_result    = ERB.new(file_contents).result
 
     YAML.load(erb_result) || {}

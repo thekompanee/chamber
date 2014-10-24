@@ -194,7 +194,7 @@ class   Settings
   # Returns a Boolean
   #
   def ==(other)
-    self.to_hash == other.to_hash
+    to_hash == other.to_hash
   end
 
   ###
@@ -204,8 +204,8 @@ class   Settings
   #
   def eql?(other)
     other.is_a?(Chamber::Settings)  &&
-    self.data        == other.data          &&
-    self.namespaces  == other.namespaces
+    data        == other.data          &&
+    namespaces  == other.namespaces
   end
 
   def securable
@@ -260,9 +260,9 @@ class   Settings
 
   def metadata
     {
-      namespaces:     self.namespaces,
-      decryption_key: self.decryption_key,
-      encryption_key: self.encryption_key,
+      namespaces:     namespaces,
+      decryption_key: decryption_key,
+      encryption_key: encryption_key,
     }
   end
 

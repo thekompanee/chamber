@@ -45,7 +45,7 @@ class   Runner < Thor
                 type:     :string,
                 desc:     'The path to or contents of the public key associated with the project (typically .chamber.pub.pem)'
   class_option  :shell,
-                default:  self.new,
+                default:  new,
                 desc:     'The command runner.  Can be overridden for specific logging capabilities.'
 
   desc 'travis SUBCOMMAND ...ARGS',   'For manipulating Travis CI environment variables'
