@@ -4,7 +4,6 @@ require 'chamber/instance'
 module  Chamber
 module  Commands
 class   Base
-
   def initialize(options = {})
     self.chamber  = Chamber::Instance.new options
     self.shell    = options[:shell]

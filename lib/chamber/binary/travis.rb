@@ -4,7 +4,6 @@ require 'chamber/commands/travis/secure'
 module  Chamber
 module  Binary
 class   Travis < Thor
-
   desc 'secure', 'Uses your Travis CI public key to encrypt the settings you have chosen not to commit to the repo'
   method_option :dry_run,
                 type:     :boolean,

@@ -3,7 +3,6 @@ require 'bundler'
 module  Chamber
 module  Commands
 module  Travis
-
   protected
 
   def travis_encrypt(command)

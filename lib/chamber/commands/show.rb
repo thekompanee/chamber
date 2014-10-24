@@ -4,7 +4,6 @@ require 'chamber/commands/base'
 module  Chamber
 module  Commands
 class   Show < Chamber::Commands::Base
-
   def initialize(options = {})
     super
 

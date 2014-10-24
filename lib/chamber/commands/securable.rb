@@ -4,7 +4,6 @@ require 'chamber/instance'
 module  Chamber
 module  Commands
 module  Securable
-
   def initialize(options = {})
     super
 

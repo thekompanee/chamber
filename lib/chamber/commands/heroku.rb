@@ -3,7 +3,6 @@ require 'bundler'
 module  Chamber
 module  Commands
 module  Heroku
-
   def initialize(options = {})
     super
 

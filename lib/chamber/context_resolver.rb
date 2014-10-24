@@ -4,7 +4,6 @@ require 'hashie/mash'
 
 module  Chamber
 class   ContextResolver
-
   def initialize(options = {})
     self.options = Hashie::Mash.new(options)
   end

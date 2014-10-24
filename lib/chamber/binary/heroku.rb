@@ -7,7 +7,6 @@ require 'chamber/commands/heroku/compare'
 module  Chamber
 module  Binary
 class   Heroku < Thor
-
   class_option :app,
                 type:     :string,
                 aliases:  '-a',

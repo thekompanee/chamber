@@ -8,7 +8,6 @@ require 'erb'
 #
 module  Chamber
 class   File < Pathname
-
   ###
   # Internal: Creates a settings file representing a path to a file on the
   # filesystem.
