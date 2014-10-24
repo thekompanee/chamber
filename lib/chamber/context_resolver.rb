@@ -51,9 +51,7 @@ class   ContextResolver
   attr_accessor :options
 
   def resolve_preset
-    if in_a_rails_project?
-      'rails'
-    end
+    'rails' if in_a_rails_project?
   end
 
   def resolve_encryption_key(key)

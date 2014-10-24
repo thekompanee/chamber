@@ -22,15 +22,9 @@ class   TranslateSecureKeysFilter
     settings = Hashie::Mash.new
 
     raw_data.each_pair do |key, value|
-      if value.respond_to? :each_pair
-        value = execute(value)
-      end
-
-      key = key.to_s
-
-      if key.match(SECURE_KEY_TOKEN)
-        key = key.sub(SECURE_KEY_TOKEN, '')
-      end
+      value = execute(value) if value.respond_to? :each_pair
+      key   = key.to_s
+      key   = key.sub(SECURE_KEY_TOKEN, '') if key.match(SECURE_KEY_TOKEN)
 
       settings[key] = value
     end

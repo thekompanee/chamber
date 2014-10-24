@@ -1,3 +1,1 @@
-if defined?(::Rails)
-  require 'chamber/rails/railtie'
-end
+require 'chamber/rails/railtie' if defined?(::Rails)
