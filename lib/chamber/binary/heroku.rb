@@ -8,10 +8,10 @@ module  Chamber
 module  Binary
 class   Heroku < Thor
   class_option :app,
-                type:     :string,
-                aliases:  '-a',
-                required: true,
-                desc:     'The name of the Heroku application whose config values will be affected'
+               type:     :string,
+               aliases:  '-a',
+               required: true,
+               desc:     'The name of the Heroku application whose config values will be affected'
 
   desc 'clear', 'Removes all Heroku environment variables which match settings that Chamber knows about'
   method_option :dry_run,
