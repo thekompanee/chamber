@@ -50,7 +50,9 @@ describe  NamespaceSet do
     expect(namespace_set.object_id).not_to eq original_set.object_id
   end
 
-  it 'when creating itself from another NamespaceSet, it does not nest the NamespaceSets' do
+  it 'when creating itself from another NamespaceSet, it does not nest the ' \
+     'NamespaceSets' do
+
     original_set  = NamespaceSet[:development, 'my host']
     namespace_set = NamespaceSet.new(original_set)
 

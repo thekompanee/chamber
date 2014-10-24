@@ -16,7 +16,9 @@ describe  ContextResolver do
     expect(options[:namespaces]).to     eql 'ns'
   end
 
-  it 'does not attempt to do any resolution if files are passed in in place of a basepath' do
+  it 'does not attempt to do any resolution if files are passed in in place of a ' \
+     'basepath' do
+
     options = ContextResolver.resolve(files:      'my_files',
                                       namespaces: 'ns')
 

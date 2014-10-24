@@ -4,6 +4,7 @@ require 'chamber/settings'
 require 'chamber/filters/encryption_filter'
 require 'tempfile'
 
+# rubocop:disable Metrics/LineLength
 def create_tempfile_with_content(content)
   tempfile = Tempfile.new('settings')
   tempfile.puts content
@@ -127,10 +128,20 @@ HEREDOC
 
     settings_file.secure
 
-    settings_file = File.new  path:           tempfile.path
+    settings_file        = File.new  path:           tempfile.path
+    raw_data             = settings_file.to_settings.send(:raw_data)
+    secure_setting       = raw_data['_secure_setting']
+    other_secure_setting = raw_data['_secure_other_setting']
 
-    expect(settings_file.to_settings.send(:raw_data)['_secure_setting']).to       match Filters::EncryptionFilter::BASE64_STRING_PATTERN
-    expect(settings_file.to_settings.send(:raw_data)['_secure_other_setting']).to eql   'g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw=='
+    expect(secure_setting).to       match Filters::EncryptionFilter::BASE64_STRING_PATTERN
+    expect(other_secure_setting).to eql   'g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBU' \
+                                          'KlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPO' \
+                                          'aDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6Rrm' \
+                                          'ydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+' \
+                                          'eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpIN' \
+                                          'A6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8' \
+                                          'uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x' \
+                                          '+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw=='
   end
 
   it 'does not rewrite the entire file but only the encrypted settings' do
@@ -170,7 +181,9 @@ other:
 HEREDOC
   end
 
-  it 'when rewriting the file, can handle names and values with regex special characters' do
+  it 'when rewriting the file, can handle names and values with regex special ' \
+     'characters' do
+
     tempfile      = create_tempfile_with_content <<-HEREDOC
 stuff:
   _secure_another+_setting: "Thanks for +all the fish"
@@ -191,3 +204,4 @@ HEREDOC
   end
 end
 end
+# rubocop:enable Metrics/LineLength

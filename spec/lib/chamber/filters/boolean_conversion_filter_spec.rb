@@ -4,7 +4,9 @@ require 'chamber/filters/boolean_conversion_filter'
 module    Chamber
 module    Filters
 describe  BooleanConversionFilter do
-  it 'can convert string boolean values into TrueClass and FalseClass even if they are deeply nested' do
+  it 'can convert string boolean values into TrueClass and FalseClass even if they ' \
+     'are deeply nested' do
+
     filtered_data = BooleanConversionFilter.execute(
                                               data: {
                                                 true_boolean:  'true',
