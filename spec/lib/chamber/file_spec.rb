@@ -58,18 +58,18 @@ describe  File do
     tempfile      = create_tempfile_with_content '{ test: settings }'
     settings_file = File.new  path:       tempfile.path,
                               namespaces: {
-                                environment:  :development }
+                                environment: :development }
 
     allow(Settings).to  receive(:new)
 
     settings_file.to_settings
 
     expect(Settings).to have_received(:new).
-                        with(settings:    { 'test' => 'settings' },
-                              namespaces: {
-                                environment:  :development },
-                              decryption_key: nil,
-                              encryption_key: nil)
+                        with(settings:       { 'test' => 'settings' },
+                             namespaces:     {
+                               environment: :development },
+                             decryption_key: nil,
+                             encryption_key: nil)
   end
 
   it 'can handle files which contain ERB markup' do
@@ -80,10 +80,10 @@ describe  File do
 
     settings_file.to_settings
     expect(Settings).to have_received(:new).
-                        with(settings:   { 'test' => 2 },
-                              namespaces: {},
-                              decryption_key: nil,
-                              encryption_key: nil)
+                        with(settings:       { 'test' => 2 },
+                             namespaces:     {},
+                             decryption_key: nil,
+                             encryption_key: nil)
   end
 
   it 'does not throw an error when attempting to convert a file which does not exist' do

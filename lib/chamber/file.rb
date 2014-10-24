@@ -63,10 +63,10 @@ class   File < Pathname
   # ```
   #
   def to_settings
-    @data ||= Settings.new(settings:        file_contents_hash,
-                           namespaces:      namespaces,
-                           decryption_key:  decryption_key,
-                           encryption_key:  encryption_key)
+    @data ||= Settings.new(settings:       file_contents_hash,
+                           namespaces:     namespaces,
+                           decryption_key: decryption_key,
+                           encryption_key: encryption_key)
   end
 
   def secure

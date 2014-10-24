@@ -176,8 +176,8 @@ describe  FileSet do
     ::File.new('/tmp/settings/credentials-development.yml', 'w+')
     ::File.new('/tmp/settings/settings.yml', 'w+')
 
-    file_set = FileSet.new files: ['/tmp/settings/credentials*.yml',
-                                   '/tmp/settings/settings*.yml'],
+    file_set = FileSet.new files:      ['/tmp/settings/credentials*.yml',
+                                        '/tmp/settings/settings*.yml'],
                            namespaces: ['development']
 
     expect(file_set.filenames).to eql [

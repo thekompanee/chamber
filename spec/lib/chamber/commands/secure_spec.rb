@@ -10,9 +10,9 @@ describe  Secure do
   let(:settings_filename)  { settings_directory + 'unencrypted.yml' }
   let(:options)            do 
     { basepath:       rootpath,
-                               rootpath:       rootpath,
-                               encryption_key: rootpath + '../spec_key',
-                               shell:          double.as_null_object }
+      rootpath:       rootpath,
+      encryption_key: rootpath + '../spec_key',
+      shell:          double.as_null_object }
   end
 
   before(:each) do
