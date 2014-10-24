@@ -39,9 +39,9 @@ class   DecryptionFilter
                   end
                 else
                   warn 'WARNING: It appears that you would like to keep your ' \
-                      "information for #{key} secure, however the value for that " \
-                      'setting does not appear to be encrypted. Make sure you run ' \
-                      "'chamber secure' before committing."
+                       "information for #{key} secure, however the value for that " \
+                       'setting does not appear to be encrypted. Make sure you run ' \
+                       "'chamber secure' before committing."
 
                   value
                 end
