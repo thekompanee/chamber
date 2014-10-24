@@ -110,7 +110,6 @@ require 'chamber/settings'
 #
 module  Chamber
 class   FileSet
-
   def initialize(options = {})
     self.namespaces     = options[:namespaces] || {}
     self.decryption_key = options[:decryption_key]

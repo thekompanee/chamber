@@ -14,7 +14,6 @@ require 'chamber/filters/insecure_filter'
 #
 module  Chamber
 class   Settings
-
   attr_reader :namespaces
 
   def initialize(options = {})

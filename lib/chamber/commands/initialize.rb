@@ -6,7 +6,6 @@ require 'chamber/commands/base'
 module  Chamber
 module  Commands
 class   Initialize < Chamber::Commands::Base
-
   def initialize(options = {})
     super
 
