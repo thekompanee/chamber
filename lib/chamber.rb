@@ -3,8 +3,6 @@ require 'chamber/instance'
 require 'chamber/rails'
 
 module  Chamber
-  extend self
-
   def load(options = {})
     self.instance = Instance.new(options)
   end
@@ -38,4 +36,12 @@ module  Chamber
   def respond_to_missing?(name, include_private = false)
     instance.respond_to?(name, include_private)
   end
+
+  module_function :load,
+                  :to_s,
+                  :env,
+                  :instance,
+                  :instance=,
+                  :method_missing,
+                  :respond_to_missing?
 end
