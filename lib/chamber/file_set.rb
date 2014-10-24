@@ -244,18 +244,18 @@ class   FileSet
 
   def file_globs
     @file_globs ||= paths.map do |path|
-                      if path.directory?
-                        path + '*.yml'
-                      else
-                        path
-                      end
-                    end
+      if path.directory?
+        path + '*.yml'
+      else
+        path
+      end
+    end
   end
 
   def namespaced_files
     @namespaced_files ||= all_files.select do |file|
-                            file.basename.fnmatch? '*-*'
-                          end
+      file.basename.fnmatch? '*-*'
+    end
   end
 
   def relevant_namespaced_files
@@ -263,8 +263,8 @@ class   FileSet
 
     namespaces.each do |namespace|
       file_holder << namespaced_files.select do |file|
-                       file.basename.fnmatch? "*-#{namespace}.???"
-                     end
+        file.basename.fnmatch? "*-#{namespace}.???"
+      end
     end
 
     file_holder.flatten

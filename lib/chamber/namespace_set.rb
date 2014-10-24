@@ -151,8 +151,8 @@ class   NamespaceSet
   #
   def namespaces
     @namespaces ||= Set.new namespace_values.map do |value|
-                      (value.respond_to?(:call) ? value.call : value).to_s
-                    end
+      (value.respond_to?(:call) ? value.call : value).to_s
+    end
   end
 
   def raw_namespaces=(raw_namespaces)
