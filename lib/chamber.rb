@@ -17,12 +17,10 @@ module  Chamber
 
   protected
 
-  def instance
-    @@instance ||= Instance.new({})
-  end
+  attr_accessor :instance
 
-  def instance=(new_instance)
-    @@instance = new_instance
+  def instance
+    @instance ||= Instance.new({})
   end
 
   public
