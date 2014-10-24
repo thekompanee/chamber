@@ -207,7 +207,7 @@ class   FileSet
   # duplicates removed.
   #
   def files
-    @files ||= -> do
+    @files ||= lambda do
       sorted_relevant_files = []
 
       file_globs.each do |glob|

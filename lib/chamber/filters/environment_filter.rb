@@ -63,10 +63,10 @@ class   EnvironmentFilter
 
   def execute(settings = data, parent_keys = [])
     with_environment(settings, parent_keys,
-      ->(key, value, environment_keys) do
+      lambda do |key, value, environment_keys|
         { key => execute(value, environment_keys) }
       end,
-      ->(key, value, environment_key) do
+      lambda do |key, value, environment_key|
         { key => (ENV[environment_key] || value) }
       end)
   end
