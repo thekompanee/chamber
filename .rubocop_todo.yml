@@ -7,5 +7,32 @@
 
 # Offense count: 166
 # Cop supports --auto-correct.
+AllCops:
+  RunRailsCops: false
+
+Rails/ActionFilter:
+  Enabled: false
+
+Rails/Delegate:
+  Enabled: false
+
+Rails/DefaultScope:
+  Enabled: false
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+Rails/Output:
+  Enabled: false
+
+Rails/ReadWriteAttribute:
+  Enabled: false
+
+Rails/ScopeArgs:
+  Enabled: false
+
+Rails/Validation:
+  Enabled: false
+
 Style/IndentationWidth:
   Enabled: false
