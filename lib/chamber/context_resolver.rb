@@ -23,9 +23,9 @@ class   ContextResolver
         require options[:rootpath].join('config', 'application')
 
         options[:namespaces]   = [
-                                   ::Rails.env,
-                                   Socket.gethostname,
-                                 ]
+          ::Rails.env,
+          Socket.gethostname,
+        ]
       end
     else
       options[:basepath]     ||= options[:rootpath]
