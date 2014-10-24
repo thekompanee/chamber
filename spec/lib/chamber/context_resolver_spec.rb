@@ -41,8 +41,8 @@ describe  ContextResolver do
     options = ContextResolver.resolve(basepath: './app')
 
     expect(options[:files].map(&:to_s)).to eql ['./app/credentials*.yml',
-                                                  './app/settings*.yml',
-                                                  './app/settings']
+                                                './app/settings*.yml',
+                                                './app/settings']
   end
 
   it 'can handle if keys are passed as strings' do
