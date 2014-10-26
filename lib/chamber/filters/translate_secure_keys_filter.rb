@@ -30,18 +30,6 @@ class   TranslateSecureKeysFilter
 
     settings
   end
-
-  def decryption_key=(keyish)
-    return @decryption_key = nil if keyish.nil?
-
-    key_content     = if ::File.readable?(::File.expand_path(keyish))
-                        ::File.read(::File.expand_path(keyish))
-                      else
-                        keyish
-                      end
-
-    @decryption_key = OpenSSL::PKey::RSA.new(key_content)
-  end
 end
 end
 end
