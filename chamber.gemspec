@@ -17,8 +17,8 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/thekompanee/chamber'
   spec.license       = 'MIT'
 
-  spec.executables   = Dir['{bin}/**/*'].map    {|dir| dir.gsub!(/\Abin\//, '')}.
-                                         reject {|bin| %w{rails rspec rake setup deploy}}
+  spec.executables   = Dir['{bin}/**/*'].map    { |bin| File.basename(bin) }.
+                                         reject { |bin| %w{rails rspec rake setup deploy}.include? bin }
   spec.files         = Dir['{app,config,db,lib}/**/*'] + %w{Rakefile README.md LICENSE}
   spec.test_files    = Dir['{test,spec,features}/**/*']
 
