@@ -1,7 +1,6 @@
 require 'openssl'
 require 'base64'
 require 'hashie/mash'
-require 'chamber/errors/undecryptable_value_error'
 
 module  Chamber
 module  Filters
