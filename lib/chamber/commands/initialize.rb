@@ -12,6 +12,7 @@ class   Initialize < Chamber::Commands::Base
     self.basepath = Chamber.configuration.basepath
   end
 
+  # rubocop:disable Metrics/LineLength, Metrics/MethodLength
   def call
     shell.create_file private_key_filepath,    rsa_private_key.to_pem
     shell.create_file protected_key_filepath,  rsa_protected_key
@@ -22,13 +23,12 @@ class   Initialize < Chamber::Commands::Base
     `chmod 644 #{public_key_filepath}`
 
     unless ::File.read(gitignore_filepath).match(/^.chamber.pem$/)
-      shell.append_to_file gitignore_filepath, private_key_filepath.basename.to_s
-      shell.append_to_file gitignore_filepath, protected_key_filepath.basename.to_s
+      shell.append_to_file gitignore_filepath, private_key_filename
+      shell.append_to_file gitignore_filepath, protected_key_filename
     end
 
     shell.copy_file settings_template_filepath, settings_filepath
 
-    # rubocop:disable Metrics/LineLength
     shell.say ''
     shell.say 'The passphrase for your encrypted private key is:', :green
     shell.say ''
@@ -46,13 +46,13 @@ class   Initialize < Chamber::Commands::Base
     shell.say ''
     shell.say 'In order for them to decrypt it (for use with Chamber), they can run:'
     shell.say ''
-    shell.say "$ cp /path/to/{#{protected_key_filepath.basename},#{private_key_filepath.basename}}", :green
-    shell.say "$ ssh-keygen -p -f /path/to/#{private_key_filepath.basename}", :green
+    shell.say "$ cp /path/to/{#{protected_key_filename},#{private_key_filename}}", :green
+    shell.say "$ ssh-keygen -p -f /path/to/#{private_key_filename}", :green
     shell.say ''
     shell.say 'Enter the passphrase when prompted and leave the new passphrase blank.', :green
     shell.say ''
-    # rubocop:enable Metrics/LineLength
   end
+  # rubocop:enable Metrics/LineLength, Metrics/MethodLength
 
   def self.call(options = {})
     new(options).call
@@ -84,15 +84,27 @@ class   Initialize < Chamber::Commands::Base
   end
 
   def protected_key_filepath
-    @protected_key_filepath     ||= rootpath + '.chamber.pem.enc'
+    @protected_key_filepath     ||= rootpath + protected_key_filename
   end
 
   def private_key_filepath
-    @private_key_filepath       ||= rootpath + '.chamber.pem'
+    @private_key_filepath       ||= rootpath + private_key_filename
   end
 
   def public_key_filepath
-    @public_key_filepath        ||= rootpath + '.chamber.pub.pem'
+    @public_key_filepath        ||= rootpath + public_key_filename
+  end
+
+  def protected_key_filename
+    '.chamber.pem.enc'
+  end
+
+  def private_key_filename
+    '.chamber.pem'
+  end
+
+  def public_key_filename
+    '.chamber.pub.pem'
   end
 
   def rsa_protected_key
