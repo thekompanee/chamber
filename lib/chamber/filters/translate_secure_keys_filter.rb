@@ -1,5 +1,4 @@
 require 'hashie/mash'
-require 'chamber/errors/undecryptable_value_error'
 
 module  Chamber
 module  Filters
