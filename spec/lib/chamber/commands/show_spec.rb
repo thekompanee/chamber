@@ -1,7 +1,6 @@
 require 'rspectacular'
 require 'chamber/commands/show'
 
-# rubocop:disable Metrics/LineLength
 module    Chamber
 module    Commands
 describe  Show do
@@ -57,4 +56,3 @@ HEREDOC
 end
 end
 end
-# rubocop:enable Metrics/LineLength
