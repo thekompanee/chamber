@@ -26,9 +26,9 @@ class   Settings
     ]
     self.post_filters     = options[:post_filters]    ||  [
       Filters::DecryptionFilter,
-      Filters::TranslateSecureKeysFilter,
       Filters::EnvironmentFilter,
       Filters::BooleanConversionFilter,
+      Filters::TranslateSecureKeysFilter,
     ]
   end
 
