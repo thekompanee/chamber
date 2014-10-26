@@ -38,6 +38,20 @@ describe  FileSet do
     ::FileUtils.rm_rf('/tmp/settings')
   end
 
+  it 'will process both *.yml and *.yml.erb files by default' do
+    ::File.new('/tmp/settings/some_settings_file.yml', 'w+')
+    ::File.new('/tmp/settings/another_settings_file.yml.erb', 'w+')
+
+    file_set = FileSet.new files: '/tmp/settings'
+
+    expect(file_set.filenames).to eql  [
+      '/tmp/settings/another_settings_file.yml.erb',
+      '/tmp/settings/some_settings_file.yml',
+    ]
+
+    ::FileUtils.rm_rf('/tmp/settings')
+  end
+
   it 'can consider namespaced files' do
     ::File.new('/tmp/settings/settings-blue.yml', 'w+')
 
