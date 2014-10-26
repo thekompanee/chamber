@@ -1,5 +1,4 @@
 require 'hashie/mash'
-require 'chamber/errors/undecryptable_value_error'
 
 module  Chamber
 module  Filters
@@ -30,18 +29,6 @@ class   TranslateSecureKeysFilter
     end
 
     settings
-  end
-
-  def decryption_key=(keyish)
-    return @decryption_key = nil if keyish.nil?
-
-    key_content     = if ::File.readable?(::File.expand_path(keyish))
-                        ::File.read(::File.expand_path(keyish))
-                      else
-                        keyish
-                      end
-
-    @decryption_key = OpenSSL::PKey::RSA.new(key_content)
   end
 end
 end
