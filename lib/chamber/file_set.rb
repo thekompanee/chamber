@@ -6,10 +6,10 @@ require 'chamber/settings'
 ###
 # Internal: Represents a set of settings files that should be considered for
 # processing. Whether they actually *are* processed depends on their extension
-# (only *.yml files are processed unless explicitly specified), and whether
-# their namespace matches one of the namespaces passed to the FileSet (text
-# after a dash '-' but before the extension is considered the namespace for the
-# file).
+# (only *.yml  and *.yml.erb files are processed unless explicitly specified),
+# and whether their namespace matches one of the namespaces passed to the
+# FileSet (text after a dash '-' but before the extension is considered the
+# namespace for the file).
 #
 # When converted to settings, files are always processed in the order of least
 # specific to most specific.  So if there are two files:
@@ -61,7 +61,7 @@ require 'chamber/settings'
 #   # /tmp/settings-green.yml
 #   # /tmp/settings/another.yml
 #   # /tmp/settings/another.json
-#   # /tmp/settings/yet_another-blue.yml
+#   # /tmp/settings/yet_another-blue.yml.erb
 #   # /tmp/settings/yet_another-green.yml
 #   #
 #
@@ -74,7 +74,7 @@ require 'chamber/settings'
 #
 #   ###
 #   # This will all files in the 'settings' directory but will only process
-#   # 'another.yml' and 'yet_another-blue.yml'
+#   # 'another.yml' and 'yet_another-blue.yml.erb'
 #   #
 #   FileSet.new(files:      '/tmp/settings',
 #               namespaces: {
@@ -245,7 +245,7 @@ class   FileSet
   def file_globs
     @file_globs ||= paths.map do |path|
       if path.directory?
-        path + '*.yml'
+        path + '*.{yml,yml.erb}'
       else
         path
       end
