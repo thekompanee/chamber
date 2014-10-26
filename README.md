@@ -563,6 +563,20 @@ Chamber.to_s pair_separator:        "\n",
 # => MY_OTHER_SETTING: 'my other value'
 ```
 
+### Git Commit Hook
+
+Chamber integration is officially built into
+[overcommit](https://github.com/causes/overcommit).  You can enable it by
+creating an `.overcommit.yml` file and adding:
+
+```yaml
+ChamberSecurity:
+  enabled: true
+```
+
+Whenever you commit any of your settings files, the hook will confirm that any
+`_secure_` settings have been encrypted.
+
 ### The chamber Command Line App
 
 Chamber provides a flexible binary that you can use to make working with your
