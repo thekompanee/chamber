@@ -322,5 +322,23 @@ HEREDOC
     expect(secured_settings.my_unencrypted_setting).to  eql 'nifty'
     expect(secured_settings.my_insecure_setting?).to    eql false
   end
+
+  it 'raises an exception when it accesses a value which cannot be decrypted' do
+    settings = Settings.new(
+      settings: {
+        _secure_my_encrypted_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYTha' \
+                                      'V4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4ak' \
+                                      'un6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkE' \
+                                      'jY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8M' \
+                                      'v4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/' \
+                                      '1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86' \
+                                      'wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmU' \
+                                      'p2Y0H1jPgGkBKQJKArfQ==',
+      },
+    )
+
+    expect { settings.my_encrypted_setting }.
+    to raise_error Chamber::Errors::DecryptionFailure
+  end
 end
 end
