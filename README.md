@@ -278,16 +278,16 @@ settings files are loaded.  In these cases, Chamber has you covered:
 
 ```ruby
 Chamber.load files: [
-                      '/path/to/my/application/chamber/credentials.yml',
+                      '/path/to/my/application/chamber/settings.yml',
                       '/path/to/my/application/application*.yml',
                       '/path/to/my/application/chamber/*.yml',
                     ]
 ```
 
-In this case, Chamber will load *only* the `credentials.yml` file *without ever*
+In this case, Chamber will load *only* the `settings.yml` file *without ever*
 looking for a namespaced file.  Then it will load `application.yml` *and* any
 associated namespaced files.  Finally it will load all \*.yml files in the
-`chamber` directory *except* `credentials.yml` because it has previously been
+`chamber` directory *except* `settings.yml` because it has previously been
 loaded.
 
 ### Predicate Methods

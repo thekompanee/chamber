@@ -42,8 +42,7 @@ describe  ContextResolver do
   it 'sets the default files if none are passed in' do
     options = ContextResolver.resolve(basepath: './app')
 
-    expect(options[:files].map(&:to_s)).to eql ['./app/credentials*.yml',
-                                                './app/settings*.yml',
+    expect(options[:files].map(&:to_s)).to eql ['./app/settings*.yml',
                                                 './app/settings']
   end
 

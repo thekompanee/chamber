@@ -11,7 +11,7 @@ test:
   my_setting: my_value
   my_boolean: "false"
   my_dynamic_setting: <%= 1 + 1 %>
-  my_ftp_url: ftp://<%= Chamber[:test][:my_username] %>:<%= Chamber[:test][:my_password] %>@127.0.0.1
+  my_ftp_url: ftp://username:password@127.0.0.1
   another_level:
     setting_one: 1
     setting_two: 2
@@ -28,14 +28,6 @@ File.open('/tmp/chamber/secure.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 test:
   _secure_my_encrpyted_setting: cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==
-  HEREDOC
-end
-
-File.open('/tmp/chamber/credentials.yml', 'w+') do |file|
-  file.puts <<-HEREDOC
-test:
-  my_username: username
-  my_password: password
   HEREDOC
 end
 
@@ -251,9 +243,7 @@ describe Chamber do
       'TEST_MY_DYNAMIC_SETTING'                 => '2',
       'TEST_MY_SETTING'                         => 'my_value',
       'TEST_MY_FTP_URL'                         => 'ftp://username:password@127.0.0.1',
-      'TEST_MY_PASSWORD'                        => 'password',
       'TEST_MY_SETTING'                         => 'my_value',
-      'TEST_MY_USERNAME'                        => 'username',
       'TEST_MY_BOOLEAN'                         => 'false',
       'BLUE_MY_SETTINGS_FOR_INLINE_NAMESPACE'   => 'my_value_for_inline_namespace',
       'MY_NON_INLINE_NAMESPACED_SETTING'        => 'my_value_for_non_inline_namespace',
@@ -264,10 +254,6 @@ describe Chamber do
     expect(Chamber[:test][:my_boolean]).to be_a FalseClass
   end
 
-  it 'can use data from credentials in subsequently loaded files' do
-    expect(Chamber[:test][:my_ftp_url]).to eql 'ftp://username:password@127.0.0.1'
-  end
-
   it 'can notify properly whether it responds to messages if the underlying ' \
      'settings does' do
 
@@ -275,17 +261,20 @@ describe Chamber do
   end
 
   it 'can explicitly specify files without specifying a basepath' do
-    Chamber.load files: ['/tmp/chamber/credentials.yml']
+    Chamber.load files: ['/tmp/chamber/settings.yml']
 
-    expect(Chamber.filenames).to    eql ['/tmp/chamber/credentials.yml']
-    expect(Chamber.to_hash).to  eql('test' => {
-                                      'my_username' => 'username',
-                                      'my_password' => 'password' })
+    expect(Chamber.filenames).to  eql ['/tmp/chamber/settings.yml']
+    expect(Chamber.to_hash).to    include(
+      'test' => include(
+        'my_setting' => 'my_value',
+        'my_ftp_url' => 'ftp://username:password@127.0.0.1',
+      ),
+    )
   end
 
   it 'ignores the basepath if file patterns are explicitly passed in' do
     Chamber.load basepath: '/tmp/chamber',
-                 files:    'credentials.yml'
+                 files:    'settings.yml'
 
     expect(Chamber.filenames).to be_empty
   end
