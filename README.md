@@ -57,13 +57,15 @@ type:
 chamber init
 ```
 
-This creates a public/private keypair for you to use with your project.  The
-private key will be called `.chamber.pem`.  The public key will be called
-`.chamber.pem.pub`.
+This creates a public/protected/private keypair for you to use with your
+project.  The private key will be called `.chamber.pem`.  The [protected
+key](#protected-key) will be called `.chamber.pem.enc`. The public key will be
+called `.chamber.pem.pub`.
 
-`.chamber.pem` will be added to your gitignore file so that it is not
-accidentally checked in.  *Keep this file safe* since anyone who has it will be
-able to decrypt any settings that Chamber encrypts for you.
+`.chamber.pem` and `.chamber.pem.enc` will be added to your gitignore file so
+that it is not accidentally checked in.  *Keep the private key safe* since
+anyone who has it will be able to decrypt any settings that Chamber encrypts for
+you.
 
 Lastly, it will create a sample `settings.yml` file for you which you should
 modify as needed.
@@ -577,6 +579,25 @@ ChamberSecurity:
 Whenever you commit any of your settings files, the hook will confirm that any
 `_secure_` settings have been encrypted.
 
+### Protected Key
+
+There's not really any such thing as a 'protected key' when you're talking about
+'keypairs'.  What there _is_ though are plaintext keys, which is like your
+password sitting in plain text on your computer and _encrypted_ keys, which is
+like if your password was scrambled and no one who was looking at it could tell
+what it was.
+
+When you run `chamber init`, Chamber will create a plaintext, private key, an
+encrypted private key and a plaintext public key.
+
+The encrypted private key will be called `.chamber.pem.enc`.  This key is
+encrypted because it's often difficult to get your private key to the various
+people on your teams since emailing a plaintext key is insecure.  If your key is
+encrypted, you can safely share your key amongst your team members any way you
+wish.  The only thing that needs to be sent is the passphrase (given to you when
+you run `chamber init`).  This phrase is a standard UUID and is fairly easy to
+say over the phone.
+
 ### The chamber Command Line App
 
 Chamber provides a flexible binary that you can use to make working with your
@@ -722,7 +743,7 @@ environments.
 Init can be used to initialize a new application/project with everything that
 Chamber needs in order to run properly.  This includes:
 
-* Creating a public/private keypair
+* Creating a public/protected/private keypair
 * Setting the proper permissions on the the newly created keypair
 * Adding the private key to the gitignore file
 * Creating a template `settings.yml` file
