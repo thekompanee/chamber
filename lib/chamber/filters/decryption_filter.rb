@@ -1,6 +1,7 @@
 require 'openssl'
 require 'base64'
 require 'hashie/mash'
+require 'yaml'
 require 'chamber/errors/decryption_failure'
 
 module  Chamber
@@ -74,7 +75,7 @@ class   DecryptionFilter
       unencrypted_value = decryption_key.private_decrypt(decoded_string)
 
       begin
-        unmarshalled_value = Marshal.load(unencrypted_value)
+        _unserialized_value = YAML.load(unencrypted_value)
       rescue TypeError
         unencrypted_value
       end
