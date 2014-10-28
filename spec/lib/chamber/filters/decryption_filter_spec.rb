@@ -123,9 +123,9 @@ describe  DecryptionFilter do
                                      'KTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ=='
   end
 
-  it 'can unmarshal a complex object' do
+  it 'can decrypt a complex object' do
     filtered_settings = DecryptionFilter.execute( data: {
-                                                    _secure_my_secure_setting: 'ISMvfguMpqYgf5NvLMaHybiWDoRlLxl3lpM0VckIyHrTWbC0MtGIaY/EYzn88JTZZQB2E2bjYv4LokTN15UnRSMyaSVwOEbRimHQ6bvGbqHAzlIeOBpV82RVB81363g+ItknXiuWdOYrddGxeCKpAQDh7QTlx0FXIbQpznueV9ukP6ILX+55gPzf1xRNVpi5z0XgIxTE+M3DxTdp3dHAuODMwqcaGMvcSO3obF10693IU85Lm+S9/ZEV98dgmvAnun5CYrnKtSmu1xcAXNWepucBVcTKWiEXH6053b0gTFwKc+ri6M3wVYwCQPWVy4tEOLfeyQv8DUCeSzQkAeigFg==' },
+                                                    _secure_my_secure_setting: 'rF1MIcLX/Q88gjpHTifI27fJHopDKVTJRvOwF2MZ8kVIrvBhFgLOyQ7JEBiWNBh1yUtR6PeKlB+h44sIL3yKMcZyccX73Mo+CiWxmnjtK4I1QxcJL8OSLa8GQPlSBxoBCykWqerwN0b2oS/jv8umB2j2RyANFYklD3mAxn1LsoTuFPAif+SCLRIGafcHkOywM32qn6HhUpeBChX81JhJpip1gdJmRTGEZjKfR93h1shW0LqLLbdQUwYPOPbnjz7fU7x+d5/ighWTDsmOVyvEiqM0WasFzK+WBUfvo8tQxUymexw/U3B7N/0R/9v6U3l6x7eeIoQ4+lnJK2ULFzVgiw==' },
                                                   decryption_key: './spec/spec_key' )
 
     expect(filtered_settings._secure_my_secure_setting).to be_a Integer
