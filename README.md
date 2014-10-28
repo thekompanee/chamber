@@ -41,7 +41,7 @@ management library.
   1. [Encrypting Your Settings](https://github.com/thekompanee/chamber/wiki/Encrypting-Your-Settings)
   1. [Accessing Secure Settings](https://github.com/thekompanee/chamber/wiki/Accessing-Secure-Settings)
   1. [Git Commit Hook](https://github.com/thekompanee/chamber/wiki/Git-Commit-Hook)
-  1. [The Protected Key]()
+  1. [The Protected Key](https://github.com/thekompanee/chamber/wiki/Protected-Keys)
 1. [Environment Variable Compatibility](https://github.com/thekompanee/chamber/wiki/Environment-Variable-Compatibility)
 1. Integrations
   1. [Heroku](https://github.com/thekompanee/chamber/wiki/Heroku)
