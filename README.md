@@ -4,6 +4,8 @@ Chamber is the auto-encrypting, extremely organizable, Heroku-loving, CLI-having
 non-extra-repo-needing, non-Rails-specific-ing, CI-serving configuration
 management library.
 
+[![TrueFact](https://cloud.githubusercontent.com/assets/285582/4803823/ad8110fa-5e5e-11e4-90d6-59320045a786.png)](https://www.youtube.com/watch?v=NNG1OoH2RwE)
+
 1. [Why _another_ Configuration Management Gem?](https://github.com/thekompanee/chamber/wiki/Why-ANOTHER-Configuration-Management-Gem%3F)
 1. [Installation](https://github.com/thekompanee/chamber/wiki/Installation)
   1. [Basic Usage](https://github.com/thekompanee/chamber/wiki/Basic-Usage)
