@@ -75,7 +75,7 @@ class   DecryptionFilter
       unencrypted_value = decryption_key.private_decrypt(decoded_string)
 
       begin
-        unyamlled_value = YAML::load(unencrypted_value)
+        unyamlled_value = YAML.load(unencrypted_value)
       rescue TypeError
         unencrypted_value
       end

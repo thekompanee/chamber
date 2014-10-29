@@ -31,7 +31,7 @@ class     EncryptionFilter
         value = execute(value)
       elsif key.match(SECURE_KEY_TOKEN)
         unless value.respond_to?(:match) && value.match(BASE64_STRING_PATTERN)
-          yamlled          = YAML::dump(value)
+          yamlled          = YAML.dump(value)
           encrypted_string = encryption_key.public_encrypt(yamlled)
           value            = Base64.strict_encode64(encrypted_string)
         end
