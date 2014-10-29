@@ -139,6 +139,14 @@ describe  DecryptionFilter do
 
     expect(filtered_settings._secure_my_secure_setting).to eql '12345'
   end
+
+  it 'can decrypt a string that has not been yamlled' do
+    filtered_settings = DecryptionFilter.execute( data: {
+                                                    _secure_my_secure_setting: 'V2ifd6KwfGK8zW7K87ypHiA89UvVqsAX3961dR/B5ensruVFi5KydFR1KxPQHxInhVl4GIvpBCwczK1mMZ61NGVISK04tg90R52/ue0s4V9v01h1wTnahrkRGFyKk4iiQwsluuXGaW4gBFayaKOs77HL/fMBY985akz8lv/8secg2U66YWeIHblJ2OKdNELaEFZKXWywPxXEMPckAnbJB6liwFNjbY1y0WH6oiP/OzoiOGzGeuUr2P8IfW8JIedOuy4JV4Y46QPvu4zCZhDgNa4dTCdOTA/oEd5+GLhuoSiC87k/vbURwhqs1fmyXUJpUaDg3x4quTDZ6uBTG0Qu/A==' },
+                                                  decryption_key: './spec/spec_key')
+
+    expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
+  end
 end
 end
 end
