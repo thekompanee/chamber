@@ -70,7 +70,7 @@ describe  ContextResolver do
   end
 
   it 'sets the decryption key to the default if not passed in' do
-    options = ContextResolver.resolve(rootpath: rails_3_path)
+    options      = ContextResolver.resolve(rootpath: rails_3_path)
     key_contents = ::File.read(rails_3_path + '/.chamber.pem')
 
     expect(options[:decryption_key].to_s).to eql key_contents
