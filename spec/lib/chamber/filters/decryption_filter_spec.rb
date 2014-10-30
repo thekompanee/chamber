@@ -129,7 +129,7 @@ describe  DecryptionFilter do
                                                   decryption_key: './spec/spec_key' )
 
     expect(filtered_settings._secure_my_secure_setting).to be_a Integer
-    expect(filtered_settings._secure_my_secure_setting).to eql  12345
+    expect(filtered_settings._secure_my_secure_setting).to eql  12_345
   end
 
   it 'can decrypt a number that has not been yamlled' do
