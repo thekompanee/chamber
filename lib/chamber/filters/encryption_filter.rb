@@ -1,6 +1,7 @@
 require 'openssl'
 require 'base64'
 require 'hashie/mash'
+require 'yaml'
 
 module    Chamber
 module    Filters
@@ -28,9 +29,10 @@ class     EncryptionFilter
     raw_data.each_pair do |key, value|
       if value.respond_to? :each_pair
         value = execute(value)
-      elsif value.respond_to? :match
-        if key.match(SECURE_KEY_TOKEN) && !value.match(BASE64_STRING_PATTERN)
-          encrypted_string = encryption_key.public_encrypt(value)
+      elsif key.match(SECURE_KEY_TOKEN)
+        unless value.respond_to?(:match) && value.match(BASE64_STRING_PATTERN)
+          serialized_value = YAML.dump(value)
+          encrypted_string = encryption_key.public_encrypt(serialized_value)
           value            = Base64.strict_encode64(encrypted_string)
         end
       end

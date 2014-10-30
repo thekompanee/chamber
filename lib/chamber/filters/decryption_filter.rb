@@ -1,6 +1,8 @@
 require 'openssl'
 require 'base64'
 require 'hashie/mash'
+require 'yaml'
+require 'chamber/errors/decryption_failure'
 
 module  Chamber
 module  Filters
@@ -69,8 +71,14 @@ class   DecryptionFilter
     if decryption_key.nil?
       value
     else
-      decoded_string = Base64.strict_decode64(value)
-      decryption_key.private_decrypt(decoded_string)
+      decoded_string    = Base64.strict_decode64(value)
+      unencrypted_value = decryption_key.private_decrypt(decoded_string)
+
+      begin
+        _unserialized_value = YAML.load(unencrypted_value)
+      rescue TypeError
+        unencrypted_value
+      end
     end
   end
 end

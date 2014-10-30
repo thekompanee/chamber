@@ -42,7 +42,15 @@ describe  EncryptionFilter do
       EncryptionFilter::BASE64_STRING_PATTERN
   end
 
-  it 'will not attempt to encrypt values if it guesses that they are already encrpyted' do
+  it 'will attempt to encrypt values if they are numbers' do
+    filtered_settings = EncryptionFilter.execute( data: {
+                                                    _secure_my_secure_setting: 12345 },
+                                                  encryption_key: './spec/spec_key.pub' )
+
+    expect(filtered_settings._secure_my_secure_setting).to match EncryptionFilter::BASE64_STRING_PATTERN
+  end
+
+  it 'will not attempt to encrypt values if it guesses that they are already encrypted' do
     filtered_settings = EncryptionFilter.execute(
       data:           {
         _secure_my_secure_setting: 'fNI5wlBniNhEU4396pmhWwx+A09bRAMJOUASuP7PzprewBX8C' \
