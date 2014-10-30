@@ -7,8 +7,8 @@ class   Show < Chamber::Commands::Base
   def initialize(options = {})
     super
 
-    self.as_env      = options[:as_env]
-    self.only_secure = options[:only_secure]
+    self.as_env         = options[:as_env]
+    self.only_sensitive = options[:only_sensitive]
   end
 
   def call
@@ -25,10 +25,10 @@ class   Show < Chamber::Commands::Base
   protected
 
   attr_accessor :as_env,
-                :only_secure
+                :only_sensitive
 
   def settings
-    @settings ||= if only_secure
+    @settings ||= if only_sensitive
                     chamber.settings.securable
                   else
                     chamber.settings

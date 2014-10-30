@@ -30,7 +30,7 @@ HEREDOC
   end
 
   it 'can return values filtered by whether or not they are secure' do
-    expect(Show.call(options.merge(as_env: true, only_secure: true))).to eql(
+    expect(Show.call(options.merge(as_env: true, only_sensitive: true))).to eql(
 <<-HEREDOC.chomp
 MY_SECURE_SETTINGS="my_secure_value"
 HEREDOC
