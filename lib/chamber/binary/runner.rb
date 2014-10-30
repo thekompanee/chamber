@@ -74,9 +74,9 @@ class   Runner < Thor
                 desc:    'Whether the displayed settings should be environment ' \
                          'variable compatible'
 
-  desc 'only_secure', 'Only show secured/securable settings'
+  desc 'only_sensitive', 'Only show secured/securable settings'
 
-  method_option :only_secure,
+  method_option :only_sensitive,
                 type:    :boolean,
                 aliases: '-s',
                 desc:    'Only displays the settings that are/should be secured. ' \
