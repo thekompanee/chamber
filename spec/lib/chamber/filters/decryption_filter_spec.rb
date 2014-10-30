@@ -122,6 +122,31 @@ describe  DecryptionFilter do
                                      'WS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1k' \
                                      'KTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ=='
   end
+
+  it 'can decrypt a complex object' do
+    filtered_settings = DecryptionFilter.execute( data: {
+                                                    _secure_my_secure_setting: 'rF1MIcLX/Q88gjpHTifI27fJHopDKVTJRvOwF2MZ8kVIrvBhFgLOyQ7JEBiWNBh1yUtR6PeKlB+h44sIL3yKMcZyccX73Mo+CiWxmnjtK4I1QxcJL8OSLa8GQPlSBxoBCykWqerwN0b2oS/jv8umB2j2RyANFYklD3mAxn1LsoTuFPAif+SCLRIGafcHkOywM32qn6HhUpeBChX81JhJpip1gdJmRTGEZjKfR93h1shW0LqLLbdQUwYPOPbnjz7fU7x+d5/ighWTDsmOVyvEiqM0WasFzK+WBUfvo8tQxUymexw/U3B7N/0R/9v6U3l6x7eeIoQ4+lnJK2ULFzVgiw==' },
+                                                  decryption_key: './spec/spec_key' )
+
+    expect(filtered_settings._secure_my_secure_setting).to be_a Integer
+    expect(filtered_settings._secure_my_secure_setting).to eql  12345
+  end
+
+  it 'can decrypt a number that has not been yamlled' do
+    filtered_settings = DecryptionFilter.execute( data: {
+                                                    _secure_my_secure_setting: 'Ieh5poOpcirj1jihkh1eENaCrF8ECQSLOigM4ApTZ8hp4vrL3NKWp3djEkQz0QceopgN8TBJOEj1lqfGGL3Ar5L0SGrIsHt6KOilerEXXH4/e2+s8JFWpdfjCxgn12fv1jqXxNyuMUlYRBD7R+oRNVA5nNpnwiSE7IOBjUEZyzlQUrePVku5CtOs0hfGe+79n6D8zFGTpx7UjZg4QVXyHISBM2hAaDOZ0dfxVqbzmvN3B68xbuIty5vyv1+Ry2k+yIGJXIOjNm96ntDxIuUbycfrqYdtopBDI5kcr0zckPWMQRqkp7yd/XNZqyYCFGMNKNwokE6wZuGffkD/H/VPxQ==' },
+                                                  decryption_key: './spec/spec_key')
+
+    expect(filtered_settings._secure_my_secure_setting).to eql '12345'
+  end
+
+  it 'can decrypt a string that has not been yamlled' do
+    filtered_settings = DecryptionFilter.execute( data: {
+                                                    _secure_my_secure_setting: 'V2ifd6KwfGK8zW7K87ypHiA89UvVqsAX3961dR/B5ensruVFi5KydFR1KxPQHxInhVl4GIvpBCwczK1mMZ61NGVISK04tg90R52/ue0s4V9v01h1wTnahrkRGFyKk4iiQwsluuXGaW4gBFayaKOs77HL/fMBY985akz8lv/8secg2U66YWeIHblJ2OKdNELaEFZKXWywPxXEMPckAnbJB6liwFNjbY1y0WH6oiP/OzoiOGzGeuUr2P8IfW8JIedOuy4JV4Y46QPvu4zCZhDgNa4dTCdOTA/oEd5+GLhuoSiC87k/vbURwhqs1fmyXUJpUaDg3x4quTDZ6uBTG0Qu/A==' },
+                                                  decryption_key: './spec/spec_key')
+
+    expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
+  end
 end
 end
 end
