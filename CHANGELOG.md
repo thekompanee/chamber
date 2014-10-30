@@ -1,3 +1,35 @@
+Version v2.5.0 - October 30, 2014
+================================================================================
+
+  Feature
+  ------------------------------------------------------------------------------
+  * Allow any values (including complex ones) to be secured
+  * Add a protected emailable private key when initializing
+  * Allow Chamber to find '*.yml.erb' files as well
+  * Add the FailedDecryptionFilter to the pipeline
+  * Add FailedDecryptionFilter
+  * Don't show the decrypted setting when pushing to Heroku
+  * Add --only-secure option to 'show'
+  * Allow host settings to override environment settings in Rails
+
+  Uncategorized
+  ------------------------------------------------------------------------------
+  * Update README.md
+  * Update README.md
+  * Update README.md
+  * Update README.md
+
+  Docs
+  ------------------------------------------------------------------------------
+  * Extract README into the Wiki
+  * Add section for the new protected keys
+  * Add git commit hook to prevent insecure settings from commit
+  * Add v2.4.0 CHANGELOG notes
+
+  Bugfix
+  ------------------------------------------------------------------------------
+  * Fix gemspec binary filter
+
 Version v2.4.0 - September 23, 2014
 ================================================================================
 
