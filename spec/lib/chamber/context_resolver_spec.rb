@@ -71,8 +71,9 @@ describe  ContextResolver do
 
   it 'sets the decryption key to the default if not passed in' do
     options = ContextResolver.resolve(rootpath: rails_3_path)
+    key_contents = ::File.read(rails_3_path + '/.chamber.pem')
 
-    expect(options[:decryption_key].to_s).to  include 'rails-3-test/.chamber.pem'
+    expect(options[:decryption_key].to_s).to eql key_contents
   end
 
   it 'does not set the encryption key if the keyfile does not exist' do

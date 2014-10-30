@@ -1,6 +1,7 @@
 require 'pathname'
 require 'socket'
 require 'hashie/mash'
+require 'chamber/decryption_key'
 
 module  Chamber
 class   ContextResolver
@@ -60,9 +61,8 @@ class   ContextResolver
   end
 
   def resolve_decryption_key(key)
-    key ||= options[:rootpath] + '.chamber.pem'
-
-    key if Pathname.new(key).readable?
+    DecryptionKey.resolve(filename: key,
+                          rootpath: options[:rootpath])
   end
 
   def in_a_rails_project?
