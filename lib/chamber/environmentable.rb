@@ -2,11 +2,14 @@ require 'hashie/mash'
 
 module  Chamber
 module  Environmentable
+  SECURE_KEY_TOKEN = /\A_secure_/
+
   def with_environment(settings, parent_keys, hash_block, value_block)
     environment_hash = Hashie::Mash.new
 
     settings.each_pair do |key, value|
-      environment_keys = parent_keys.dup.push(key)
+      environment_key  = key.to_s.gsub(SECURE_KEY_TOKEN, '')
+      environment_keys = parent_keys.dup.push(environment_key)
 
       if value.respond_to? :each_pair
         environment_hash.merge!(hash_block.call(key, value, environment_keys))
