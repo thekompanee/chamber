@@ -10,6 +10,8 @@ class   DecryptionKey
   def resolve
     if filename.readable?
       filename.read
+    elsif in_environment_variable?
+      environment_variable
     end
   end
 
@@ -33,6 +35,14 @@ class   DecryptionKey
   end
 
   private
+
+  def in_environment_variable?
+    ENV['CHAMBER_KEY']
+  end
+
+  def environment_variable
+    ENV['CHAMBER_KEY']
+  end
 
   def default_file
     Pathname.new(rootpath + '.chamber.pem')
