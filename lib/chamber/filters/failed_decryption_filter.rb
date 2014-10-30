@@ -29,7 +29,8 @@ class   FailedDecryptionFilter
             value.match(BASE64_STRING_PATTERN)
 
         fail Chamber::Errors::DecryptionFailure,
-             'Failed to decrypt values in your settings.'
+             "Failed to decrypt #{key} (with an encrypted value of '#{value}') " \
+             'in your settings.'
       end
     end
 
