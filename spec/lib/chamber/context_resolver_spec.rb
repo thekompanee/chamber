@@ -76,6 +76,16 @@ describe  ContextResolver do
     expect(options[:decryption_key].to_s).to eql key_contents
   end
 
+  it 'sets the decryption key to the value of the CHAMBER_KEY if available' do
+    ENV['CHAMBER_KEY'] = 'my key'
+
+    options = ContextResolver.resolve(rootpath: 'my_path')
+
+    expect(options[:decryption_key].to_s).to eql 'my key'
+
+    ENV['CHAMBER_KEY'] = nil
+  end
+
   it 'does not set the encryption key if the keyfile does not exist' do
     options = ContextResolver.resolve(rootpath: './app')
 
