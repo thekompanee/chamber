@@ -29,3 +29,15 @@ management library.
 ## Full Reference
 
 Visit the [wiki](https://github.com/thekompanee/chamber/wiki)
+
+## Credits
+
+![The Kompanee](http://www.thekompanee.com/wp-content/themes/kompanee-2013/images/kompanee-logo.png)
+
+Chamber is maintained and funded by [The Kompanee, Ltd.](http://www.thekompanee.com/)
+
+The names and logos for The Kompanee are trademarks of The Kompanee, Ltd.
+
+## License
+
+Chamber is free software, and may be redistributed under the terms specified in the [LICENSE](https://github.com/thekompanee/chamber/blob/master/LICENSE) file.
