@@ -32,7 +32,7 @@ Visit the [wiki](https://github.com/thekompanee/chamber/wiki)
 
 ## Credits
 
-![The Kompanee](http://www.thekompanee.com/wp-content/themes/kompanee-2013/images/kompanee-logo.png)
+![The Kompanee](https://www.dropbox.com/s/86jfka1d6bhv8as/kompanee-text-black.png?dl=1)
 
 Chamber is maintained and funded by [The Kompanee, Ltd.](http://www.thekompanee.com/)
 
