@@ -32,6 +32,8 @@ Visit the [wiki](https://github.com/thekompanee/chamber/wiki)
 
 ## Credits
 
+Chamber was written by Jeff Felchner and Mark McEahern.
+
 ![The Kompanee](https://www.dropbox.com/s/86jfka1d6bhv8as/kompanee-text-black.png?dl=1)
 
 Chamber is maintained and funded by [The Kompanee, Ltd.](http://www.thekompanee.com/)
@@ -40,4 +42,4 @@ The names and logos for The Kompanee are trademarks of The Kompanee, Ltd.
 
 ## License
 
-Chamber is free software, and may be redistributed under the terms specified in the [LICENSE](https://github.com/thekompanee/chamber/blob/master/LICENSE) file.
+Chamber is Copyright © 2014 Jeff Felchner and Mark McEahern. It is free software, and may be redistributed under the terms specified in the [LICENSE](https://github.com/thekompanee/chamber/blob/master/LICENSE) file.
