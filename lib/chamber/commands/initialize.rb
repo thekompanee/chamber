@@ -23,8 +23,9 @@ class   Initialize < Chamber::Commands::Base
     `chmod 644 #{public_key_filepath}`
 
     unless ::File.read(gitignore_filepath).match(/^.chamber.pem$/)
-      shell.append_to_file gitignore_filepath, private_key_filename
-      shell.append_to_file gitignore_filepath, protected_key_filename
+      shell.append_to_file gitignore_filepath, "\n# Private and protected key files for Chamber\n"
+      shell.append_to_file gitignore_filepath, "#{private_key_filename}\n"
+      shell.append_to_file gitignore_filepath, "#{protected_key_filename}\n"
     end
 
     shell.copy_file settings_template_filepath, settings_filepath
