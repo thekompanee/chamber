@@ -1,4 +1,5 @@
 require 'pathname'
+require 'fileutils'
 require 'openssl'
 require 'chamber/configuration'
 require 'chamber/commands/base'
@@ -21,6 +22,8 @@ class   Initialize < Chamber::Commands::Base
     `chmod 600 #{private_key_filepath}`
     `chmod 600 #{protected_key_filepath}`
     `chmod 644 #{public_key_filepath}`
+
+    ::FileUtils.touch gitignore_filepath
 
     unless ::File.read(gitignore_filepath).match(/^.chamber.pem$/)
       shell.append_to_file gitignore_filepath, "\n# Private and protected key files for Chamber\n"
