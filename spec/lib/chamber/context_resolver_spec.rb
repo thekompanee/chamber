@@ -7,6 +7,7 @@ describe  ContextResolver do
   let(:rails_2_path) { ::File.expand_path('../../../rails-2-test', __FILE__) }
   let(:rails_3_path) { ::File.expand_path('../../../rails-3-test', __FILE__) }
   let(:rails_4_path) { ::File.expand_path('../../../rails-4-test', __FILE__) }
+  let(:rails_engine_path) { ::File.expand_path('../../../rails-engine-test', __FILE__) }
 
   it 'does not attempt to do any resolution if all valid options are passed in' do
     options = ContextResolver.resolve(basepath:   'my_path',
@@ -140,6 +141,16 @@ describe  ContextResolver do
     options = ContextResolver.resolve(rootpath: rails_4_path)
 
     expect(options[:basepath].to_s).to  include 'rails-4-test/config'
+    expect(options[:namespaces]).to     eql     %w{development my_host}
+  end
+
+  it 'sets the basepath if inside a Rails engine' do
+    allow(Socket).to receive(:gethostname).and_return 'my_host'
+
+    options = ContextResolver.resolve(rootpath: rails_engine_path)
+
+    expect(options[:rootpath].to_s).to  include 'rails-engine-test/spec/dummy'
+    expect(options[:basepath].to_s).to  include 'rails-engine-test/spec/dummy/config'
     expect(options[:namespaces]).to     eql     %w{development my_host}
   end
 end

@@ -9,7 +9,8 @@ class   ContextResolver
     self.options = Hashie::Mash.new(options)
   end
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
   def resolve
     options[:rootpath]       ||= Pathname.pwd
     options[:rootpath]         = Pathname.new(options[:rootpath])
@@ -18,7 +19,18 @@ class   ContextResolver
     options[:namespaces]     ||= []
     options[:preset]         ||= resolve_preset
 
-    if options[:preset] == 'rails'
+    if %w{rails rails-engine}.include?(options[:preset])
+      if options[:preset] == 'rails-engine'
+        engine_spec_dummy_directory = options[:rootpath] + 'spec' + 'dummy'
+        engine_test_dummy_directory = options[:rootpath] + 'test' + 'dummy'
+
+        options[:rootpath] = if (engine_spec_dummy_directory + 'config.ru').exist?
+                               engine_spec_dummy_directory
+                             elsif (engine_test_dummy_directory + 'config.ru').exist?
+                               engine_test_dummy_directory
+                             end
+      end
+
       options[:basepath]     ||= options[:rootpath] + 'config'
 
       if options[:namespaces] == []
@@ -42,7 +54,8 @@ class   ContextResolver
   rescue LoadError
     options
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity, Metrics/MethodLength
 
   def self.resolve(options = {})
     new(options).resolve
@@ -53,7 +66,11 @@ class   ContextResolver
   attr_accessor :options
 
   def resolve_preset
-    'rails' if in_a_rails_project?
+    if in_a_rails_project?
+      'rails'
+    elsif in_a_rails_engine?
+      'rails-engine'
+    end
   end
 
   def resolve_encryption_key(key)
@@ -70,6 +87,11 @@ class   ContextResolver
   def in_a_rails_project?
     (options[:rootpath] + 'config.ru').exist? &&
     rails_executable_exists?
+  end
+
+  def in_a_rails_engine?
+    (options[:rootpath] + 'spec' + 'dummy' + 'config.ru').exist? ||
+    (options[:rootpath] + 'test' + 'dummy' + 'config.ru').exist?
   end
 
   def rails_executable_exists?
