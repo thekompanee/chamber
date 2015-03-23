@@ -45,10 +45,10 @@ class   Initialize < Chamber::Commands::Base
     shell.say protected_key_filepath, :green
     shell.say ''
     shell.say 'and not have to worry about sending it via a secure medium (such as', :green
-    shell.say 'email), however do not send the passphrase along with it.  Give it to'
+    shell.say 'email), however do not send the passphrase along with it.  Give it to', :green
     shell.say 'your team members in person.', :green
     shell.say ''
-    shell.say 'In order for them to decrypt it (for use with Chamber), they can run:'
+    shell.say 'In order for them to decrypt it (for use with Chamber), they can run:', :green
     shell.say ''
     shell.say "$ cp /path/to/{#{protected_key_filename},#{private_key_filename}}", :green
     shell.say "$ ssh-keygen -p -f /path/to/#{private_key_filename}", :green
