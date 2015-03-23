@@ -4,9 +4,9 @@ require 'chamber/context_resolver'
 module    Chamber
 module    Commands
 describe  ContextResolver do
-  let(:rails_2_path) { ::File.expand_path('../../../rails-2-test', __FILE__) }
-  let(:rails_3_path) { ::File.expand_path('../../../rails-3-test', __FILE__) }
-  let(:rails_4_path) { ::File.expand_path('../../../rails-4-test', __FILE__) }
+  let(:rails_2_path)      { ::File.expand_path('../../../rails-2-test', __FILE__) }
+  let(:rails_3_path)      { ::File.expand_path('../../../rails-3-test', __FILE__) }
+  let(:rails_4_path)      { ::File.expand_path('../../../rails-4-test', __FILE__) }
   let(:rails_engine_path) { ::File.expand_path('../../../rails-engine-test', __FILE__) }
 
   it 'does not attempt to do any resolution if all valid options are passed in' do
