@@ -12,7 +12,7 @@ class   Initialize < Chamber::Commands::Base
     self.basepath = Chamber.configuration.basepath
   end
 
-  # rubocop:disable Metrics/LineLength, Metrics/MethodLength
+  # rubocop:disable Metrics/LineLength, Metrics/MethodLength, Metrics/AbcSize
   def call
     shell.create_file private_key_filepath,    rsa_private_key.to_pem
     shell.create_file protected_key_filepath,  rsa_protected_key
@@ -52,7 +52,7 @@ class   Initialize < Chamber::Commands::Base
     shell.say 'Enter the passphrase when prompted and leave the new passphrase blank.', :green
     shell.say ''
   end
-  # rubocop:enable Metrics/LineLength, Metrics/MethodLength
+  # rubocop:enable Metrics/LineLength, Metrics/MethodLength, Metrics/AbcSize
 
   def self.call(options = {})
     new(options).call
