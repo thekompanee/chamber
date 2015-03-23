@@ -22,7 +22,7 @@ class   ContextResolver
       options[:basepath]     ||= options[:rootpath] + 'config'
 
       if options[:namespaces] == []
-        require options[:rootpath].join('config', 'application')
+        require options[:rootpath].join('config', 'application').to_s
 
         options[:namespaces]   = [
           ::Rails.env,
