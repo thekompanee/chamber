@@ -1,4 +1,5 @@
 require 'pathname'
+require 'fileutils'
 require 'openssl'
 require 'chamber/configuration'
 require 'chamber/commands/base'
@@ -22,9 +23,12 @@ class   Initialize < Chamber::Commands::Base
     `chmod 600 #{protected_key_filepath}`
     `chmod 644 #{public_key_filepath}`
 
+    ::FileUtils.touch gitignore_filepath
+
     unless ::File.read(gitignore_filepath).match(/^.chamber.pem$/)
-      shell.append_to_file gitignore_filepath, private_key_filename
-      shell.append_to_file gitignore_filepath, protected_key_filename
+      shell.append_to_file gitignore_filepath, "\n# Private and protected key files for Chamber\n"
+      shell.append_to_file gitignore_filepath, "#{private_key_filename}\n"
+      shell.append_to_file gitignore_filepath, "#{protected_key_filename}\n"
     end
 
     shell.copy_file settings_template_filepath, settings_filepath
@@ -41,10 +45,10 @@ class   Initialize < Chamber::Commands::Base
     shell.say protected_key_filepath, :green
     shell.say ''
     shell.say 'and not have to worry about sending it via a secure medium (such as', :green
-    shell.say 'email), however do not send the passphrase along with it.  Give it to'
+    shell.say 'email), however do not send the passphrase along with it.  Give it to', :green
     shell.say 'your team members in person.', :green
     shell.say ''
-    shell.say 'In order for them to decrypt it (for use with Chamber), they can run:'
+    shell.say 'In order for them to decrypt it (for use with Chamber), they can run:', :green
     shell.say ''
     shell.say "$ cp /path/to/{#{protected_key_filename},#{private_key_filename}}", :green
     shell.say "$ ssh-keygen -p -f /path/to/#{private_key_filename}", :green
