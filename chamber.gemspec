@@ -22,10 +22,9 @@ Gem::Specification.new do |spec|
   spec.files         = Dir['{app,config,db,lib}/**/*'] + %w{Rakefile README.md LICENSE}
   spec.test_files    = Dir['{test,spec,features}/**/*']
 
-  spec.add_dependency             'thor', ["~> 0.19.1"]
-  spec.add_dependency             'hashie', ["~> 3.3"]
+  spec.add_dependency             'thor',          ["~> 0.19.1"]
+  spec.add_dependency             'hashie',        ["~> 3.3"]
 
-  spec.add_development_dependency 'rspec', ["~> 3.0"]
-  spec.add_development_dependency 'rspectacular', ["~> 0.46"]
-  spec.add_development_dependency 'codeclimate-test-reporter', ["~> 0.3.0"]
+  spec.add_development_dependency 'rspec',         ["~> 3.0"]
+  spec.add_development_dependency 'rspectacular',  ["~> 0.46"]
 end
