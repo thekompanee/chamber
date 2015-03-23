@@ -280,13 +280,13 @@ describe Chamber do
   end
 
   it 'can render itself as a string even if it has not been loaded' do
-    Chamber.load
+    Chamber.load basepath: '/'
 
     expect(Chamber.to_s).to eql ''
   end
 
   it 'can determine settings even if it has not been loaded' do
-    Chamber.load
+    Chamber.load basepath: '/'
 
     expect(Chamber.to_hash).to eql({})
   end
