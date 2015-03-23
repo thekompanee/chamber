@@ -71,7 +71,7 @@ only_namespaced_sub_settings:
   HEREDOC
 end
 
-describe Chamber do
+describe 'Chamber' do
   before(:each) { Chamber.load(basepath: '/tmp/chamber') }
 
   it 'knows how to load itself with a path string' do
