@@ -9,6 +9,7 @@ class   ContextResolver
     self.options = Hashie::Mash.new(options)
   end
 
+  # rubocop:disable Metrics/AbcSize
   def resolve
     options[:rootpath]       ||= Pathname.pwd
     options[:rootpath]         = Pathname.new(options[:rootpath])
@@ -41,6 +42,7 @@ class   ContextResolver
   rescue LoadError
     options
   end
+  # rubocop:enable Metrics/AbcSize
 
   def self.resolve(options = {})
     new(options).resolve
