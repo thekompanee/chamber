@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-gem_name="ruby-progressbar"
+gem_name="chamber"
 current_sha="$(git rev-parse HEAD)"
 
 function chamber_env_var {
