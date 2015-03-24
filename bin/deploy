@@ -41,6 +41,14 @@ else
   exit
 fi
 
+echo ""
+echo "Current Version Information"
+echo "--------------------------------------------------------------------------------"
+echo ""
+echo "Current SHA: $(git rev-parse HEAD)"
+echo "Current Tag: $(git describe --exact-match HEAD 2> /dev/null)"
+echo ""
+
 if [ -n "$(git describe --exact-match HEAD 2> /dev/null | grep $latest_release_tag)" ]; then
   echo "The commit being built contains the release tag.  Releasing now."
 else
