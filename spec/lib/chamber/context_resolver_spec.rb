@@ -9,6 +9,9 @@ describe  ContextResolver do
   let(:rails_4_path)      { ::File.expand_path('../../../rails-4-test', __FILE__) }
   let(:rails_engine_path) { ::File.expand_path('../../../rails-engine-test', __FILE__) }
 
+  before(:each) { @old_chamber_key = ENV.delete('CHAMBER_KEY') }
+  after(:each)  { ENV['CHAMBER_KEY'] = @old_chamber_key }
+
   it 'does not attempt to do any resolution if all valid options are passed in' do
     options = ContextResolver.resolve(basepath:   'my_path',
                                       namespaces: 'ns')
