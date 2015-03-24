@@ -1,42 +1,53 @@
+Version v2.8.0 - March 24, 2015
+================================================================================
+
+Added
+--------------------------------------------------------------------------------
+  * Support for rails engine projects
+  * Create the .gitignore file if it doesn't exist
+  * newlines to .chamber lines inserted in the .gitignore file
+  * templates directory to the gemspec
+  * circle.yml
+  * rubygems config
+
+Fixed
+--------------------------------------------------------------------------------
+  * Lines in output which were not colored
+  * Pathname implicit conversion to string in Ruby 2.2.1
+
+Uncategorized
+--------------------------------------------------------------------------------
+  * Add names and dates
+  * Swap logo
+  * Add credits and license info to README
+
 Version v2.7.1 - October 30, 2014
 ================================================================================
 
-  Bugfix
-  ------------------------------------------------------------------------------
+Bugfix
+--------------------------------------------------------------------------------
   * Settings overridden by environment variables were decrypted
-
-  Docs
-  ------------------------------------------------------------------------------
-  * Update CHANGELOG for version 2.7.0
 
 Version v2.7.0 - October 30, 2014
 ================================================================================
 
-  Feature
-  ------------------------------------------------------------------------------
+Feature
+--------------------------------------------------------------------------------
   * Add key and encrypted value to failed decryption error message
-
-  Docs
-  ------------------------------------------------------------------------------
-  * Update CHANGELOG for version 2.6.0
 
 Version v2.6.0 - October 30, 2014
 ================================================================================
 
-  Feature
-  ------------------------------------------------------------------------------
+Feature
+--------------------------------------------------------------------------------
   * Allow the chamber decryption key to be pulled from CHAMBER_KEY
   * Change 'show --only-secure' to '--only-sensitive'
-
-  Docs
-  ------------------------------------------------------------------------------
-  * Update CHANGELOG for version 2.5.0
 
 Version v2.5.0 - October 30, 2014
 ================================================================================
 
-  Feature
-  ------------------------------------------------------------------------------
+Feature
+--------------------------------------------------------------------------------
   * Allow any values (including complex ones) to be secured
   * Add a protected emailable private key when initializing
   * Allow Chamber to find '*.yml.erb' files as well
@@ -46,46 +57,33 @@ Version v2.5.0 - October 30, 2014
   * Add --only-secure option to 'show'
   * Allow host settings to override environment settings in Rails
 
-  Uncategorized
-  ------------------------------------------------------------------------------
+Uncategorized
+--------------------------------------------------------------------------------
   * Update README.md
   * Update README.md
   * Update README.md
   * Update README.md
 
-  Docs
-  ------------------------------------------------------------------------------
-  * Extract README into the Wiki
-  * Add section for the new protected keys
-  * Add git commit hook to prevent insecure settings from commit
-  * Add v2.4.0 CHANGELOG notes
-
-  Bugfix
-  ------------------------------------------------------------------------------
+Bugfix
+--------------------------------------------------------------------------------
   * Fix gemspec binary filter
 
 Version v2.4.0 - September 23, 2014
 ================================================================================
 
-  Uncategorized
-  ------------------------------------------------------------------------------
   * Allow hashie to be upgraded to 3.x
-
-  Docs
-  ------------------------------------------------------------------------------
-  * Add CHANGELOG
 
 Version v2.3.2 - August 8, 2014
 ================================================================================
 
-  Uncategorized
-  ------------------------------------------------------------------------------
+Uncategorized
+--------------------------------------------------------------------------------
   * Ensure Chamber loads Chamber::Instance in bin/chamber
   * Fix README typos
   * Add `chamber secure` example usage to README
 
-  Bugfix
-  ------------------------------------------------------------------------------
+Bugfix
+--------------------------------------------------------------------------------
   * Special Regex characters caused values to not encrypt
   * Add a missing 'require' for configuration
   * Add missing 'pathname' requires to files that use it
@@ -100,20 +98,20 @@ Version v2.3.1 - July 10, 2014
 Version v2.3.0 - June 29, 2014
 ================================================================================
 
-  Feature
-  ------------------------------------------------------------------------------
+Feature
+--------------------------------------------------------------------------------
   * When securing files, do not rewrite the entire file
   * Add 'to_flattened_name_hash' to Settings
   * Allow Settings to filter only those which are insecure
   * Add InsecureFilter
   * Add a filter for translating secure keys
 
-  Bugfix
-  ------------------------------------------------------------------------------
+Bugfix
+--------------------------------------------------------------------------------
   * When running 'chamber secure' only display insecure settings
 
-  Uncategorized
-  ------------------------------------------------------------------------------
+Uncategorized
+--------------------------------------------------------------------------------
   * Fix BooleanConversionFilter bug when nil value at top level
   * added rubinius to travis ci
   * update thor
