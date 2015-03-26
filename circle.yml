@@ -15,4 +15,4 @@ deployment:
   production:
     branch: master
     commands:
-      - ./bin/deploy production
+      - ./bin/deploy
