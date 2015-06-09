@@ -129,7 +129,7 @@ PreCommit:
   Scalastyle:
     enabled:                  false
 
-  Rubocop:
+  RuboCop:
     enabled:                  true
 
   ScssLint:
