@@ -9,6 +9,8 @@ module  Filters
 class   DecryptionFilter
   SECURE_KEY_TOKEN      = /\A_secure_/
   BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9\+/]{342}==\z}
+  LARGEDATA_STRING_PATTERN  = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z}
+
 
   def initialize(options = {})
     self.decryption_key = options.fetch(:decryption_key, nil)
@@ -57,6 +59,8 @@ class   DecryptionFilter
   def read_or_decrypt(key, value)
     if value.match(BASE64_STRING_PATTERN)
       decrypt(value)
+    elsif value.match(LARGEDATA_STRING_PATTERN)
+      decrypt_large_data(value)
     else
       warn 'WARNING: It appears that you would like to keep your ' \
            "information for #{key} secure, however the value for that " \
@@ -81,6 +85,34 @@ class   DecryptionFilter
       end
     end
   end
+
+  def decrypt_large_data(value)
+    if decryption_key.nil?
+      value
+    else
+      # the encoded data is in the formate <key>#<iv>#<encrypted data> with each part Base64 encoded
+      key, iv, decoded_string = value.match(LARGEDATA_STRING_PATTERN).captures.map{|part| Base64.strict_decode64(part)}
+      key = decryption_key.private_decrypt(key) # The key is decrypted with the private key
+
+      cipher_dec = OpenSSL::Cipher::Cipher.new("AES-128-CBC")
+      cipher_dec.decrypt
+      cipher_dec.key = key
+      cipher_dec.iv = iv
+
+      begin
+        unencrypted_value = cipher_dec.update(decoded_string) + cipher_dec.final
+      rescue OpenSSL::Cipher::CipherError
+        fail Chamber::Errors::DecryptionFailure, "A decryption error occurred, probably due to invalid key data."
+      end
+
+      begin
+        _unserialized_value = YAML.load(unencrypted_value)
+      rescue TypeError
+        unencrypted_value
+      end
+    end
+  end
+
 end
 end
 end
