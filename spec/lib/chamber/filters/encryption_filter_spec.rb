@@ -86,6 +86,39 @@ describe  EncryptionFilter do
                                      'AW51JwVryg/im1rayGAwWYNgupQ/5LDmjffwx7Q3fyMH2' \
                                      'uF3CDIKRIC6U+mnM5SRMO4Dzysw=='
   end
+
+  it "will encrypt strings of 127 chars effective length" do
+    # Prove there is no gap in length between the small and long encryption types that could
+    # cause an OpenSSL exception because assymetric encryption can only be done with small
+    # data.
+    filtered_settings = EncryptionFilter.execute(
+        data:           {
+            _secure_my_secure_setting: "A"*119 },
+        encryption_key: './spec/spec_key.pub')
+
+    expect(filtered_settings._secure_my_secure_setting).to match \
+      EncryptionFilter::BASE64_STRING_PATTERN
+
+    filtered_settings = EncryptionFilter.execute(
+        data:           {
+            _secure_my_secure_setting: "A"*120 }, # one char longer
+        encryption_key: './spec/spec_key.pub')
+
+    expect(filtered_settings._secure_my_secure_setting).to match \
+      EncryptionFilter::LARGEDATA_STRING_PATTERN
+
+  end
+
+  it "will encrypt and decrypt strings larger than 128 chars" do
+    filtered_settings = EncryptionFilter.execute(
+        data:           {
+            _secure_my_secure_setting: "long"*100 },
+        encryption_key: './spec/spec_key.pub')
+
+    expect(filtered_settings._secure_my_secure_setting).to match \
+      EncryptionFilter::LARGEDATA_STRING_PATTERN
+
+  end
 end
 end
 end

@@ -9,6 +9,7 @@ module    Filters
 class     EncryptionFilter
   SECURE_KEY_TOKEN      = /\A_secure_/
   BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9\+\/]{342}==\z}
+  LARGEDATA_STRING_PATTERN  = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z}
 
   def initialize(options = {})
     self.encryption_key = options.fetch(:encryption_key, nil)
@@ -33,8 +34,26 @@ class     EncryptionFilter
       elsif key.match(SECURE_KEY_TOKEN)
         unless value.respond_to?(:match) && value.match(BASE64_STRING_PATTERN)
           serialized_value = YAML.dump(value)
-          encrypted_string = encryption_key.public_encrypt(serialized_value)
-          value            = Base64.strict_encode64(encrypted_string)
+          if serialized_value.length > 128 # PKI can only be used at smaller data like symmetric keys
+            #encrypted_string = encryption_certificate(encryption_key).public_encrypt(serialized_value)
+            cipher = OpenSSL::Cipher::Cipher.new("AES-128-CBC")
+            cipher.encrypt
+            symmetric_key = cipher.random_key
+            iv = cipher.random_iv
+
+            # encrypt all data with this key and iv
+            encrypted_data = cipher.update(serialized_value) + cipher.final
+
+            # encrypt the key with the public key
+            encrypted_key = encryption_key.public_encrypt(symmetric_key)
+
+            # assemble the resulting Base64 encoded data, the key
+            value = Base64.strict_encode64(encrypted_key) + '#' + Base64.strict_encode64(iv) + '#' + Base64.strict_encode64(encrypted_data)
+
+          else
+            encrypted_string = encryption_key.public_encrypt(serialized_value)
+            value =  Base64.strict_encode64(encrypted_string)
+          end
         end
       end
 
