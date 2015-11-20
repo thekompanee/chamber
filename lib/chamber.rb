@@ -3,6 +3,8 @@ require 'chamber/instance'
 require 'chamber/rails'
 
 module  Chamber
+  SECURE_KEY_TOKEN = /\A_secure_/
+
   def load(options = {})
     self.instance = Instance.new(options)
   end
