@@ -3,8 +3,6 @@ require 'hashie/mash'
 module  Chamber
 module  Filters
 class   TranslateSecureKeysFilter
-  SECURE_KEY_TOKEN = /\A_secure_/
-
   def initialize(options = {})
     self.data = options.fetch(:data).dup
   end

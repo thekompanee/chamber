@@ -2,8 +2,6 @@ require 'hashie/mash'
 
 module  Chamber
 module  Environmentable
-  SECURE_KEY_TOKEN = /\A_secure_/
-
   def with_environment(settings, parent_keys, hash_block, value_block)
     environment_hash = Hashie::Mash.new
 

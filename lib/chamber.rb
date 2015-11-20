@@ -3,6 +3,9 @@ require 'chamber/instance'
 require 'chamber/rails'
 
 module  Chamber
+  SECURE_KEY_PREFIX = '_secure_'
+  SECURE_KEY_TOKEN = /\A#{SECURE_KEY_PREFIX}/
+
   def load(options = {})
     self.instance = Instance.new(options)
   end

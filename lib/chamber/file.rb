@@ -82,8 +82,8 @@ class   File < Pathname
 
       file_contents.
         sub!(
-          /^(\s*)_secure_#{escaped_name}(\s*):(\s*)['"]?#{escaped_value}['"]?$/,
-          "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}")
+          /^(\s*)#{SECURE_KEY_PREFIX}#{escaped_name}(\s*):(\s*)['"]?#{escaped_value}['"]?$/,
+          "\\1#{SECURE_KEY_PREFIX}#{name_pieces.last}\\2:\\3#{secure_value}")
     end
 
     write(file_contents)
