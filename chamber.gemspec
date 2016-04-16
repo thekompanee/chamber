@@ -17,14 +17,13 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/thekompanee/chamber'
   spec.license       = 'MIT'
 
-  spec.executables   = Dir['{bin}/**/*'].map    { |bin| File.basename(bin) }.
-                                         reject { |bin| %w{rails rspec rake setup deploy}.include? bin }
-  spec.files         = Dir['{app,config,db,lib,templates}/**/*'] + %w{Rakefile README.md LICENSE}
+  spec.executables   = []
+  spec.files         = Dir['{app,config,db,lib}/**/*'] + %w{Rakefile README.md LICENSE}
   spec.test_files    = Dir['{test,spec,features}/**/*']
 
-  spec.add_dependency             'thor',          ["~> 0.19.1"]
-  spec.add_dependency             'hashie',        ["~> 3.3"]
+  spec.add_dependency             'thor', ["~> 0.19.1"]
+  spec.add_dependency             'hashie', ["~> 3.3"]
 
-  spec.add_development_dependency 'rspec',         ["~> 3.0"]
-  spec.add_development_dependency 'rspectacular',  ["~> 0.46"]
+  spec.add_development_dependency 'rspec', ["~> 3.0"]
+  spec.add_development_dependency 'rspectacular', ["~> 0.46"]
 end
