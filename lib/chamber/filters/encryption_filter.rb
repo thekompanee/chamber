@@ -5,6 +5,7 @@ require 'hashie/mash'
 require 'yaml'
 require 'chamber/encryption_methods/public_key'
 require 'chamber/encryption_methods/ssl'
+require 'chamber/encryption_methods/none'
 
 module    Chamber
 module    Filters
@@ -34,12 +35,8 @@ class     EncryptionFilter
       if value.respond_to? :each_pair
         value = execute(value)
       elsif key.match(SECURE_KEY_TOKEN)
-        unless value.respond_to?(:match) && value.match(BASE64_STRING_PATTERN)
-          serialized_value = YAML.dump(value)
-
-          value = encryption_method(serialized_value).
-                    encrypt(key, serialized_value, encryption_key)
-        end
+        value = encryption_method(value).
+                  encrypt(key, value, encryption_key)
       end
 
       settings[key] = value
@@ -61,10 +58,16 @@ class     EncryptionFilter
   end
 
   def encryption_method(value)
-    if value.length <= 128
-      EncryptionMethods::PublicKey
+    if value.respond_to?(:match) && value.match(BASE64_STRING_PATTERN)
+      EncryptionMethods::None
     else
-      EncryptionMethods::Ssl
+      serialized_value = YAML.dump(value)
+
+      if serialized_value.length <= 128
+        EncryptionMethods::PublicKey
+      else
+        EncryptionMethods::Ssl
+      end
     end
   end
 end

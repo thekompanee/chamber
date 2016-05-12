@@ -4,6 +4,7 @@ class   Ssl
   LARGE_DATA_STRING_PATTERN = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z}
 
   def self.encrypt(key, value, encryption_key)
+    value = YAML.dump(value)
     #encrypted_string = encryption_certificate(encryption_key).public_encrypt(value)
     cipher = OpenSSL::Cipher::Cipher.new("AES-128-CBC")
     cipher.encrypt
