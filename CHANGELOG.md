@@ -1,3 +1,29 @@
+Version v2.9.0 - May 12, 2016
+================================================================================
+
+Fixed
+--------------------------------------------------------------------------------
+  * YAML multiline strings not being secured properly
+
+Changed
+--------------------------------------------------------------------------------
+  * Generalize the encryption and decryption filters
+  * Extract more encryption method logic
+  * Extract encryption method into a method
+  * Extract public key encryption to EncryptionMethods::PublicKey
+  * Extract SSL encryption into EncryptionMethods::Ssl
+  * Extract decryption method into its own method
+  * Move decryption methods into their own classes
+  * LARGEDATA to LARGE_DATA
+
+Removed
+--------------------------------------------------------------------------------
+  * Unneeded method
+
+Uncategorized
+--------------------------------------------------------------------------------
+  * Encryption of large data with test cases
+
 Version v2.8.0 - March 24, 2015
 ================================================================================
 
