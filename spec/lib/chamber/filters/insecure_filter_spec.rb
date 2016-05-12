@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rspectacular'
 require 'chamber/filters/insecure_filter'
 
@@ -6,14 +7,16 @@ module    Filters
 describe  InsecureFilter do
   it 'will return values which are marked as "secure" if they are unencrypted' do
     filtered_settings = InsecureFilter.execute(data: {
-                                                 _secure_my_secure_setting: 'hello' })
+                                                 _secure_my_secure_setting: 'hello',
+                                               })
 
     expect(filtered_settings._secure_my_secure_setting).to match 'hello'
   end
 
   it 'will not return values which are not marked as "secure"' do
     filtered_settings = InsecureFilter.execute(data: {
-                                                 my_secure_setting: 'hello' })
+                                                 my_secure_setting: 'hello',
+                                               })
 
     expect(filtered_settings.my_secure_setting).to be_nil
   end
@@ -24,7 +27,9 @@ describe  InsecureFilter do
                                                  secure_setting:  'goodbye',
                                                  secure_group:    {
                                                    _secure_nested_setting:  'movie',
-                                                   insecure_nested_setting: 'dinner' } })
+                                                   insecure_nested_setting: 'dinner',
+                                                 },
+                                               })
 
     expect(filtered_settings._secure_setting).to                      eql 'hello'
     expect(filtered_settings.secure_setting).to                       be_nil
@@ -60,7 +65,10 @@ describe  InsecureFilter do
                                         'gfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMn' \
                                         'z84XzmUp2Y0H1jPgGkBKQJKArfQ==',
           _secure_other_nested_setting: 'goodbye',
-          insecure_nested_setting:      'dinner' } })
+          insecure_nested_setting:      'dinner',
+        },
+      },
+    )
 
     expect(filtered_settings._secure_setting?).to                          eql false
     expect(filtered_settings.secure_setting?).to                           eql false

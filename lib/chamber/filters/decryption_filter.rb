@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'openssl'
 require 'base64'
 require 'hashie/mash'
@@ -16,7 +17,7 @@ class   DecryptionFilter
   end
 
   def self.execute(options = {})
-    new(options).send(:execute)
+    new(options).__send__(:execute)
   end
 
   protected
@@ -58,9 +59,9 @@ class   DecryptionFilter
     if value.match(BASE64_STRING_PATTERN)
       decrypt(value)
     else
-      warn 'WARNING: It appears that you would like to keep your ' \
+      warn "WARNING: It appears that you would like to keep your " \
            "information for #{key} secure, however the value for that " \
-           'setting does not appear to be encrypted. Make sure you run ' \
+           "setting does not appear to be encrypted. Make sure you run " \
            "'chamber secure' before committing."
 
       value

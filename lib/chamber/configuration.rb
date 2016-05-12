@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'chamber/context_resolver'
 
 module  Chamber

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'pathname'
 require 'socket'
 require 'hashie/mash'
@@ -36,19 +37,21 @@ class   ContextResolver
       if options[:namespaces] == []
         require options[:rootpath].join('config', 'application').to_s
 
-        options[:namespaces]   = [
-          ::Rails.env,
-          Socket.gethostname,
-        ]
+        options[:namespaces] = [
+                                 ::Rails.env,
+                                 Socket.gethostname,
+                               ]
       end
     else
-      options[:basepath]     ||= options[:rootpath]
+      options[:basepath] ||= options[:rootpath]
     end
 
     options[:basepath]         = Pathname.new(options[:basepath])
 
-    options[:files]          ||= [options[:basepath] + 'settings*.yml',
-                                  options[:basepath] + 'settings']
+    options[:files]          ||= [
+                                   options[:basepath] + 'settings*.yml',
+                                   options[:basepath] + 'settings',
+                                 ]
 
     options
   rescue LoadError

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rspectacular'
 require 'chamber/settings'
 
@@ -55,17 +56,21 @@ describe  Settings do
   it 'sorts environment variables by name when converted to an environment hash so ' \
      'that they are easier to parse for humans' do
 
-    settings = Settings.new(settings: { 'C' => 'value',
-                                        'D' => 'value',
-                                        'A' => 'value',
-                                        'E' => 'value',
-                                        'B' => 'value' })
+    settings = Settings.new(settings: {
+                              'C' => 'value',
+                              'D' => 'value',
+                              'A' => 'value',
+                              'E' => 'value',
+                              'B' => 'value',
+                            })
 
-    expect(settings.to_environment.to_a).to eql([%w{A value},
-                                                 %w{B value},
-                                                 %w{C value},
-                                                 %w{D value},
-                                                 %w{E value}])
+    expect(settings.to_environment.to_a).to eql([
+                                                  %w{A value},
+                                                  %w{B value},
+                                                  %w{C value},
+                                                  %w{D value},
+                                                  %w{E value},
+                                                ])
   end
 
   it 'can convert itself into a string' do
@@ -82,12 +87,12 @@ describe  Settings do
                             })
 
     expect(settings.to_s).to eql %w{
-      LEVEL_1_BODY="gracias"
-      LEVEL_1_LEVEL_2_ANOTHER="goodbye"
-      LEVEL_1_LEVEL_2_SOME_SETTING="hello"
-      MY_SETTING="value"
-      THERE="was not that easy?"
-    }.join(' ')
+                                   LEVEL_1_BODY="gracias"
+                                   LEVEL_1_LEVEL_2_ANOTHER="goodbye"
+                                   LEVEL_1_LEVEL_2_SOME_SETTING="hello"
+                                   MY_SETTING="value"
+                                   THERE="was not that easy?"
+                                 }.join(' ')
   end
 
   it 'can convert itself into a string with custom options' do
@@ -137,7 +142,8 @@ HEREDOC
 
     expect(merged_settings).to eql Settings.new(settings:   {
                                                   setting:       'value',
-                                                  other_setting: 'another value' },
+                                                  other_setting: 'another value',
+                                                },
                                                 namespaces: %w{good bad})
   end
 
@@ -172,7 +178,7 @@ HEREDOC
                               there:      'was not that easy?',
                             })
 
-    expect(settings.to_flattened_name_hash).to     eql(
+    expect(settings.to_flattened_name_hash).to eql(
       %w{my_setting}                   => 'value',
       %w{level_1 level_2 some_setting} => 'hello',
       %w{level_1 level_2 another}      => 'goodbye',
@@ -191,7 +197,7 @@ HEREDOC
     settings_hash = settings.to_hash
     settings_hash['setting'] = 'foo'
 
-    expect(settings.send(:data).object_id).not_to eql settings_hash.object_id
+    expect(settings.__send__(:data).object_id).not_to eql settings_hash.object_id
     expect(settings.setting).to eql 'value'
   end
 
@@ -216,9 +222,11 @@ HEREDOC
   it 'only includes namespaced data if any exists' do
     settings = Settings.new(settings:   {
                               namespace_value:       {
-                                namespace_setting: 'value' },
+                                namespace_setting: 'value',
+                              },
                               other_namespace_value: {
-                                other_namespace_setting: 'value' },
+                                other_namespace_setting: 'value',
+                              },
                               non_namespace_setting: 'other value',
                             },
                             namespaces: %w{namespace_value other_namespace_value})
@@ -239,7 +247,8 @@ HEREDOC
                                       'wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmU' \
                                       'p2Y0H1jPgGkBKQJKArfQ==',
       },
-      decryption_key: './spec/spec_key')
+      decryption_key: './spec/spec_key',
+    )
 
     expect(settings).to eq('my_encrypted_setting' => 'hello')
   end
@@ -291,7 +300,8 @@ HEREDOC
         _secure_my_unencrypted_setting: 'nifty',
         my_insecure_setting:            'goodbye',
       },
-      decryption_key: './spec/spec_key')
+      decryption_key: './spec/spec_key',
+    )
 
     secured_settings = settings.securable
 
@@ -314,7 +324,8 @@ HEREDOC
         _secure_my_unencrypted_setting: 'nifty',
         my_insecure_setting:            'goodbye',
       },
-      decryption_key: './spec/spec_key')
+      decryption_key: './spec/spec_key',
+    )
 
     secured_settings = settings.insecure
 

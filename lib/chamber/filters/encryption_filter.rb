@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'openssl'
 require 'base64'
 require 'hashie/mash'
@@ -15,7 +16,7 @@ class     EncryptionFilter
   end
 
   def self.execute(options = {})
-    new(options).send(:execute)
+    new(options).__send__(:execute)
   end
 
   protected

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rspectacular'
 require 'chamber/commands/files'
 
@@ -6,8 +7,10 @@ module    Commands
 describe  Files do
   let(:rootpath) { ::File.expand_path('./spec/fixtures') }
   let(:options)  do
-    {  basepath: rootpath,
-       rootpath: rootpath }
+    {
+      basepath: rootpath,
+      rootpath: rootpath,
+    }
   end
 
   it 'can return values formatted as environment variables' do

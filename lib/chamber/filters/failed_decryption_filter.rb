@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'chamber/errors/decryption_failure'
 
 module  Chamber
@@ -11,7 +12,7 @@ class   FailedDecryptionFilter
   end
 
   def self.execute(options = {})
-    new(options).send(:execute)
+    new(options).__send__(:execute)
   end
 
   protected
@@ -30,7 +31,7 @@ class   FailedDecryptionFilter
 
         fail Chamber::Errors::DecryptionFailure,
              "Failed to decrypt #{key} (with an encrypted value of '#{value}') " \
-             'in your settings.'
+             "in your settings."
       end
     end
 

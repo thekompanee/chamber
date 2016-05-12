@@ -3,7 +3,19 @@ inherit_from:
 
 # Put your project-specifc Rubocop config here
 
+AllCops:
+  TargetRubyVersion: 1.9
+
+Style/SymbolArray:
+  EnforcedStyle: 'brackets'
+
+Style/OptionHash:
+  Enabled: false
+
 Style/IndentationWidth:
+  Enabled: false
+
+Style/ExtraSpacing:
   Enabled: false
 
 Style/EmptyLinesAroundBlockBody:

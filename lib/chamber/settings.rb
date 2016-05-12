@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'hashie/mash'
 require 'chamber/namespace_set'
 require 'chamber/filters/namespace_filter'
@@ -22,16 +23,16 @@ class   Settings
     self.raw_data         = options[:settings]        ||  {}
     self.decryption_key   = options[:decryption_key]
     self.encryption_key   = options[:encryption_key]
-    self.pre_filters      = options[:pre_filters]     ||  [
-      Filters::NamespaceFilter,
-    ]
-    self.post_filters     = options[:post_filters]    ||  [
-      Filters::DecryptionFilter,
-      Filters::EnvironmentFilter,
-      Filters::FailedDecryptionFilter,
-      Filters::BooleanConversionFilter,
-      Filters::TranslateSecureKeysFilter,
-    ]
+    self.pre_filters  = options[:pre_filters]  || [
+                                                    Filters::NamespaceFilter,
+                                                  ]
+    self.post_filters = options[:post_filters] || [
+                                                    Filters::DecryptionFilter,
+                                                    Filters::EnvironmentFilter,
+                                                    Filters::FailedDecryptionFilter,
+                                                    Filters::BooleanConversionFilter,
+                                                    Filters::TranslateSecureKeysFilter,
+                                                  ]
   end
 
   ###
@@ -186,7 +187,8 @@ class   Settings
       encryption_key: encryption_key || other_settings.encryption_key,
       decryption_key: decryption_key || other_settings.decryption_key,
       namespaces:     (namespaces + other_settings.namespaces),
-      settings:       raw_data.merge(other_settings.raw_data))
+      settings:       raw_data.merge(other_settings.raw_data),
+    )
   end
 
   ###
@@ -205,29 +207,32 @@ class   Settings
   # Returns a Boolean
   #
   def eql?(other)
-    other.is_a?(Chamber::Settings)  &&
-    data        == other.data          &&
+    other.is_a?(Chamber::Settings) &&
+    data        == other.data &&
     namespaces  == other.namespaces
   end
 
   def securable
     Settings.new(metadata.merge(
                     settings:    raw_data,
-                    pre_filters: [Filters::SecureFilter]))
+                    pre_filters: [Filters::SecureFilter],
+    ))
   end
 
   def secure
     Settings.new(metadata.merge(
                     settings:     raw_data,
                     pre_filters:  [Filters::EncryptionFilter],
-                    post_filters: [Filters::TranslateSecureKeysFilter]))
+                    post_filters: [Filters::TranslateSecureKeysFilter],
+    ))
   end
 
   def insecure
     Settings.new(metadata.merge(
                     settings:     raw_data,
                     pre_filters:  [Filters::InsecureFilter],
-                    post_filters: [Filters::TranslateSecureKeysFilter]))
+                    post_filters: [Filters::TranslateSecureKeysFilter],
+    ))
   end
 
   protected
@@ -247,14 +252,14 @@ class   Settings
   end
 
   def raw_data
-    @filtered_raw_data ||= pre_filters.reduce(@raw_data) do |filtered_data, filter|
+    @filtered_raw_data ||= pre_filters.inject(@raw_data) do |filtered_data, filter|
       filter.execute({ data: filtered_data }.
                      merge(metadata))
     end
   end
 
   def data
-    @data ||= post_filters.reduce(raw_data) do |filtered_data, filter|
+    @data ||= post_filters.inject(raw_data) do |filtered_data, filter|
       filter.execute({ data: filtered_data }.
                      merge(metadata))
     end

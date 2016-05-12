@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'pathname'
 require 'fileutils'
 require 'openssl'
@@ -25,7 +26,7 @@ class   Initialize < Chamber::Commands::Base
 
     ::FileUtils.touch gitignore_filepath
 
-    unless ::File.read(gitignore_filepath).match(/^.chamber.pem$/)
+    unless ::File.read(gitignore_filepath) =~ /^.chamber.pem$/
       shell.append_to_file gitignore_filepath, "\n# Private and protected key files for Chamber\n"
       shell.append_to_file gitignore_filepath, "#{private_key_filename}\n"
       shell.append_to_file gitignore_filepath, "#{protected_key_filename}\n"
@@ -76,7 +77,8 @@ class   Initialize < Chamber::Commands::Base
 
   def gem_path
     @gem_path                   ||= Pathname.new(
-                                      ::File.expand_path('../../../..', __FILE__))
+                                      ::File.expand_path('../../../..', __FILE__),
+    )
   end
 
   def settings_filepath
@@ -129,7 +131,7 @@ class   Initialize < Chamber::Commands::Base
   end
 
   def rsa_key_passphrase
-    @rsa_key_passphrase         ||= SecureRandom.uuid
+    @rsa_key_passphrase ||= SecureRandom.uuid
   end
 end
 end

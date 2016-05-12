@@ -20,6 +20,8 @@ AllCops:
     - '**/vendor/**/*'
     - 'bin/rails'
 
+  DefaultFormatter:              'fuubar'
+  TargetRubyVersion:             2.3
   DisplayCopNames:               true
 
 ################################################################################

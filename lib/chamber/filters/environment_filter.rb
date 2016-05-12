@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'chamber/environmentable'
 
 module  Chamber
@@ -54,7 +55,7 @@ class   EnvironmentFilter
   #
   #
   def self.execute(options = {})
-    new(options).send(:execute)
+    new(options).__send__(:execute)
   end
 
   protected

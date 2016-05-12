@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rspectacular'
 require 'chamber/commands/secure'
 require 'fileutils'
@@ -9,10 +10,12 @@ describe  Secure do
   let(:settings_directory) { rootpath + 'settings' }
   let(:settings_filename)  { settings_directory + 'unencrypted.yml' }
   let(:options)            do
-    { basepath:       rootpath,
+    {
+      basepath:       rootpath,
       rootpath:       rootpath,
       encryption_key: rootpath + '../spec_key',
-      shell:          double.as_null_object }
+      shell:          double.as_null_object,
+    }
   end
 
   before(:each) do

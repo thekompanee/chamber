@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'hashie/mash'
 require 'chamber/filters/secure_filter'
 

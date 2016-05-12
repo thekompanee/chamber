@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rspectacular'
 require 'chamber/filters/secure_filter'
 
@@ -6,14 +7,16 @@ module    Filters
 describe  SecureFilter do
   it 'will return values which are marked as "secure"' do
     filtered_settings = SecureFilter.execute(data: {
-                                               _secure_my_secure_setting: 'hello' })
+                                               _secure_my_secure_setting: 'hello',
+                                             })
 
     expect(filtered_settings._secure_my_secure_setting).to match 'hello'
   end
 
   it 'will not return values which are not marked as "secure"' do
     filtered_settings = SecureFilter.execute(data: {
-                                               my_secure_setting: 'hello' })
+                                               my_secure_setting: 'hello',
+                                             })
 
     expect(filtered_settings.my_secure_setting).to be_nil
   end
@@ -24,7 +27,9 @@ describe  SecureFilter do
                                                secure_setting:  'goodbye',
                                                secure_group:    {
                                                  _secure_nested_setting:  'movie',
-                                                 insecure_nested_setting: 'dinner' } })
+                                                 insecure_nested_setting: 'dinner',
+                                               },
+                                             })
 
     expect(filtered_settings._secure_setting).to                      eql 'hello'
     expect(filtered_settings.secure_setting).to                       be_nil

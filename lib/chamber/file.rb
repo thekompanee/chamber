@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'pathname'
 require 'yaml'
 require 'erb'
@@ -83,7 +84,8 @@ class   File < Pathname
       file_contents.
         sub!(
           /^(\s*)_secure_#{escaped_name}(\s*):(\s*)['"]?#{escaped_value}['"]?$/,
-          "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}")
+          "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}",
+        )
     end
 
     write(file_contents)

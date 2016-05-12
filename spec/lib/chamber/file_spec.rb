@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rspectacular'
 require 'chamber/file'
 require 'chamber/settings'
@@ -59,16 +60,18 @@ describe  File do
     tempfile      = create_tempfile_with_content '{ test: settings }'
     settings_file = File.new  path:       tempfile.path,
                               namespaces: {
-                                environment: :development }
+                                environment: :development,
+                              }
 
-    allow(Settings).to  receive(:new)
+    allow(Settings).to receive(:new)
 
     settings_file.to_settings
 
     expect(Settings).to have_received(:new).
                         with(settings:       { 'test' => 'settings' },
                              namespaces:     {
-                               environment: :development },
+                               environment: :development,
+                             },
                              decryption_key: nil,
                              encryption_key: nil)
   end
@@ -77,7 +80,7 @@ describe  File do
     tempfile      = create_tempfile_with_content '{ test: <%= 1 + 1 %> }'
     settings_file = File.new  path: tempfile.path
 
-    allow(Settings).to      receive(:new)
+    allow(Settings).to receive(:new)
 
     settings_file.to_settings
     expect(Settings).to have_received(:new).
@@ -112,9 +115,9 @@ HEREDOC
 
     settings_file.secure
 
-    settings_file = File.new  path:           tempfile.path
+    settings_file = File.new path:           tempfile.path
 
-    expect(settings_file.to_settings.send(:raw_data)['_secure_setting']).to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
+    expect(settings_file.to_settings.__send__(:raw_data)['_secure_setting']).to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
 
   it 'does not encrypt the settings contained in a file which are already secure' do
@@ -128,8 +131,8 @@ HEREDOC
 
     settings_file.secure
 
-    settings_file        = File.new  path:           tempfile.path
-    raw_data             = settings_file.to_settings.send(:raw_data)
+    settings_file        = File.new path: tempfile.path
+    raw_data             = settings_file.to_settings.__send__(:raw_data)
     secure_setting       = raw_data['_secure_setting']
     other_secure_setting = raw_data['_secure_other_setting']
 
@@ -145,7 +148,7 @@ HEREDOC
   end
 
   it 'does not rewrite the entire file but only the encrypted settings' do
-    tempfile      = create_tempfile_with_content <<-HEREDOC
+    tempfile = create_tempfile_with_content <<-HEREDOC
 default:
   stuff: &default
     _secure_setting:       hello

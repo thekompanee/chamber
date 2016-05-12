@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rspectacular'
 require 'chamber/namespace_set'
 
@@ -11,8 +12,10 @@ describe  NamespaceSet do
   end
 
   it 'can create a set from an array' do
-    namespace_set = NamespaceSet.new([:development,
-                                      'my host'])
+    namespace_set = NamespaceSet.new([
+                                       :development,
+                                       'my host',
+                                     ])
 
     expect(namespace_set).to eq ['development', 'my host']
   end
@@ -56,7 +59,7 @@ describe  NamespaceSet do
     original_set  = NamespaceSet[:development, 'my host']
     namespace_set = NamespaceSet.new(original_set)
 
-    expect(namespace_set.send(:raw_namespaces)).not_to be_a NamespaceSet
+    expect(namespace_set.__send__(:raw_namespaces)).not_to be_a NamespaceSet
   end
 
   it 'can turn itself into an array' do

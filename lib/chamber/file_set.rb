@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'pathname'
 require 'chamber/namespace_set'
 require 'chamber/file'
@@ -163,7 +164,7 @@ class   FileSet
   #   # => <Chamber::Settings>
   #
   def to_settings
-    files.reduce(Settings.new) do |settings, file|
+    files.inject(Settings.new) do |settings, file|
       settings.merge(file.to_settings).tap do |merged|
         yield merged if block_given?
       end
@@ -207,7 +208,7 @@ class   FileSet
   # duplicates removed.
   #
   def files
-    @files ||= lambda do
+    @files ||= lambda {
       sorted_relevant_files = []
 
       file_globs.each do |glob|
@@ -225,7 +226,7 @@ class   FileSet
       end
 
       sorted_relevant_files.uniq
-    end.call
+    }.call
   end
 
   private

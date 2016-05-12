@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rspectacular'
 require 'chamber/context_resolver'
 
@@ -34,7 +35,7 @@ describe  ContextResolver do
     options = ContextResolver.resolve(rootpath:   './app',
                                       namespaces: 'ns')
 
-    expect(options[:basepath].to_s).to  eql './app'
+    expect(options[:basepath].to_s).to eql './app'
   end
 
   it 'always sets the basepath to a Pathname even if it is passed in as a String' do
@@ -46,8 +47,10 @@ describe  ContextResolver do
   it 'sets the default files if none are passed in' do
     options = ContextResolver.resolve(basepath: './app')
 
-    expect(options[:files].map(&:to_s)).to eql ['./app/settings*.yml',
-                                                './app/settings']
+    expect(options[:files].map(&:to_s)).to eql [
+                                                 './app/settings*.yml',
+                                                 './app/settings',
+                                               ]
   end
 
   it 'can handle if keys are passed as strings' do
@@ -64,13 +67,13 @@ describe  ContextResolver do
 
     options = ContextResolver.resolve
 
-    expect(options[:rootpath].to_s).to  eql 'my_dir'
+    expect(options[:rootpath].to_s).to eql 'my_dir'
   end
 
   it 'sets the encryption key to the default if not passed in' do
     options = ContextResolver.resolve(rootpath: rails_3_path)
 
-    expect(options[:encryption_key].to_s).to  include 'rails-3-test/.chamber.pub.pem'
+    expect(options[:encryption_key].to_s).to include 'rails-3-test/.chamber.pub.pem'
   end
 
   it 'sets the decryption key to the default if not passed in' do

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'chamber/commands/securable'
 require 'chamber/commands/heroku'
 require 'chamber/commands/comparable'

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
 require 'rspectacular'
 require 'chamber/filters/boolean_conversion_filter'
 
 module    Chamber
 module    Filters
 describe  BooleanConversionFilter do
+  # rubocop:disable Lint/DuplicatedKey
   it 'can convert string boolean values into TrueClass and FalseClass even if they ' \
      'are deeply nested' do
 
@@ -18,13 +20,17 @@ describe  BooleanConversionFilter do
                                                     false_boolean: 'false',
                                                     no_boolean:    'no',
                                                     nilly:         nil,
-                                                    non_boolean:   3 },
+                                                    non_boolean:   3,
+                                                  },
                                                   f_boolean:         'f',
                                                   non_boolean:       Time.utc(2012, 8, 1),
-                                                  nilly:             nil },
+                                                  nilly:             nil,
+                                                },
                                                 false_boolean: 'false',
                                                 nilly:         nil,
-                                                non_boolean:   [1, 2, 3] })
+                                                non_boolean:   [1, 2, 3],
+                                              },
+    )
 
     expect(filtered_data).to eql(true_boolean:  true,
                                  boolean_group: {
@@ -35,14 +41,17 @@ describe  BooleanConversionFilter do
                                      false_boolean: false,
                                      no_boolean:    false,
                                      nilly:         nil,
-                                     non_boolean:   3 },
+                                     non_boolean:   3,
+                                   },
                                    f_boolean:         false,
                                    non_boolean:       Time.utc(2012, 8, 1),
-                                   nilly:             nil },
+                                   nilly:             nil,
+                                 },
                                  false_boolean: false,
                                  nilly:         nil,
                                  non_boolean:   [1, 2, 3])
   end
+  # rubocop:enable Lint/DuplicatedKey
 end
 end
 end

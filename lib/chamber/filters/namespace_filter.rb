@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'hashie/mash'
 
 module  Chamber
@@ -9,7 +10,7 @@ class   NamespaceFilter
   end
 
   def self.execute(options = {})
-    new(options).send(:execute)
+    new(options).__send__(:execute)
   end
 
   protected

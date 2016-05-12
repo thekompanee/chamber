@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'socket'
 
 module  Chamber
@@ -7,7 +8,8 @@ class   Railtie < ::Rails::Railtie
     Chamber.load(basepath:   ::Rails.root.join('config'),
                  namespaces: {
                    environment: -> { ::Rails.env },
-                   hostname:    -> { Socket.gethostname } })
+                   hostname:    -> { Socket.gethostname },
+                 })
   end
 end
 end

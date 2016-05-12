@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'thor'
 require 'chamber/rubinius_fix'
 require 'chamber/binary/travis'

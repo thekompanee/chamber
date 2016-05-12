@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rspectacular'
 require 'chamber/filters/failed_decryption_filter'
 
@@ -5,7 +6,7 @@ module    Chamber
 module    Filters
 describe  FailedDecryptionFilter do
   it 'raises an exception if any of the settings are not decrypted' do
-    expect do
+    expect {
       FailedDecryptionFilter.execute(
         data: {
           _secure_my_secure_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4m' \
@@ -17,12 +18,12 @@ describe  FailedDecryptionFilter do
                                      'TcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
         },
       )
-    end.
+    }.
     to raise_error Chamber::Errors::DecryptionFailure
   end
 
   it 'does not raise an exception if it is not a secure key' do
-    expect do
+    expect {
       FailedDecryptionFilter.execute(
         data: {
           my_secure_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4m' \
@@ -34,18 +35,18 @@ describe  FailedDecryptionFilter do
                              'TcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
         },
       )
-    end.
+    }.
     not_to raise_error
   end
 
   it 'does not raise an exception if it is not a secure value' do
-    expect do
+    expect {
       FailedDecryptionFilter.execute(
         data: {
           _secure_my_secure_setting: 'hello',
         },
       )
-    end.
+    }.
     not_to raise_error
   end
 end

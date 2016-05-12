@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'chamber/commands/base'
 require 'chamber/commands/heroku'
 

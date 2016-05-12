@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'set'
 
 ###
@@ -83,7 +84,7 @@ class   NamespaceSet
     namespaces.to_a
   end
 
-  alias_method :to_a, :to_ary
+  alias to_a to_ary
 
   ###
   # Internal: Determines whether a NamespaceSet is equal to another array-like
@@ -102,8 +103,8 @@ class   NamespaceSet
   # Returns a Boolean
   #
   def eql?(other)
-    other.is_a?(NamespaceSet)  &&
-    namespaces  == other.namespaces
+    other.is_a?(NamespaceSet) &&
+    namespaces == other.namespaces
   end
 
   protected

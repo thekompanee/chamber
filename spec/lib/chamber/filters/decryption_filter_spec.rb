@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rspectacular'
 require 'chamber/filters/decryption_filter'
 
@@ -15,7 +16,8 @@ describe  DecryptionFilter do
                                    'S7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kK' \
                                    'TcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
       },
-      decryption_key: './spec/spec_key')
+      decryption_key: './spec/spec_key',
+    )
 
     expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
   end
@@ -29,8 +31,10 @@ describe  DecryptionFilter do
                            'nf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZD' \
                            'wS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXW' \
                            'S7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kK' \
-                           'TcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==' },
-      decryption_key: './spec/spec_key')
+                           'TcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
+      },
+      decryption_key: './spec/spec_key',
+    )
 
     my_secure_setting = filtered_settings.my_secure_setting
 
@@ -54,7 +58,8 @@ describe  DecryptionFilter do
                         'WVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKT' \
                         'cdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
       },
-      decryption_key: './spec/spec_key')
+      decryption_key: './spec/spec_key',
+    )
 
     secure_setting = filtered_settings.secure_setting
 
@@ -78,7 +83,8 @@ describe  DecryptionFilter do
                                    'WS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1k' \
                                    'KTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
       },
-      decryption_key: './spec/spec_key')
+      decryption_key: './spec/spec_key',
+    )
 
     my_secure_setting = filtered_settings._secure_my_secure_setting
 
@@ -93,7 +99,8 @@ describe  DecryptionFilter do
 
   it 'will not attempt to decrypt values if it guesses that they are not encrpyted' do
     filtered_settings = DecryptionFilter.execute(data:           {
-                                                   _secure_my_secure_setting: 'hello' },
+                                                   _secure_my_secure_setting: 'hello',
+                                                 },
                                                  decryption_key: './spec/spec_key')
 
     expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
@@ -134,7 +141,8 @@ describe  DecryptionFilter do
                                    'bnjz7fU7x+d5/ighWTDsmOVyvEiqM0WasFzK+WBUfvo8tQxUym' \
                                    'exw/U3B7N/0R/9v6U3l6x7eeIoQ4+lnJK2ULFzVgiw==',
       },
-      decryption_key: './spec/spec_key')
+      decryption_key: './spec/spec_key',
+    )
 
     expect(filtered_settings._secure_my_secure_setting).to be_a Integer
     expect(filtered_settings._secure_my_secure_setting).to eql  12_345
@@ -151,7 +159,8 @@ describe  DecryptionFilter do
                                    '+Ry2k+yIGJXIOjNm96ntDxIuUbycfrqYdtopBDI5kcr0zckPWM' \
                                    'QRqkp7yd/XNZqyYCFGMNKNwokE6wZuGffkD/H/VPxQ==',
       },
-      decryption_key: './spec/spec_key')
+      decryption_key: './spec/spec_key',
+    )
 
     expect(filtered_settings._secure_my_secure_setting).to eql '12345'
   end
@@ -167,7 +176,8 @@ describe  DecryptionFilter do
                                    '8JIedOuy4JV4Y46QPvu4zCZhDgNa4dTCdOTA/oEd5+GLhuoSiC' \
                                    '87k/vbURwhqs1fmyXUJpUaDg3x4quTDZ6uBTG0Qu/A==',
       },
-      decryption_key: './spec/spec_key')
+      decryption_key: './spec/spec_key',
+    )
 
     expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
   end

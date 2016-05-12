@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module  Chamber
 module  Filters
 class   BooleanConversionFilter
@@ -6,7 +7,7 @@ class   BooleanConversionFilter
   end
 
   def self.execute(options = {})
-    new(options).send(:execute)
+    new(options).__send__(:execute)
   end
 
   protected
