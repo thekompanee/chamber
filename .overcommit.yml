@@ -7,7 +7,7 @@ plugin_directory: '.git-hooks'
 # This is a defense mechanism when working with repositories which can contain
 # untrusted code (e.g. when you fetch a pull request from a third party).
 # See https://github.com/causes/overcommit#security for more information.
-verify_plugin_signatures: true
+verify_signatures: true
 
 PreCommit:
   ALL:
@@ -50,8 +50,18 @@ PreCommit:
   CssLint:
     enabled:                  true
 
+  Dogma:
+    enabled:                  true
+
   EsLint:
-    enabled:                  false
+    enabled:                  true
+
+  ExecutePermissions:
+    enabled:                  true
+    exclude:
+      - 'bin/**/*'
+      - 'script/**/*'
+      - 'scripts/**/*'
 
   GoLint:
     enabled:                  true
@@ -59,10 +69,19 @@ PreCommit:
   GoVet:
     enabled:                  true
 
+  Hlint:
+    enabled:                  true
+
   HamlLint:
     enabled:                  false
 
   HardTabs:
+    enabled:                  true
+    exclude:
+      - '**/*.svg'
+      - '**/structure.sql'
+
+  HtmlHint:
     enabled:                  true
 
   HtmlTidy:
@@ -78,7 +97,7 @@ PreCommit:
     enabled:                  true
 
   JsHint:
-    enabled:                  true
+    enabled:                  false
 
   JsLint:
     enabled:                  false
@@ -95,11 +114,20 @@ PreCommit:
   MergeConflicts:
     enabled:                  true
 
+  Minitest:
+    enabled:                  false
+
+  NginxTest:
+    enabled:                  true
+
   Pep257:
     enabled:                  false
 
   Pep8:
     enabled:                  false
+
+  PuppetLint:
+    enabled:                  true
 
   Pyflakes:
     enabled:                  false
@@ -110,6 +138,9 @@ PreCommit:
   PythonFlake8:
     enabled:                  false
 
+  RailsBestPractices:
+    enabled:                  false
+
   RailsSchemaUpToDate:
     enabled:                  true
     include:
@@ -118,7 +149,10 @@ PreCommit:
       - '**/db/structure.sql'
 
   Reek:
-    enabled:                  false
+    enabled:                  true
+
+  RuboCop:
+    enabled:                  true
 
   RubyLint:
     enabled:                  false
@@ -129,9 +163,6 @@ PreCommit:
   Scalastyle:
     enabled:                  false
 
-  Rubocop:
-    enabled:                  true
-
   ScssLint:
     enabled:                  true
 
@@ -140,9 +171,22 @@ PreCommit:
 
   ShellCheck:
     enabled:                  true
+    flags:
+      - '--format=gcc'
+      - '-e SC2155'
+    include:
+      - '**/*.sh'
+      - '**/*.bash'
+      - '**/*.zsh'
+      - '**/bash_profile'
+      - '**/bashrc'
+      - '**/zshrc'
 
   SlimLint:
     enabled:                  false
+
+  Sqlint:
+    enabled:                  true
 
   Standard:
     enabled:                  false
@@ -155,7 +199,7 @@ PreCommit:
     enabled:                  true
 
   Vint:
-    enabled:                  false
+    enabled:                  true
 
   W3cCss:
     enabled:                  false
@@ -201,8 +245,11 @@ CommitMsg:
   CapitalizedSubject:
     enabled:                  true
 
+  EmptyMessage:
+    enabled:                  false
+
   GerritChangeId:
-    enabled:                  true
+    enabled:                  false
 
   HardTabs:
     enabled:                  true
@@ -229,10 +276,16 @@ PostCheckout:
     required:                 false
     quiet:                    false
 
+  BowerInstall:
+    enabled:                  false
+
   BundleCheck:
     enabled:                  true
 
   IndexTags:
+    enabled:                  false
+
+  NpmInstall:
     enabled:                  false
 
   SubmoduleStatus:
@@ -244,10 +297,19 @@ PostCommit:
     required:                 false
     quiet:                    false
 
+  BowerInstall:
+    enabled:                  false
+
+  BundleInstall:
+    enabled:                  false
+
   GitGuilt:
     enabled:                  false
 
   IndexTags:
+    enabled:                  false
+
+  NpmInstall:
     enabled:                  false
 
   SubmoduleStatus:
@@ -258,7 +320,16 @@ PostMerge:
     requires_files:           false
     quiet:                    false
 
+  BowerInstall:
+    enabled:                  false
+
+  BundleInstall:
+    enabled:                  false
+
   IndexTags:
+    enabled:                  false
+
+  NpmInstall:
     enabled:                  false
 
   SubmoduleStatus:
@@ -269,7 +340,16 @@ PostRewrite:
     requires_files:           false
     quiet:                    false
 
+  BowerInstall:
+    enabled:                  false
+
+  BundleInstall:
+    enabled:                  false
+
   IndexTags:
+    enabled:                  false
+
+  NpmInstall:
     enabled:                  false
 
   SubmoduleStatus:
