@@ -10,7 +10,7 @@ module  Filters
 class   DecryptionFilter
   SECURE_KEY_TOKEN      = /\A_secure_/
   BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9\+/]{342}==\z}
-  LARGEDATA_STRING_PATTERN  = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z}
+  LARGE_DATA_STRING_PATTERN = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z}
 
 
   def initialize(options = {})
@@ -60,7 +60,7 @@ class   DecryptionFilter
   def read_or_decrypt(key, value)
     if value.match(BASE64_STRING_PATTERN)
       decrypt(value)
-    elsif value.match(LARGEDATA_STRING_PATTERN)
+    elsif value.match(LARGE_DATA_STRING_PATTERN)
       decrypt_large_data(value)
     else
       warn "WARNING: It appears that you would like to keep your " \
@@ -92,7 +92,7 @@ class   DecryptionFilter
       value
     else
       # the encoded data is in the formate <key>#<iv>#<encrypted data> with each part Base64 encoded
-      key, iv, decoded_string = value.match(LARGEDATA_STRING_PATTERN).captures.map{|part| Base64.strict_decode64(part)}
+      key, iv, decoded_string = value.match(LARGE_DATA_STRING_PATTERN).captures.map{|part| Base64.strict_decode64(part)}
       key = decryption_key.private_decrypt(key) # The key is decrypted with the private key
 
       cipher_dec = OpenSSL::Cipher::Cipher.new("AES-128-CBC")

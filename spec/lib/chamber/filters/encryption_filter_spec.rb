@@ -105,7 +105,7 @@ describe  EncryptionFilter do
         encryption_key: './spec/spec_key.pub')
 
     expect(filtered_settings._secure_my_secure_setting).to match \
-      EncryptionFilter::LARGEDATA_STRING_PATTERN
+      EncryptionFilter::LARGE_DATA_STRING_PATTERN
 
   end
 
@@ -116,7 +116,7 @@ describe  EncryptionFilter do
         encryption_key: './spec/spec_key.pub')
 
     expect(filtered_settings._secure_my_secure_setting).to match \
-      EncryptionFilter::LARGEDATA_STRING_PATTERN
+      EncryptionFilter::LARGE_DATA_STRING_PATTERN
 
   end
 end

@@ -9,7 +9,7 @@ module    Filters
 class     EncryptionFilter
   SECURE_KEY_TOKEN      = /\A_secure_/
   BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9\+\/]{342}==\z}
-  LARGEDATA_STRING_PATTERN  = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z}
+  LARGE_DATA_STRING_PATTERN = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z}
 
   def initialize(options = {})
     self.encryption_key = options.fetch(:encryption_key, nil)
