@@ -8,27 +8,30 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    coderay (1.1.1)
     diff-lcs (1.2.5)
-    fuubar (2.0.0.rc1)
-      rspec (~> 3.0.rc1)
+    fuubar (2.0.0)
+      rspec (~> 3.0)
       ruby-progressbar (~> 1.4)
     hashie (3.3.1)
-    rspec (3.0.0)
-      rspec-core (~> 3.0.0)
-      rspec-expectations (~> 3.0.0)
-      rspec-mocks (~> 3.0.0)
-    rspec-core (3.0.2)
-      rspec-support (~> 3.0.0)
-    rspec-expectations (3.0.2)
+    rspec (3.4.0)
+      rspec-core (~> 3.4.0)
+      rspec-expectations (~> 3.4.0)
+      rspec-mocks (~> 3.4.0)
+    rspec-core (3.4.4)
+      rspec-support (~> 3.4.0)
+    rspec-expectations (3.4.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.0.0)
-    rspec-mocks (3.0.2)
-      rspec-support (~> 3.0.0)
-    rspec-support (3.0.2)
-    rspectacular (0.47.0)
-      fuubar (~> 2.0.beta)
-      rspec (~> 3.0.beta)
-    ruby-progressbar (1.5.1)
+      rspec-support (~> 3.4.0)
+    rspec-mocks (3.4.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.4.0)
+    rspec-support (3.4.1)
+    rspectacular (0.70.6)
+      coderay (~> 1.1)
+      fuubar (~> 2.0)
+      rspec (~> 3.1)
+    ruby-progressbar (1.8.0)
     thor (0.19.1)
 
 PLATFORMS
@@ -38,3 +41,6 @@ DEPENDENCIES
   chamber!
   rspec (~> 3.0)
   rspectacular (~> 0.46)
+
+BUNDLED WITH
+   1.11.2
