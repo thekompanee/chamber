@@ -3,6 +3,7 @@ require 'openssl'
 require 'base64'
 require 'hashie/mash'
 require 'yaml'
+require 'chamber/encryption_methods/public_key'
 require 'chamber/encryption_methods/ssl'
 
 module    Chamber
@@ -38,8 +39,7 @@ class     EncryptionFilter
           if serialized_value.length > 128 # PKI can only be used at smaller data like symmetric keys
             value = EncryptionMethods::Ssl.encrypt(key, serialized_value, encryption_key)
           else
-            encrypted_string = encryption_key.public_encrypt(serialized_value)
-            value =  Base64.strict_encode64(encrypted_string)
+            value = EncryptionMethods::PublicKey.encrypt(key, serialized_value, encryption_key)
           end
         end
       end
