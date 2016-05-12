@@ -3,6 +3,9 @@ require 'openssl'
 require 'base64'
 require 'hashie/mash'
 require 'yaml'
+require 'chamber/encryption_methods/public_key'
+require 'chamber/encryption_methods/ssl'
+require 'chamber/encryption_methods/none'
 require 'chamber/errors/decryption_failure'
 
 module  Chamber
@@ -58,61 +61,13 @@ class   DecryptionFilter
 
   def read_or_decrypt(key, value)
     if value.match(BASE64_STRING_PATTERN)
-      decrypt(value)
+      EncryptionMethods::PublicKey.decrypt(key, value, decryption_key)
     elsif value.match(LARGE_DATA_STRING_PATTERN)
-      decrypt_large_data(value)
+      EncryptionMethods::Ssl.decrypt(key, value, decryption_key)
     else
-      warn "WARNING: It appears that you would like to keep your " \
-           "information for #{key} secure, however the value for that " \
-           "setting does not appear to be encrypted. Make sure you run " \
-           "'chamber secure' before committing."
-
-      value
+      EncryptionMethods::None.decrypt(key, value, decryption_key)
     end
   end
-
-  def decrypt(value)
-    if decryption_key.nil?
-      value
-    else
-      decoded_string    = Base64.strict_decode64(value)
-      unencrypted_value = decryption_key.private_decrypt(decoded_string)
-
-      begin
-        _unserialized_value = YAML.load(unencrypted_value)
-      rescue TypeError
-        unencrypted_value
-      end
-    end
-  end
-
-  def decrypt_large_data(value)
-    if decryption_key.nil?
-      value
-    else
-      # the encoded data is in the formate <key>#<iv>#<encrypted data> with each part Base64 encoded
-      key, iv, decoded_string = value.match(LARGE_DATA_STRING_PATTERN).captures.map{|part| Base64.strict_decode64(part)}
-      key = decryption_key.private_decrypt(key) # The key is decrypted with the private key
-
-      cipher_dec = OpenSSL::Cipher::Cipher.new("AES-128-CBC")
-      cipher_dec.decrypt
-      cipher_dec.key = key
-      cipher_dec.iv = iv
-
-      begin
-        unencrypted_value = cipher_dec.update(decoded_string) + cipher_dec.final
-      rescue OpenSSL::Cipher::CipherError
-        fail Chamber::Errors::DecryptionFailure, "A decryption error occurred, probably due to invalid key data."
-      end
-
-      begin
-        _unserialized_value = YAML.load(unencrypted_value)
-      rescue TypeError
-        unencrypted_value
-      end
-    end
-  end
-
 end
 end
 end
