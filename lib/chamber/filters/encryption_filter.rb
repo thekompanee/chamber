@@ -36,11 +36,9 @@ class     EncryptionFilter
       elsif key.match(SECURE_KEY_TOKEN)
         unless value.respond_to?(:match) && value.match(BASE64_STRING_PATTERN)
           serialized_value = YAML.dump(value)
-          if serialized_value.length > 128 # PKI can only be used at smaller data like symmetric keys
-            value = EncryptionMethods::Ssl.encrypt(key, serialized_value, encryption_key)
-          else
-            value = EncryptionMethods::PublicKey.encrypt(key, serialized_value, encryption_key)
-          end
+
+          value = encryption_method(serialized_value).
+                    encrypt(key, serialized_value, encryption_key)
         end
       end
 
@@ -60,6 +58,14 @@ class     EncryptionFilter
                       end
 
     @encryption_key = OpenSSL::PKey::RSA.new(key_content)
+  end
+
+  def encryption_method(value)
+    if value.length <= 128
+      EncryptionMethods::PublicKey
+    else
+      EncryptionMethods::Ssl
+    end
   end
 end
 end
