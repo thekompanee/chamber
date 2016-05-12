@@ -32,14 +32,13 @@ class     EncryptionFilter
     settings = Hashie::Mash.new
 
     raw_data.each_pair do |key, value|
-      if value.respond_to? :each_pair
-        value = execute(value)
-      elsif key.match(SECURE_KEY_TOKEN)
-        value = encryption_method(value).
-                  encrypt(key, value, encryption_key)
-      end
-
-      settings[key] = value
+      settings[key] = if value.respond_to? :each_pair
+                        execute(value)
+                      elsif key.match(SECURE_KEY_TOKEN)
+                        encryption_method(value).encrypt(key, value, encryption_key)
+                      else
+                        value
+                      end
     end
 
     settings

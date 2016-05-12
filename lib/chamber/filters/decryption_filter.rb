@@ -35,7 +35,7 @@ class   DecryptionFilter
     raw_data.each_pair do |key, value|
       settings[key] = if value.respond_to? :each_pair
                         execute(value)
-                      elsif key.match(SECURE_KEY_TOKEN) && value.respond_to?(:match)
+                      elsif key.match(SECURE_KEY_TOKEN)
                         decryption_method(value).decrypt(key, value, decryption_key)
                       else
                         value
@@ -60,10 +60,14 @@ class   DecryptionFilter
   private
 
   def decryption_method(value)
-    if value.match(BASE64_STRING_PATTERN)
-      EncryptionMethods::PublicKey
-    elsif value.match(LARGE_DATA_STRING_PATTERN)
-      EncryptionMethods::Ssl
+    if value.respond_to?(:match)
+      if value.match(BASE64_STRING_PATTERN)
+        EncryptionMethods::PublicKey
+      elsif value.match(LARGE_DATA_STRING_PATTERN)
+        EncryptionMethods::Ssl
+      else
+        EncryptionMethods::None
+      end
     else
       EncryptionMethods::None
     end
