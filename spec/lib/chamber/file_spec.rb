@@ -184,6 +184,37 @@ other:
 HEREDOC
   end
 
+  it 'can handle encrypting multiline strings' do
+    tempfile = create_tempfile_with_content <<-HEREDOC
+other:
+  stuff:
+    _secure_setting: |
+      -----BEGIN RSA PRIVATE KEY-----
+      uQ431irYF7XGEwmsfNUcw++6Enjmt9MItVZJrfL4cUr84L1ccOEX9AThsxz2nkiO
+      GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVaYKYuHwYVb1spGfreHQHRP90EMv3U5Ir
+      xs0YFwKBgAJKGol+GM1oFodg48v4QA6hlF5z49v83wU+AS2f3aMVfjkTYgAEAoCT
+      qoSi7wkYK3NvftVgVi8Z2+1WEzp3S590UkkHmjc5o+HfS657v2fnqkekJyinB+OH
+      b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
+      -----END RSA PRIVATE KEY-----
+    something_else:  'right here'
+HEREDOC
+
+    settings_file = File.new  path:           tempfile.path,
+                              encryption_key: './spec/spec_key.pub'
+
+    settings_file.secure
+
+    file_contents          = ::File.read(tempfile.path)
+    secure_setting_encoded = file_contents[%r{    _secure_setting: (.*)$}, 1]
+
+    expect(::File.read(tempfile.path)).to eql <<-HEREDOC
+other:
+  stuff:
+    _secure_setting: #{secure_setting_encoded}
+    something_else:  'right here'
+HEREDOC
+  end
+
   it 'when rewriting the file, can handle names and values with regex special ' \
      'characters' do
 
