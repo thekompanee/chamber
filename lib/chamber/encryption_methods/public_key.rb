@@ -1,14 +1,14 @@
 module  Chamber
 module  EncryptionMethods
 class   PublicKey
-  def self.encrypt(key, value, encryption_key)
+  def self.encrypt(_key, value, encryption_key)
     value = YAML.dump(value)
     encrypted_string = encryption_key.public_encrypt(value)
 
     Base64.strict_encode64(encrypted_string)
   end
 
-  def self.decrypt(key, value, decryption_key)
+  def self.decrypt(_key, value, decryption_key)
     if decryption_key.nil?
       value
     else

@@ -205,7 +205,7 @@ HEREDOC
     settings_file.secure
 
     file_contents          = ::File.read(tempfile.path)
-    secure_setting_encoded = file_contents[%r{    _secure_setting: (.*)$}, 1]
+    secure_setting_encoded = file_contents[/    _secure_setting: (.*)$/, 1]
 
     expect(::File.read(tempfile.path)).to eql <<-HEREDOC
 other:
