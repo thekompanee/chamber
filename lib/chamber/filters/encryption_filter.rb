@@ -3,6 +3,7 @@ require 'openssl'
 require 'base64'
 require 'hashie/mash'
 require 'yaml'
+require 'chamber/encryption_methods/ssl'
 
 module    Chamber
 module    Filters
@@ -35,21 +36,7 @@ class     EncryptionFilter
         unless value.respond_to?(:match) && value.match(BASE64_STRING_PATTERN)
           serialized_value = YAML.dump(value)
           if serialized_value.length > 128 # PKI can only be used at smaller data like symmetric keys
-            #encrypted_string = encryption_certificate(encryption_key).public_encrypt(serialized_value)
-            cipher = OpenSSL::Cipher::Cipher.new("AES-128-CBC")
-            cipher.encrypt
-            symmetric_key = cipher.random_key
-            iv = cipher.random_iv
-
-            # encrypt all data with this key and iv
-            encrypted_data = cipher.update(serialized_value) + cipher.final
-
-            # encrypt the key with the public key
-            encrypted_key = encryption_key.public_encrypt(symmetric_key)
-
-            # assemble the resulting Base64 encoded data, the key
-            value = Base64.strict_encode64(encrypted_key) + '#' + Base64.strict_encode64(iv) + '#' + Base64.strict_encode64(encrypted_data)
-
+            value = EncryptionMethods::Ssl.encrypt(key, serialized_value, encryption_key)
           else
             encrypted_string = encryption_key.public_encrypt(serialized_value)
             value =  Base64.strict_encode64(encrypted_string)

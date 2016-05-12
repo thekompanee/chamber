@@ -3,6 +3,23 @@ module  EncryptionMethods
 class   Ssl
   LARGE_DATA_STRING_PATTERN = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z}
 
+  def self.encrypt(key, value, encryption_key)
+    #encrypted_string = encryption_certificate(encryption_key).public_encrypt(value)
+    cipher = OpenSSL::Cipher::Cipher.new("AES-128-CBC")
+    cipher.encrypt
+    symmetric_key = cipher.random_key
+    iv = cipher.random_iv
+
+    # encrypt all data with this key and iv
+    encrypted_data = cipher.update(value) + cipher.final
+
+    # encrypt the key with the public key
+    encrypted_key = encryption_key.public_encrypt(symmetric_key)
+
+    # assemble the resulting Base64 encoded data, the key
+    Base64.strict_encode64(encrypted_key) + '#' + Base64.strict_encode64(iv) + '#' + Base64.strict_encode64(encrypted_data)
+  end
+
   def self.decrypt(key, value, decryption_key)
     if decryption_key.nil?
       value
