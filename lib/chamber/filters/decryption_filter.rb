@@ -3,13 +3,17 @@ require 'openssl'
 require 'base64'
 require 'hashie/mash'
 require 'yaml'
+require 'chamber/encryption_methods/public_key'
+require 'chamber/encryption_methods/ssl'
+require 'chamber/encryption_methods/none'
 require 'chamber/errors/decryption_failure'
 
 module  Chamber
 module  Filters
 class   DecryptionFilter
-  SECURE_KEY_TOKEN      = /\A_secure_/
-  BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9\+/]{342}==\z}
+  SECURE_KEY_TOKEN          = /\A_secure_/
+  BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9\+/]{342}==\z}
+  LARGE_DATA_STRING_PATTERN = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z} # rubocop:disable Metrics/LineLength
 
   def initialize(options = {})
     self.decryption_key = options.fetch(:decryption_key, nil)
@@ -31,8 +35,8 @@ class   DecryptionFilter
     raw_data.each_pair do |key, value|
       settings[key] = if value.respond_to? :each_pair
                         execute(value)
-                      elsif key.match(SECURE_KEY_TOKEN) && value.respond_to?(:match)
-                        read_or_decrypt(key, value)
+                      elsif key.match(SECURE_KEY_TOKEN)
+                        decryption_method(value).decrypt(key, value, decryption_key)
                       else
                         value
                       end
@@ -55,31 +59,17 @@ class   DecryptionFilter
 
   private
 
-  def read_or_decrypt(key, value)
-    if value.match(BASE64_STRING_PATTERN)
-      decrypt(value)
-    else
-      warn "WARNING: It appears that you would like to keep your " \
-           "information for #{key} secure, however the value for that " \
-           "setting does not appear to be encrypted. Make sure you run " \
-           "'chamber secure' before committing."
-
-      value
-    end
-  end
-
-  def decrypt(value)
-    if decryption_key.nil?
-      value
-    else
-      decoded_string    = Base64.strict_decode64(value)
-      unencrypted_value = decryption_key.private_decrypt(decoded_string)
-
-      begin
-        _unserialized_value = YAML.load(unencrypted_value)
-      rescue TypeError
-        unencrypted_value
+  def decryption_method(value)
+    if value.respond_to?(:match)
+      if value.match(BASE64_STRING_PATTERN)
+        EncryptionMethods::PublicKey
+      elsif value.match(LARGE_DATA_STRING_PATTERN)
+        EncryptionMethods::Ssl
+      else
+        EncryptionMethods::None
       end
+    else
+      EncryptionMethods::None
     end
   end
 end

@@ -22,6 +22,43 @@ describe  DecryptionFilter do
     expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
   end
 
+  it 'will correct decrypt values which contain multiline strings' do
+    filtered_settings = DecryptionFilter.execute(
+      data:           {
+        _secure_my_secure_setting: 'Q0ImhgdRmOdXEx04E3TnMoW/c6ckuce+y4kYGYWIJM6W/nBJBF' \
+                                   'jnqcFru/6wo+TVEZxowxjxJNv8H6SuxYmahxMRl7AajTrJ/QD+' \
+                                   'bKzbStL7D2oViB1dDNUz4GZxeNDSMU0oF9e67ih6AmnxAgI0Rl' \
+                                   'EterOMyWOPHJIUrLquBRlIs0JyP8yermN9KWOAeLZdJlIGSyfw' \
+                                   'EU+sWQtafJ3jiNAPqWTGJxHfQZTQHn+q4SnZPPnBPK0dZiZzqO' \
+                                   'rtkzmVPR7SAT5Ube4CxJWhkpWpl5rPgamqVsG/P0AalMqLxuPU' \
+                                   'XqSdOEWKkK6jerbElVyQ7FdRBLau2JXHpDZYGw8KTA==#EPCuI' \
+                                   'el5w17aUZfpHOuFNQ==#VzcE0BIuqA7xUMYEZkWZa4kOPse95N' \
+                                   'iow+e/FhKAlG/7uYYTmkRbxRiMLtzH1Swzyz0NHF/BJPa1rKRb' \
+                                   'cVCGjK8v13O9zJY8UdCQYsrdQaTIOA95NIcxwLCbrYencDzZFx' \
+                                   'YtOgioyXbW9OCPnjDe9ozkCw6prRclgJyvadvKWqBgaJkluIdi' \
+                                   'kCDLX+Dy7fjkLtq5GqPFeFjHKwRGMLQB5dYk1VNAKgzhnSpUkJ' \
+                                   'JZA2Z7P54NhQQ83Doypfwb16LfKFax9575XeUWZeURxl7Ric4M' \
+                                   'rjJYrc3u5biTzToMQBITGEsComsTDpfB3FVtZhobNjzdkhEGzf' \
+                                   '6F2iRjjHDsQfaUebAPxDVFa31p5XGQN7YJDeAXYBLb16kAhv8N' \
+                                   '5DGwiukPjtUVXUfFQzaTnJWm/eIhQKFH8rkVawAr9wAeoSz7cw' \
+                                   'WFyD+pq5QF9GlxPU5ZotNjrqO4rz/s8+bkt2XwBANTVCZrTb9g' \
+                                   'nE9FyIqFmRZ9L8Ef43KE02wDcUnrKp3oOMSItWnY5rFJew0eAU' \
+                                   '+CHQ==',
+      },
+      decryption_key: './spec/spec_key',
+    )
+
+    expect(filtered_settings._secure_my_secure_setting).to eql <<-HEREDOC
+-----BEGIN RSA PRIVATE KEY-----
+uQ431irYF7XGEwmsfNUcw++6Enjmt9MItVZJrfL4cUr84L1ccOEX9AThsxz2nkiO
+GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVaYKYuHwYVb1spGfreHQHRP90EMv3U5Ir
+xs0YFwKBgAJKGol+GM1oFodg48v4QA6hlF5z49v83wU+AS2f3aMVfjkTYgAEAoCT
+qoSi7wkYK3NvftVgVi8Z2+1WEzp3S590UkkHmjc5o+HfS657v2fnqkekJyinB+OH
+b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
+-----END RSA PRIVATE KEY-----
+    HEREDOC
+  end
+
   it 'will not attempt to decrypt values which are not marked as "secure"' do
     filtered_settings = DecryptionFilter.execute(
       data:           {
@@ -180,6 +217,35 @@ describe  DecryptionFilter do
     )
 
     expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
+  end
+
+  it 'can decrypt large encrypted data' do
+    filtered_settings = DecryptionFilter.execute(
+        data:           {
+          _secure_my_secure_setting: 'AcMY7ALLoGZRakL3ibyo2WB438ipdMDIjsa4SCDBP2saOY63A' \
+                                     'D3C/SZanexlYDQoYoYC0V5J5EvKHgGMDAU8qnp9LjzU5VCwJ3' \
+                                     'SVRGz3J0c7LXgTlC585Lgy8LX+/yjYFm4D13hlMvvsoI35Bo8' \
+                                     'EVkTSU2+0gRSjRpQJeK1o7az5+fBuNmFipevA4YfLnarnpwo2' \
+                                     'd2oO+BqStI2QQI1UWwN2R04rvOdHoEzA6DLsdvYX+QTKDk4K5' \
+                                     'oSKXfuMBvzOCaCGT75cmt85ZY7XZnwbKi6c4mtL1ajrCr8sQF' \
+                                     'TA/GyG1EiYLFp1uQco0m2/S9yFf26REjax4ZE6O/ilXgT6xg=' \
+                                     '=#YAm25swWRQx4ip1RjVzpGQ==#vRGvgjErI+dATM4UOtFkkg' \
+                                     'efFpFTvxGpHN0gRbf1VCO4K07eqAQPb46BDI67a8iNum9cBph' \
+                                     'es7oGmuNnUvBg4JiZhKsXnolcRWdITDVh/XYNioXRmesvj4x+' \
+                                     'tY0FVhkLV2zubRVfC7CDJgin6wRHP+bcZhICDD2YqB+XRS4ou' \
+                                     '66UeaiGA4eV4G6sPIo+DPjDM3m8JFnuRFMvGk73wthbN4MdAp' \
+                                     '9xONt5wfobJUiUR11k2iAqwhx7Wyj0imz/afI8goDTdMfQt3V' \
+                                     'DOYqYG3y2AcYOfsOL6m0GtQRlKvtsvw+m8/ICwSGiL2Loup0j' \
+                                     '/jDGhFi1lwf4ded8aSwyS+2/Ks9C008dsJwpR1SxJ59z1KSzd' \
+                                     'QcTcrJTnxd+2qpOVVIoaRGud2tSV+5wKXy9dWRflLsjEtBRFR' \
+                                     'eFurTVQPodjDy+Lhs452/O/+KAJOXMKeYegCGOe8z9tLD3tel' \
+                                     'jjTyJPeW/1FE3+tP3G3HJAV4sgoO0YwhNY1Nji56igCl3UvEP' \
+                                     'nEQcJgu0w/+dqSreqwp6TqaqXY3lzr8vi733lti4nss=',
+        },
+        decryption_key: './spec/spec_key',
+    )
+
+    expect(filtered_settings._secure_my_secure_setting).to eql 'long' * 100
   end
 end
 end

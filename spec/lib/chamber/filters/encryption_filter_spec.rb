@@ -86,6 +86,61 @@ describe  EncryptionFilter do
                                      'AW51JwVryg/im1rayGAwWYNgupQ/5LDmjffwx7Q3fyMH2' \
                                      'uF3CDIKRIC6U+mnM5SRMO4Dzysw=='
   end
+
+  it 'can encrypt long multiline strings' do
+    filtered_settings = EncryptionFilter.execute(
+      data:           {
+        _secure_multiline: <<-HEREDOC
+-----BEGIN RSA PRIVATE KEY-----
+uQ431irYF7XGEwmsfNUcw++6Enjmt9MItVZJrfL4cUr84L1ccOEX9AThsxz2nkiO
+GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVaYKYuHwYVb1spGfreHQHRP90EMv3U5Ir
+xs0YFwKBgAJKGol+GM1oFodg48v4QA6hlF5z49v83wU+AS2f3aMVfjkTYgAEAoCT
+qoSi7wkYK3NvftVgVi8Z2+1WEzp3S590UkkHmjc5o+HfS657v2fnqkekJyinB+OH
+b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
+-----END RSA PRIVATE KEY-----
+        HEREDOC
+      },
+      encryption_key: './spec/spec_key.pub',
+    )
+
+    my_secure_setting = filtered_settings._secure_multiline
+
+    expect(my_secure_setting).to match(EncryptionFilter::LARGE_DATA_STRING_PATTERN)
+  end
+
+  it 'will encrypt strings of 127 chars effective length' do
+    filtered_settings = EncryptionFilter.execute(
+        data:           {
+          _secure_my_secure_setting: 'A' * 119,
+        },
+        encryption_key: './spec/spec_key.pub',
+    )
+
+    expect(filtered_settings._secure_my_secure_setting).to match \
+      EncryptionFilter::BASE64_STRING_PATTERN
+
+    filtered_settings = EncryptionFilter.execute(
+        data:           {
+          _secure_my_secure_setting: 'A' * 120,
+        },
+        encryption_key: './spec/spec_key.pub',
+    )
+
+    expect(filtered_settings._secure_my_secure_setting).to match \
+      EncryptionFilter::LARGE_DATA_STRING_PATTERN
+  end
+
+  it 'will encrypt and decrypt strings larger than 128 chars' do
+    filtered_settings = EncryptionFilter.execute(
+        data:           {
+          _secure_my_secure_setting: 'long' * 100,
+        },
+        encryption_key: './spec/spec_key.pub',
+    )
+
+    expect(filtered_settings._secure_my_secure_setting).to match \
+      EncryptionFilter::LARGE_DATA_STRING_PATTERN
+  end
 end
 end
 end
