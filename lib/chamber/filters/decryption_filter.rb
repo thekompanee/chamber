@@ -36,7 +36,7 @@ class   DecryptionFilter
       settings[key] = if value.respond_to? :each_pair
                         execute(value)
                       elsif key.match(SECURE_KEY_TOKEN) && value.respond_to?(:match)
-                        read_or_decrypt(key, value)
+                        decryption_method(value).decrypt(key, value, decryption_key)
                       else
                         value
                       end
@@ -58,10 +58,6 @@ class   DecryptionFilter
   end
 
   private
-
-  def read_or_decrypt(key, value)
-    decryption_method(value).decrypt(key, value, decryption_key)
-  end
 
   def decryption_method(value)
     if value.match(BASE64_STRING_PATTERN)
