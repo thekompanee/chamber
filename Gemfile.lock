@@ -8,7 +8,6 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    coderay (1.1.1)
     diff-lcs (1.2.5)
     fuubar (2.0.0)
       rspec (~> 3.0)
@@ -27,8 +26,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
-    rspectacular (0.70.6)
-      coderay (~> 1.1)
+    rspectacular (0.70.7)
       fuubar (~> 2.0)
       rspec (~> 3.1)
     ruby-progressbar (1.8.0)
