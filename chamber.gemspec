@@ -16,6 +16,8 @@ Gem::Specification.new do |spec|
                        }
   spec.homepage      = 'https://github.com/thekompanee/chamber'
   spec.license       = 'MIT'
+  spec.cert_chain    = %w{certs/thekompanee.pem}
+  spec.signing_key   = File.expand_path('~/.gem/certs/thekompanee-private_key.pem') if $0 =~ /gem\z/
 
   spec.executables   = []
   spec.files         = Dir['{app,config,db,lib}/**/*'] + %w{Rakefile README.md LICENSE.txt}
