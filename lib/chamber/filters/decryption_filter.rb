@@ -60,12 +60,16 @@ class   DecryptionFilter
   private
 
   def read_or_decrypt(key, value)
+    decryption_method(value).decrypt(key, value, decryption_key)
+  end
+
+  def decryption_method(value)
     if value.match(BASE64_STRING_PATTERN)
-      EncryptionMethods::PublicKey.decrypt(key, value, decryption_key)
+      EncryptionMethods::PublicKey
     elsif value.match(LARGE_DATA_STRING_PATTERN)
-      EncryptionMethods::Ssl.decrypt(key, value, decryption_key)
+      EncryptionMethods::Ssl
     else
-      EncryptionMethods::None.decrypt(key, value, decryption_key)
+      EncryptionMethods::None
     end
   end
 end
