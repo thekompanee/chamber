@@ -87,6 +87,27 @@ describe  EncryptionFilter do
                                      'uF3CDIKRIC6U+mnM5SRMO4Dzysw=='
   end
 
+  it 'can encrypt long multiline strings' do
+    filtered_settings = EncryptionFilter.execute(
+      data:           {
+        _secure_multiline: <<-HEREDOC
+-----BEGIN RSA PRIVATE KEY-----
+uQ431irYF7XGEwmsfNUcw++6Enjmt9MItVZJrfL4cUr84L1ccOEX9AThsxz2nkiO
+GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVaYKYuHwYVb1spGfreHQHRP90EMv3U5Ir
+xs0YFwKBgAJKGol+GM1oFodg48v4QA6hlF5z49v83wU+AS2f3aMVfjkTYgAEAoCT
+qoSi7wkYK3NvftVgVi8Z2+1WEzp3S590UkkHmjc5o+HfS657v2fnqkekJyinB+OH
+b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
+-----END RSA PRIVATE KEY-----
+        HEREDOC
+      },
+      encryption_key: './spec/spec_key.pub',
+    )
+
+    my_secure_setting = filtered_settings._secure_multiline
+
+    expect(my_secure_setting).to match(EncryptionFilter::LARGE_DATA_STRING_PATTERN)
+  end
+
   it "will encrypt strings of 127 chars effective length" do
     # Prove there is no gap in length between the small and long encryption types that could
     # cause an OpenSSL exception because assymetric encryption can only be done with small
