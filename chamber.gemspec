@@ -16,11 +16,12 @@ Gem::Specification.new do |spec|
                        }
   spec.homepage      = 'https://github.com/thekompanee/chamber'
   spec.license       = 'MIT'
+
   spec.cert_chain    = %w{certs/thekompanee.pem}
   spec.signing_key   = File.expand_path('~/.gem/certs/thekompanee-private_key.pem') if $0 =~ /gem\z/
 
   spec.executables   = %w{chamber}
-  spec.files         = Dir['{app,config,db,lib,templates}/**/*'] + %w{Rakefile README.md LICENSE.txt}
+  spec.files         = Dir['{app,config,db,lib,templates}/**/*'] + %w{README.md LICENSE.txt}
   spec.test_files    = Dir['{test,spec,features}/**/*']
 
   spec.add_dependency             'thor', ["~> 0.19.1"]
@@ -28,4 +29,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'rspec', ["~> 3.0"]
   spec.add_development_dependency 'rspectacular', ["~> 0.46"]
+
+  spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 end
