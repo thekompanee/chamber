@@ -63,7 +63,7 @@ describe  ContextResolver do
 
   it 'sets the rootpath to the current working directory if none is passed in' do
     allow(Pathname).to  receive(:pwd).
-                        and_return('my_dir')
+    and_return('my_dir')
 
     options = ContextResolver.resolve
 

@@ -82,16 +82,16 @@ class   File < Pathname
       escaped_value = Regexp.escape(value)
 
       file_contents.
-        sub!(
+      sub!(
           /^(\s*)_secure_#{escaped_name}(\s*):(\s*)['"]?#{escaped_value}['"]?$/,
           "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}",
-        )
+      )
 
       file_contents.
-        sub!(
+      sub!(
           /^(\s*)_secure_#{escaped_name}(\s*):(\s*)\|((?:\n\1\s{2}.*)+)/,
           "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}",
-        )
+      )
     end
 
     write(file_contents)

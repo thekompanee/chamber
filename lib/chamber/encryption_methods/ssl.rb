@@ -27,11 +27,11 @@ class   Ssl
       value
     else
       key, iv, decoded_string = value.
-                                  match(LARGE_DATA_STRING_PATTERN).
-                                  captures.
-                                  map do |part|
+                                match(LARGE_DATA_STRING_PATTERN).
+                                captures.
+                                map do |part|
                                     Base64.strict_decode64(part)
-                                  end
+      end
       key = decryption_key.private_decrypt(key)
 
       cipher_dec = OpenSSL::Cipher::Cipher.new('AES-128-CBC')
