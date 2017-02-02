@@ -57,7 +57,11 @@ class     EncryptionFilter
   end
 
   def encryption_method(value)
-    if value.respond_to?(:match) && value.match(BASE64_STRING_PATTERN)
+    value_is_encrypted = value.respond_to?(:match) &&
+                           (value.match(BASE64_STRING_PATTERN) ||
+                            value.match(LARGE_DATA_STRING_PATTERN))
+
+    if value_is_encrypted
       EncryptionMethods::None
     else
       serialized_value = YAML.dump(value)
