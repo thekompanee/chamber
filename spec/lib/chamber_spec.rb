@@ -3,7 +3,6 @@ require 'rspectacular'
 require 'chamber'
 require 'fileutils'
 
-# rubocop:disable Metrics/LineLength
 FileUtils.mkdir_p '/tmp/chamber/settings' unless File.exist? '/tmp/chamber/settings'
 
 File.open('/tmp/chamber/settings.yml', 'w+') do |file|
@@ -313,4 +312,3 @@ describe 'Chamber' do
     expect(Chamber.test.my_encrpyted_setting).to eql 'hello'
   end
 end
-# rubocop:enable Metrics/LineLength

@@ -14,6 +14,7 @@ class   BooleanConversionFilter
 
   attr_accessor :data
 
+  # rubocop:disable Metrics/BlockNesting
   def execute(settings = data)
     settings.each_pair do |key, value|
       if value.respond_to? :each_pair
@@ -34,6 +35,7 @@ class   BooleanConversionFilter
       end
     end
   end
+  # rubocop:enable Metrics/BlockNesting
 end
 end
 end

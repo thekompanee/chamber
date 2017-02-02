@@ -21,3 +21,6 @@ Style/ExtraSpacing:
 Style/EmptyLinesAroundBlockBody:
   Exclude:
     - 'spec/**/*.rb'
+
+Security/YAMLLoad:
+  Enabled: false
