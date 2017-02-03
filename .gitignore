@@ -91,6 +91,8 @@ target
 *.ipr
 *.iws
 *.project
+*.sublime-project
+*.sublime-workspace
 *.tmproj
 .bundle
 .chamber.pem
@@ -103,6 +105,7 @@ target
 .idea_modules
 .powenv
 .powrc
+.pryrc
 .railsrc
 .rspec
 .rvmrc
@@ -145,7 +148,7 @@ tmp
 # Vagrant
 .vagrant
 
-# Always keep Gemfile.lock
+# Always keep lock files
 !yarn.lock
 !Gemfile.lock
 !Cargo.lock
