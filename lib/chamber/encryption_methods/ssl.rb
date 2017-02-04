@@ -5,7 +5,7 @@ class   Ssl
 
   def self.encrypt(_key, value, encryption_key)
     value = YAML.dump(value)
-    cipher = OpenSSL::Cipher::Cipher.new('AES-128-CBC')
+    cipher = OpenSSL::Cipher.new('AES-128-CBC')
     cipher.encrypt
     symmetric_key = cipher.random_key
     iv = cipher.random_iv
@@ -34,7 +34,7 @@ class   Ssl
       end
       key = decryption_key.private_decrypt(key)
 
-      cipher_dec = OpenSSL::Cipher::Cipher.new('AES-128-CBC')
+      cipher_dec = OpenSSL::Cipher.new('AES-128-CBC')
 
       cipher_dec.decrypt
 
