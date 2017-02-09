@@ -56,11 +56,6 @@ class   Runner < Thor
                 desc: 'The path to or contents of the public key associated with ' \
                       'the project (typically .chamber.pub.pem)'
 
-  class_option  :shell,
-                default: new,
-                desc:    'The command runner.  Can be overridden for specific logging ' \
-                         'capabilities.'
-
   desc 'travis SUBCOMMAND ...ARGS',   'For manipulating Travis CI environment variables'
   subcommand 'travis', Chamber::Binary::Travis
 
@@ -84,12 +79,12 @@ class   Runner < Thor
                          'Useful for debugging.'
 
   def show
-    puts Commands::Show.call(options)
+    puts Commands::Show.call(options.merge(shell: self))
   end
 
   desc 'files', 'Lists the settings files which are parsed with the given options'
   def files
-    puts Commands::Files.call(options)
+    puts Commands::Files.call(options.merge(shell: self))
   end
 
   desc 'compare', 'Displays the difference between what is currently stored in the ' \
@@ -112,7 +107,7 @@ class   Runner < Thor
                       'of the comparison'
 
   def compare
-    Commands::Compare.call(options)
+    Commands::Compare.call(options.merge(shell: self))
   end
 
   desc 'secure', 'Secures any values which appear to need to be encrypted in any of ' \
@@ -129,14 +124,14 @@ class   Runner < Thor
                          'what values would be encrypted'
 
   def secure
-    Commands::Secure.call(options)
+    Commands::Secure.call(options.merge(shell: self))
   end
 
   desc 'init', 'Sets Chamber up matching best practices for secure configuration ' \
                'management'
 
   def init
-    Commands::Initialize.call(options)
+    Commands::Initialize.call(options.merge(shell: self))
   end
 end
 end
