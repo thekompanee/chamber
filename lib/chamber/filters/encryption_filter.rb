@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'openssl'
 require 'base64'
-require 'hashie/mash'
+require 'chamber/hashie_mash'
 require 'yaml'
 require 'chamber/encryption_methods/public_key'
 require 'chamber/encryption_methods/ssl'
@@ -29,7 +29,7 @@ class     EncryptionFilter
   attr_reader   :encryption_key
 
   def execute(raw_data = data)
-    settings = Hashie::Mash.new
+    settings = HashieMash.new
 
     raw_data.each_pair do |key, value|
       settings[key] = if value.respond_to? :each_pair

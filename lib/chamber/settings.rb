@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'hashie/mash'
+require 'chamber/hashie_mash'
 require 'chamber/namespace_set'
 require 'chamber/filters/namespace_filter'
 require 'chamber/filters/encryption_filter'
@@ -244,7 +244,7 @@ class   Settings
                 :raw_data
 
   def raw_data=(new_raw_data)
-    @raw_data   = Hashie::Mash.new(new_raw_data)
+    @raw_data   = HashieMash.new(new_raw_data)
   end
 
   def namespaces=(raw_namespaces)

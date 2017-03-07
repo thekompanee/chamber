@@ -1,12 +1,12 @@
 # frozen_string_literal: true
-require 'hashie/mash'
+require 'chamber/hashie_mash'
 
 module  Chamber
 module  Environmentable
   SECURE_KEY_TOKEN = /\A_secure_/
 
   def with_environment(settings, parent_keys, hash_block, value_block)
-    environment_hash = Hashie::Mash.new
+    environment_hash = HashieMash.new
 
     settings.each_pair do |key, value|
       environment_key  = key.to_s.gsub(SECURE_KEY_TOKEN, '')
