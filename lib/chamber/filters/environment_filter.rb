@@ -68,7 +68,11 @@ class   EnvironmentFilter
                        { key => execute(value, environment_keys) }
                      end,
                      lambda do |key, value, environment_key|
-                       { key => (ENV[environment_key] || value) }
+                       if value.is_a? Integer
+                         { key => ENV[environment_key].nil? ? value : ENV[environment_key].to_i }
+                       else
+                         { key => (ENV[environment_key] || value) }
+                       end
                      end)
   end
 end

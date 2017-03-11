@@ -43,6 +43,26 @@ describe  EnvironmentFilter do
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
+
+  it 'can extract an integer from the environment if an existing variable' \
+     'matches the composite key' do
+
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING'] = '2'
+
+    filtered_data = EnvironmentFilter.execute(data: {
+                                                test_setting_group: {
+                                                  test_setting_level: {
+                                                    test_setting: 1,
+                                                  },
+                                                },
+                                              })
+
+    test_setting  = filtered_data.test_setting_group.test_setting_level.test_setting
+
+    expect(test_setting).to eql 2
+
+    ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+  end
 end
 end
 end
