@@ -70,6 +70,8 @@ class   EnvironmentFilter
                      lambda do |key, value, environment_key|
                        if value.is_a? Integer
                          { key => ENV[environment_key].nil? ? value : ENV[environment_key].to_i }
+                       elsif value.is_a? Float
+                         { key => ENV[environment_key].nil? ? value : ENV[environment_key].to_f }
                        else
                          { key => (ENV[environment_key] || value) }
                        end
