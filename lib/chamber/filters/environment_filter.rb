@@ -19,21 +19,33 @@ class   EnvironmentFilter
   #
   #   ###
   #   # Injects the current environment variables
+  #   # Replaces arrays
+  #   # Maintains type of integers and arrays
   #   #
   #   ENV['LEVEL_ONE_1_LEVEL_TWO_1']               = 'env value 1'
   #   ENV['LEVEL_ONE_1_LEVEL_TWO_2_LEVEL_THREE_1'] = 'env value 2'
+  #   ENV['LEVEL_ONE_1_INTEGER']                   = '2'
+  #   ENV['LEVEL_ONE_1_FLOAT']                     = '3.14'
+  #   ENV['LEVEL_ONE_1_ARRAY_0']                   = 'env value 3'
+  #   ENV['LEVEL_ONE_1_ARRAY_1']                   = 'env value 4'
   #
   #   EnvironmentFilter.execute(
   #     level_one_1: {
   #       level_two_1: 'value 1',
   #       level_two_2: {
-  #         level_three_1: 'value 2' } } )
+  #         level_three_1: 'value 2' },
+  #       integer: 1,
+  #       float: 2.17,
+  #       array: [ 'value 3', 'value 4' ] } )
   #
   #   # => {
   #     'level_one_1' => {
   #       'level_two_1' => 'env value 1',
   #       'level_two_2' => {
   #         'level_three_1' => 'env value 2',
+  #       'integer' => 2,
+  #       'float' => 3.14,
+  #       'array' => [ 'env value 3', 'env value 4' ]
   #   }
   #
   #   ###
