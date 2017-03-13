@@ -44,6 +44,53 @@ describe  EnvironmentFilter do
 
       ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
     end
+
+    it 'can extract an array from the environment if an existing set of' \
+       'variables match the composite key' do
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_0'] = 'value 4'
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_1'] = 'value 5'
+
+      filtered_data = EnvironmentFilter.execute(data: {
+                                                  test_setting_group: {
+                                                    test_setting_level: {
+                                                      test_array: [
+                                                        'value 1',
+                                                        'value 2',
+                                                        'value 3'
+                                                      ]
+                                                    },
+                                                  },
+                                                })
+
+      test_array  = filtered_data.test_setting_group.test_setting_level.test_array
+
+      expect(test_array).to eql [ 'value 4', 'value 5' ]
+
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_0')
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_1')
+    end
+
+    it 'can replace an array with an empty array' do
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY'] = '0'
+
+      filtered_data = EnvironmentFilter.execute(data: {
+                                                  test_setting_group: {
+                                                    test_setting_level: {
+                                                      test_array: [
+                                                        'value 1',
+                                                        'value 2',
+                                                        'value 3'
+                                                      ]
+                                                    },
+                                                  },
+                                                })
+
+      test_array  = filtered_data.test_setting_group.test_setting_level.test_array
+
+      expect(test_array).to eql [ ]
+
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY')
+    end
   end
 
   context 'integer variables' do
@@ -86,6 +133,45 @@ describe  EnvironmentFilter do
 
       ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
     end
+
+    it 'can extract an array from the environment if an existing set of' \
+       'variables match the composite key' do
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_0'] = '4'
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_1'] = '5'
+
+      filtered_data = EnvironmentFilter.execute(data: {
+                                                  test_setting_group: {
+                                                    test_setting_level: {
+                                                      test_array: [ 1, 2, 3 ]
+                                                    },
+                                                  },
+                                                })
+
+      test_array  = filtered_data.test_setting_group.test_setting_level.test_array
+
+      expect(test_array).to eql [ 4, 5 ]
+
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_0')
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_1')
+    end
+
+    it 'can replace an array with an empty array' do
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY'] = '0'
+
+      filtered_data = EnvironmentFilter.execute(data: {
+                                                  test_setting_group: {
+                                                    test_setting_level: {
+                                                      test_array: [ 1, 2, 3 ]
+                                                    },
+                                                  },
+                                                })
+
+      test_array  = filtered_data.test_setting_group.test_setting_level.test_array
+
+      expect(test_array).to eql [ ]
+
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY')
+    end
   end
 
   context 'float variables' do
@@ -127,6 +213,45 @@ describe  EnvironmentFilter do
       expect(another_setting).to eql 3.4
 
       ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+    end
+
+    it 'can extract an array from the environment if an existing set of' \
+       'variables match the composite key' do
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_0'] = '4.2'
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_1'] = '5.3'
+
+      filtered_data = EnvironmentFilter.execute(data: {
+                                                  test_setting_group: {
+                                                    test_setting_level: {
+                                                      test_array: [ 1.9, 2.8, 3.7 ]
+                                                    },
+                                                  },
+                                                })
+
+      test_array  = filtered_data.test_setting_group.test_setting_level.test_array
+
+      expect(test_array).to eql [ 4.2, 5.3 ]
+
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_0')
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_1')
+    end
+
+    it 'can replace an array with an empty array' do
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY'] = '0'
+
+      filtered_data = EnvironmentFilter.execute(data: {
+                                                  test_setting_group: {
+                                                    test_setting_level: {
+                                                      test_array: [ 1.9, 2.8, 3.7 ]
+                                                    },
+                                                  },
+                                                })
+
+      test_array  = filtered_data.test_setting_group.test_setting_level.test_array
+
+      expect(test_array).to eql [ ]
+
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY')
     end
   end
 end

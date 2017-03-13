@@ -68,14 +68,36 @@ class   EnvironmentFilter
                        { key => execute(value, environment_keys) }
                      end,
                      lambda do |key, value, environment_key|
-                       if value.is_a? Integer
-                         { key => ENV[environment_key].nil? ? value : ENV[environment_key].to_i }
-                       elsif value.is_a? Float
-                         { key => ENV[environment_key].nil? ? value : ENV[environment_key].to_f }
+                       if value.is_a? Array
+                         if ENV[environment_key] == '0'
+                           { key => [] }
+                         else
+                           env_values = ENV.keys
+                                        .select{ |e|
+                                          e =~ /^#{environment_key}_\d+$/
+                                        }.sort.map{ |e|
+                                          match_type(ENV[e], value[0])
+                                        }
+                           if env_values.length > 0
+                             { key => env_values }
+                           else
+                             { key => value }
+                           end
+                         end
                        else
-                         { key => (ENV[environment_key] || value) }
+                         { key => ENV[environment_key].nil? ? value : match_type(ENV[environment_key], value) }
                        end
                      end)
+  end
+
+  def match_type(value, template)
+    if template.is_a? Integer
+      value.to_i
+    elsif template.is_a? Float
+      value.to_f
+    else
+      value
+    end
   end
 end
 end
