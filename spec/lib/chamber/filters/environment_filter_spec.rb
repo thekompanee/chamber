@@ -70,6 +70,33 @@ describe  EnvironmentFilter do
       ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_1')
     end
 
+    it 'can replace an array in numerical order' do
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_0'] = 'value 4'
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_2'] = 'value 6'
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_1'] = 'value 5'
+
+      filtered_data = EnvironmentFilter.execute(data: {
+                                                  test_setting_group: {
+                                                    test_setting_level: {
+                                                      test_array: [
+                                                        'value 1',
+                                                        'value 2',
+                                                        'value 3'
+                                                      ]
+                                                    },
+                                                  },
+                                                })
+
+      test_array  = filtered_data.test_setting_group.test_setting_level.test_array
+
+      expect(test_array).to eql [ 'value 4', 'value 5', 'value 6' ]
+
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_0')
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_1')
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_2')
+
+    end
+
     it 'can replace an array with an empty array' do
       ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY'] = '0'
 
@@ -88,6 +115,24 @@ describe  EnvironmentFilter do
       test_array  = filtered_data.test_setting_group.test_setting_level.test_array
 
       expect(test_array).to eql [ ]
+
+      ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY')
+    end
+
+    it 'defaults to strings in an empty array' do
+      ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY_0'] = '123'
+
+      filtered_data = EnvironmentFilter.execute(data: {
+                                                  test_setting_group: {
+                                                    test_setting_level: {
+                                                      test_array: []
+                                                    },
+                                                  },
+                                                })
+
+      test_array  = filtered_data.test_setting_group.test_setting_level.test_array
+
+      expect(test_array[0]).to be_a String
 
       ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_ARRAY')
     end
