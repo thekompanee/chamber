@@ -9,11 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['thekompanee', 'jfelchner', 'stevenhallen', 'm5rk']
   spec.email         = 'hello@thekompanee.com'
   spec.summary       = %q{A surprisingly configurable convention-based approach to managing your application's custom configuration settings.}
-  spec.description   = %q{
-                          Chamber lets you source your Settings from an arbitrary number of YAML files and
-                          provides a simple mechanism for overriding settings from the ENV, which is
-                          friendly to how Heroku addons work.
-                       }
+  spec.description   = %q{Chamber lets you source your Settings from an arbitrary number of YAML files and provides a simple mechanism for overriding settings from the ENV, which is friendly to how Heroku addons work.}
   spec.homepage      = 'https://github.com/thekompanee/chamber'
   spec.license       = 'MIT'
 
@@ -22,7 +18,8 @@ Gem::Specification.new do |spec|
 
   spec.executables   = %w{chamber}
   spec.files         = Dir['{app,config,db,lib,templates}/**/*'] + %w{README.md LICENSE.txt}
-  spec.test_files    = Dir['{test,spec,features}/**/*']
+
+  spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
   spec.add_dependency             'thor', ["~> 0.19.1"]
   spec.add_dependency             'hashie', ["~> 3.3"]
@@ -31,6 +28,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspectacular', ["~> 0.46"]
   spec.add_development_dependency 'activemodel', ["~> 5.0"]
   spec.add_development_dependency 'activesupport', ["~> 5.0"]
-
-  spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 end
