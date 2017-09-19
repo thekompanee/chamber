@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'hashie/mash'
+require 'chamber/hashie_mash'
 
 module  Chamber
 module  Filters
@@ -7,7 +7,7 @@ class   SecureFilter
   SECURE_KEY_TOKEN = /\A_secure_/
 
   def initialize(options = {})
-    self.data = Hashie::Mash.new(options.fetch(:data))
+    self.data = HashieMash.new(options.fetch(:data))
   end
 
   def self.execute(options = {})
@@ -19,7 +19,7 @@ class   SecureFilter
   attr_accessor :data
 
   def execute(raw_data = data)
-    settings = Hashie::Mash.new
+    settings = HashieMash.new
 
     raw_data.each_pair do |key, value|
       secure_value  = if value.respond_to? :each_pair

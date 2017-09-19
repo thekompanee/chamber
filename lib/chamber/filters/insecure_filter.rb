@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'hashie/mash'
+require 'chamber/hashie_mash'
 require 'chamber/filters/secure_filter'
 
 module  Chamber
@@ -12,7 +12,7 @@ class   InsecureFilter < SecureFilter
 
   def execute(raw_data = data)
     securable_settings = super
-    settings           = Hashie::Mash.new
+    settings           = HashieMash.new
 
     securable_settings.each_pair do |key, value|
       value = if value.respond_to? :each_pair

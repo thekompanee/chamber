@@ -162,7 +162,7 @@ HEREDOC
 
     expect(settings.to_hash).to     eql('setting' => 'value')
     expect(settings.to_hash).to     be_a Hash
-    expect(settings.to_hash).not_to be_a Hashie::Mash
+    expect(settings.to_hash).not_to be_a HashieMash
   end
 
   it 'can convert itself into a hash with flattened names' do
@@ -186,7 +186,7 @@ HEREDOC
       %w{there}                        => 'was not that easy?',
     )
     expect(settings.to_flattened_name_hash).to     be_a Hash
-    expect(settings.to_flattened_name_hash).not_to be_a Hashie::Mash
+    expect(settings.to_flattened_name_hash).not_to be_a HashieMash
   end
 
   it 'does not allow manipulation of the internal setting hash when converted to ' \

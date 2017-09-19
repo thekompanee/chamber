@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 require 'pathname'
 require 'socket'
-require 'hashie/mash'
+require 'chamber/hashie_mash'
 require 'chamber/decryption_key'
 
 module  Chamber
 class   ContextResolver
   def initialize(options = {})
-    self.options = Hashie::Mash.new(options)
+    self.options = HashieMash.new(options)
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
