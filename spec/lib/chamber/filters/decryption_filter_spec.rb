@@ -247,6 +247,19 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 
     expect(filtered_settings._secure_my_secure_setting).to eql 'long' * 100
   end
+
+  it 'does not warn if decrypting nil' do
+    allow(Chamber::EncryptionMethods::None).to receive(:warn)
+
+    filtered_settings = DecryptionFilter.execute(
+      data:           {
+        _secure_my_secure_setting: nil,
+      },
+      decryption_key: './spec/spec_key',
+    )
+
+    expect(Chamber::EncryptionMethods::None).not_to have_received(:warn)
+  end
 end
 end
 end
