@@ -53,7 +53,7 @@ describe  File do
     tempfile      = create_tempfile_with_content '{ test : '
     settings_file = File.new path: tempfile.path
 
-    expect { settings_file.to_settings }.to raise_error
+    expect { settings_file.to_settings }.to raise_error Psych::SyntaxError
   end
 
   it 'passes any namespaces through to the settings' do
