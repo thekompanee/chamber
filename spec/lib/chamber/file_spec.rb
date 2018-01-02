@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber/file'
 require 'chamber/settings'
@@ -20,16 +21,16 @@ describe  File do
     settings_file = File.new path: tempfile.path
 
     allow(Settings).to receive(:new).
-    and_return :settings
+                         and_return :settings
 
     file_settings = settings_file.to_settings
 
-    expect(file_settings).to  eql :settings
+    expect(file_settings).to  be :settings
     expect(Settings).to       have_received(:new).
-    with(settings:       { 'test' => 'settings' },
-         namespaces:     {},
-         decryption_key: nil,
-         encryption_key: nil)
+                                with(settings:       { 'test' => 'settings' },
+                                     namespaces:     {},
+                                     decryption_key: nil,
+                                     encryption_key: nil)
   end
 
   it 'can convert a file whose contents are empty' do
@@ -37,16 +38,16 @@ describe  File do
     settings_file = File.new path: tempfile.path
 
     allow(Settings).to receive(:new).
-    and_return :settings
+                         and_return :settings
 
     file_settings = settings_file.to_settings
 
-    expect(file_settings).to  eql :settings
+    expect(file_settings).to  be :settings
     expect(Settings).to       have_received(:new).
-    with(settings:       {},
-         namespaces:     {},
-         decryption_key: nil,
-         encryption_key: nil)
+                                with(settings:       {},
+                                     namespaces:     {},
+                                     decryption_key: nil,
+                                     encryption_key: nil)
   end
 
   it 'throws an error when the file contents are malformed' do
@@ -68,12 +69,12 @@ describe  File do
     settings_file.to_settings
 
     expect(Settings).to have_received(:new).
-    with(settings:       { 'test' => 'settings' },
-         namespaces:     {
-           environment: :development,
-         },
-         decryption_key: nil,
-         encryption_key: nil)
+                          with(settings:       { 'test' => 'settings' },
+                               namespaces:     {
+                                 environment: :development,
+                               },
+                               decryption_key: nil,
+                               encryption_key: nil)
   end
 
   it 'can handle files which contain ERB markup' do
@@ -84,26 +85,26 @@ describe  File do
 
     settings_file.to_settings
     expect(Settings).to have_received(:new).
-    with(settings:       { 'test' => 2 },
-         namespaces:     {},
-         decryption_key: nil,
-         encryption_key: nil)
+                          with(settings:       { 'test' => 2 },
+                               namespaces:     {},
+                               decryption_key: nil,
+                               encryption_key: nil)
   end
 
   it 'does not throw an error when attempting to convert a file which does not exist' do
     settings_file = File.new path: 'no/path'
 
     allow(Settings).to receive(:new).
-    and_return :settings
+                         and_return :settings
 
     file_settings = settings_file.to_settings
 
-    expect(file_settings).to  eql :settings
+    expect(file_settings).to  be :settings
     expect(Settings).to       have_received(:new).
-    with(settings:       {},
-         namespaces:     {},
-         decryption_key: nil,
-         encryption_key: nil)
+                                with(settings:       {},
+                                     namespaces:     {},
+                                     decryption_key: nil,
+                                     encryption_key: nil)
   end
 
   it 'can securely encrypt the settings contained in a file' do

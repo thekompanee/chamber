@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber/filters/failed_decryption_filter'
 
@@ -19,7 +20,7 @@ describe  FailedDecryptionFilter do
         },
       )
     }.
-    to raise_error Chamber::Errors::DecryptionFailure
+      to raise_error Chamber::Errors::DecryptionFailure
   end
 
   it 'does not raise an exception if it is not a secure key' do
@@ -36,7 +37,7 @@ describe  FailedDecryptionFilter do
         },
       )
     }.
-    not_to raise_error
+      not_to raise_error
   end
 
   it 'does not raise an exception if it is not a secure value' do
@@ -47,7 +48,7 @@ describe  FailedDecryptionFilter do
         },
       )
     }.
-    not_to raise_error
+      not_to raise_error
   end
 end
 end

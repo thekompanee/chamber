@@ -1,22 +1,23 @@
 # frozen_string_literal: true
+
 require 'hashie/mash'
 
 module  Chamber
 module  Filters
 class   NamespaceFilter
+  def self.execute(options = {})
+    new(options).__send__(:execute)
+  end
+
+  attr_accessor :data,
+                :namespaces
+
   def initialize(options = {})
     self.data       = Hashie::Mash.new(options.fetch(:data))
     self.namespaces = options.fetch(:namespaces)
   end
 
-  def self.execute(options = {})
-    new(options).__send__(:execute)
-  end
-
   protected
-
-  attr_accessor :data,
-                :namespaces
 
   def execute
     if data_is_namespaced?

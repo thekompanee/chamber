@@ -1,4 +1,16 @@
+Layout/DotPosition:
+  Enabled:            false
+
 Layout/ExtraSpacing:
+  Enabled:            false
+
+Layout/IndentHeredoc:
+  Enabled:            false
+
+Performance/RegexpMatch:
+  Enabled:            false
+
+Style/InlineComment:
   Enabled:            false
 
 Style/SymbolArray:

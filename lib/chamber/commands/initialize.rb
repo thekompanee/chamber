@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'pathname'
 require 'fileutils'
 require 'openssl'
@@ -8,6 +9,12 @@ require 'chamber/commands/base'
 module  Chamber
 module  Commands
 class   Initialize < Chamber::Commands::Base
+  def self.call(options = {})
+    new(options).call
+  end
+
+  attr_accessor :basepath
+
   def initialize(options = {})
     super
 
@@ -59,13 +66,7 @@ class   Initialize < Chamber::Commands::Base
   end
   # rubocop:enable Metrics/LineLength, Metrics/MethodLength, Metrics/AbcSize
 
-  def self.call(options = {})
-    new(options).call
-  end
-
   protected
-
-  attr_accessor :basepath
 
   def settings_template_filepath
     @settings_template_filepath ||= templates_path + 'settings.yml'

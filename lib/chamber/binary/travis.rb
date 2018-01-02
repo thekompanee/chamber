@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'thor'
 require 'chamber/commands/travis/secure'
 

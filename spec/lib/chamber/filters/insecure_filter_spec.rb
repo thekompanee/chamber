@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber/filters/insecure_filter'
 
@@ -37,6 +38,7 @@ describe  InsecureFilter do
     expect(filtered_settings.secure_group.insecure_nested_setting).to be_nil
   end
 
+  # rubocop:disable RSpec/ExampleLength
   it 'will not return values which are encrypted' do
     filtered_settings = InsecureFilter.execute(
       data: {
@@ -70,13 +72,14 @@ describe  InsecureFilter do
       },
     )
 
-    expect(filtered_settings._secure_setting?).to                          eql false
-    expect(filtered_settings.secure_setting?).to                           eql false
+    expect(filtered_settings._secure_setting?).to                          be  false
+    expect(filtered_settings.secure_setting?).to                           be  false
     expect(filtered_settings._secure_other_setting).to                     eql 'hello'
-    expect(filtered_settings.secure_group._secure_nested_setting?).to      eql false
+    expect(filtered_settings.secure_group._secure_nested_setting?).to      be  false
     expect(filtered_settings.secure_group._secure_other_nested_setting).to eql 'goodbye'
-    expect(filtered_settings.secure_group.insecure_nested_setting?).to     eql false
+    expect(filtered_settings.secure_group.insecure_nested_setting?).to     be  false
   end
+  # rubocop:enable RSpec/ExampleLength
 end
 end
 end

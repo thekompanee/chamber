@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'set'
 
 ###
@@ -14,13 +15,6 @@ class   NamespaceSet
   include Enumerable
 
   ###
-  # Internal: Creates a new NamespaceSet from arrays, hashes and sets.
-  #
-  def initialize(raw_namespaces = {})
-    self.raw_namespaces = raw_namespaces
-  end
-
-  ###
   # Internal: Allows for more compact NamespaceSet creation by giving a list of
   # namespace values.
   #
@@ -32,6 +26,15 @@ class   NamespaceSet
   #
   def self.[](*namespace_values)
     new(namespace_values)
+  end
+
+  attr_reader :raw_namespaces
+
+  ###
+  # Internal: Creates a new NamespaceSet from arrays, hashes and sets.
+  #
+  def initialize(raw_namespaces = {})
+    self.raw_namespaces = raw_namespaces
   end
 
   ###
@@ -108,8 +111,6 @@ class   NamespaceSet
   end
 
   protected
-
-  attr_accessor :raw_namespaces
 
   ###
   # Internal: Sets the namespaces for the set from a variety of objects and

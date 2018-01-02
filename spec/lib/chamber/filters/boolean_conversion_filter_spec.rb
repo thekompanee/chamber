@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber/filters/boolean_conversion_filter'
 
 module    Chamber
 module    Filters
 describe  BooleanConversionFilter do
-  # rubocop:disable Lint/DuplicatedKey
+  # rubocop:disable Lint/DuplicatedKey, RSpec/ExampleLength
   it 'can convert string boolean values into TrueClass and FalseClass even if they ' \
      'are deeply nested' do
 
@@ -51,7 +52,7 @@ describe  BooleanConversionFilter do
                                  nilly:         nil,
                                  non_boolean:   [1, 2, 3])
   end
-  # rubocop:enable Lint/DuplicatedKey
+  # rubocop:enable Lint/DuplicatedKey, RSpec/ExampleLength
 end
 end
 end

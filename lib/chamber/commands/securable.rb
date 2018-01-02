@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'shellwords'
 require 'chamber/instance'
 
@@ -9,8 +10,8 @@ module  Securable
     super
 
     ignored_settings_options        = options.
-                                      merge(files: ignored_settings_filepaths).
-                                      reject { |k, _v| k == 'basepath' }
+                                        merge(files: ignored_settings_filepaths).
+                                        reject { |k, _v| k == 'basepath' }
     self.ignored_settings_instance  = Chamber::Instance.new(ignored_settings_options)
     self.current_settings_instance  = Chamber::Instance.new(options)
     self.only_sensitive             = options[:only_sensitive]

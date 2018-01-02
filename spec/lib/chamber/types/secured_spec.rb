@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rspectacular'
 require 'active_support/hash_with_indifferent_access'
 require 'chamber/types/secured'
@@ -7,35 +9,35 @@ module    Types
 describe  Secured do
   BASE64_STRING_PATTERN = %r{[A-Za-z0-9\+/]{342}==}
 
-  subject do
+  subject(:secured_type) do
     Secured.new(decryption_key: './spec/spec_key',
                 encryption_key: './spec/spec_key.pub')
   end
 
   it 'allows strings to be cast from the user' do
     json_string = '{ "hello": "there", "whatever": 3 }'
-    secured     = subject.cast(json_string)
+    secured     = secured_type.cast(json_string)
 
     expect(secured).to eql('hello' => 'there', 'whatever' => 3)
   end
 
   it 'allows hashes to be cast from a user' do
     json_hash = { 'hello' => 'there', 'whatever' => 3 }
-    secured   = subject.cast(json_hash)
+    secured   = secured_type.cast(json_hash)
 
     expect(secured).to eql('hello' => 'there', 'whatever' => 3)
   end
 
   it 'allows nils to be cast from a user' do
-    secured = subject.cast(nil)
+    secured = secured_type.cast(nil)
 
     expect(secured).to be_nil
   end
 
   it 'fails if passed something that it cannot be cast' do
-    expect { subject.cast(3) }.to \
+    expect { secured_type.cast(3) }.to \
     raise_error(ArgumentError).
-    with_message('Any attributes encrypted with Chamber must ' \
+      with_message('Any attributes encrypted with Chamber must ' \
                  'be either a Hash or a valid JSON string')
   end
 
@@ -51,7 +53,7 @@ describe  Secured do
                                      'LAtSQjFRYfAQA==",' \
                     '"whatever":3' \
                   '}'
-    secured     = subject.deserialize(json_string)
+    secured     = secured_type.deserialize(json_string)
 
     expect(secured).to eql('_secure_hello' => 'there', 'whatever' => 3)
   end
@@ -59,7 +61,7 @@ describe  Secured do
   # rubocop:disable Metrics/LineLength
   it 'can serialize a hash' do
     json_hash = { '_secure_hello' => 'there', 'whatever' => 3 }
-    secured   = subject.serialize(json_hash)
+    secured   = secured_type.serialize(json_hash)
 
     expect(secured).to be_a String
     expect(secured).to match(/{\"_secure_hello\":\"#{BASE64_STRING_PATTERN}\",\"whatever\":3}/)

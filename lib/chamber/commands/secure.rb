@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'chamber/commands/base'
 
 module  Chamber
@@ -12,7 +13,7 @@ class   Secure < Chamber::Commands::Base
 
   def call
     disable_warnings do
-      insecure_environment_variables.each do |key, _value|
+      insecure_environment_variables.each_key do |key|
         if dry_run
           shell.say_status 'encrypt', key, :blue
         else

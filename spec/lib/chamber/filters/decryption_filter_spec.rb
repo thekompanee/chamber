@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber/filters/decryption_filter'
 
@@ -22,6 +23,7 @@ describe  DecryptionFilter do
     expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
   end
 
+  # rubocop:disable RSpec/ExampleLength
   it 'will correct decrypt values which contain multiline strings' do
     filtered_settings = DecryptionFilter.execute(
       data:           {
@@ -58,6 +60,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 -----END RSA PRIVATE KEY-----
     HEREDOC
   end
+  # rubocop:enable RSpec/ExampleLength
 
   it 'will not attempt to decrypt values which are not marked as "secure"' do
     filtered_settings = DecryptionFilter.execute(
@@ -182,7 +185,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
     )
 
     expect(filtered_settings._secure_my_secure_setting).to be_a Integer
-    expect(filtered_settings._secure_my_secure_setting).to eql  12_345
+    expect(filtered_settings._secure_my_secure_setting).to be   12_345
   end
 
   it 'can decrypt a number that has not been yamlled' do
@@ -251,7 +254,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
   it 'does not warn if decrypting nil' do
     allow(Chamber::EncryptionMethods::None).to receive(:warn)
 
-    filtered_settings = DecryptionFilter.execute(
+    _filtered_settings = DecryptionFilter.execute(
       data:           {
         _secure_my_secure_setting: nil,
       },

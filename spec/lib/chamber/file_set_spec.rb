@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber/file_set'
 require 'fileutils'
@@ -174,21 +175,6 @@ describe  FileSet do
     ::FileUtils.rm_f('/tmp/settings*.yml')
   end
 
-  it 'considers the generic file prior to any namespaced files' do
-    ::File.new('/tmp/settings.yml', 'w+')
-    ::File.new('/tmp/settings-blue.yml', 'w+')
-
-    file_set = FileSet.new files:      '/tmp/settings*.yml',
-                           namespaces: ['blue']
-
-    expect(file_set.filenames).to eql  [
-                                         '/tmp/settings.yml',
-                                         '/tmp/settings-blue.yml',
-                                       ]
-
-    ::FileUtils.rm_f('/tmp/settings*.yml')
-  end
-
   it 'considers each glob independently, placing non-namespaced and namespaced ' \
      'versions of the globs files above those in subsequent globs' do
 
@@ -204,20 +190,6 @@ describe  FileSet do
     expect(file_set.filenames).to eql [
                                         '/tmp/settings/credentials-development.yml',
                                         '/tmp/settings/settings.yml',
-                                      ]
-
-    ::FileUtils.rm_rf('/tmp/settings')
-  end
-
-  it 'can display the filenames which were considered for the settings values' do
-    ::File.new('/tmp/settings/some_settings_file.yml', 'w+')
-    ::File.new('/tmp/settings/another_settings_file.yml', 'w+')
-
-    file_set = FileSet.new files: '/tmp/settings/*.yml'
-
-    expect(file_set.filenames).to eql [
-                                        '/tmp/settings/another_settings_file.yml',
-                                        '/tmp/settings/some_settings_file.yml',
                                       ]
 
     ::FileUtils.rm_rf('/tmp/settings')

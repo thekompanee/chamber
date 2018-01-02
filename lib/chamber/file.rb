@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'pathname'
 require 'yaml'
 require 'erb'
@@ -9,6 +10,10 @@ require 'erb'
 #
 module  Chamber
 class   File < Pathname
+  attr_accessor :namespaces,
+                :decryption_key,
+                :encryption_key
+
   ###
   # Internal: Creates a settings file representing a path to a file on the
   # filesystem.
@@ -82,13 +87,13 @@ class   File < Pathname
       escaped_value = Regexp.escape(value)
 
       file_contents.
-      sub!(
+        sub!(
           /^(\s*)_secure_#{escaped_name}(\s*):(\s*)['"]?#{escaped_value}['"]?$/,
           "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}",
       )
 
       file_contents.
-      sub!(
+        sub!(
           /^(\s*)_secure_#{escaped_name}(\s*):(\s*)\|((?:\n\1\s{2}.*)+)/,
           "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}",
       )
@@ -96,12 +101,6 @@ class   File < Pathname
 
     write(file_contents)
   end
-
-  protected
-
-  attr_accessor :namespaces,
-                :decryption_key,
-                :encryption_key
 
   private
 

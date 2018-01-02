@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'pathname'
 require 'socket'
 require 'hashie/mash'
@@ -6,6 +7,8 @@ require 'chamber/decryption_key'
 
 module  Chamber
 class   ContextResolver
+  attr_accessor :options
+
   def initialize(options = {})
     self.options = Hashie::Mash.new(options)
   end
@@ -65,8 +68,6 @@ class   ContextResolver
   end
 
   protected
-
-  attr_accessor :options
 
   def resolve_preset
     if in_a_rails_project?

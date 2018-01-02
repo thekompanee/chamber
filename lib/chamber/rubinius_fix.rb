@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'pathname'
 
 unless Pathname.instance_methods.include?(:write)

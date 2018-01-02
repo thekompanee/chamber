@@ -1,7 +1,10 @@
 # frozen_string_literal: true
+
 module  Chamber
 module  Filters
 class   BooleanConversionFilter
+  attr_accessor :data
+
   def initialize(options = {})
     self.data = options.fetch(:data).dup
   end
@@ -11,8 +14,6 @@ class   BooleanConversionFilter
   end
 
   protected
-
-  attr_accessor :data
 
   # rubocop:disable Metrics/BlockNesting
   def execute(settings = data)

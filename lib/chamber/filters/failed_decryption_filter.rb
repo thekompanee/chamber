@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'chamber/errors/decryption_failure'
 
 module  Chamber
@@ -7,17 +8,17 @@ class   FailedDecryptionFilter
   SECURE_KEY_TOKEN      = /\A_secure_/
   BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9\+/]{342}==\z}
 
-  def initialize(options = {})
-    self.data = options.fetch(:data).dup
-  end
-
   def self.execute(options = {})
     new(options).__send__(:execute)
   end
 
-  protected
-
   attr_accessor :data
+
+  def initialize(options = {})
+    self.data = options.fetch(:data).dup
+  end
+
+  protected
 
   def execute(raw_data = data)
     settings = raw_data

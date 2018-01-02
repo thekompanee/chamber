@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module  Chamber
 module  EncryptionMethods
 class   Ssl
@@ -27,10 +29,10 @@ class   Ssl
       value
     else
       key, iv, decoded_string = value.
-                                match(LARGE_DATA_STRING_PATTERN).
-                                captures.
-                                map do |part|
-                                    Base64.strict_decode64(part)
+                                  match(LARGE_DATA_STRING_PATTERN).
+                                  captures.
+                                  map do |part|
+        Base64.strict_decode64(part)
       end
       key = decryption_key.private_decrypt(key)
 

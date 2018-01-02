@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'chamber/configuration'
 require 'chamber/file_set'
 require 'chamber/settings'
@@ -29,21 +30,21 @@ class   Instance
     config = configuration.to_hash.merge(options)
 
     Settings.
-    new(
+      new(
       config.merge(
         settings:     data,
         pre_filters:  [Filters::EncryptionFilter],
         post_filters: [],
       ),
     ).
-    to_hash
+      to_hash
   end
 
   def decrypt(data, options = {})
     config = configuration.to_hash.merge(options)
 
     Settings.
-    new(
+      new(
       config.merge(
         settings:     data,
         pre_filters:  [Filters::NamespaceFilter],
@@ -53,7 +54,7 @@ class   Instance
                       ],
       ),
     ).
-    to_hash
+      to_hash
   end
 
   def to_s(options = {})

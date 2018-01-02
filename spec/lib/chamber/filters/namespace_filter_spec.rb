@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber/filters/namespace_filter'
 require 'chamber/namespace_set'

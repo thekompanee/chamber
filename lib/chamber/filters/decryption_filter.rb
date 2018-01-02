@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'openssl'
 require 'base64'
 require 'hashie/mash'
@@ -15,6 +16,9 @@ class   DecryptionFilter
   BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9\+/]{342}==\z}
   LARGE_DATA_STRING_PATTERN = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z} # rubocop:disable Metrics/LineLength
 
+  attr_accessor :data
+  attr_reader   :decryption_key
+
   def initialize(options = {})
     self.decryption_key = options.fetch(:decryption_key, nil)
     self.data           = options.fetch(:data).dup
@@ -25,9 +29,6 @@ class   DecryptionFilter
   end
 
   protected
-
-  attr_accessor :data
-  attr_reader   :decryption_key
 
   def execute(raw_data = data)
     settings = Hashie::Mash.new
@@ -46,7 +47,11 @@ class   DecryptionFilter
   end
 
   def decryption_key=(keyish)
-    return @decryption_key = nil if keyish.nil?
+    if keyish.nil?
+      @decryption_key = nil
+
+      return
+    end
 
     key_content     = if ::File.readable?(::File.expand_path(keyish))
                         ::File.read(::File.expand_path(keyish))

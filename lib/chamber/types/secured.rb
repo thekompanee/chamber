@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'active_support/json'
 require 'chamber'
 
-# rubocop:disable Lint/HandleExceptions, Style/EmptyLinesAroundModuleBody
+# rubocop:disable Lint/HandleExceptions, Layout/EmptyLinesAroundModuleBody
 module  Chamber
 
 begin
@@ -76,4 +78,4 @@ class   Secured < CHAMBER_TYPE_VALUE_SUPERCLASS
 end
 end
 end
-# rubocop:enable Lint/HandleExceptions, Style/EmptyLinesAroundModuleBody
+# rubocop:enable Lint/HandleExceptions, Layout/EmptyLinesAroundModuleBody

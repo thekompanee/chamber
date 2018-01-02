@@ -1,9 +1,12 @@
 # frozen_string_literal: true
+
 require 'chamber/rubinius_fix'
 require 'chamber/instance'
 require 'chamber/rails'
 
 module  Chamber
+  attr_writer :instance
+
   def load(options = {})
     self.instance = Instance.new(options)
   end
@@ -16,15 +19,9 @@ module  Chamber
     instance.settings
   end
 
-  protected
-
-  attr_accessor :instance
-
   def instance
     @instance ||= Instance.new({})
   end
-
-  public
 
   def method_missing(name, *args)
     return instance.public_send(name, *args) if instance.respond_to?(name)

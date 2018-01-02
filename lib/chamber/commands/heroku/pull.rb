@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'chamber/commands/base'
 require 'chamber/commands/heroku'
 
@@ -7,6 +8,8 @@ module  Commands
 module  Heroku
 class   Pull < Chamber::Commands::Base
   include Chamber::Commands::Heroku
+
+  attr_accessor :target_file
 
   def initialize(options = {})
     super
@@ -21,10 +24,6 @@ class   Pull < Chamber::Commands::Base
       configuration
     end
   end
-
-  protected
-
-  attr_accessor :target_file
 end
 end
 end

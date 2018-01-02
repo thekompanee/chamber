@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'pathname'
 require 'chamber/namespace_set'
 require 'chamber/file'
@@ -111,6 +112,11 @@ require 'chamber/settings'
 #
 module  Chamber
 class   FileSet
+  attr_reader   :namespaces,
+                :paths
+  attr_accessor :decryption_key,
+                :encryption_key
+
   def initialize(options = {})
     self.namespaces     = options[:namespaces] || {}
     self.decryption_key = options[:decryption_key]
@@ -176,11 +182,6 @@ class   FileSet
   end
 
   protected
-
-  attr_reader   :namespaces,
-                :paths
-  attr_accessor :decryption_key,
-                :encryption_key
 
   ###
   # Internal: Allows the paths for the FileSet to be set. It can either be an

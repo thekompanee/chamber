@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber'
 require 'fileutils'
@@ -71,7 +72,7 @@ only_namespaced_sub_settings:
   HEREDOC
 end
 
-describe 'Chamber' do
+describe Chamber do
   before(:each) { Chamber.load(basepath: '/tmp/chamber') }
 
   it 'knows how to load itself with a path string' do
@@ -87,7 +88,7 @@ describe 'Chamber' do
   end
 
   it 'processes settings files through ERB before YAML' do
-    expect(Chamber[:test][:my_dynamic_setting]).to eql 2
+    expect(Chamber[:test][:my_dynamic_setting]).to be 2
   end
 
   it 'can access settings through a hash-like syntax' do
@@ -109,7 +110,7 @@ describe 'Chamber' do
     Chamber.load(basepath: '/tmp/chamber')
     expect(Chamber.test.my_setting).to eql 'some_other_value'
     expect(Chamber.test.another_level.level_three.an_array).to eql 'something'
-    expect(Chamber.test.my_dynamic_setting).to eql 2
+    expect(Chamber.test.my_dynamic_setting).to be 2
 
     ENV.delete 'TEST_MY_SETTING'
     ENV.delete 'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'
@@ -122,7 +123,7 @@ describe 'Chamber' do
                  })
 
     expect(Chamber.other.everything).to        eql 'works'
-    expect(Chamber.test.my_dynamic_setting).to eql 2
+    expect(Chamber.test.my_dynamic_setting).to be  2
   end
 
   it 'loads multiple namespaces if it is called twice' do
@@ -192,7 +193,7 @@ describe 'Chamber' do
 
     expect(Chamber.test.my_setting).to                eql 'my_value'
     expect(Chamber.test.my_other_setting).to          eql 'my_other_value'
-    expect(Chamber.test.another_level.setting_one).to eql 3
+    expect(Chamber.test.another_level.setting_one).to be  3
   end
 
   it 'loads YAML files from the "settings" directory under the base directory if ' \

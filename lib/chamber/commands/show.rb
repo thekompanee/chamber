@@ -1,10 +1,14 @@
 # frozen_string_literal: true
+
 require 'pp'
 require 'chamber/commands/base'
 
 module  Chamber
 module  Commands
 class   Show < Chamber::Commands::Base
+  attr_accessor :as_env,
+                :only_sensitive
+
   def initialize(options = {})
     super
 
@@ -17,16 +21,13 @@ class   Show < Chamber::Commands::Base
       settings.to_s(pair_separator: "\n")
     else
       PP.
-      pp(settings.to_hash, StringIO.new, 60).
-      string.
-      chomp
+        pp(settings.to_hash, StringIO.new, 60).
+        string.
+        chomp
     end
   end
 
   protected
-
-  attr_accessor :as_env,
-                :only_sensitive
 
   def settings
     @settings ||= if only_sensitive

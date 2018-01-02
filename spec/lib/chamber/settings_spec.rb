@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber/settings'
 
@@ -307,7 +308,7 @@ HEREDOC
 
     expect(secured_settings.my_encrypted_setting).to    eql 'hello'
     expect(secured_settings.my_unencrypted_setting).to  eql 'nifty'
-    expect(secured_settings.my_insecure_setting?).to    eql false
+    expect(secured_settings.my_insecure_setting?).to    be  false
   end
 
   it 'can filter unencrypted settings' do
@@ -329,9 +330,9 @@ HEREDOC
 
     secured_settings = settings.insecure
 
-    expect(secured_settings.my_encrypted_setting?).to   eql false
+    expect(secured_settings.my_encrypted_setting?).to   be  false
     expect(secured_settings.my_unencrypted_setting).to  eql 'nifty'
-    expect(secured_settings.my_insecure_setting?).to    eql false
+    expect(secured_settings.my_insecure_setting?).to    be  false
   end
 
   it 'raises an exception when it accesses a value which cannot be decrypted' do
@@ -349,7 +350,7 @@ HEREDOC
     )
 
     expect { settings.my_encrypted_setting }.
-    to raise_error Chamber::Errors::DecryptionFailure
+      to raise_error Chamber::Errors::DecryptionFailure
   end
 
   it 'prefers environment variable values over encrypted values' do

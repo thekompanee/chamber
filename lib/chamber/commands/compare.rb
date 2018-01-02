@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'chamber/instance'
 require 'chamber/commands/base'
 require 'chamber/commands/comparable'
@@ -7,6 +8,13 @@ module  Chamber
 module  Commands
 class   Compare < Chamber::Commands::Base
   include Chamber::Commands::Comparable
+
+  attr_accessor :first_settings_instance,
+                :second_settings_instance
+
+  def self.call(options = {})
+    new(options).call
+  end
 
   def initialize(options = {})
     super
@@ -18,14 +26,7 @@ class   Compare < Chamber::Commands::Base
     self.second_settings_instance = Chamber::Instance.new(second_settings_options)
   end
 
-  def self.call(options = {})
-    new(options).call
-  end
-
   protected
-
-  attr_accessor :first_settings_instance,
-                :second_settings_instance
 
   def first_settings_data
     settings_data(first_settings_instance)

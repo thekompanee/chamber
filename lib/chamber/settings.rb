@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'hashie/mash'
 require 'chamber/namespace_set'
 require 'chamber/filters/namespace_filter'
@@ -16,7 +17,11 @@ require 'chamber/filters/failed_decryption_filter'
 #
 module  Chamber
 class   Settings
-  attr_reader :namespaces
+  attr_accessor :pre_filters,
+                :post_filters,
+                :encryption_key,
+                :decryption_key
+  attr_reader   :namespaces
 
   def initialize(options = {})
     self.namespaces       = options[:namespaces]      ||  []
@@ -235,13 +240,17 @@ class   Settings
     ))
   end
 
-  protected
+  def method_missing(name, *args)
+    return data.public_send(name, *args) if data.respond_to?(name)
 
-  attr_accessor :pre_filters,
-                :post_filters,
-                :encryption_key,
-                :decryption_key,
-                :raw_data
+    super
+  end
+
+  def respond_to_missing?(name, include_private = false)
+    data.respond_to?(name, include_private)
+  end
+
+  protected
 
   def raw_data=(new_raw_data)
     @raw_data   = Hashie::Mash.new(new_raw_data)
@@ -271,18 +280,6 @@ class   Settings
       decryption_key: decryption_key,
       encryption_key: encryption_key,
     }
-  end
-
-  public
-
-  def method_missing(name, *args)
-    return data.public_send(name, *args) if data.respond_to?(name)
-
-    super
-  end
-
-  def respond_to_missing?(name, include_private = false)
-    data.respond_to?(name, include_private)
   end
 end
 end

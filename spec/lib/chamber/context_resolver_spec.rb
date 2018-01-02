@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber/context_resolver'
 
@@ -10,8 +11,10 @@ describe  ContextResolver do
   let(:rails_4_path)      { ::File.expand_path('../../../rails-4-test', __FILE__) }
   let(:rails_engine_path) { ::File.expand_path('../../../rails-engine-test', __FILE__) }
 
+  # rubocop:disable RSpec/InstanceVariable
   before(:each) { @old_chamber_key = ENV.delete('CHAMBER_KEY') }
   after(:each)  { ENV['CHAMBER_KEY'] = @old_chamber_key }
+  # rubocop:enable RSpec/InstanceVariable
 
   it 'does not attempt to do any resolution if all valid options are passed in' do
     options = ContextResolver.resolve(basepath:   'my_path',
@@ -63,7 +66,7 @@ describe  ContextResolver do
 
   it 'sets the rootpath to the current working directory if none is passed in' do
     allow(Pathname).to  receive(:pwd).
-    and_return('my_dir')
+                          and_return('my_dir')
 
     options = ContextResolver.resolve
 

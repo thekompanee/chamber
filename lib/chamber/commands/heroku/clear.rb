@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'chamber/commands/base'
 require 'chamber/commands/heroku'
 
@@ -9,7 +10,7 @@ class   Clear < Chamber::Commands::Base
   include Chamber::Commands::Heroku
 
   def call
-    chamber.to_environment.keys.each do |key|
+    chamber.to_environment.each_key do |key|
       next unless configuration.match(key)
 
       if dry_run

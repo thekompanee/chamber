@@ -1,14 +1,11 @@
 # frozen_string_literal: true
+
 require 'chamber/environmentable'
 
 module  Chamber
 module  Filters
 class   EnvironmentFilter
   include Environmentable
-
-  def initialize(options = {})
-    self.data = options.fetch(:data)
-  end
 
   ###
   # Internal: Allows the existing environment to be injected into the passed in
@@ -58,9 +55,13 @@ class   EnvironmentFilter
     new(options).__send__(:execute)
   end
 
-  protected
-
   attr_accessor :data
+
+  def initialize(options = {})
+    self.data = options.fetch(:data)
+  end
+
+  protected
 
   def execute(settings = data, parent_keys = [])
     with_environment(settings, parent_keys,

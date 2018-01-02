@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber/filters/encryption_filter'
 
@@ -87,6 +88,7 @@ describe  EncryptionFilter do
                                      'uF3CDIKRIC6U+mnM5SRMO4Dzysw=='
   end
 
+  # rubocop:disable RSpec/ExampleLength
   it 'will not attempt to encrypt large values if it guesses that they are already encrypted' do
     filtered_settings = EncryptionFilter.execute(
       data:           {
@@ -135,6 +137,7 @@ describe  EncryptionFilter do
                                      'jjTyJPeW/1FE3+tP3G3HJAV4sgoO0YwhNY1Nji56igCl3UvEP' \
                                      'nEQcJgu0w/+dqSreqwp6TqaqXY3lzr8vi733lti4nss='
   end
+  # rubocop:enable RSpec/ExampleLength
 
   it 'can encrypt long multiline strings' do
     filtered_settings = EncryptionFilter.execute(

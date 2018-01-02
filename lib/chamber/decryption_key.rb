@@ -1,8 +1,16 @@
 # frozen_string_literal: true
+
 require 'stringio'
 
 module  Chamber
 class   DecryptionKey
+  def self.resolve(*args)
+    new(*args).resolve
+  end
+
+  attr_accessor :rootpath
+  attr_reader   :filename
+
   def initialize(options = {})
     self.rootpath = options[:rootpath]
     self.filename = options[:filename] || ''
@@ -16,14 +24,7 @@ class   DecryptionKey
     end
   end
 
-  def self.resolve(*args)
-    new(*args).resolve
-  end
-
   protected
-
-  attr_accessor :filename,
-                :rootpath
 
   def filename=(other)
     other_file = Pathname.new(other)

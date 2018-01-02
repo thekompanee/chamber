@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rspectacular'
 require 'chamber/commands/secure'
 require 'fileutils'
@@ -35,7 +36,7 @@ HEREDOC
     Secure.call(options)
 
     expect(settings_filename.read).
-    to match %r{_secure_my_unencrpyted_setting: [A-Za-z0-9\+\/]{342}==}
+      to match %r{_secure_my_unencrpyted_setting: [A-Za-z0-9\+\/]{342}==}
   end
 end
 end
