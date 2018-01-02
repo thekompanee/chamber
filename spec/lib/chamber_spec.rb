@@ -104,15 +104,19 @@ describe 'Chamber' do
 
   it 'prefers values stored in environment variables over those in the YAML files' do
     ENV['TEST_MY_SETTING'] = 'some_other_value'
-    ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = 'something'
+    ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY_0'] = 'something 0'
+    ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY_1'] = 'something 1'
+    ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY_2'] = 'something 2'
 
     Chamber.load(basepath: '/tmp/chamber')
     expect(Chamber.test.my_setting).to eql 'some_other_value'
-    expect(Chamber.test.another_level.level_three.an_array).to eql 'something'
+    expect(Chamber.test.another_level.level_three.an_array).to eql [ 'something 0', 'something 1', 'something 2' ]
     expect(Chamber.test.my_dynamic_setting).to eql 2
 
     ENV.delete 'TEST_MY_SETTING'
-    ENV.delete 'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'
+    ENV.delete 'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY_0'
+    ENV.delete 'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY_1'
+    ENV.delete 'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY_2'
   end
 
   it 'can load files based on the namespace passed in' do
