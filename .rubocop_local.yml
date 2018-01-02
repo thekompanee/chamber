@@ -1,0 +1,11 @@
+Layout/ExtraSpacing:
+  Enabled:            false
+
+Style/SymbolArray:
+  EnforcedStyle:      'brackets'
+
+Style/OptionHash:
+  Enabled:            false
+
+Security/YAMLLoad:
+  Enabled:            false
