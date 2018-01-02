@@ -3,6 +3,7 @@
 require 'pathname'
 require 'fileutils'
 require 'openssl'
+require 'securerandom'
 require 'chamber/configuration'
 require 'chamber/commands/base'
 
