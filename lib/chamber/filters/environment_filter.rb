@@ -101,6 +101,7 @@ class   EnvironmentFilter
   # rubocop:disable Metrics/CyclomaticComplexity
   def convert_environment_value(environment_value, settings_value)
     return settings_value unless environment_value
+    return                if %w{___nil___ ___null___}.include?(environment_value)
 
     case settings_value.class.name
     when 'TrueClass', 'FalseClass'

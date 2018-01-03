@@ -106,6 +106,42 @@ describe  EnvironmentFilter do
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
 
+  it 'can extract a nil from the environment if an existing variable' \
+     'matches the composite key' do
+
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING'] = '___nil___'
+
+    filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
+                                              data:              {
+                                                test_setting_group: {
+                                                  test_setting_level: {
+                                                    test_setting: 1,
+                                                  },
+                                                },
+                                              })
+
+    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+
+    expect(test_setting).to be nil
+
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING'] = '___null___'
+
+    filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
+                                              data:              {
+                                                test_setting_group: {
+                                                  test_setting_level: {
+                                                    test_setting: 1,
+                                                  },
+                                                },
+                                              })
+
+    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+
+    expect(test_setting).to be nil
+
+    ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+  end
+
   it 'can extract an integer from the environment if an existing variable' \
      'matches the composite key' do
 
