@@ -89,6 +89,59 @@ describe  EnvironmentFilter do
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
 
+  it 'can extract a boolean from the environment if an existing variable' \
+     'matches the composite key' do
+
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_ONE']   = 'false'
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_TWO']   = 'true'
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_THREE'] = 'f'
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_FOUR']  = 't'
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_FIVE']  = 'no'
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_SIX']   = 'yes'
+
+    filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
+                                              data:              {
+                                                test_setting_group: {
+                                                  test_setting_one:   true,
+                                                  test_setting_two:   false,
+                                                  test_setting_three: true,
+                                                  test_setting_four:  false,
+                                                  test_setting_five:  true,
+                                                  test_setting_six:   false,
+                                                  test_setting_seven: false,
+                                                },
+                                              })
+
+    expect(filtered_data.test_setting_group.test_setting_one).to   be false
+    expect(filtered_data.test_setting_group.test_setting_two).to   be true
+    expect(filtered_data.test_setting_group.test_setting_three).to be false
+    expect(filtered_data.test_setting_group.test_setting_four).to  be true
+    expect(filtered_data.test_setting_group.test_setting_five).to  be false
+    expect(filtered_data.test_setting_group.test_setting_six).to   be true
+    expect(filtered_data.test_setting_group.test_setting_seven).to be false
+
+    ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+  end
+
+  it 'raises an error if the boolean value cannot be converted' do
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_ONE'] = 'foobar'
+
+    expect {
+      EnvironmentFilter.execute(
+        secure_key_prefix: '_secure_',
+        data:              {
+          test_setting_group: {
+            test_setting_one: true,
+          },
+        },
+      )
+    }.to \
+      raise_error(ArgumentError)
+        .with_message('Invalid value for Boolean: foobar')
+
+    ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+  end
+
   it 'returns the settings value if there is no environment variable to override it' do
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {

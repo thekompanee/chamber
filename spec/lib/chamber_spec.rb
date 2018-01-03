@@ -10,7 +10,7 @@ File.open('/tmp/chamber/settings.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 test:
   my_setting: my_value
-  my_boolean: "false"
+  my_boolean: false
   my_dynamic_setting: <%= 1 + 1 %>
   my_ftp_url: ftp://username:password@127.0.0.1
   another_level:
@@ -264,10 +264,6 @@ describe Chamber do
     )
   end
   # rubocop:enable Lint/DuplicatedKey
-
-  pending 'can convert boolean-like strings to actual booleans' do
-    expect(Chamber[:test][:my_boolean]).to be_a FalseClass
-  end
 
   it 'can notify properly whether it responds to messages if the underlying ' \
      'settings does' do

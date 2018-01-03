@@ -97,10 +97,20 @@ class   EnvironmentFilter
     environment_hash
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def convert_environment_value(environment_value, settings_value)
     return settings_value unless environment_value
 
     case settings_value.class.name
+    when 'TrueClass', 'FalseClass'
+      case environment_value.downcase
+      when 'false', 'f', 'no'
+        false
+      when 'true', 't', 'yes'
+        true
+      else
+        fail ArgumentError, "Invalid value for Boolean: #{environment_value}"
+      end
     when 'Float'
       Float(environment_value)
     when 'Integer'
@@ -109,6 +119,7 @@ class   EnvironmentFilter
       environment_value
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 end
 end
 end
