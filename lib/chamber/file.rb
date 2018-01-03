@@ -75,6 +75,7 @@ class   File < Pathname
                            encryption_key: encryption_key)
   end
 
+  # rubocop:disable Metrics/LineLength
   def secure
     insecure_settings = to_settings.insecure.to_flattened_name_hash
     secure_settings   = to_settings.insecure.secure.to_flattened_name_hash
@@ -88,21 +89,30 @@ class   File < Pathname
 
       file_contents.
         sub!(
-          /^(\s*)_secure_#{escaped_name}(\s*):(\s*)['"]?#{escaped_value}['"]?$/,
-          "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}",
+          /^(\s*)#{secure_prefix_pattern}#{escaped_name}(\s*):(\s*)['"]?#{escaped_value}['"]?$/,
+          "\\1#{secure_prefix}#{name_pieces.last}\\2:\\3#{secure_value}",
       )
 
       file_contents.
         sub!(
-          /^(\s*)_secure_#{escaped_name}(\s*):(\s*)\|((?:\n\1\s{2}.*)+)/,
-          "\\1_secure_#{name_pieces.last}\\2:\\3#{secure_value}",
+          /^(\s*)#{secure_prefix_pattern}#{escaped_name}(\s*):(\s*)\|((?:\n\1\s{2}.*)+)/,
+          "\\1#{secure_prefix}#{name_pieces.last}\\2:\\3#{secure_value}",
       )
     end
 
     write(file_contents)
   end
+  # rubocop:enable Metrics/LineLength
 
   private
+
+  def secure_prefix
+    '_secure_'
+  end
+
+  def secure_prefix_pattern
+    @secure_prefix_pattern ||= Regexp.escape(secure_prefix)
+  end
 
   def file_contents_hash
     file_contents = read

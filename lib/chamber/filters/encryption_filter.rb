@@ -11,16 +11,17 @@ require 'chamber/encryption_methods/none'
 module    Chamber
 module    Filters
 class     EncryptionFilter
-  SECURE_KEY_TOKEN          = /\A_secure_/
   BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9\+\/]{342}==\z}
   LARGE_DATA_STRING_PATTERN = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z} # rubocop:disable Metrics/LineLength
 
-  attr_accessor :data
+  attr_accessor :data,
+                :secure_key_token
   attr_reader   :encryption_key
 
   def initialize(options = {})
-    self.encryption_key = options.fetch(:encryption_key, nil)
-    self.data           = options.fetch(:data).dup
+    self.encryption_key   = options.fetch(:encryption_key, nil)
+    self.data             = options.fetch(:data).dup
+    self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
   end
 
   def self.execute(options = {})
@@ -35,7 +36,7 @@ class     EncryptionFilter
     raw_data.each_pair do |key, value|
       settings[key] = if value.respond_to? :each_pair
                         execute(value)
-                      elsif key.match(SECURE_KEY_TOKEN)
+                      elsif key.match(secure_key_token)
                         encryption_method(value).encrypt(key, value, encryption_key)
                       else
                         value

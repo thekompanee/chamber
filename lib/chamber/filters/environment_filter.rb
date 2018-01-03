@@ -1,12 +1,8 @@
 # frozen_string_literal: true
 
-require 'chamber/environmentable'
-
 module  Chamber
 module  Filters
 class   EnvironmentFilter
-  include Environmentable
-
   ###
   # Internal: Allows the existing environment to be injected into the passed in
   # hash.  The hash that is passed in is *not* modified, instead a new hash is
@@ -55,10 +51,12 @@ class   EnvironmentFilter
     new(options).__send__(:execute)
   end
 
-  attr_accessor :data
+  attr_accessor :data,
+                :secure_key_token
 
   def initialize(options = {})
-    self.data = options.fetch(:data)
+    self.data             = options.fetch(:data)
+    self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
   end
 
   protected
@@ -71,6 +69,27 @@ class   EnvironmentFilter
                      lambda do |key, value, environment_key|
                        { key => (ENV[environment_key] || value) }
                      end)
+  end
+
+  private
+
+  def with_environment(settings, parent_keys, hash_block, value_block)
+    environment_hash = Hashie::Mash.new
+
+    settings.each_pair do |key, value|
+      environment_key  = key.to_s.gsub(secure_key_token, '')
+      environment_keys = parent_keys.dup.push(environment_key)
+
+      if value.respond_to? :each_pair
+        environment_hash.merge!(hash_block.call(key, value, environment_keys))
+      else
+        environment_key = environment_keys.join('_').upcase
+
+        environment_hash.merge!(value_block.call(key, value, environment_key))
+      end
+    end
+
+    environment_hash
   end
 end
 end

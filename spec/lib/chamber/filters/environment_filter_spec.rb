@@ -11,7 +11,8 @@ describe  EnvironmentFilter do
 
     ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING'] = 'value 2'
 
-    filtered_data = EnvironmentFilter.execute(data: {
+    filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
+                                              data:              {
                                                 test_setting_group: {
                                                   test_setting_level: {
                                                     test_setting: 'value 1',
@@ -29,7 +30,8 @@ describe  EnvironmentFilter do
   it 'does not affect items which are not stored in the environment' do
     ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING'] = 'value 2'
 
-    filtered_data = EnvironmentFilter.execute(data: {
+    filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
+                                              data:              {
                                                 test_setting_group: {
                                                   test_setting_level: {
                                                     test_setting:    'value 1',
