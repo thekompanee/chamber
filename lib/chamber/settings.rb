@@ -6,7 +6,6 @@ require 'chamber/filters/namespace_filter'
 require 'chamber/filters/encryption_filter'
 require 'chamber/filters/decryption_filter'
 require 'chamber/filters/environment_filter'
-require 'chamber/filters/boolean_conversion_filter'
 require 'chamber/filters/secure_filter'
 require 'chamber/filters/translate_secure_keys_filter'
 require 'chamber/filters/insecure_filter'
@@ -35,7 +34,6 @@ class   Settings
                                                       Filters::DecryptionFilter,
                                                       Filters::EnvironmentFilter,
                                                       Filters::FailedDecryptionFilter,
-                                                      Filters::BooleanConversionFilter,
                                                       Filters::TranslateSecureKeysFilter,
                                                     ]
   end

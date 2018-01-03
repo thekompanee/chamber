@@ -44,7 +44,7 @@ HEREDOC
 <<-HEREDOC.chomp
 {"my_setting"=>"my_value",
  "my_secure_settings"=>"my_secure_value",
- "my_boolean"=>false,
+ "my_boolean"=>"false",
  "my_dynamic_setting"=>2,
  "another_level"=>
   {"setting_one"=>1,

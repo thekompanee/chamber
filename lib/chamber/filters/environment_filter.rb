@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'yaml'
+require 'hashie/mash'
+
 module  Chamber
 module  Filters
 class   EnvironmentFilter
@@ -62,13 +65,16 @@ class   EnvironmentFilter
   protected
 
   def execute(settings = data, parent_keys = [])
-    with_environment(settings, parent_keys,
-                     lambda do |key, value, environment_keys|
-                       { key => execute(value, environment_keys) }
-                     end,
-                     lambda do |key, value, environment_key|
-                       { key => (ENV[environment_key] || value) }
-                     end)
+    with_environment(
+      settings,
+      parent_keys,
+      lambda do |key, value, environment_keys|
+        { key => execute(value, environment_keys) }
+      end,
+      lambda do |key, value, environment_key|
+        { key => convert_environment_value(ENV[environment_key], value) }
+      end,
+    )
   end
 
   private
@@ -91,6 +97,37 @@ class   EnvironmentFilter
 
     environment_hash
   end
+
+  # rubocop:disable Metrics/CyclomaticComplexity
+  def convert_environment_value(environment_value, settings_value)
+    return settings_value unless environment_value
+    return                if %w{___nil___ ___null___}.include?(environment_value)
+
+    case settings_value.class.name
+    when 'TrueClass', 'FalseClass'
+      case environment_value.downcase
+      when 'false', 'f', 'no'
+        false
+      when 'true', 't', 'yes'
+        true
+      else
+        fail ArgumentError, "Invalid value for Boolean: #{environment_value}"
+      end
+    when 'Float'
+      Float(environment_value)
+    when 'Array'
+      YAML.safe_load(environment_value).tap do |parsed_value|
+        unless parsed_value.is_a?(Array)
+          fail ArgumentError, "Invalid value for Array: #{environment_value}"
+        end
+      end
+    when 'Integer'
+      Integer(environment_value)
+    else
+      environment_value
+    end
+  end
+  # rubocop:enable Metrics/CyclomaticComplexity
 end
 end
 end

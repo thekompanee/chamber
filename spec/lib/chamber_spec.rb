@@ -10,7 +10,7 @@ File.open('/tmp/chamber/settings.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 test:
   my_setting: my_value
-  my_boolean: "false"
+  my_boolean: false
   my_dynamic_setting: <%= 1 + 1 %>
   my_ftp_url: ftp://username:password@127.0.0.1
   another_level:
@@ -105,11 +105,11 @@ describe Chamber do
 
   it 'prefers values stored in environment variables over those in the YAML files' do
     ENV['TEST_MY_SETTING'] = 'some_other_value'
-    ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = 'something'
+    ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = '[1, 2, 3]'
 
     Chamber.load(basepath: '/tmp/chamber')
     expect(Chamber.test.my_setting).to eql 'some_other_value'
-    expect(Chamber.test.another_level.level_three.an_array).to eql 'something'
+    expect(Chamber.test.another_level.level_three.an_array).to eql [1, 2, 3]
     expect(Chamber.test.my_dynamic_setting).to be 2
 
     ENV.delete 'TEST_MY_SETTING'
@@ -264,10 +264,6 @@ describe Chamber do
     )
   end
   # rubocop:enable Lint/DuplicatedKey
-
-  it 'can convert boolean-like strings to actual booleans' do
-    expect(Chamber[:test][:my_boolean]).to be_a FalseClass
-  end
 
   it 'can notify properly whether it responds to messages if the underlying ' \
      'settings does' do
