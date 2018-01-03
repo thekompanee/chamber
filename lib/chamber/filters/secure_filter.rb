@@ -13,7 +13,7 @@ class   SecureFilter
                 :secure_key_token
 
   def initialize(options = {})
-    self.data = Hashie::Mash.new(options.fetch(:data))
+    self.data             = Hashie::Mash.new(options.fetch(:data))
     self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
   end
 

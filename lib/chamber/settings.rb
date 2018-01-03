@@ -24,20 +24,20 @@ class   Settings
   attr_reader   :namespaces
 
   def initialize(options = {})
-    self.namespaces       = options[:namespaces]      ||  []
-    self.raw_data         = options[:settings]        ||  {}
-    self.decryption_key   = options[:decryption_key]
-    self.encryption_key   = options[:encryption_key]
-    self.pre_filters  = options[:pre_filters]  || [
-                                                    Filters::NamespaceFilter,
-                                                  ]
-    self.post_filters = options[:post_filters] || [
-                                                    Filters::DecryptionFilter,
-                                                    Filters::EnvironmentFilter,
-                                                    Filters::FailedDecryptionFilter,
-                                                    Filters::BooleanConversionFilter,
-                                                    Filters::TranslateSecureKeysFilter,
-                                                  ]
+    self.namespaces     = options[:namespaces]     ||  []
+    self.raw_data       = options[:settings]       ||  {}
+    self.decryption_key = options[:decryption_key]
+    self.encryption_key = options[:encryption_key]
+    self.pre_filters    = options[:pre_filters]  || [
+                                                      Filters::NamespaceFilter,
+                                                    ]
+    self.post_filters   = options[:post_filters] || [
+                                                      Filters::DecryptionFilter,
+                                                      Filters::EnvironmentFilter,
+                                                      Filters::FailedDecryptionFilter,
+                                                      Filters::BooleanConversionFilter,
+                                                      Filters::TranslateSecureKeysFilter,
+                                                    ]
   end
 
   ###
@@ -280,9 +280,9 @@ class   Settings
 
   def metadata
     {
-      namespaces:     namespaces,
-      decryption_key: decryption_key,
-      encryption_key: encryption_key,
+      decryption_key:    decryption_key,
+      encryption_key:    encryption_key,
+      namespaces:        namespaces,
       secure_key_prefix: secure_key_prefix,
     }
   end

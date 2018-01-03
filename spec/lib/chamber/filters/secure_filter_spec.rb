@@ -8,7 +8,7 @@ module    Filters
 describe  SecureFilter do
   it 'will return values which are marked as "secure"' do
     filtered_settings = SecureFilter.execute(secure_key_prefix: '_secure_',
-                                             data: {
+                                             data:              {
                                                _secure_my_secure_setting: 'hello',
                                              })
 
@@ -17,7 +17,7 @@ describe  SecureFilter do
 
   it 'will not return values which are not marked as "secure"' do
     filtered_settings = SecureFilter.execute(secure_key_prefix: '_secure_',
-                                             data: {
+                                             data:              {
                                                my_secure_setting: 'hello',
                                              })
 
@@ -26,7 +26,7 @@ describe  SecureFilter do
 
   it 'will properly return values even if they are mixed and deeply nested' do
     filtered_settings = SecureFilter.execute(secure_key_prefix: '_secure_',
-                                             data: {
+                                             data:              {
                                                _secure_setting: 'hello',
                                                secure_setting:  'goodbye',
                                                secure_group:    {

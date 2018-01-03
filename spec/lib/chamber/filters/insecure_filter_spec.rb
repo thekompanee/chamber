@@ -8,7 +8,7 @@ module    Filters
 describe  InsecureFilter do
   it 'will return values which are marked as "secure" if they are unencrypted' do
     filtered_settings = InsecureFilter.execute(secure_key_prefix: '_secure_',
-                                               data: {
+                                               data:              {
                                                  _secure_my_secure_setting: 'hello',
                                                })
 
@@ -17,7 +17,7 @@ describe  InsecureFilter do
 
   it 'will not return values which are not marked as "secure"' do
     filtered_settings = InsecureFilter.execute(secure_key_prefix: '_secure_',
-                                               data: {
+                                               data:              {
                                                  my_secure_setting: 'hello',
                                                })
 
@@ -26,7 +26,7 @@ describe  InsecureFilter do
 
   it 'will properly return values even if they are mixed and deeply nested' do
     filtered_settings = InsecureFilter.execute(secure_key_prefix: '_secure_',
-                                               data: {
+                                               data:              {
                                                  _secure_setting: 'hello',
                                                  secure_setting:  'goodbye',
                                                  secure_group:    {
@@ -45,7 +45,7 @@ describe  InsecureFilter do
   it 'will not return values which are encrypted' do
     filtered_settings = InsecureFilter.execute(
       secure_key_prefix: '_secure_',
-      data: {
+      data:              {
         _secure_setting:       'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpss' \
                                'pg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzC' \
                                'MJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YG' \

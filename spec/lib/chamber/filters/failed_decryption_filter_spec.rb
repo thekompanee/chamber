@@ -10,7 +10,7 @@ describe  FailedDecryptionFilter do
     expect {
       FailedDecryptionFilter.execute(
         secure_key_prefix: '_secure_',
-        data: {
+        data:              {
           _secure_my_secure_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4m' \
                                      'psspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ5' \
                                      '7m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXz' \
@@ -28,7 +28,7 @@ describe  FailedDecryptionFilter do
     expect {
       FailedDecryptionFilter.execute(
         secure_key_prefix: '_secure_',
-        data: {
+        data:              {
           my_secure_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4m' \
                              'psspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ5' \
                              '7m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXz' \
@@ -46,7 +46,7 @@ describe  FailedDecryptionFilter do
     expect {
       FailedDecryptionFilter.execute(
         secure_key_prefix: '_secure_',
-        data: {
+        data:              {
           _secure_my_secure_setting: 'hello',
         },
       )
