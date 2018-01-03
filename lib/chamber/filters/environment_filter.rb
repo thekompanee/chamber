@@ -11,6 +11,23 @@ class   EnvironmentFilter
   # hash.  The hash that is passed in is *not* modified, instead a new hash is
   # returned.
   #
+  # This filter will also do basic value conversions from the environment
+  # variable string to the data type defined in the YAML.  For example if the
+  # YAML value is `true`, then the conversion knows it's a Boolean.  If there's
+  # an environment varible which should override that value, it will look to see
+  # if it is a `String` of 'true', 'false', 't', 'f', 'yes', or 'no' and perform
+  # the appropriate conversion of that value into a Boolean.
+  #
+  # This will work for:
+  #
+  #   * Booleans
+  #   * Integers
+  #   * Floats
+  #   * Arrays
+  #
+  # For the Arrays, it will convert the environment value by parsing the string
+  # as YAML.  Whatever the parsed value ends up being, *must* be an Array.
+  #
   # Examples:
   #
   #   ###
@@ -30,6 +47,25 @@ class   EnvironmentFilter
   #       'level_two_1' => 'env value 1',
   #       'level_two_2' => {
   #         'level_three_1' => 'env value 2',
+  #   }
+  #
+  #   ###
+  #   # Can do basic value conversions based on the raw data
+  #   #
+  #   ENV['LEVEL_ONE_1_LEVEL_TWO_1']               = '1'
+  #   ENV['LEVEL_ONE_1_LEVEL_TWO_2_LEVEL_THREE_1'] = '[1, 2, 3]'
+  #
+  #   EnvironmentFilter.execute(
+  #     level_one_1: {
+  #       level_two_1: 4,
+  #       level_two_2: {
+  #         level_three_1: [4, 5, 6] } } )
+  #
+  #   # => {
+  #     'level_one_1' => {
+  #       'level_two_1' => 1,
+  #       'level_two_2' => {
+  #         'level_three_1' => [1, 2, 3],
   #   }
   #
   #   ###
