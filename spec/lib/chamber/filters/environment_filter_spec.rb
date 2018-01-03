@@ -68,6 +68,27 @@ describe  EnvironmentFilter do
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
 
+  it 'can extract a float from the environment if an existing variable' \
+     'matches the composite key' do
+
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING'] = '2.3'
+
+    filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
+                                              data:              {
+                                                test_setting_group: {
+                                                  test_setting_level: {
+                                                    test_setting: 1.2,
+                                                  },
+                                                },
+                                              })
+
+    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+
+    expect(test_setting).to be 2.3
+
+    ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+  end
+
   it 'returns the settings value if there is no environment variable to override it' do
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {

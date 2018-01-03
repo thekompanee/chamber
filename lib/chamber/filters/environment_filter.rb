@@ -101,6 +101,8 @@ class   EnvironmentFilter
     return settings_value unless environment_value
 
     case settings_value.class.name
+    when 'Float'
+      Float(environment_value)
     when 'Integer'
       Integer(environment_value)
     else
