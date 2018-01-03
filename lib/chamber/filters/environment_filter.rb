@@ -71,7 +71,7 @@ class   EnvironmentFilter
         { key => execute(value, environment_keys) }
       end,
       lambda do |key, value, environment_key|
-        { key => (ENV[environment_key] || value) }
+        { key => convert_environment_value(ENV[environment_key], value) }
       end,
     )
   end
@@ -95,6 +95,17 @@ class   EnvironmentFilter
     end
 
     environment_hash
+  end
+
+  def convert_environment_value(environment_value, settings_value)
+    return settings_value unless environment_value
+
+    case settings_value.class.name
+    when 'Integer'
+      Integer(environment_value)
+    else
+      environment_value
+    end
   end
 end
 end
