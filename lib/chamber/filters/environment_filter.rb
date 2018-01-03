@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'yaml'
 require 'hashie/mash'
 
 module  Chamber
@@ -113,6 +114,12 @@ class   EnvironmentFilter
       end
     when 'Float'
       Float(environment_value)
+    when 'Array'
+      YAML.safe_load(environment_value).tap do |parsed_value|
+        unless parsed_value.is_a?(Array)
+          fail ArgumentError, "Invalid value for Array: #{environment_value}"
+        end
+      end
     when 'Integer'
       Integer(environment_value)
     else

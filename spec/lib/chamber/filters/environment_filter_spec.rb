@@ -27,6 +27,65 @@ describe  EnvironmentFilter do
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
 
+  it 'can extract an array from the environment if an existing variable' \
+     'matches the composite key' do
+
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING'] = '[4, 5, 6]'
+
+    filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
+                                              data:              {
+                                                test_setting_group: {
+                                                  test_setting_level: {
+                                                    test_setting: [
+                                                                    1,
+                                                                    2,
+                                                                    3,
+                                                                  ],
+                                                  },
+                                                },
+                                              })
+
+    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+
+    expect(test_setting).to eql [4, 5, 6]
+
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING'] = '["4", "5", "6"]'
+
+    filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
+                                              data:              {
+                                                test_setting_group: {
+                                                  test_setting_level: {
+                                                    test_setting: %w{1 2 3},
+                                                  },
+                                                },
+                                              })
+
+    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+
+    expect(test_setting).to eql %w{4 5 6}
+
+    ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+  end
+
+  it 'raises an error if the array value cannot be converted' do
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_ONE'] = '{"foobar": "bazqux"}'
+
+    expect {
+      EnvironmentFilter.execute(
+        secure_key_prefix: '_secure_',
+        data:              {
+          test_setting_group: {
+            test_setting_one: %w{1 2 3},
+          },
+        },
+      )
+    }.to \
+      raise_error(ArgumentError)
+        .with_message('Invalid value for Array: {"foobar": "bazqux"}')
+
+    ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+  end
+
   it 'does not affect items which are not stored in the environment' do
     ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING'] = 'value 2'
 
