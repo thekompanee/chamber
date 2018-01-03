@@ -105,11 +105,11 @@ describe Chamber do
 
   it 'prefers values stored in environment variables over those in the YAML files' do
     ENV['TEST_MY_SETTING'] = 'some_other_value'
-    ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = 'something'
+    ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = '[1, 2, 3]'
 
     Chamber.load(basepath: '/tmp/chamber')
     expect(Chamber.test.my_setting).to eql 'some_other_value'
-    expect(Chamber.test.another_level.level_three.an_array).to eql 'something'
+    expect(Chamber.test.another_level.level_three.an_array).to eql [1, 2, 3]
     expect(Chamber.test.my_dynamic_setting).to be 2
 
     ENV.delete 'TEST_MY_SETTING'
