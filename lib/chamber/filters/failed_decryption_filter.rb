@@ -5,17 +5,18 @@ require 'chamber/errors/decryption_failure'
 module  Chamber
 module  Filters
 class   FailedDecryptionFilter
-  SECURE_KEY_TOKEN      = /\A_secure_/
   BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9\+/]{342}==\z}
 
   def self.execute(options = {})
     new(options).__send__(:execute)
   end
 
-  attr_accessor :data
+  attr_accessor :data,
+                :secure_key_token
 
   def initialize(options = {})
     self.data = options.fetch(:data).dup
+    self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
   end
 
   protected
@@ -26,7 +27,7 @@ class   FailedDecryptionFilter
     raw_data.each_pair do |key, value|
       if value.respond_to? :each_pair
         execute(value)
-      elsif key.match(SECURE_KEY_TOKEN) &&
+      elsif key.match(secure_key_token) &&
             value.respond_to?(:match)   &&
             value.match(BASE64_STRING_PATTERN)
 

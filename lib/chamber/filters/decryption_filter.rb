@@ -12,16 +12,17 @@ require 'chamber/errors/decryption_failure'
 module  Chamber
 module  Filters
 class   DecryptionFilter
-  SECURE_KEY_TOKEN          = /\A_secure_/
   BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9\+/]{342}==\z}
   LARGE_DATA_STRING_PATTERN = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z} # rubocop:disable Metrics/LineLength
 
-  attr_accessor :data
+  attr_accessor :data,
+                :secure_key_token
   attr_reader   :decryption_key
 
   def initialize(options = {})
     self.decryption_key = options.fetch(:decryption_key, nil)
     self.data           = options.fetch(:data).dup
+    self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
   end
 
   def self.execute(options = {})
@@ -36,7 +37,7 @@ class   DecryptionFilter
     raw_data.each_pair do |key, value|
       settings[key] = if value.respond_to? :each_pair
                         execute(value)
-                      elsif key.match(SECURE_KEY_TOKEN)
+                      elsif key.match(secure_key_token)
                         decryption_method(value).decrypt(key, value, decryption_key)
                       else
                         value

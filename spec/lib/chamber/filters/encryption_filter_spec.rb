@@ -8,6 +8,7 @@ module    Filters
 describe  EncryptionFilter do
   it 'will attempt to encrypt values which are marked as "secure"' do
     filtered_settings = EncryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_my_secure_setting: 'hello',
       },
@@ -20,6 +21,7 @@ describe  EncryptionFilter do
 
   it 'will not attempt to encrypt values which are not marked as "secure"' do
     filtered_settings = EncryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         my_secure_setting: 'hello',
       },
@@ -31,6 +33,7 @@ describe  EncryptionFilter do
 
   it 'will not attempt to encrypt values even if they are prefixed with "secure"' do
     filtered_settings = EncryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         secure_setting: 'hello',
       },
@@ -42,6 +45,7 @@ describe  EncryptionFilter do
 
   it 'will attempt to encrypt values if they are not properly encoded' do
     filtered_settings = EncryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_my_secure_setting: 'fNI5\jwlBn',
       },
@@ -53,7 +57,8 @@ describe  EncryptionFilter do
   end
 
   it 'will attempt to encrypt values if they are numbers' do
-    filtered_settings = EncryptionFilter.execute(data:           {
+    filtered_settings = EncryptionFilter.execute(secure_key_prefix: '_secure_',
+                                                 data:           {
                                                    _secure_my_secure_setting: 12_345,
                                                  },
                                                  encryption_key: './spec/spec_key.pub')
@@ -64,6 +69,7 @@ describe  EncryptionFilter do
 
   it 'will not attempt to encrypt normal values if it guesses that they are already encrypted' do
     filtered_settings = EncryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_my_secure_setting: 'fNI5wlBniNhEU4396pmhWwx+A09bRAMJOUASuP7PzprewBX8C' \
                                    'XYqL+v/uXOJpIRCLDjwe8quuC+j9iLcPU7HBRMr054gGxeqZe' \
@@ -91,6 +97,7 @@ describe  EncryptionFilter do
   # rubocop:disable RSpec/ExampleLength
   it 'will not attempt to encrypt large values if it guesses that they are already encrypted' do
     filtered_settings = EncryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_my_secure_setting: 'AcMY7ALLoGZRakL3ibyo2WB438ipdMDIjsa4SCDBP2saOY63A' \
                                    'D3C/SZanexlYDQoYoYC0V5J5EvKHgGMDAU8qnp9LjzU5VCwJ3' \
@@ -141,6 +148,7 @@ describe  EncryptionFilter do
 
   it 'can encrypt long multiline strings' do
     filtered_settings = EncryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_multiline: <<-HEREDOC
 -----BEGIN RSA PRIVATE KEY-----
@@ -162,20 +170,22 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 
   it 'will encrypt strings of 127 chars effective length' do
     filtered_settings = EncryptionFilter.execute(
-        data:           {
-          _secure_my_secure_setting: 'A' * 119,
-        },
-        encryption_key: './spec/spec_key.pub',
+      secure_key_prefix: '_secure_',
+      data:           {
+        _secure_my_secure_setting: 'A' * 119,
+      },
+      encryption_key: './spec/spec_key.pub',
     )
 
     expect(filtered_settings._secure_my_secure_setting).to match \
       EncryptionFilter::BASE64_STRING_PATTERN
 
     filtered_settings = EncryptionFilter.execute(
-        data:           {
-          _secure_my_secure_setting: 'A' * 120,
-        },
-        encryption_key: './spec/spec_key.pub',
+      secure_key_prefix: '_secure_',
+      data:           {
+        _secure_my_secure_setting: 'A' * 120,
+      },
+      encryption_key: './spec/spec_key.pub',
     )
 
     expect(filtered_settings._secure_my_secure_setting).to match \
@@ -184,10 +194,11 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 
   it 'will encrypt and decrypt strings larger than 128 chars' do
     filtered_settings = EncryptionFilter.execute(
-        data:           {
-          _secure_my_secure_setting: 'long' * 100,
-        },
-        encryption_key: './spec/spec_key.pub',
+      secure_key_prefix: '_secure_',
+      data:           {
+        _secure_my_secure_setting: 'long' * 100,
+      },
+      encryption_key: './spec/spec_key.pub',
     )
 
     expect(filtered_settings._secure_my_secure_setting).to match \

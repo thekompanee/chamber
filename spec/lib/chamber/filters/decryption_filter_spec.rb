@@ -8,6 +8,7 @@ module    Filters
 describe  DecryptionFilter do
   it 'will attempt to decrypt values which are marked as "secure"' do
     filtered_settings = DecryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_my_secure_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4m' \
                                    'psspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ5' \
@@ -26,6 +27,7 @@ describe  DecryptionFilter do
   # rubocop:disable RSpec/ExampleLength
   it 'will correct decrypt values which contain multiline strings' do
     filtered_settings = DecryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_my_secure_setting: 'Q0ImhgdRmOdXEx04E3TnMoW/c6ckuce+y4kYGYWIJM6W/nBJBF' \
                                    'jnqcFru/6wo+TVEZxowxjxJNv8H6SuxYmahxMRl7AajTrJ/QD+' \
@@ -64,6 +66,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 
   it 'will not attempt to decrypt values which are not marked as "secure"' do
     filtered_settings = DecryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         my_secure_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4m' \
                            'psspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ5' \
@@ -90,6 +93,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 
   it 'will not attempt to decrypt values even if they are prefixed with "secure"' do
     filtered_settings = DecryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         secure_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBt' \
                         'mjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/em' \
@@ -114,6 +118,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 
   it 'will not attempt to decrypt values even if they are not properly encoded' do
     filtered_settings = DecryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_my_secure_setting: 'cJbFe0NI5\wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4' \
                                    'mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ' \
@@ -138,7 +143,8 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
   end
 
   it 'will not attempt to decrypt values if it guesses that they are not encrpyted' do
-    filtered_settings = DecryptionFilter.execute(data:           {
+    filtered_settings = DecryptionFilter.execute(secure_key_prefix: '_secure_',
+                                                 data:           {
                                                    _secure_my_secure_setting: 'hello',
                                                  },
                                                  decryption_key: './spec/spec_key')
@@ -148,6 +154,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 
   it 'simply returns the encrypted string if there is no decryption key' do
     filtered_settings = DecryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data: {
         _secure_my_secure_setting: 'cJbFe0NI5\wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4' \
                                    'mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ' \
@@ -172,6 +179,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 
   it 'can decrypt a complex object' do
     filtered_settings = DecryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_my_secure_setting: 'rF1MIcLX/Q88gjpHTifI27fJHopDKVTJRvOwF2MZ8kVIrvBhFg' \
                                    'LOyQ7JEBiWNBh1yUtR6PeKlB+h44sIL3yKMcZyccX73Mo+CiWx' \
@@ -190,6 +198,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 
   it 'can decrypt a number that has not been yamlled' do
     filtered_settings = DecryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_my_secure_setting: 'Ieh5poOpcirj1jihkh1eENaCrF8ECQSLOigM4ApTZ8hp4vrL3N' \
                                    'KWp3djEkQz0QceopgN8TBJOEj1lqfGGL3Ar5L0SGrIsHt6KOil' \
@@ -207,6 +216,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 
   it 'can decrypt a string that has not been yamlled' do
     filtered_settings = DecryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_my_secure_setting: 'V2ifd6KwfGK8zW7K87ypHiA89UvVqsAX3961dR/B5ensruVFi5' \
                                    'KydFR1KxPQHxInhVl4GIvpBCwczK1mMZ61NGVISK04tg90R52/' \
@@ -224,6 +234,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 
   it 'can decrypt large encrypted data' do
     filtered_settings = DecryptionFilter.execute(
+        secure_key_prefix: '_secure_',
         data:           {
           _secure_my_secure_setting: 'AcMY7ALLoGZRakL3ibyo2WB438ipdMDIjsa4SCDBP2saOY63A' \
                                      'D3C/SZanexlYDQoYoYC0V5J5EvKHgGMDAU8qnp9LjzU5VCwJ3' \
@@ -255,6 +266,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
     allow(Chamber::EncryptionMethods::None).to receive(:warn)
 
     _filtered_settings = DecryptionFilter.execute(
+      secure_key_prefix: '_secure_',
       data:           {
         _secure_my_secure_setting: nil,
       },

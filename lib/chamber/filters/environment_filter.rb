@@ -3,8 +3,6 @@
 module  Chamber
 module  Filters
 class   EnvironmentFilter
-  SECURE_KEY_TOKEN = /\A_secure_/
-
   ###
   # Internal: Allows the existing environment to be injected into the passed in
   # hash.  The hash that is passed in is *not* modified, instead a new hash is
@@ -53,10 +51,12 @@ class   EnvironmentFilter
     new(options).__send__(:execute)
   end
 
-  attr_accessor :data
+  attr_accessor :data,
+                :secure_key_token
 
   def initialize(options = {})
     self.data = options.fetch(:data)
+    self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
   end
 
   protected
@@ -77,7 +77,7 @@ class   EnvironmentFilter
     environment_hash = Hashie::Mash.new
 
     settings.each_pair do |key, value|
-      environment_key  = key.to_s.gsub(SECURE_KEY_TOKEN, '')
+      environment_key  = key.to_s.gsub(secure_key_token, '')
       environment_keys = parent_keys.dup.push(environment_key)
 
       if value.respond_to? :each_pair

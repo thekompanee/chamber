@@ -274,11 +274,16 @@ class   Settings
     end
   end
 
+  def secure_key_prefix
+    '_secure_'
+  end
+
   def metadata
     {
       namespaces:     namespaces,
       decryption_key: decryption_key,
       encryption_key: encryption_key,
+      secure_key_prefix: secure_key_prefix,
     }
   end
 end

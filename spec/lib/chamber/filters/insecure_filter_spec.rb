@@ -7,7 +7,8 @@ module    Chamber
 module    Filters
 describe  InsecureFilter do
   it 'will return values which are marked as "secure" if they are unencrypted' do
-    filtered_settings = InsecureFilter.execute(data: {
+    filtered_settings = InsecureFilter.execute(secure_key_prefix: '_secure_',
+                                               data: {
                                                  _secure_my_secure_setting: 'hello',
                                                })
 
@@ -15,7 +16,8 @@ describe  InsecureFilter do
   end
 
   it 'will not return values which are not marked as "secure"' do
-    filtered_settings = InsecureFilter.execute(data: {
+    filtered_settings = InsecureFilter.execute(secure_key_prefix: '_secure_',
+                                               data: {
                                                  my_secure_setting: 'hello',
                                                })
 
@@ -23,7 +25,8 @@ describe  InsecureFilter do
   end
 
   it 'will properly return values even if they are mixed and deeply nested' do
-    filtered_settings = InsecureFilter.execute(data: {
+    filtered_settings = InsecureFilter.execute(secure_key_prefix: '_secure_',
+                                               data: {
                                                  _secure_setting: 'hello',
                                                  secure_setting:  'goodbye',
                                                  secure_group:    {
@@ -41,6 +44,7 @@ describe  InsecureFilter do
   # rubocop:disable RSpec/ExampleLength
   it 'will not return values which are encrypted' do
     filtered_settings = InsecureFilter.execute(
+      secure_key_prefix: '_secure_',
       data: {
         _secure_setting:       'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpss' \
                                'pg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzC' \
