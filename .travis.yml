@@ -6,7 +6,6 @@ rvm:
 - 2.1
 - 2.0
 - 1.9.3
-- rbx-2
 script: bundle exec rspec spec
 env:
   global:
