@@ -150,14 +150,14 @@ HEREDOC
 
   it 'does not rewrite the entire file but only the encrypted settings' do
     tempfile = create_tempfile_with_content <<-HEREDOC
-default:
-  stuff: &default
+defaults:
+  stuff: &defaults
     _secure_setting:       hello
     _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
 
 other:
   stuff:
-    <<: *default
+    <<: *defaults
     _secure_another_setting: "Thanks for all the fish"
     regular_setting:         <%= 1 + 1 %>
 HEREDOC
@@ -172,14 +172,14 @@ HEREDOC
     secure_another_setting_encoded = file_contents[%r{    _secure_another_setting: ([A-Za-z0-9\+/]{342}==)$}, 1]
 
     expect(::File.read(tempfile.path)).to eql <<-HEREDOC
-default:
-  stuff: &default
+defaults:
+  stuff: &defaults
     _secure_setting:       #{secure_setting_encoded}
     _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
 
 other:
   stuff:
-    <<: *default
+    <<: *defaults
     _secure_another_setting: #{secure_another_setting_encoded}
     regular_setting:         <%= 1 + 1 %>
 HEREDOC
