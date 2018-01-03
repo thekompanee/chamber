@@ -265,7 +265,7 @@ describe Chamber do
   end
   # rubocop:enable Lint/DuplicatedKey
 
-  it 'can convert boolean-like strings to actual booleans' do
+  pending 'can convert boolean-like strings to actual booleans' do
     expect(Chamber[:test][:my_boolean]).to be_a FalseClass
   end
 
