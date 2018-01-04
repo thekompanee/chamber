@@ -287,7 +287,7 @@ describe Chamber do
     Chamber.load basepath: '/tmp/chamber',
                  files:    'settings.yml'
 
-    expect(Chamber.filenames).to be_empty
+    expect(Chamber.filenames).to eql ['settings.yml']
   end
 
   it 'can render itself as a string even if it has not been loaded' do
