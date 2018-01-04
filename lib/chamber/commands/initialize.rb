@@ -5,6 +5,7 @@ require 'fileutils'
 require 'openssl'
 require 'securerandom'
 require 'chamber/configuration'
+require 'chamber/key_pair'
 require 'chamber/commands/base'
 
 module  Chamber
@@ -14,60 +15,114 @@ class   Initialize < Chamber::Commands::Base
     new(options).call
   end
 
-  attr_accessor :basepath
+  attr_accessor :basepath,
+                :namespaces
 
   def initialize(options = {})
     super
 
-    self.basepath = Chamber.configuration.basepath
+    self.basepath   = Chamber.configuration.basepath
+    self.namespaces = options.fetch(:namespaces, [])
   end
 
   # rubocop:disable Metrics/LineLength, Metrics/MethodLength, Metrics/AbcSize
   def call
-    shell.create_file private_key_filepath,    rsa_private_key.to_pem
-    shell.create_file protected_key_filepath,  rsa_protected_key
-    shell.create_file public_key_filepath,     rsa_public_key.to_pem
-
-    `chmod 600 #{private_key_filepath}`
-    `chmod 600 #{protected_key_filepath}`
-    `chmod 644 #{public_key_filepath}`
-
-    ::FileUtils.touch gitignore_filepath
-
-    unless ::File.read(gitignore_filepath) =~ /^.chamber.pem$/
-      shell.append_to_file gitignore_filepath, "\n# Private and protected key files for Chamber\n"
-      shell.append_to_file gitignore_filepath, "#{private_key_filename}\n"
-      shell.append_to_file gitignore_filepath, "#{protected_key_filename}\n"
+    key_pairs = namespaces.map do |namespace|
+      Chamber::KeyPair.new(namespace:     namespace,
+                           key_file_path: rootpath)
     end
+    key_pairs << Chamber::KeyPair.new(namespace:     nil,
+                                      key_file_path: rootpath)
+
+    key_pairs.each { |key_pair| generate_key_pair(key_pair) }
+
+    append_to_gitignore
 
     shell.copy_file settings_template_filepath, settings_filepath
 
     shell.say ''
-    shell.say 'The passphrase for your encrypted private key is:', :green
+    shell.say '********************************************************************************', :green
+    shell.say '                                    Success!', :green
+    shell.say '********************************************************************************', :green
     shell.say ''
-    shell.say rsa_key_passphrase, :yellow
+
+    shell.say '.chamber.pem is a DEFAULT Chamber key.', :red
     shell.say ''
-    shell.say 'Store this securely somewhere.', :green
+    shell.say 'If you would like a key which is used only for things such as a certain'
+    shell.say 'environment (such as production), or your local machine, you can rerun'
+    shell.say 'the command like so:'
     shell.say ''
-    shell.say 'You can send them the file located at:', :green
+    shell.say '$ chamber init --namespaces="production my_machines_hostname"', :yellow
     shell.say ''
-    shell.say protected_key_filepath, :yellow
+
+    shell.say 'The passphrase for your encrypted private key(s) are:'
     shell.say ''
-    shell.say 'and not have to worry about sending it via a secure medium (such as', :green
-    shell.say 'email), however do not send the passphrase along with it.  Give it to', :green
-    shell.say 'your team members in person.', :green
+
+    key_pairs.each do |key_pair|
+      shell.say "* #{key_pair.encrypted_private_key_filename}: "
+      shell.say key_pair.passphrase, :yellow
+    end
+
     shell.say ''
-    shell.say 'In order for them to decrypt it (for use with Chamber), they can run:', :green
+    shell.say 'Store these securely somewhere.'
     shell.say ''
-    shell.say "$ cp /path/to/{#{protected_key_filename},#{private_key_filename}}", :yellow
-    shell.say "$ ssh-keygen -p -f /path/to/#{private_key_filename}", :yellow
+    shell.say 'You can send your team members any of the file(s) located at:'
     shell.say ''
-    shell.say 'Enter the passphrase when prompted and leave the new passphrase blank.', :green
+
+    key_pairs.each do |key_pair|
+      shell.say '* '
+      shell.say key_pair.encrypted_private_key_filepath, :yellow
+    end
+
+    shell.say ''
+    shell.say 'and not have to worry about sending it via a secure medium (such as'
+    shell.say 'email), however do not send the passphrase along with it.  Give it to'
+    shell.say 'your team members in person.'
+    shell.say ''
+    shell.say 'In order for them to decrypt it (for use with Chamber), they can use something'
+    shell.say 'like the following (swapping out the actual key filenames if necessary):'
+    shell.say ''
+    shell.say "$ cp #{key_pairs[0].encrypted_private_key_filepath} #{key_pairs[0].unencrypted_private_key_filepath}", :yellow
+    shell.say "$ ssh-keygen -p -f #{key_pairs[0].unencrypted_private_key_filepath}", :yellow
+    shell.say ''
+    shell.say 'Enter the passphrase when prompted and leave the new passphrase blank.'
     shell.say ''
   end
   # rubocop:enable Metrics/LineLength, Metrics/MethodLength, Metrics/AbcSize
 
   protected
+
+  def generate_key_pair(key_pair)
+    shell.create_file key_pair.unencrypted_private_key_filepath,
+                      key_pair.unencrypted_private_key_pem,
+                      skip: true
+    shell.create_file key_pair.encrypted_private_key_filepath,
+                      key_pair.encrypted_private_key_pem,
+                      skip: true
+    shell.create_file key_pair.public_key_filepath,
+                      key_pair.public_key_pem,
+                      skip: true
+
+    `chmod 600 #{key_pair.unencrypted_private_key_filepath}`
+    `chmod 600 #{key_pair.encrypted_private_key_filepath}`
+    `chmod 644 #{key_pair.public_key_filepath}`
+  end
+
+  # rubocop:disable Style/GuardClause
+  def append_to_gitignore
+    ::FileUtils.touch gitignore_filepath
+
+    gitignore_contents = ::File.read(gitignore_filepath)
+
+    unless gitignore_contents =~ /^\.chamber\*\.enc$/
+      shell.append_to_file gitignore_filepath, ".chamber*.enc\n"
+    end
+
+    unless gitignore_contents =~ /^\.chamber\*\.pem$/
+      shell.append_to_file gitignore_filepath, ".chamber*.pem\n"
+    end
+  end
+  # rubocop:enable Style/GuardClause
 
   def settings_template_filepath
     @settings_template_filepath ||= templates_path + 'settings.yml'
@@ -80,7 +135,7 @@ class   Initialize < Chamber::Commands::Base
   def gem_path
     @gem_path                   ||= Pathname.new(
                                       ::File.expand_path('../../../..', __FILE__),
-    )
+                                    )
   end
 
   def settings_filepath
@@ -89,51 +144,6 @@ class   Initialize < Chamber::Commands::Base
 
   def gitignore_filepath
     @gitignore_filepath         ||= rootpath + '.gitignore'
-  end
-
-  def protected_key_filepath
-    @protected_key_filepath     ||= rootpath + protected_key_filename
-  end
-
-  def private_key_filepath
-    @private_key_filepath       ||= rootpath + private_key_filename
-  end
-
-  def public_key_filepath
-    @public_key_filepath        ||= rootpath + public_key_filename
-  end
-
-  def protected_key_filename
-    '.chamber.pem.enc'
-  end
-
-  def private_key_filename
-    '.chamber.pem'
-  end
-
-  def public_key_filename
-    '.chamber.pub.pem'
-  end
-
-  def rsa_protected_key
-    @rsa_protected_key          ||= begin
-                                      cipher = OpenSSL::Cipher.new 'AES-128-CBC'
-                                      key    = OpenSSL::PKey::RSA.new(2048)
-
-                                      key.export cipher, rsa_key_passphrase
-                                    end
-  end
-
-  def rsa_private_key
-    @rsa_private_key            ||= OpenSSL::PKey::RSA.new(2048)
-  end
-
-  def rsa_public_key
-    rsa_private_key.public_key
-  end
-
-  def rsa_key_passphrase
-    @rsa_key_passphrase ||= SecureRandom.uuid
   end
 end
 end

@@ -96,8 +96,8 @@ target
 *.tmproj
 .Rhistory
 .bundle
-.chamber.pem
-.chamber.pem.enc
+.chamber*.enc
+.chamber*.pem
 .env
 .env.yml
 .foreman
