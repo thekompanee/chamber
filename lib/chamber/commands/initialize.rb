@@ -45,13 +45,13 @@ class   Initialize < Chamber::Commands::Base
     shell.say ''
     shell.say 'The passphrase for your encrypted private key is:', :green
     shell.say ''
-    shell.say rsa_key_passphrase, :green
+    shell.say rsa_key_passphrase, :yellow
     shell.say ''
     shell.say 'Store this securely somewhere.', :green
     shell.say ''
     shell.say 'You can send them the file located at:', :green
     shell.say ''
-    shell.say protected_key_filepath, :green
+    shell.say protected_key_filepath, :yellow
     shell.say ''
     shell.say 'and not have to worry about sending it via a secure medium (such as', :green
     shell.say 'email), however do not send the passphrase along with it.  Give it to', :green
@@ -59,8 +59,8 @@ class   Initialize < Chamber::Commands::Base
     shell.say ''
     shell.say 'In order for them to decrypt it (for use with Chamber), they can run:', :green
     shell.say ''
-    shell.say "$ cp /path/to/{#{protected_key_filename},#{private_key_filename}}", :green
-    shell.say "$ ssh-keygen -p -f /path/to/#{private_key_filename}", :green
+    shell.say "$ cp /path/to/{#{protected_key_filename},#{private_key_filename}}", :yellow
+    shell.say "$ ssh-keygen -p -f /path/to/#{private_key_filename}", :yellow
     shell.say ''
     shell.say 'Enter the passphrase when prompted and leave the new passphrase blank.', :green
     shell.say ''
