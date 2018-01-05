@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 require 'rspectacular'
-require 'chamber/encryption_key'
+require 'chamber/keys/encryption'
 
 module    Chamber
-describe  EncryptionKey do
+module    Keys
+describe  Encryption do
   it 'can find default keys by reading files' do
-    key = EncryptionKey.resolve(rootpath:   'spec/fixtures/keys/',
+    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
                                 namespaces: [],
                                 filenames:  'spec/fixtures/keys/.chamber.pub.pem')
 
@@ -16,7 +17,7 @@ describe  EncryptionKey do
   it 'can find default keys by reading the environment' do
     ENV['CHAMBER_PUBLIC_KEY'] = 'environment public key'
 
-    key = EncryptionKey.resolve(rootpath:   'spec/fixtures/keys/',
+    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
                                 namespaces: [],
                                 filenames:  'spec/fixtures/.chamber.pub.pem')
 
@@ -26,7 +27,7 @@ describe  EncryptionKey do
   end
 
   it 'can find namespaced key files by reading files' do
-    key = EncryptionKey.resolve(rootpath:   'spec/fixtures/keys/',
+    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
                                 namespaces: [],
                                 filenames:  'spec/fixtures/keys/.chamber.development.pub.pem')
 
@@ -36,7 +37,7 @@ describe  EncryptionKey do
   it 'can find namespaced key files by reading the environment' do
     ENV['CHAMBER_DEVELOPMENT_PUBLIC_KEY'] = 'environment public key'
 
-    key = EncryptionKey.resolve(rootpath:   'spec/fixtures/keys/',
+    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
                                 namespaces: [],
                                 filenames:  'spec/fixtures/.chamber.development.pub.pem')
 
@@ -46,7 +47,7 @@ describe  EncryptionKey do
   end
 
   it 'can generate generic key filenames from namespaces' do
-    key = EncryptionKey.resolve(rootpath:   'spec/fixtures/keys/',
+    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
                                 namespaces: %w{test production},
                                 filenames:  %w{
                                               spec/fixtures/keys/.chamber.development.pub.pem
@@ -62,7 +63,7 @@ describe  EncryptionKey do
   it 'can lookup generic key from namespaces by reading the environment' do
     ENV['CHAMBER_MISSING_PUBLIC_KEY'] = 'environment public key'
 
-    key = EncryptionKey.resolve(rootpath:   'spec/fixtures/keys/',
+    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
                                 namespaces: %w{test missing production},
                                 filenames:  [])
 
@@ -76,7 +77,7 @@ describe  EncryptionKey do
   end
 
   it 'removes duplicates from the filenames and namespaces if necessary' do
-    key = EncryptionKey.resolve(rootpath:   'spec/fixtures/keys/',
+    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
                                 namespaces: %w{test production},
                                 filenames:  %w{
                                               spec/fixtures/keys/.chamber.development.pub.pem
@@ -91,7 +92,7 @@ describe  EncryptionKey do
   end
 
   it 'can find multiple keys' do
-    key = EncryptionKey.resolve(
+    key = Encryption.resolve(
             rootpath:   'spec/fixtures/keys/',
             namespaces: [],
             filenames:  [
@@ -112,7 +113,7 @@ describe  EncryptionKey do
 
   it 'raises an error if the key cannot be found' do
     expect {
-      EncryptionKey.resolve(rootpath:   'spec/fixtures/keys/',
+      Encryption.resolve(rootpath:   'spec/fixtures/keys/',
                             namespaces: [],
                             filenames:  'spec/fixtures/keys/.chamber.staging.pub.pem')
     }.to \
@@ -120,5 +121,6 @@ describe  EncryptionKey do
         with_message('One or more of your keys were not found: ' \
                      'spec/fixtures/keys/.chamber.staging.pub.pem')
   end
+end
 end
 end

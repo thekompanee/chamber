@@ -3,7 +3,9 @@
 require 'pathname'
 require 'socket'
 require 'hashie/mash'
-require 'chamber/decryption_key'
+
+require 'chamber/keys/decryption'
+require 'chamber/keys/encryption'
 
 module  Chamber
 class   ContextResolver
@@ -17,8 +19,6 @@ class   ContextResolver
   def resolve
     options[:rootpath]        ||= Pathname.pwd
     options[:rootpath]          = Pathname.new(options[:rootpath])
-    options[:encryption_keys]   = resolve_encryption_keys(options[:encryption_keys])
-    options[:decryption_keys]   = resolve_decryption_keys(options[:decryption_keys])
     options[:namespaces]      ||= []
     options[:preset]          ||= resolve_preset
 
@@ -35,6 +35,12 @@ class   ContextResolver
                                  options[:basepath] + 'settings*.yml',
                                  options[:basepath] + 'settings',
                                ]
+    options[:encryption_keys]   = Keys::Encryption.resolve(filenames:  options[:encryption_keys],
+                                                        namespaces: options[:namespaces],
+                                                        rootpath:   options[:rootpath])
+    options[:decryption_keys]   = Keys::Decryption.resolve(filenames:  options[:decryption_keys],
+                                                        namespaces: options[:namespaces],
+                                                        rootpath:   options[:rootpath])
 
     options
   end
@@ -52,17 +58,6 @@ class   ContextResolver
     elsif in_a_rails_engine?
       'rails-engine'
     end
-  end
-
-  def resolve_encryption_keys(keys)
-    keys ||= options[:rootpath] + '.chamber.pub.pem'
-
-    keys if Pathname.new(keys).readable?
-  end
-
-  def resolve_decryption_keys(keys)
-    DecryptionKey.resolve(filename: keys,
-                          rootpath: options[:rootpath])
   end
 
   def in_a_rails_project?

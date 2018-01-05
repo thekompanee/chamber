@@ -5,7 +5,8 @@ require 'stringio'
 require 'chamber/keys/base'
 
 module  Chamber
-class   DecryptionKey < Chamber::Keys::Base
+module  Keys
+class   Decryption < Chamber::Keys::Base
   NAMESPACE_PATTERN = /
                         \A      # Beginning of Filename
                         \.      # Initial Period
@@ -36,5 +37,6 @@ class   DecryptionKey < Chamber::Keys::Base
   def default_decryption_key_file_path
     Pathname.new(rootpath + '.chamber.pem')
   end
+end
 end
 end
