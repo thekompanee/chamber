@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'chamber/commands/base'
+require 'chamber/commands/securable'
 
 module  Chamber
 module  Commands

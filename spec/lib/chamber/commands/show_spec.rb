@@ -11,7 +11,7 @@ describe  Show do
     {
       basepath:        rootpath,
       rootpath:        rootpath,
-      namespaces:      'test',
+      namespaces:      ['test'],
       decryption_keys: './spec/spec_key',
     }
   end

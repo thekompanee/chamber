@@ -18,25 +18,25 @@ describe  ContextResolver do
 
   it 'does not attempt to do any resolution if all valid options are passed in' do
     options = ContextResolver.resolve(basepath:   'my_path',
-                                      namespaces: 'ns')
+                                      namespaces: ['ns'])
 
     expect(options[:basepath].to_s).to  eql 'my_path'
-    expect(options[:namespaces]).to     eql 'ns'
+    expect(options[:namespaces]).to     eql ['ns']
   end
 
   it 'does not attempt to do any resolution if files are passed in in place of a ' \
      'basepath' do
 
     options = ContextResolver.resolve(files:      'my_files',
-                                      namespaces: 'ns')
+                                      namespaces: ['ns'])
 
     expect(options[:files]).to          eql 'my_files'
-    expect(options[:namespaces]).to     eql 'ns'
+    expect(options[:namespaces]).to     eql ['ns']
   end
 
   it 'defaults the basepath to the rootpath if none is explicitly set' do
     options = ContextResolver.resolve(rootpath:   './app',
-                                      namespaces: 'ns')
+                                      namespaces: ['ns'])
 
     expect(options[:basepath].to_s).to eql './app'
   end
@@ -58,10 +58,10 @@ describe  ContextResolver do
 
   it 'can handle if keys are passed as strings' do
     options = ContextResolver.resolve('files'      => 'my_files',
-                                      'namespaces' => 'ns')
+                                      'namespaces' => ['ns'])
 
     expect(options[:files]).to          eql 'my_files'
-    expect(options[:namespaces]).to     eql 'ns'
+    expect(options[:namespaces]).to     eql ['ns']
   end
 
   it 'sets the rootpath to the current working directory if none is passed in' do
@@ -76,7 +76,17 @@ describe  ContextResolver do
   it 'sets the encryption key to the default if not passed in' do
     options = ContextResolver.resolve(rootpath: rails_3_path)
 
-    expect(options[:encryption_keys].to_s).to include 'rails-3-test/.chamber.pub.pem'
+    expect(options[:encryption_keys].to_s).to eql <<-HEREDOC
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvYcqkBjBLhSaTKOCMoq+
+ZxcuxTaA5UQpf/vDXbOiI871+6x7yKbTr+Xr9oFDvFldyvUFiK6LX0rj/jgLnaTB
+sLyXjH46dOmiPUO3k/QvDmRKN8zvl4x9T7YZKuoEkxZwE3T3MxKPmBorKGv/22Vb
+KocqkGGgx9gKIvSfxVXfTMfcvTDrFllm1bCaXEVGcRAknJg94ul2yMgqmYA2KJcP
+y2naped90yzv0A7c/UI5zjBcJPgkum79aDTSv095yl+Pk+5JM2jD85x3ph3ij++L
+dAXJ1fBJrV1H39UJ4A6yOupEG3+QsZTPDXkBBnX8+mWXYCClI/GF6iA/G3njeMqU
+fQIDAQAB
+-----END PUBLIC KEY-----
+    HEREDOC
   end
 
   it 'sets the decryption key to the default if not passed in' do
