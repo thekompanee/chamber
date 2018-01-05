@@ -1,52 +1,87 @@
 # frozen_string_literal: true
 
+require 'pathname'
 require 'stringio'
 
 module  Chamber
 class   DecryptionKey
+  NAMESPACE_PATTERN = /
+                        \A      # Beginning of Filename
+                        \.      # Initial Period
+                        [^\.]+? # Initial Key Filename Base
+                        \.      # Dot Separator
+                        (\w+)   # Namespace
+                        \.      # Post Namespace Period
+                      /x
+
   def self.resolve(*args)
     new(*args).resolve
   end
 
-  attr_accessor :rootpath
-  attr_reader   :filename
+  attr_accessor :namespaces,
+                :rootpath
+  attr_reader   :filenames
 
   def initialize(options = {})
-    self.rootpath = options[:rootpath]
-    self.filename = options[:filename] || ''
+    self.rootpath   = options.fetch(:rootpath)
+    self.namespaces = options.fetch(:namespaces)
+    self.filenames  = (
+                        Array(options[:filenames]) +
+                        generate_key_filenames
+                      ).
+                        uniq
   end
 
   def resolve
-    if filename.readable?
-      filename.read
-    elsif in_environment_variable?
-      environment_variable
+    filenames.each_with_object({}) do |filename, memo|
+      namespace = namespace_from_filename(filename) || 'default'
+      value     = key_from_file_contents(filename)        ||
+                  key_from_environment_variable(filename) ||
+                  fail(ArgumentError,
+                       "One or more of your keys were not found: #{filename}")
+
+      memo[namespace.downcase.to_sym] = value
     end
   end
 
-  protected
-
-  def filename=(other)
-    other_file = Pathname.new(other)
-
-    @filename = if other_file.readable?
-                  other_file
-                else
-                  default_file
-                end
+  def filenames=(other)
+    @filenames = other.map { |o| Pathname.new(o) }
   end
 
   private
 
-  def in_environment_variable?
-    ENV['CHAMBER_KEY']
+  def key_from_file_contents(filename)
+    filename.readable? && filename.read
   end
 
-  def environment_variable
-    ENV['CHAMBER_KEY']
+  def key_from_environment_variable(filename)
+    ENV[environment_variable_from_filename(filename)]
   end
 
-  def default_file
+  def environment_variable_from_filename(filename)
+    [
+      'CHAMBER',
+      namespace_from_filename(filename),
+      'KEY',
+    ].
+      compact.
+      join('_')
+  end
+
+  def namespace_from_filename(filename)
+    filename.
+      basename.
+      to_s.
+      match(NAMESPACE_PATTERN) { |m| m[1].upcase }
+  end
+
+  def generate_key_filenames
+    namespaces.map do |namespace|
+      rootpath + ".chamber.#{namespace}.pem"
+    end
+  end
+
+  def default_decryption_key_file_path
     Pathname.new(rootpath + '.chamber.pem')
   end
 end
