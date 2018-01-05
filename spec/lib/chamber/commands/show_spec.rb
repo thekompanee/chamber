@@ -9,9 +9,9 @@ describe  Show do
   let(:rootpath) { ::File.expand_path('./spec/fixtures') }
   let(:options) do
     {
-      basepath:       rootpath,
-      rootpath:       rootpath,
-      namespaces:     'test',
+      basepath:        rootpath,
+      rootpath:        rootpath,
+      namespaces:      'test',
       decryption_keys: './spec/spec_key',
     }
   end

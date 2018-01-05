@@ -42,7 +42,7 @@ class   File < Pathname
   #   # => <Chamber::File>
   #
   def initialize(options = {})
-    self.namespaces     = options[:namespaces] || {}
+    self.namespaces      = options[:namespaces] || {}
     self.decryption_keys = options[:decryption_keys]
     self.encryption_keys = options[:encryption_keys]
 
@@ -69,8 +69,8 @@ class   File < Pathname
   # ```
   #
   def to_settings
-    @data ||= Settings.new(settings:       file_contents_hash,
-                           namespaces:     namespaces,
+    @data ||= Settings.new(settings:        file_contents_hash,
+                           namespaces:      namespaces,
                            decryption_keys: decryption_keys,
                            encryption_keys: encryption_keys)
   end

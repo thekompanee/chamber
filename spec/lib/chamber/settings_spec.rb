@@ -238,7 +238,7 @@ HEREDOC
 
   it 'can decrypt a setting if it finds a secure key' do
     settings = Settings.new(
-      settings:       {
+      settings:        {
         _secure_my_encrypted_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYTha' \
                                       'V4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4ak' \
                                       'un6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkE' \
@@ -255,19 +255,19 @@ HEREDOC
   end
 
   it 'can encrypt a setting if it finds a secure key' do
-    settings = Settings.new(settings:       {
+    settings = Settings.new(settings:        {
                               _secure_my_encrypted_setting: 'hello',
                             },
                             encryption_keys: './spec/spec_key.pub',
-                            pre_filters:    [],
-                            post_filters:   [Filters::EncryptionFilter])
+                            pre_filters:     [],
+                            post_filters:    [Filters::EncryptionFilter])
 
     expect(settings._secure_my_encrypted_setting).to match \
       Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
 
   it 'can encrypt a settings without explicitly having to have a filter passed' do
-    settings = Settings.new(settings:       {
+    settings = Settings.new(settings:        {
                               _secure_my_encrypted_setting: 'hello',
                             },
                             decryption_keys: './spec/spec_key',
@@ -289,7 +289,7 @@ HEREDOC
 
   it 'can filter securable settings' do
     settings = Settings.new(
-      settings:       {
+      settings:        {
         _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYTha' \
                                         'V4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4ak' \
                                         'un6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkE' \
@@ -313,7 +313,7 @@ HEREDOC
 
   it 'can filter unencrypted settings' do
     settings = Settings.new(
-      settings:       {
+      settings:        {
         _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYTha' \
                                         'V4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4ak' \
                                         'un6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkE' \

@@ -54,11 +54,11 @@ class   DecryptionFilter
       return
     end
 
-    key_content     = if ::File.readable?(::File.expand_path(keyish))
-                        ::File.read(::File.expand_path(keyish))
-                      else
-                        keyish
-                      end
+    key_content      = if ::File.readable?(::File.expand_path(keyish))
+                         ::File.read(::File.expand_path(keyish))
+                       else
+                         keyish
+                       end
 
     @decryption_keys = OpenSSL::PKey::RSA.new(key_content)
   end

@@ -27,8 +27,8 @@ describe  File do
 
     expect(file_settings).to  be :settings
     expect(Settings).to       have_received(:new).
-                                with(settings:       { 'test' => 'settings' },
-                                     namespaces:     {},
+                                with(settings:        { 'test' => 'settings' },
+                                     namespaces:      {},
                                      decryption_keys: nil,
                                      encryption_keys: nil)
   end
@@ -44,8 +44,8 @@ describe  File do
 
     expect(file_settings).to  be :settings
     expect(Settings).to       have_received(:new).
-                                with(settings:       {},
-                                     namespaces:     {},
+                                with(settings:        {},
+                                     namespaces:      {},
                                      decryption_keys: nil,
                                      encryption_keys: nil)
   end
@@ -69,8 +69,8 @@ describe  File do
     settings_file.to_settings
 
     expect(Settings).to have_received(:new).
-                          with(settings:       { 'test' => 'settings' },
-                               namespaces:     {
+                          with(settings:        { 'test' => 'settings' },
+                               namespaces:      {
                                  environment: :development,
                                },
                                decryption_keys: nil,
@@ -85,8 +85,8 @@ describe  File do
 
     settings_file.to_settings
     expect(Settings).to have_received(:new).
-                          with(settings:       { 'test' => 2 },
-                               namespaces:     {},
+                          with(settings:        { 'test' => 2 },
+                               namespaces:      {},
                                decryption_keys: nil,
                                encryption_keys: nil)
   end
@@ -101,8 +101,8 @@ describe  File do
 
     expect(file_settings).to  be :settings
     expect(Settings).to       have_received(:new).
-                                with(settings:       {},
-                                     namespaces:     {},
+                                with(settings:        {},
+                                     namespaces:      {},
                                      decryption_keys: nil,
                                      encryption_keys: nil)
   end
@@ -111,7 +111,7 @@ describe  File do
     tempfile      = create_tempfile_with_content <<-HEREDOC
 _secure_setting: hello
 HEREDOC
-    settings_file = File.new  path:           tempfile.path,
+    settings_file = File.new  path:            tempfile.path,
                               encryption_keys: './spec/spec_key.pub'
 
     settings_file.secure
@@ -127,7 +127,7 @@ _secure_setting: hello
 _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
 HEREDOC
 
-    settings_file = File.new  path:           tempfile.path,
+    settings_file = File.new  path:            tempfile.path,
                               encryption_keys: './spec/spec_key.pub'
 
     settings_file.secure
@@ -162,7 +162,7 @@ other:
     regular_setting:         <%= 1 + 1 %>
 HEREDOC
 
-    settings_file = File.new  path:           tempfile.path,
+    settings_file = File.new  path:            tempfile.path,
                               encryption_keys: './spec/spec_key.pub'
 
     settings_file.secure
@@ -200,7 +200,7 @@ other:
     something_else:  'right here'
 HEREDOC
 
-    settings_file = File.new  path:           tempfile.path,
+    settings_file = File.new  path:            tempfile.path,
                               encryption_keys: './spec/spec_key.pub'
 
     settings_file.secure
@@ -224,7 +224,7 @@ stuff:
   _secure_another+_setting: "Thanks for +all the fish"
 HEREDOC
 
-    settings_file = File.new  path:           tempfile.path,
+    settings_file = File.new  path:            tempfile.path,
                               encryption_keys: './spec/spec_key.pub'
 
     settings_file.secure

@@ -189,8 +189,8 @@ class   Settings
     Settings.new(
       encryption_keys: encryption_keys || other_settings.encryption_keys,
       decryption_keys: decryption_keys || other_settings.decryption_keys,
-      namespaces:     (namespaces + other_settings.namespaces),
-      settings:       raw_data.merge(other_settings.raw_data),
+      namespaces:      (namespaces + other_settings.namespaces),
+      settings:        raw_data.merge(other_settings.raw_data),
     )
   end
 

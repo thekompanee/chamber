@@ -15,12 +15,12 @@ class   ContextResolver
 
   # rubocop:disable Metrics/AbcSize, Metrics/LineLength
   def resolve
-    options[:rootpath]       ||= Pathname.pwd
-    options[:rootpath]         = Pathname.new(options[:rootpath])
+    options[:rootpath]        ||= Pathname.pwd
+    options[:rootpath]          = Pathname.new(options[:rootpath])
     options[:encryption_keys]   = resolve_encryption_keys(options[:encryption_keys])
     options[:decryption_keys]   = resolve_decryption_keys(options[:decryption_keys])
-    options[:namespaces]     ||= []
-    options[:preset]         ||= resolve_preset
+    options[:namespaces]      ||= []
+    options[:preset]          ||= resolve_preset
 
     if %w{rails rails-engine}.include?(options[:preset])
       options[:rootpath]     = detect_engine_root                                if options[:preset]     == 'rails-engine'

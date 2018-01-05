@@ -118,10 +118,10 @@ class   FileSet
                 :encryption_keys
 
   def initialize(options = {})
-    self.namespaces     = options[:namespaces] || {}
+    self.namespaces      = options[:namespaces] || {}
     self.decryption_keys = options[:decryption_keys]
     self.encryption_keys = options[:encryption_keys]
-    self.paths          = options.fetch(:files)
+    self.paths           = options.fetch(:files)
   end
 
   ###
@@ -217,8 +217,8 @@ class   FileSet
         relevant_glob_files = relevant_files & current_glob_files
 
         relevant_glob_files.map! do |file|
-          File.new(path:           file,
-                   namespaces:     namespaces,
+          File.new(path:            file,
+                   namespaces:      namespaces,
                    decryption_keys: decryption_keys,
                    encryption_keys: encryption_keys)
         end
