@@ -13,8 +13,7 @@ class   ContextResolver
     self.options = Hashie::Mash.new(options)
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize, Metrics/LineLength
   def resolve
     options[:rootpath]       ||= Pathname.pwd
     options[:rootpath]         = Pathname.new(options[:rootpath])
@@ -24,44 +23,22 @@ class   ContextResolver
     options[:preset]         ||= resolve_preset
 
     if %w{rails rails-engine}.include?(options[:preset])
-      if options[:preset] == 'rails-engine'
-        engine_spec_dummy_directory = options[:rootpath] + 'spec' + 'dummy'
-        engine_test_dummy_directory = options[:rootpath] + 'test' + 'dummy'
-
-        options[:rootpath] = if (engine_spec_dummy_directory + 'config.ru').exist?
-                               engine_spec_dummy_directory
-                             elsif (engine_test_dummy_directory + 'config.ru').exist?
-                               engine_test_dummy_directory
-                             end
-      end
-
-      options[:basepath]     ||= options[:rootpath] + 'config'
-
-      if options[:namespaces] == []
-        require options[:rootpath].join('config', 'application').to_s
-
-        options[:namespaces] = [
-                                 ::Rails.env,
-                                 Socket.gethostname,
-                               ]
-      end
+      options[:rootpath]     = detect_engine_root                                if options[:preset]     == 'rails-engine'
+      options[:namespaces]   = load_rails_default_namespaces(options[:rootpath]) if options[:namespaces] == []
+      options[:basepath]   ||= options[:rootpath] + 'config'
     else
-      options[:basepath] ||= options[:rootpath]
+      options[:basepath]   ||= options[:rootpath]
     end
 
-    options[:basepath]         = Pathname.new(options[:basepath])
+    options[:basepath]       = Pathname.new(options[:basepath])
+    options[:files]        ||= [
+                                 options[:basepath] + 'settings*.yml',
+                                 options[:basepath] + 'settings',
+                               ]
 
-    options[:files]          ||= [
-                                   options[:basepath] + 'settings*.yml',
-                                   options[:basepath] + 'settings',
-                                 ]
-
-    options
-  rescue LoadError
     options
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity, Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize, Metrics/LineLength
 
   def self.resolve(options = {})
     new(options).resolve
@@ -102,6 +79,30 @@ class   ContextResolver
     options[:rootpath].join('bin',    'rails').exist? ||
     options[:rootpath].join('script', 'rails').exist? ||
     options[:rootpath].join('script', 'console').exist?
+  end
+
+  private
+
+  def detect_engine_root
+    engine_spec_dummy_directory = options[:rootpath] + 'spec' + 'dummy'
+    engine_test_dummy_directory = options[:rootpath] + 'test' + 'dummy'
+
+    if (engine_spec_dummy_directory + 'config.ru').exist?
+      engine_spec_dummy_directory
+    elsif (engine_test_dummy_directory + 'config.ru').exist?
+      engine_test_dummy_directory
+    end
+  end
+
+  def load_rails_default_namespaces(root)
+    require root.join('config', 'application').to_s
+
+    [
+      ::Rails.env,
+      Socket.gethostname,
+    ]
+  rescue LoadError
+    []
   end
 end
 end
