@@ -3,11 +3,11 @@
 module  Chamber
 module  EncryptionMethods
 class   None
-  def self.encrypt(_key, value, _encryption_key)
+  def self.encrypt(_key, value, _encryption_keys)
     value
   end
 
-  def self.decrypt(key, value, _decryption_key)
+  def self.decrypt(key, value, _decryption_keys)
     return value if value.nil?
 
     warn "WARNING: It appears that you would like to keep your information for #{key} " \

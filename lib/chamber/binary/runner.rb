@@ -47,15 +47,15 @@ class   Runner < Thor
                 desc:    'Used to quickly assign a given scenario to the chamber ' \
                          'command (eg Rails apps)'
 
-  class_option  :decryption_key,
+  class_option  :decryption_keys,
                 type: :string,
-                desc: 'The path to or contents of the private key associated with ' \
-                      'the project (typically .chamber.pem)'
+                desc: 'The path to or contents of the private key (or keys) associated ' \
+                      'with the project (typically .chamber.pem)'
 
-  class_option  :encryption_key,
+  class_option  :encryption_keys,
                 type: :string,
-                desc: 'The path to or contents of the public key associated with ' \
-                      'the project (typically .chamber.pub.pem)'
+                desc: 'The path to or contents of the public key (or keys) associated ' \
+                      'with the project (typically .chamber.pub.pem)'
 
   desc 'travis SUBCOMMAND ...ARGS',   'For manipulating Travis CI environment variables'
   subcommand 'travis', Chamber::Binary::Travis

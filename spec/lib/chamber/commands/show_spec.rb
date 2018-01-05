@@ -12,7 +12,7 @@ describe  Show do
       basepath:       rootpath,
       rootpath:       rootpath,
       namespaces:     'test',
-      decryption_key: './spec/spec_key',
+      decryption_keys: './spec/spec_key',
     }
   end
 

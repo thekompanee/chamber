@@ -304,7 +304,7 @@ describe Chamber do
 
   it 'can unencrpyt an already encrpyted value if it has access to the private key' do
     Chamber.load(files:          '/tmp/chamber/secure.yml',
-                 decryption_key: './spec/spec_key')
+                 decryption_keys: './spec/spec_key')
 
     expect(Chamber.test.my_encrpyted_setting).to eql 'hello'
   end

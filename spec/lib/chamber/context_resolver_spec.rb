@@ -76,14 +76,14 @@ describe  ContextResolver do
   it 'sets the encryption key to the default if not passed in' do
     options = ContextResolver.resolve(rootpath: rails_3_path)
 
-    expect(options[:encryption_key].to_s).to include 'rails-3-test/.chamber.pub.pem'
+    expect(options[:encryption_keys].to_s).to include 'rails-3-test/.chamber.pub.pem'
   end
 
   it 'sets the decryption key to the default if not passed in' do
     options      = ContextResolver.resolve(rootpath: rails_3_path)
     key_contents = ::File.read(rails_3_path + '/.chamber.pem')
 
-    expect(options[:decryption_key].to_s).to eql key_contents
+    expect(options[:decryption_keys].to_s).to eql key_contents
   end
 
   it 'sets the decryption key to the value of the CHAMBER_KEY if available' do
@@ -91,7 +91,7 @@ describe  ContextResolver do
 
     options = ContextResolver.resolve(rootpath: 'my_path')
 
-    expect(options[:decryption_key].to_s).to eql 'my key'
+    expect(options[:decryption_keys].to_s).to eql 'my key'
 
     ENV['CHAMBER_KEY'] = nil
   end
@@ -99,13 +99,13 @@ describe  ContextResolver do
   it 'does not set the encryption key if the keyfile does not exist' do
     options = ContextResolver.resolve(rootpath: './app')
 
-    expect(options[:encryption_key]).to be_nil
+    expect(options[:encryption_keys]).to be_nil
   end
 
   it 'does not set the decryption key if the keyfile does not exist' do
     options = ContextResolver.resolve(rootpath: './app')
 
-    expect(options[:decryption_key]).to be_nil
+    expect(options[:decryption_keys]).to be_nil
   end
 
   it 'sets the information to a Rails preset even if it is not pointing to a Rails app' do

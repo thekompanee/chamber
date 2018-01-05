@@ -14,7 +14,7 @@ describe  Secure do
     {
       basepath:       rootpath,
       rootpath:       rootpath,
-      encryption_key: rootpath + '../spec_key',
+      encryption_keys: rootpath + '../spec_key',
       shell:          double.as_null_object,
     }
   end

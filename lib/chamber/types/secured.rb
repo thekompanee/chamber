@@ -22,14 +22,14 @@ end
 
 module  Types
 class   Secured < CHAMBER_TYPE_VALUE_SUPERCLASS
-  attr_accessor :decryption_key,
-                :encryption_key
+  attr_accessor :decryption_keys,
+                :encryption_keys
 
   def initialize(options = {})
-    self.encryption_key = options.fetch(:encryption_key,
-                                        Chamber.configuration.encryption_key)
-    self.decryption_key = options.fetch(:decryption_key,
-                                        Chamber.configuration.decryption_key)
+    self.encryption_keys = options.fetch(:encryption_keys,
+                                         Chamber.configuration.encryption_keys)
+    self.decryption_keys = options.fetch(:decryption_keys,
+                                         Chamber.configuration.decryption_keys)
   end
 
   def type
@@ -56,8 +56,8 @@ class   Secured < CHAMBER_TYPE_VALUE_SUPERCLASS
     return if value.nil?
 
     Chamber.decrypt(value,
-                    decryption_key: decryption_key,
-                    encryption_key: encryption_key)
+                    decryption_keys: decryption_keys,
+                    encryption_keys: encryption_keys)
   end
   alias type_cast_from_database deserialize
 
@@ -66,8 +66,8 @@ class   Secured < CHAMBER_TYPE_VALUE_SUPERCLASS
 
     ::ActiveSupport::JSON.encode(
       Chamber.encrypt(value,
-                      decryption_key: decryption_key,
-                      encryption_key: encryption_key),
+                      decryption_keys: decryption_keys,
+                      encryption_keys: encryption_keys),
     )
   end
   alias type_cast_for_database serialize

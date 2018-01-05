@@ -114,13 +114,13 @@ module  Chamber
 class   FileSet
   attr_reader   :namespaces,
                 :paths
-  attr_accessor :decryption_key,
-                :encryption_key
+  attr_accessor :decryption_keys,
+                :encryption_keys
 
   def initialize(options = {})
     self.namespaces     = options[:namespaces] || {}
-    self.decryption_key = options[:decryption_key]
-    self.encryption_key = options[:encryption_key]
+    self.decryption_keys = options[:decryption_keys]
+    self.encryption_keys = options[:encryption_keys]
     self.paths          = options.fetch(:files)
   end
 
@@ -219,8 +219,8 @@ class   FileSet
         relevant_glob_files.map! do |file|
           File.new(path:           file,
                    namespaces:     namespaces,
-                   decryption_key: decryption_key,
-                   encryption_key: encryption_key)
+                   decryption_keys: decryption_keys,
+                   encryption_keys: encryption_keys)
         end
 
         sorted_relevant_files += relevant_glob_files

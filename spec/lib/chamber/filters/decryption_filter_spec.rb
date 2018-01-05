@@ -18,7 +18,7 @@ describe  DecryptionFilter do
                                    'S7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kK' \
                                    'TcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
       },
-      decryption_key:    './spec/spec_key',
+      decryption_keys:   './spec/spec_key',
     )
 
     expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
@@ -49,7 +49,7 @@ describe  DecryptionFilter do
                                    'nE9FyIqFmRZ9L8Ef43KE02wDcUnrKp3oOMSItWnY5rFJew0eAU' \
                                    '+CHQ==',
       },
-      decryption_key:    './spec/spec_key',
+      decryption_keys:   './spec/spec_key',
     )
 
     expect(filtered_settings._secure_my_secure_setting).to eql <<-HEREDOC
@@ -76,7 +76,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
                            'S7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kK' \
                            'TcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
       },
-      decryption_key:    './spec/spec_key',
+      decryption_keys:   './spec/spec_key',
     )
 
     my_secure_setting = filtered_settings.my_secure_setting
@@ -102,7 +102,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
                         'WVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKT' \
                         'cdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
       },
-      decryption_key:    './spec/spec_key',
+      decryption_keys:   './spec/spec_key',
     )
 
     secure_setting = filtered_settings.secure_setting
@@ -128,7 +128,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
                                    'WS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1k' \
                                    'KTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
       },
-      decryption_key:    './spec/spec_key',
+      decryption_keys:   './spec/spec_key',
     )
 
     my_secure_setting = filtered_settings._secure_my_secure_setting
@@ -147,7 +147,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
                                                  data:              {
                                                    _secure_my_secure_setting: 'hello',
                                                  },
-                                                 decryption_key:    './spec/spec_key')
+                                                 decryption_keys:   './spec/spec_key')
 
     expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
   end
@@ -189,7 +189,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
                                    'bnjz7fU7x+d5/ighWTDsmOVyvEiqM0WasFzK+WBUfvo8tQxUym' \
                                    'exw/U3B7N/0R/9v6U3l6x7eeIoQ4+lnJK2ULFzVgiw==',
       },
-      decryption_key:    './spec/spec_key',
+      decryption_keys:   './spec/spec_key',
     )
 
     expect(filtered_settings._secure_my_secure_setting).to be_a Integer
@@ -208,7 +208,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
                                    '+Ry2k+yIGJXIOjNm96ntDxIuUbycfrqYdtopBDI5kcr0zckPWM' \
                                    'QRqkp7yd/XNZqyYCFGMNKNwokE6wZuGffkD/H/VPxQ==',
       },
-      decryption_key:    './spec/spec_key',
+      decryption_keys:   './spec/spec_key',
     )
 
     expect(filtered_settings._secure_my_secure_setting).to eql '12345'
@@ -226,7 +226,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
                                    '8JIedOuy4JV4Y46QPvu4zCZhDgNa4dTCdOTA/oEd5+GLhuoSiC' \
                                    '87k/vbURwhqs1fmyXUJpUaDg3x4quTDZ6uBTG0Qu/A==',
       },
-      decryption_key:    './spec/spec_key',
+      decryption_keys:   './spec/spec_key',
     )
 
     expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
@@ -256,7 +256,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
                                      'jjTyJPeW/1FE3+tP3G3HJAV4sgoO0YwhNY1Nji56igCl3UvEP' \
                                      'nEQcJgu0w/+dqSreqwp6TqaqXY3lzr8vi733lti4nss=',
         },
-        decryption_key:    './spec/spec_key',
+        decryption_keys:   './spec/spec_key',
     )
 
     expect(filtered_settings._secure_my_secure_setting).to eql 'long' * 100
@@ -270,7 +270,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
       data:              {
         _secure_my_secure_setting: nil,
       },
-      decryption_key:    './spec/spec_key',
+      decryption_keys:   './spec/spec_key',
     )
 
     expect(Chamber::EncryptionMethods::None).not_to have_received(:warn)

@@ -5,7 +5,7 @@ module  EncryptionMethods
 class   Ssl
   LARGE_DATA_STRING_PATTERN = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z} # rubocop:disable Metrics/LineLength
 
-  def self.encrypt(_key, value, encryption_key)
+  def self.encrypt(_key, value, encryption_keys)
     value = YAML.dump(value)
     cipher = OpenSSL::Cipher.new('AES-128-CBC')
     cipher.encrypt
@@ -16,7 +16,7 @@ class   Ssl
     encrypted_data = cipher.update(value) + cipher.final
 
     # encrypt the key with the public key
-    encrypted_key = encryption_key.public_encrypt(symmetric_key)
+    encrypted_key = encryption_keys.public_encrypt(symmetric_key)
 
     # assemble the resulting Base64 encoded data, the key
     Base64.strict_encode64(encrypted_key) + '#' +
@@ -24,8 +24,8 @@ class   Ssl
     Base64.strict_encode64(encrypted_data)
   end
 
-  def self.decrypt(key, value, decryption_key)
-    if decryption_key.nil?
+  def self.decrypt(key, value, decryption_keys)
+    if decryption_keys.nil?
       value
     else
       key, iv, decoded_string = value.
@@ -34,7 +34,7 @@ class   Ssl
                                   map do |part|
         Base64.strict_decode64(part)
       end
-      key = decryption_key.private_decrypt(key)
+      key = decryption_keys.private_decrypt(key)
 
       cipher_dec = OpenSSL::Cipher.new('AES-128-CBC')
 

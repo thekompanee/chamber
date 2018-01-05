@@ -16,10 +16,10 @@ class     EncryptionFilter
 
   attr_accessor :data,
                 :secure_key_token
-  attr_reader   :encryption_key
+  attr_reader   :encryption_keys
 
   def initialize(options = {})
-    self.encryption_key   = options.fetch(:encryption_key, nil)
+    self.encryption_keys  = options.fetch(:encryption_keys, nil)
     self.data             = options.fetch(:data).dup
     self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
   end
@@ -37,7 +37,7 @@ class     EncryptionFilter
       settings[key] = if value.respond_to? :each_pair
                         execute(value)
                       elsif key.match(secure_key_token)
-                        encryption_method(value).encrypt(key, value, encryption_key)
+                        encryption_method(value).encrypt(key, value, encryption_keys)
                       else
                         value
                       end
@@ -46,9 +46,9 @@ class     EncryptionFilter
     settings
   end
 
-  def encryption_key=(keyish)
+  def encryption_keys=(keyish)
     if keyish.nil?
-      @encryption_key = nil
+      @encryption_keys = nil
 
       return
     end
@@ -59,7 +59,7 @@ class     EncryptionFilter
                         keyish
                       end
 
-    @encryption_key = OpenSSL::PKey::RSA.new(key_content)
+    @encryption_keys = OpenSSL::PKey::RSA.new(key_content)
   end
 
   def encryption_method(value)

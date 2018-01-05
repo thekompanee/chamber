@@ -17,10 +17,10 @@ class   DecryptionFilter
 
   attr_accessor :data,
                 :secure_key_token
-  attr_reader   :decryption_key
+  attr_reader   :decryption_keys
 
   def initialize(options = {})
-    self.decryption_key   = options.fetch(:decryption_key, nil)
+    self.decryption_keys  = options.fetch(:decryption_keys, nil)
     self.data             = options.fetch(:data).dup
     self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
   end
@@ -38,7 +38,7 @@ class   DecryptionFilter
       settings[key] = if value.respond_to? :each_pair
                         execute(value)
                       elsif key.match(secure_key_token)
-                        decryption_method(value).decrypt(key, value, decryption_key)
+                        decryption_method(value).decrypt(key, value, decryption_keys)
                       else
                         value
                       end
@@ -47,9 +47,9 @@ class   DecryptionFilter
     settings
   end
 
-  def decryption_key=(keyish)
+  def decryption_keys=(keyish)
     if keyish.nil?
-      @decryption_key = nil
+      @decryption_keys = nil
 
       return
     end
@@ -60,7 +60,7 @@ class   DecryptionFilter
                         keyish
                       end
 
-    @decryption_key = OpenSSL::PKey::RSA.new(key_content)
+    @decryption_keys = OpenSSL::PKey::RSA.new(key_content)
   end
 
   private

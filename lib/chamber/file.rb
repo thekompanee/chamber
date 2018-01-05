@@ -11,8 +11,8 @@ require 'erb'
 module  Chamber
 class   File < Pathname
   attr_accessor :namespaces,
-                :decryption_key,
-                :encryption_key
+                :decryption_keys,
+                :encryption_keys
 
   ###
   # Internal: Creates a settings file representing a path to a file on the
@@ -43,8 +43,8 @@ class   File < Pathname
   #
   def initialize(options = {})
     self.namespaces     = options[:namespaces] || {}
-    self.decryption_key = options[:decryption_key]
-    self.encryption_key = options[:encryption_key]
+    self.decryption_keys = options[:decryption_keys]
+    self.encryption_keys = options[:encryption_keys]
 
     super options.fetch(:path)
   end
@@ -71,8 +71,8 @@ class   File < Pathname
   def to_settings
     @data ||= Settings.new(settings:       file_contents_hash,
                            namespaces:     namespaces,
-                           decryption_key: decryption_key,
-                           encryption_key: encryption_key)
+                           decryption_keys: decryption_keys,
+                           encryption_keys: encryption_keys)
   end
 
   # rubocop:disable Metrics/LineLength

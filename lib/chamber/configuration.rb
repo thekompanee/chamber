@@ -5,8 +5,8 @@ require 'chamber/context_resolver'
 module  Chamber
 class   Configuration
   attr_accessor :basepath,
-                :decryption_key,
-                :encryption_key,
+                :decryption_keys,
+                :encryption_keys,
                 :files,
                 :namespaces
 
@@ -15,16 +15,16 @@ class   Configuration
 
     self.basepath       = options[:basepath]
     self.namespaces     = options[:namespaces]
-    self.decryption_key = options[:decryption_key]
-    self.encryption_key = options[:encryption_key]
+    self.decryption_keys = options[:decryption_keys]
+    self.encryption_keys = options[:encryption_keys]
     self.files          = options[:files]
   end
 
   def to_hash
     {
       basepath:       basepath,
-      decryption_key: decryption_key,
-      encryption_key: encryption_key,
+      decryption_keys: decryption_keys,
+      encryption_keys: encryption_keys,
       files:          files,
       namespaces:     namespaces,
     }
