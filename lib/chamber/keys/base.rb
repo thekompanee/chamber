@@ -12,13 +12,9 @@ class   Base
   attr_reader   :filenames
 
   def initialize(options = {})
-    self.rootpath   = options.fetch(:rootpath)
+    self.rootpath   = Pathname.new(options.fetch(:rootpath))
     self.namespaces = options.fetch(:namespaces)
-    self.filenames  = (
-                        Array(options[:filenames]) +
-                        generate_key_filenames
-                      ).
-                        uniq
+    self.filenames  = options[:filenames]
   end
 
   def resolve
@@ -32,7 +28,19 @@ class   Base
   end
 
   def filenames=(other)
-    @filenames = other.map { |o| Pathname.new(o) }
+    @filenames = begin
+                   paths = Array(other).
+                             map { |o| Pathname.new(o) }.
+                             compact
+
+                   paths << default_key_file_path if paths.empty?
+
+                   (
+                     paths +
+                     generate_key_filenames
+                   ).
+                     uniq
+                 end
   end
 
   private

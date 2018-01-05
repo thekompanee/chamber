@@ -14,10 +14,18 @@ describe  Decryption do
     expect(key).to eql(default: "default private key\n")
   end
 
+  it 'always includes the default key even if nothing is passed in' do
+    key = Decryption.resolve(rootpath:   'spec/fixtures/keys/',
+                             namespaces: [],
+                             filenames:  [])
+
+    expect(key).to eql(default: "default private key\n")
+  end
+
   it 'can find default keys by reading the environment' do
     ENV['CHAMBER_KEY'] = 'environment private key'
 
-    key = Decryption.resolve(rootpath:   'spec/fixtures/keys/',
+    key = Decryption.resolve(rootpath:   'spec/fixtures/',
                              namespaces: [],
                              filenames:  'spec/fixtures/.chamber.pem')
 
@@ -68,6 +76,7 @@ describe  Decryption do
                              filenames:  [])
 
     expect(key).to eql(
+                     default:    "default private key\n",
                      missing:    'environment private key',
                      production: "production private key\n",
                      test:       "test private key\n",

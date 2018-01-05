@@ -14,10 +14,18 @@ describe  Encryption do
     expect(key).to eql(default: "default public key\n")
   end
 
+  it 'always includes the default key even if nothing is passed in' do
+    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
+                             namespaces: [],
+                             filenames:  [])
+
+    expect(key).to eql(default: "default public key\n")
+  end
+
   it 'can find default keys by reading the environment' do
     ENV['CHAMBER_PUBLIC_KEY'] = 'environment public key'
 
-    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
+    key = Encryption.resolve(rootpath:   'spec/fixtures/',
                              namespaces: [],
                              filenames:  'spec/fixtures/.chamber.pub.pem')
 
@@ -31,7 +39,7 @@ describe  Encryption do
                              namespaces: [],
                              filenames:  'spec/fixtures/keys/.chamber.test.pub.pem')
 
-    expect(key).to eql(test: "test public key\n")
+    expect(key).to eql(test:    "test public key\n")
   end
 
   it 'can find namespaced key files by reading the environment' do
@@ -68,6 +76,7 @@ describe  Encryption do
                              filenames:  [])
 
     expect(key).to eql(
+                     default:    "default public key\n",
                      missing:    'environment public key',
                      production: "production public key\n",
                      test:       "test public key\n",

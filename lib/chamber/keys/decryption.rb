@@ -34,7 +34,7 @@ class   Decryption < Chamber::Keys::Base
     end
   end
 
-  def default_decryption_key_file_path
+  def default_key_file_path
     Pathname.new(rootpath + '.chamber.pem')
   end
 end
