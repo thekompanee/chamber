@@ -11,7 +11,7 @@ describe  Decryption do
                              namespaces: [],
                              filenames:  'spec/fixtures/keys/.chamber.pem')
 
-    expect(key).to eql(default: "default private key\n")
+    expect(key).to eql(__default: "default private key\n")
   end
 
   it 'always includes the default key even if nothing is passed in' do
@@ -19,7 +19,7 @@ describe  Decryption do
                              namespaces: [],
                              filenames:  [])
 
-    expect(key).to eql(default: "default private key\n")
+    expect(key).to eql(__default: "default private key\n")
   end
 
   it 'can find default keys by reading the environment' do
@@ -29,7 +29,7 @@ describe  Decryption do
                              namespaces: [],
                              filenames:  'spec/fixtures/.chamber.pem')
 
-    expect(key).to eql(default: 'environment private key')
+    expect(key).to eql(__default: 'environment private key')
 
     ENV.delete('CHAMBER_KEY')
   end
@@ -76,7 +76,7 @@ describe  Decryption do
                              filenames:  [])
 
     expect(key).to eql(
-                     default:    "default private key\n",
+                     __default:  "default private key\n",
                      missing:    'environment private key',
                      production: "production private key\n",
                      test:       "test private key\n",
@@ -113,7 +113,7 @@ describe  Decryption do
           )
 
     expect(key).to eql(
-                        default:     "default private key\n",
+                        __default:   "default private key\n",
                         development: "development private key\n",
                         production:  "production private key\n",
                         test:        "test private key\n",
@@ -133,7 +133,7 @@ describe  Decryption do
           )
 
     expect(key).to eql(
-                        default:     "default private key\n",
+                        __default:   "default private key\n",
                         development: "development private key\n",
                         test:        "test private key\n",
                       )

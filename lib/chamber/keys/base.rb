@@ -19,7 +19,7 @@ class   Base
 
   def resolve
     filenames.each_with_object({}) do |filename, memo|
-      namespace = namespace_from_filename(filename) || 'default'
+      namespace = namespace_from_filename(filename) || '__default'
       value     = key_from_file_contents(filename) ||
                   key_from_environment_variable(filename)
 

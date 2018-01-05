@@ -11,7 +11,7 @@ describe  Encryption do
                              namespaces: [],
                              filenames:  'spec/fixtures/keys/.chamber.pub.pem')
 
-    expect(key).to eql(default: "default public key\n")
+    expect(key).to eql(__default: "default public key\n")
   end
 
   it 'always includes the default key even if nothing is passed in' do
@@ -19,7 +19,7 @@ describe  Encryption do
                              namespaces: [],
                              filenames:  [])
 
-    expect(key).to eql(default: "default public key\n")
+    expect(key).to eql(__default: "default public key\n")
   end
 
   it 'can find default keys by reading the environment' do
@@ -29,7 +29,7 @@ describe  Encryption do
                              namespaces: [],
                              filenames:  'spec/fixtures/.chamber.pub.pem')
 
-    expect(key).to eql(default: 'environment public key')
+    expect(key).to eql(__default: 'environment public key')
 
     ENV.delete('CHAMBER_PUBLIC_KEY')
   end
@@ -76,7 +76,7 @@ describe  Encryption do
                              filenames:  [])
 
     expect(key).to eql(
-                     default:    "default public key\n",
+                     __default:  "default public key\n",
                      missing:    'environment public key',
                      production: "production public key\n",
                      test:       "test public key\n",
@@ -113,7 +113,7 @@ describe  Encryption do
           )
 
     expect(key).to eql(
-                        default:     "default public key\n",
+                        __default:   "default public key\n",
                         development: "development public key\n",
                         production:  "production public key\n",
                         test:        "test public key\n",
@@ -133,7 +133,7 @@ describe  Encryption do
           )
 
     expect(key).to eql(
-                        default:     "default public key\n",
+                        __default:   "default public key\n",
                         development: "development public key\n",
                         test:        "test public key\n",
                       )

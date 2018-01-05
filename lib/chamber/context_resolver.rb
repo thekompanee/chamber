@@ -32,10 +32,10 @@ class   ContextResolver
 
     options[:encryption_keys]   = Keys::Encryption.resolve(filenames:  options[:encryption_keys],
                                                            namespaces: options[:namespaces],
-                                                           rootpath:   options[:rootpath])[:default]
+                                                           rootpath:   options[:rootpath])[:__default]
     options[:decryption_keys]   = Keys::Decryption.resolve(filenames:  options[:decryption_keys],
                                                            namespaces: options[:namespaces],
-                                                           rootpath:   options[:rootpath])[:default]
+                                                           rootpath:   options[:rootpath])[:__default]
     options[:basepath]          = Pathname.new(options[:basepath])
     options[:files]           ||= [
                                     options[:basepath] + 'settings*.yml',
