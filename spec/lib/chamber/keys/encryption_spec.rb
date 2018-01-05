@@ -29,9 +29,9 @@ describe  Encryption do
   it 'can find namespaced key files by reading files' do
     key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
                              namespaces: [],
-                             filenames:  'spec/fixtures/keys/.chamber.development.pub.pem')
+                             filenames:  'spec/fixtures/keys/.chamber.test.pub.pem')
 
-    expect(key).to eql(development: "development public key\n")
+    expect(key).to eql(test: "test public key\n")
   end
 
   it 'can find namespaced key files by reading the environment' do
