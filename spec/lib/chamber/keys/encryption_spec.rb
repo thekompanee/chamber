@@ -111,15 +111,23 @@ describe  Encryption do
                       )
   end
 
-  it 'raises an error if the key cannot be found' do
-    expect {
-      Encryption.resolve(rootpath:   'spec/fixtures/keys/',
-                         namespaces: [],
-                         filenames:  'spec/fixtures/keys/.chamber.staging.pub.pem')
-    }.to \
-      raise_error(ArgumentError).
-        with_message('One or more of your keys were not found: ' \
-                     'spec/fixtures/keys/.chamber.staging.pub.pem')
+  it 'skips a key if it cannot be found' do
+    key = Encryption.resolve(
+            rootpath:   'spec/fixtures/keys/',
+            namespaces: %w{foobar},
+            filenames:  [
+                          'spec/fixtures/keys/.chamber.development.pub.pem',
+                          'spec/fixtures/keys/.chamber.pub.pem',
+                          'spec/fixtures/keys/.chamber.staging.pub.pem',
+                          'spec/fixtures/keys/.chamber.test.pub.pem',
+                        ],
+          )
+
+    expect(key).to eql(
+                        default:     "default public key\n",
+                        development: "development public key\n",
+                        test:        "test public key\n",
+                      )
   end
 end
 end

@@ -24,12 +24,10 @@ class   Base
   def resolve
     filenames.each_with_object({}) do |filename, memo|
       namespace = namespace_from_filename(filename) || 'default'
-      value     = key_from_file_contents(filename)        ||
-                  key_from_environment_variable(filename) ||
-                  fail(ArgumentError,
-                       "One or more of your keys were not found: #{filename}")
+      value     = key_from_file_contents(filename) ||
+                  key_from_environment_variable(filename)
 
-      memo[namespace.downcase.to_sym] = value
+      memo[namespace.downcase.to_sym] = value if value
     end
   end
 
