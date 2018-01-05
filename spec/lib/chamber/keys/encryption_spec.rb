@@ -100,6 +100,18 @@ describe  Encryption do
                    )
   end
 
+  it 'ignores non-standard key name namespace detection' do
+    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
+                             namespaces: [],
+                             filenames:  %w{
+                                           spec/fixtures/keys/.foo.development.pub.pem
+                                         })
+
+    expect(key).to eql(
+                     __default: "non-standard public key\n",
+                   )
+  end
+
   it 'can find multiple keys' do
     key = Encryption.resolve(
             rootpath:   'spec/fixtures/keys/',

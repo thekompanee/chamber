@@ -8,12 +8,12 @@ module  Chamber
 module  Keys
 class   Decryption < Chamber::Keys::Base
   NAMESPACE_PATTERN = /
-                        \A      # Beginning of Filename
-                        \.      # Initial Period
-                        [^\.]+? # Initial Key Filename Base
-                        \.      # Dot Separator
-                        (\w+)   # Namespace
-                        \.      # Post Namespace Period
+                        \A          # Beginning of Filename
+                        \.chamber   # Initial Chamber Prefix
+                        \.          # Pre-Namespace Dot
+                        (\w+)       # Namespace
+                        \.pem       # Extension
+                        \z          # End of Filename
                       /x
 
   private

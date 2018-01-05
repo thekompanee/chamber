@@ -100,6 +100,30 @@ describe  Decryption do
                    )
   end
 
+  it 'can handle non-standard default keys' do
+    key = Decryption.resolve(rootpath:   'spec/fixtures/keys/',
+                             namespaces: [],
+                             filenames:  %w{
+                                           spec/spec_key
+                                         })
+
+    expect(key).to include(
+                     __default: match(/\A-----BEGIN RSA PRIVATE KEY-----/),
+                   )
+  end
+
+  it 'ignores non-standard key name namespace detection' do
+    key = Decryption.resolve(rootpath:   'spec/fixtures/keys/',
+                             namespaces: [],
+                             filenames:  %w{
+                                           spec/fixtures/keys/.foo.development.pem
+                                         })
+
+    expect(key).to eql(
+                     __default: "non-standard private key\n",
+                   )
+  end
+
   it 'can find multiple keys' do
     key = Decryption.resolve(
             rootpath:   'spec/fixtures/keys/',

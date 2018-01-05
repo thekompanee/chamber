@@ -9,11 +9,11 @@ module  Keys
 class   Encryption < Chamber::Keys::Base
   NAMESPACE_PATTERN = /
                         \A          # Beginning of Filename
-                        \.          # Initial Period
-                        [^\.]+?     # Initial Key Filename Base
-                        \.          # Dot Separator
+                        \.chamber   # Initial Chamber Prefix
+                        \.          # Pre-Namespace Dot
                         (\w+)       # Namespace
-                        \.pub\.pem  # Post Namespace Extension
+                        \.pub\.pem  # Extension
+                        \z          # End of Filename
                       /x
 
   private
