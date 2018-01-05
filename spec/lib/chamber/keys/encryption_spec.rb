@@ -8,8 +8,8 @@ module    Keys
 describe  Encryption do
   it 'can find default keys by reading files' do
     key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: [],
-                                filenames:  'spec/fixtures/keys/.chamber.pub.pem')
+                             namespaces: [],
+                             filenames:  'spec/fixtures/keys/.chamber.pub.pem')
 
     expect(key).to eql(default: "default public key\n")
   end
@@ -18,8 +18,8 @@ describe  Encryption do
     ENV['CHAMBER_PUBLIC_KEY'] = 'environment public key'
 
     key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: [],
-                                filenames:  'spec/fixtures/.chamber.pub.pem')
+                             namespaces: [],
+                             filenames:  'spec/fixtures/.chamber.pub.pem')
 
     expect(key).to eql(default: 'environment public key')
 
@@ -28,8 +28,8 @@ describe  Encryption do
 
   it 'can find namespaced key files by reading files' do
     key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: [],
-                                filenames:  'spec/fixtures/keys/.chamber.development.pub.pem')
+                             namespaces: [],
+                             filenames:  'spec/fixtures/keys/.chamber.development.pub.pem')
 
     expect(key).to eql(development: "development public key\n")
   end
@@ -38,8 +38,8 @@ describe  Encryption do
     ENV['CHAMBER_DEVELOPMENT_PUBLIC_KEY'] = 'environment public key'
 
     key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: [],
-                                filenames:  'spec/fixtures/.chamber.development.pub.pem')
+                             namespaces: [],
+                             filenames:  'spec/fixtures/.chamber.development.pub.pem')
 
     expect(key).to eql(development: 'environment public key')
 
@@ -48,10 +48,10 @@ describe  Encryption do
 
   it 'can generate generic key filenames from namespaces' do
     key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: %w{test production},
-                                filenames:  %w{
-                                              spec/fixtures/keys/.chamber.development.pub.pem
-                                            })
+                             namespaces: %w{test production},
+                             filenames:  %w{
+                                           spec/fixtures/keys/.chamber.development.pub.pem
+                                         })
 
     expect(key).to eql(
                      development: "development public key\n",
@@ -64,8 +64,8 @@ describe  Encryption do
     ENV['CHAMBER_MISSING_PUBLIC_KEY'] = 'environment public key'
 
     key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: %w{test missing production},
-                                filenames:  [])
+                             namespaces: %w{test missing production},
+                             filenames:  [])
 
     expect(key).to eql(
                      missing:    'environment public key',
@@ -78,11 +78,11 @@ describe  Encryption do
 
   it 'removes duplicates from the filenames and namespaces if necessary' do
     key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: %w{test production},
-                                filenames:  %w{
-                                              spec/fixtures/keys/.chamber.development.pub.pem
-                                              spec/fixtures/keys/.chamber.test.pub.pem
-                                            })
+                             namespaces: %w{test production},
+                             filenames:  %w{
+                                           spec/fixtures/keys/.chamber.development.pub.pem
+                                           spec/fixtures/keys/.chamber.test.pub.pem
+                                         })
 
     expect(key).to eql(
                      development: "development public key\n",
@@ -114,8 +114,8 @@ describe  Encryption do
   it 'raises an error if the key cannot be found' do
     expect {
       Encryption.resolve(rootpath:   'spec/fixtures/keys/',
-                            namespaces: [],
-                            filenames:  'spec/fixtures/keys/.chamber.staging.pub.pem')
+                         namespaces: [],
+                         filenames:  'spec/fixtures/keys/.chamber.staging.pub.pem')
     }.to \
       raise_error(ArgumentError).
         with_message('One or more of your keys were not found: ' \

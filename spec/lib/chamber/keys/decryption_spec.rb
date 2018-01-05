@@ -8,8 +8,8 @@ module    Keys
 describe  Decryption do
   it 'can find default keys by reading files' do
     key = Decryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: [],
-                                filenames:  'spec/fixtures/keys/.chamber.pem')
+                             namespaces: [],
+                             filenames:  'spec/fixtures/keys/.chamber.pem')
 
     expect(key).to eql(default: "default private key\n")
   end
@@ -18,8 +18,8 @@ describe  Decryption do
     ENV['CHAMBER_KEY'] = 'environment private key'
 
     key = Decryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: [],
-                                filenames:  'spec/fixtures/.chamber.pem')
+                             namespaces: [],
+                             filenames:  'spec/fixtures/.chamber.pem')
 
     expect(key).to eql(default: 'environment private key')
 
@@ -28,8 +28,8 @@ describe  Decryption do
 
   it 'can find namespaced key files by reading files' do
     key = Decryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: [],
-                                filenames:  'spec/fixtures/keys/.chamber.development.pem')
+                             namespaces: [],
+                             filenames:  'spec/fixtures/keys/.chamber.development.pem')
 
     expect(key).to eql(development: "development private key\n")
   end
@@ -38,8 +38,8 @@ describe  Decryption do
     ENV['CHAMBER_DEVELOPMENT_KEY'] = 'environment private key'
 
     key = Decryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: [],
-                                filenames:  'spec/fixtures/.chamber.development.pem')
+                             namespaces: [],
+                             filenames:  'spec/fixtures/.chamber.development.pem')
 
     expect(key).to eql(development: 'environment private key')
 
@@ -48,10 +48,10 @@ describe  Decryption do
 
   it 'can generate generic key filenames from namespaces' do
     key = Decryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: %w{test production},
-                                filenames:  %w{
-                                              spec/fixtures/keys/.chamber.development.pem
-                                            })
+                             namespaces: %w{test production},
+                             filenames:  %w{
+                                           spec/fixtures/keys/.chamber.development.pem
+                                         })
 
     expect(key).to eql(
                      development: "development private key\n",
@@ -64,8 +64,8 @@ describe  Decryption do
     ENV['CHAMBER_MISSING_KEY'] = 'environment private key'
 
     key = Decryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: %w{test missing production},
-                                filenames:  [])
+                             namespaces: %w{test missing production},
+                             filenames:  [])
 
     expect(key).to eql(
                      missing:    'environment private key',
@@ -78,11 +78,11 @@ describe  Decryption do
 
   it 'removes duplicates from the filenames and namespaces if necessary' do
     key = Decryption.resolve(rootpath:   'spec/fixtures/keys/',
-                                namespaces: %w{test production},
-                                filenames:  %w{
-                                              spec/fixtures/keys/.chamber.development.pem
-                                              spec/fixtures/keys/.chamber.test.pem
-                                            })
+                             namespaces: %w{test production},
+                             filenames:  %w{
+                                           spec/fixtures/keys/.chamber.development.pem
+                                           spec/fixtures/keys/.chamber.test.pem
+                                         })
 
     expect(key).to eql(
                      development: "development private key\n",
@@ -114,8 +114,8 @@ describe  Decryption do
   it 'raises an error if the key cannot be found' do
     expect {
       Decryption.resolve(rootpath:   'spec/fixtures/keys/',
-                            namespaces: [],
-                            filenames:  'spec/fixtures/keys/.chamber.staging.pem')
+                         namespaces: [],
+                         filenames:  'spec/fixtures/keys/.chamber.staging.pem')
     }.to \
       raise_error(ArgumentError).
         with_message('One or more of your keys were not found: ' \

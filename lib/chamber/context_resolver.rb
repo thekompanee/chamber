@@ -17,10 +17,10 @@ class   ContextResolver
 
   # rubocop:disable Metrics/AbcSize, Metrics/LineLength
   def resolve
-    options[:rootpath]        ||= Pathname.pwd
-    options[:rootpath]          = Pathname.new(options[:rootpath])
-    options[:namespaces]      ||= []
-    options[:preset]          ||= resolve_preset
+    options[:rootpath]   ||= Pathname.pwd
+    options[:rootpath]     = Pathname.new(options[:rootpath])
+    options[:namespaces] ||= []
+    options[:preset]     ||= resolve_preset
 
     if %w{rails rails-engine}.include?(options[:preset])
       options[:rootpath]     = detect_engine_root                                if options[:preset]     == 'rails-engine'
@@ -30,17 +30,17 @@ class   ContextResolver
       options[:basepath]   ||= options[:rootpath]
     end
 
-    options[:basepath]       = Pathname.new(options[:basepath])
-    options[:files]        ||= [
-                                 options[:basepath] + 'settings*.yml',
-                                 options[:basepath] + 'settings',
-                               ]
     options[:encryption_keys]   = Keys::Encryption.resolve(filenames:  options[:encryption_keys],
-                                                        namespaces: options[:namespaces],
-                                                        rootpath:   options[:rootpath])
+                                                           namespaces: options[:namespaces],
+                                                           rootpath:   options[:rootpath])
     options[:decryption_keys]   = Keys::Decryption.resolve(filenames:  options[:decryption_keys],
-                                                        namespaces: options[:namespaces],
-                                                        rootpath:   options[:rootpath])
+                                                           namespaces: options[:namespaces],
+                                                           rootpath:   options[:rootpath])
+    options[:basepath]          = Pathname.new(options[:basepath])
+    options[:files]           ||= [
+                                    options[:basepath] + 'settings*.yml',
+                                    options[:basepath] + 'settings',
+                                  ]
 
     options
   end
