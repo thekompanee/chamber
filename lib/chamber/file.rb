@@ -42,7 +42,7 @@ class   File < Pathname
   #   # => <Chamber::File>
   #
   def initialize(options = {})
-    self.namespaces      = options[:namespaces] || {}
+    self.namespaces      = options[:namespaces]      || {}
     self.decryption_keys = options[:decryption_keys] || {}
     self.encryption_keys = options[:encryption_keys] || {}
 
