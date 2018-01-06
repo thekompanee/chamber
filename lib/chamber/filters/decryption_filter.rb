@@ -20,7 +20,7 @@ class   DecryptionFilter
   attr_reader   :decryption_keys
 
   def initialize(options = {})
-    self.decryption_keys  = options.fetch(:decryption_keys, nil)
+    self.decryption_keys  = options.fetch(:decryption_keys, {})[:__default]
     self.data             = options.fetch(:data).dup
     self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
   end

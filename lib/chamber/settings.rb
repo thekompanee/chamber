@@ -25,8 +25,6 @@ class   Settings
   def initialize(options = {})
     self.namespaces     = options[:namespaces]     ||  []
     self.raw_data       = options[:settings]       ||  {}
-    self.decryption_keys = options[:decryption_keys]
-    self.encryption_keys = options[:encryption_keys]
     self.pre_filters    = options[:pre_filters]  || [
                                                       Filters::NamespaceFilter,
                                                     ]
@@ -36,6 +34,8 @@ class   Settings
                                                       Filters::FailedDecryptionFilter,
                                                       Filters::TranslateSecureKeysFilter,
                                                     ]
+    self.decryption_keys = options[:decryption_keys] || {}
+    self.encryption_keys = options[:encryption_keys] || {}
   end
 
   ###
@@ -187,8 +187,8 @@ class   Settings
                      end
 
     Settings.new(
-      encryption_keys: encryption_keys || other_settings.encryption_keys,
-      decryption_keys: decryption_keys || other_settings.decryption_keys,
+      encryption_keys: encryption_keys.any? ? encryption_keys : other_settings.encryption_keys,
+      decryption_keys: decryption_keys.any? ? decryption_keys : other_settings.decryption_keys,
       namespaces:      (namespaces + other_settings.namespaces),
       settings:        raw_data.merge(other_settings.raw_data),
     )

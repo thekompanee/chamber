@@ -12,7 +12,7 @@ describe  EncryptionFilter do
       data:              {
         _secure_my_secure_setting: 'hello',
       },
-      encryption_keys:   './spec/spec_key.pub',
+      encryption_keys:   { __default: './spec/spec_key.pub' },
     )
 
     expect(filtered_settings._secure_my_secure_setting).to match \
@@ -25,7 +25,7 @@ describe  EncryptionFilter do
       data:              {
         my_secure_setting: 'hello',
       },
-      encryption_keys:   './spec/spec_key.pub',
+      encryption_keys:   { __default: './spec/spec_key.pub' },
     )
 
     expect(filtered_settings.my_secure_setting).to eql 'hello'
@@ -37,7 +37,7 @@ describe  EncryptionFilter do
       data:              {
         secure_setting: 'hello',
       },
-      encryption_keys:   './spec/spec_key.pub',
+      encryption_keys:   { __default: './spec/spec_key.pub' },
     )
 
     expect(filtered_settings.secure_setting).to eql 'hello'
@@ -49,7 +49,7 @@ describe  EncryptionFilter do
       data:              {
         _secure_my_secure_setting: 'fNI5\jwlBn',
       },
-      encryption_keys:   './spec/spec_key.pub',
+      encryption_keys:   { __default: './spec/spec_key.pub' },
     )
 
     expect(filtered_settings._secure_my_secure_setting).to match \
@@ -61,7 +61,9 @@ describe  EncryptionFilter do
                                                  data:              {
                                                    _secure_my_secure_setting: 12_345,
                                                  },
-                                                 encryption_keys:   './spec/spec_key.pub')
+                                                 encryption_keys:   {
+                                                   __default: './spec/spec_key.pub',
+                                                 })
 
     expect(filtered_settings._secure_my_secure_setting).to match \
       EncryptionFilter::BASE64_STRING_PATTERN
@@ -79,7 +81,7 @@ describe  EncryptionFilter do
                                    'UUnZuIE/y+P4A3wgD6G/u8hgvAW51JwVryg/im1rayGAwWYNg' \
                                    'upQ/5LDmjffwx7Q3fyMH2uF3CDIKRIC6U+mnM5SRMO4Dzysw==',
       },
-      encryption_keys:   './spec/spec_key.pub',
+      encryption_keys:   { __default: './spec/spec_key.pub' },
     )
 
     my_secure_setting = filtered_settings._secure_my_secure_setting
@@ -119,7 +121,7 @@ describe  EncryptionFilter do
                                    'jjTyJPeW/1FE3+tP3G3HJAV4sgoO0YwhNY1Nji56igCl3UvEP' \
                                    'nEQcJgu0w/+dqSreqwp6TqaqXY3lzr8vi733lti4nss=',
       },
-      encryption_keys:   './spec/spec_key.pub',
+      encryption_keys:   { __default: './spec/spec_key.pub' },
     )
 
     my_secure_setting = filtered_settings._secure_my_secure_setting
@@ -160,7 +162,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 -----END RSA PRIVATE KEY-----
         HEREDOC
       },
-      encryption_keys:   './spec/spec_key.pub',
+      encryption_keys:   { __default: './spec/spec_key.pub' },
     )
 
     my_secure_setting = filtered_settings._secure_multiline
@@ -174,7 +176,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
       data:              {
         _secure_my_secure_setting: 'A' * 119,
       },
-      encryption_keys:   './spec/spec_key.pub',
+      encryption_keys:   { __default: './spec/spec_key.pub' },
     )
 
     expect(filtered_settings._secure_my_secure_setting).to match \
@@ -185,7 +187,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
       data:              {
         _secure_my_secure_setting: 'A' * 120,
       },
-      encryption_keys:   './spec/spec_key.pub',
+      encryption_keys:   { __default: './spec/spec_key.pub' },
     )
 
     expect(filtered_settings._secure_my_secure_setting).to match \
@@ -198,7 +200,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
       data:              {
         _secure_my_secure_setting: 'long' * 100,
       },
-      encryption_keys:   './spec/spec_key.pub',
+      encryption_keys:   { __default: './spec/spec_key.pub' },
     )
 
     expect(filtered_settings._secure_my_secure_setting).to match \

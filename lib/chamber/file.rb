@@ -43,8 +43,8 @@ class   File < Pathname
   #
   def initialize(options = {})
     self.namespaces      = options[:namespaces] || {}
-    self.decryption_keys = options[:decryption_keys]
-    self.encryption_keys = options[:encryption_keys]
+    self.decryption_keys = options[:decryption_keys] || {}
+    self.encryption_keys = options[:encryption_keys] || {}
 
     super options.fetch(:path)
   end

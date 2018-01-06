@@ -248,7 +248,7 @@ HEREDOC
                                       'wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmU' \
                                       'p2Y0H1jPgGkBKQJKArfQ==',
       },
-      decryption_keys: './spec/spec_key',
+      decryption_keys: { __default: './spec/spec_key' },
     )
 
     expect(settings).to eq('my_encrypted_setting' => 'hello')
@@ -258,7 +258,7 @@ HEREDOC
     settings = Settings.new(settings:        {
                               _secure_my_encrypted_setting: 'hello',
                             },
-                            encryption_keys: './spec/spec_key.pub',
+                            encryption_keys: { __default: './spec/spec_key.pub' },
                             pre_filters:     [],
                             post_filters:    [Filters::EncryptionFilter])
 
@@ -270,8 +270,8 @@ HEREDOC
     settings = Settings.new(settings:        {
                               _secure_my_encrypted_setting: 'hello',
                             },
-                            decryption_keys: './spec/spec_key',
-                            encryption_keys: './spec/spec_key.pub')
+                            decryption_keys: { __default: './spec/spec_key' },
+                            encryption_keys: { __default: './spec/spec_key.pub' })
 
     expect(settings).to eq('my_encrypted_setting' => 'hello')
 
@@ -301,7 +301,7 @@ HEREDOC
         _secure_my_unencrypted_setting: 'nifty',
         my_insecure_setting:            'goodbye',
       },
-      decryption_keys: './spec/spec_key',
+      decryption_keys: { __default: './spec/spec_key' },
     )
 
     secured_settings = settings.securable
@@ -325,7 +325,7 @@ HEREDOC
         _secure_my_unencrypted_setting: 'nifty',
         my_insecure_setting:            'goodbye',
       },
-      decryption_keys: './spec/spec_key',
+      decryption_keys: { __default: './spec/spec_key' },
     )
 
     secured_settings = settings.insecure

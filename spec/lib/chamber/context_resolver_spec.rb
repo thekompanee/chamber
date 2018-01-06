@@ -76,7 +76,7 @@ describe  ContextResolver do
   it 'sets the encryption key to the default if not passed in' do
     options = ContextResolver.resolve(rootpath: rails_3_path)
 
-    expect(options[:encryption_keys].to_s).to eql <<-HEREDOC
+    expect(options[:encryption_keys][:__default]).to eql <<-HEREDOC
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvYcqkBjBLhSaTKOCMoq+
 ZxcuxTaA5UQpf/vDXbOiI871+6x7yKbTr+Xr9oFDvFldyvUFiK6LX0rj/jgLnaTB
@@ -93,7 +93,7 @@ fQIDAQAB
     options      = ContextResolver.resolve(rootpath: rails_3_path)
     key_contents = ::File.read(rails_3_path + '/.chamber.pem')
 
-    expect(options[:decryption_keys].to_s).to eql key_contents
+    expect(options[:decryption_keys][:__default]).to eql key_contents
   end
 
   it 'sets the decryption key to the value of the CHAMBER_KEY if available' do
@@ -101,7 +101,7 @@ fQIDAQAB
 
     options = ContextResolver.resolve(rootpath: 'my_path')
 
-    expect(options[:decryption_keys].to_s).to eql 'my key'
+    expect(options[:decryption_keys][:__default]).to eql 'my key'
 
     ENV['CHAMBER_KEY'] = nil
   end
@@ -109,13 +109,13 @@ fQIDAQAB
   it 'does not set the encryption key if the keyfile does not exist' do
     options = ContextResolver.resolve(rootpath: './app')
 
-    expect(options[:encryption_keys]).to be_nil
+    expect(options[:encryption_keys]).to eql({})
   end
 
   it 'does not set the decryption key if the keyfile does not exist' do
     options = ContextResolver.resolve(rootpath: './app')
 
-    expect(options[:decryption_keys]).to be_nil
+    expect(options[:decryption_keys]).to eql({})
   end
 
   it 'sets the information to a Rails preset even if it is not pointing to a Rails app' do

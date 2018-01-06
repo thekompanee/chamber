@@ -29,8 +29,8 @@ describe  File do
     expect(Settings).to       have_received(:new).
                                 with(settings:        { 'test' => 'settings' },
                                      namespaces:      {},
-                                     decryption_keys: nil,
-                                     encryption_keys: nil)
+                                     decryption_keys: {},
+                                     encryption_keys: {})
   end
 
   it 'can convert a file whose contents are empty' do
@@ -46,8 +46,8 @@ describe  File do
     expect(Settings).to       have_received(:new).
                                 with(settings:        {},
                                      namespaces:      {},
-                                     decryption_keys: nil,
-                                     encryption_keys: nil)
+                                     decryption_keys: {},
+                                     encryption_keys: {})
   end
 
   it 'throws an error when the file contents are malformed' do
@@ -73,8 +73,8 @@ describe  File do
                                namespaces:      {
                                  environment: :development,
                                },
-                               decryption_keys: nil,
-                               encryption_keys: nil)
+                               decryption_keys: {},
+                               encryption_keys: {})
   end
 
   it 'can handle files which contain ERB markup' do
@@ -87,8 +87,8 @@ describe  File do
     expect(Settings).to have_received(:new).
                           with(settings:        { 'test' => 2 },
                                namespaces:      {},
-                               decryption_keys: nil,
-                               encryption_keys: nil)
+                               decryption_keys: {},
+                               encryption_keys: {})
   end
 
   it 'does not throw an error when attempting to convert a file which does not exist' do
@@ -103,8 +103,8 @@ describe  File do
     expect(Settings).to       have_received(:new).
                                 with(settings:        {},
                                      namespaces:      {},
-                                     decryption_keys: nil,
-                                     encryption_keys: nil)
+                                     decryption_keys: {},
+                                     encryption_keys: {})
   end
 
   it 'can securely encrypt the settings contained in a file' do
@@ -112,7 +112,7 @@ describe  File do
 _secure_setting: hello
 HEREDOC
     settings_file = File.new  path:            tempfile.path,
-                              encryption_keys: './spec/spec_key.pub'
+                              encryption_keys: { __default: './spec/spec_key.pub' }
 
     settings_file.secure
 
@@ -128,7 +128,7 @@ _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8Mvdv
 HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
-                              encryption_keys: './spec/spec_key.pub'
+                              encryption_keys: { __default: './spec/spec_key.pub' }
 
     settings_file.secure
 
@@ -163,7 +163,7 @@ other:
 HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
-                              encryption_keys: './spec/spec_key.pub'
+                              encryption_keys: { __default: './spec/spec_key.pub' }
 
     settings_file.secure
 
@@ -201,7 +201,7 @@ other:
 HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
-                              encryption_keys: './spec/spec_key.pub'
+                              encryption_keys: { __default: './spec/spec_key.pub' }
 
     settings_file.secure
 
@@ -225,7 +225,7 @@ stuff:
 HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
-                              encryption_keys: './spec/spec_key.pub'
+                              encryption_keys: { __default: './spec/spec_key.pub' }
 
     settings_file.secure
 

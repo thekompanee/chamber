@@ -10,8 +10,8 @@ describe  Secured do
   BASE64_STRING_PATTERN = %r{[A-Za-z0-9\+/]{342}==}
 
   subject(:secured_type) do
-    Secured.new(decryption_keys: './spec/spec_key',
-                encryption_keys: './spec/spec_key.pub')
+    Secured.new(decryption_keys: { __default: './spec/spec_key' },
+                encryption_keys: { __default: './spec/spec_key.pub' })
   end
 
   it 'allows strings to be cast from the user' do
