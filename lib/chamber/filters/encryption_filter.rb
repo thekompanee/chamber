@@ -19,7 +19,7 @@ class     EncryptionFilter
   attr_reader   :encryption_keys
 
   def initialize(options = {})
-    self.encryption_keys  = options.fetch(:encryption_keys, {})[:__default]
+    self.encryption_keys  = options.fetch(:encryption_keys, {}) || {}
     self.data             = options.fetch(:data).dup
     self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
   end
@@ -37,7 +37,7 @@ class     EncryptionFilter
       settings[key] = if value.respond_to? :each_pair
                         execute(value)
                       elsif key.match(secure_key_token)
-                        encryption_method(value).encrypt(key, value, encryption_keys)
+                        encrypt(key, value)
                       else
                         value
                       end
@@ -46,20 +46,28 @@ class     EncryptionFilter
     settings
   end
 
-  def encryption_keys=(keyish)
-    if keyish.nil?
-      @encryption_keys = nil
+  def encryption_keys=(other)
+    @encryption_keys = other.each_value.map do |keyish|
+      content = if ::File.readable?(::File.expand_path(keyish))
+                  ::File.read(::File.expand_path(keyish))
+                else
+                  keyish
+                end
 
-      return
+      OpenSSL::PKey::RSA.new(content)
+    end
+  end
+
+  private
+
+  def encrypt(key, value)
+    method = encryption_method(value)
+
+    encryption_keys.each do |encryption_key|
+      return method.encrypt(key, value, encryption_key)
     end
 
-    key_content      = if ::File.readable?(::File.expand_path(keyish))
-                         ::File.read(::File.expand_path(keyish))
-                       else
-                         keyish
-                       end
-
-    @encryption_keys = OpenSSL::PKey::RSA.new(key_content)
+    value
   end
 
   def encryption_method(value)
