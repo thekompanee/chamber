@@ -6,6 +6,54 @@ require 'chamber/filters/decryption_filter'
 module    Chamber
 module    Filters
 describe  DecryptionFilter do
+  # rubocop:disable RSpec/ExampleLength
+  it 'will attempt multiple keys to decrypt values' do
+    allow(EncryptionMethods::PublicKey).to receive(:decrypt).and_call_original
+
+    filtered_settings = DecryptionFilter.execute(
+      secure_key_prefix: '_secure_',
+      data:              {
+        development: {
+          sub_key: {
+            sub_sub_key: {
+              _secure_setting: 'RPaB5BEuo4Ht+97GA41GSD+fW4xABbJ/CvDZtnh/UqpCoiAG9' \
+                               'MlASlMsCrVEf6OH075Sm1X33Q3uJEoKEtdooqFF6rgUe9AV4r' \
+                               'p1nrclFCv9/bJJEemeV3tVMPMFqItxxIdGzMMYE9CuiL74TCQ' \
+                               'zcnvadOl1qWlQ4y/q+l5t8YEziB6IZSKYXQJw8SUHBtTitfH/' \
+                               'lnXqh27f2U6Y0WSlDC+LJHJLRo4x/0+Sc5CTRl78eGedctGjM' \
+                               'jRCrzg7MKvKzaKx2Quw7MnG9d/eOy05/uLTho/SosEjL6wTHh' \
+                               'MJMzWfeC5LPVuM4v9haSRZseZTkYeLczOpjn2W/PlOlvnWTw==',
+            },
+          },
+        },
+        other:       {
+          sub_key: {
+            sub_sub_key: {
+              _secure_setting: 'BZtWwj2KAuwxDCMoHvGRQmZwonh25vDxQUYXSNEUaxAx2ySVK' \
+                               'Jf5BsD166m1NUCpDTNr2u/s9u3TEQJCDaji6QU3zNshrs9JCe' \
+                               'yhs2ti7AR/ZoY2GYAOvATYIM4Hc8EsrlQjf+TWRwgLOwjd0QW' \
+                               'nyUWPVPrHcS+vk13rkkoOe03fVhb3gMuqQJn9Mlw08qW7oAFf' \
+                               'Qc3Fy/TgvmkSekMCtEbhNpa75xbk6RvDhTZKpHPXTq9/6jDXl' \
+                               'ukFo4MYX3zQ6AeGM8Rd+QsvwAWrlXhOTZ3qx8gLFuGWaD6Ggo' \
+                               'UDO5MoBZkSni4Ej1n/sBsbmF0jFY+EM6Z5Ajhn4VWoMerKfw==',
+            },
+          },
+        },
+      },
+      decryption_keys:   {
+        __default:   './spec/fixtures/keys/real/.chamber.pem',
+        development: './spec/fixtures/keys/real/.chamber.development.pem',
+      },
+    )
+
+    expect(filtered_settings.development.sub_key.sub_sub_key._secure_setting).to eql \
+      'hello development'
+
+    expect(filtered_settings.other.sub_key.sub_sub_key._secure_setting).to eql \
+      'hello other'
+  end
+  # rubocop:enable RSpec/ExampleLength
+
   it 'will attempt to decrypt values which are marked as "secure"' do
     filtered_settings = DecryptionFilter.execute(
       secure_key_prefix: '_secure_',

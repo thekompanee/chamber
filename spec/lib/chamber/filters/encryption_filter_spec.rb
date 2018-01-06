@@ -33,6 +33,10 @@ describe  EncryptionFilter do
     development_key_contents = ::File.read(development_key_filename)
     development_key          = OpenSSL::PKey::RSA.new(development_key_contents)
 
+    production_key_filename  = './spec/fixtures/keys/real/.chamber.production.pub.pem'
+    production_key_contents  = ::File.read(production_key_filename)
+    production_key           = OpenSSL::PKey::RSA.new(production_key_contents)
+
     filtered_settings        = EncryptionFilter.execute(
       secure_key_prefix: '_secure_',
       data:              {
@@ -40,6 +44,13 @@ describe  EncryptionFilter do
           sub_key: {
             sub_sub_key: {
               _secure_setting: 'hello development',
+            },
+          },
+        },
+        production:  {
+          sub_key: {
+            sub_sub_key: {
+              _secure_setting: 'hello production',
             },
           },
         },
@@ -54,6 +65,7 @@ describe  EncryptionFilter do
       encryption_keys:   {
         __default:   default_key,
         development: development_key,
+        production:  production_key,
       },
     )
 
@@ -66,6 +78,9 @@ describe  EncryptionFilter do
         with(:_secure_setting, 'hello other', default_key)
 
     expect(filtered_settings.development.sub_key.sub_sub_key._secure_setting).to match \
+      EncryptionFilter::BASE64_STRING_PATTERN
+
+    expect(filtered_settings.production.sub_key.sub_sub_key._secure_setting).to match \
       EncryptionFilter::BASE64_STRING_PATTERN
 
     expect(filtered_settings.other.sub_key.sub_sub_key._secure_setting).to match \
