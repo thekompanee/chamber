@@ -48,12 +48,12 @@ class   Runner < Thor
                          'command (eg Rails apps)'
 
   class_option  :decryption_keys,
-                type: :string,
+                type: :array,
                 desc: 'The path to or contents of the private key (or keys) associated ' \
                       'with the project (typically .chamber.pem)'
 
   class_option  :encryption_keys,
-                type: :string,
+                type: :array,
                 desc: 'The path to or contents of the public key (or keys) associated ' \
                       'with the project (typically .chamber.pub.pem)'
 
