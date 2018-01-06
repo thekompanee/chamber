@@ -12,7 +12,7 @@ class   ContextResolver
   attr_accessor :options
 
   def initialize(options = {})
-    self.options = Hashie::Mash.new(options)
+    self.options = options.dup
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/LineLength
