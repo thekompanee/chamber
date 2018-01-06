@@ -13,7 +13,21 @@ module  Chamber
 module  Filters
 class   DecryptionFilter
   BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9\+/]{342}==\z}
-  LARGE_DATA_STRING_PATTERN = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z} # rubocop:disable Metrics/LineLength
+  LARGE_DATA_STRING_PATTERN = %r{
+                                  \A                            # Beginning of String
+                                  (
+                                    [A-Za-z0-9\+\/#]*\={0,2}    # Base64 Encoded Key
+                                  )
+                                  \#                            # Separator
+                                  (
+                                    [A-Za-z0-9\+\/#]*\={0,2}    # Base64 Encoded IV
+                                  )
+                                  \#                            # Separator
+                                  (
+                                    [A-Za-z0-9\+\/#]*\={0,2}    # Base64 Encoded Data
+                                  )
+                                  \z                            # End of String
+                                }x
 
   attr_accessor :data,
                 :secure_key_token
