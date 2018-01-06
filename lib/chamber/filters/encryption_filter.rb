@@ -31,9 +31,7 @@ class     EncryptionFilter
   protected
 
   def execute(raw_data = data, namespace = nil)
-    settings = Hashie::Mash.new
-
-    raw_data.each_pair do |key, value|
+    raw_data.each_with_object(Hashie::Mash.new) do |(key, value), settings|
       settings[key] = if value.respond_to? :each_pair
                         execute(value, namespace || key)
                       elsif key.match(secure_key_token)
@@ -42,8 +40,6 @@ class     EncryptionFilter
                         value
                       end
     end
-
-    settings
   end
 
   def encryption_keys=(other)
