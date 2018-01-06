@@ -19,6 +19,60 @@ describe  EncryptionFilter do
       EncryptionFilter::BASE64_STRING_PATTERN
   end
 
+  # rubocop:disable RSpec/ExampleLength
+  it 'will attempt to encrypt values with a key which matches the namespace of the ' \
+     'value' do
+
+    allow(EncryptionMethods::PublicKey).to receive(:encrypt).and_call_original
+
+    default_key_filename     = './spec/fixtures/keys/real/.chamber.pub.pem'
+    default_key_contents     = ::File.read(default_key_filename)
+    default_key              = OpenSSL::PKey::RSA.new(default_key_contents)
+
+    development_key_filename = './spec/fixtures/keys/real/.chamber.development.pub.pem'
+    development_key_contents = ::File.read(development_key_filename)
+    development_key          = OpenSSL::PKey::RSA.new(development_key_contents)
+
+    filtered_settings        = EncryptionFilter.execute(
+      secure_key_prefix: '_secure_',
+      data:              {
+        development: {
+          sub_key: {
+            sub_sub_key: {
+              _secure_setting: 'hello development',
+            },
+          },
+        },
+        other:       {
+          sub_key: {
+            sub_sub_key: {
+              _secure_setting: 'hello other',
+            },
+          },
+        },
+      },
+      encryption_keys:   {
+        __default:   default_key,
+        development: development_key,
+      },
+    )
+
+    expect(EncryptionMethods::PublicKey).to \
+      have_received(:encrypt).
+        with(:_secure_setting, 'hello development', development_key)
+
+    expect(EncryptionMethods::PublicKey).to \
+      have_received(:encrypt).
+        with(:_secure_setting, 'hello other', default_key)
+
+    expect(filtered_settings.development.sub_key.sub_sub_key._secure_setting).to match \
+      EncryptionFilter::BASE64_STRING_PATTERN
+
+    expect(filtered_settings.other.sub_key.sub_sub_key._secure_setting).to match \
+      EncryptionFilter::BASE64_STRING_PATTERN
+  end
+  # rubocop:enable RSpec/ExampleLength
+
   it 'will not attempt to encrypt values which are not marked as "secure"' do
     filtered_settings = EncryptionFilter.execute(
       secure_key_prefix: '_secure_',

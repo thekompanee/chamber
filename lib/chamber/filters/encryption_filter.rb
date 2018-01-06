@@ -30,14 +30,14 @@ class     EncryptionFilter
 
   protected
 
-  def execute(raw_data = data)
+  def execute(raw_data = data, namespace = nil)
     settings = Hashie::Mash.new
 
     raw_data.each_pair do |key, value|
       settings[key] = if value.respond_to? :each_pair
-                        execute(value)
+                        execute(value, namespace || key)
                       elsif key.match(secure_key_token)
-                        encrypt(key, value)
+                        encrypt(namespace, key, value)
                       else
                         value
                       end
@@ -47,27 +47,27 @@ class     EncryptionFilter
   end
 
   def encryption_keys=(other)
-    @encryption_keys = other.each_value.map do |keyish|
-      content = if ::File.readable?(::File.expand_path(keyish))
-                  ::File.read(::File.expand_path(keyish))
-                else
-                  keyish
-                end
-
-      OpenSSL::PKey::RSA.new(content)
+    @encryption_keys = other.each_with_object({}) do |(namespace, keyish), memo|
+      memo[namespace] = if keyish.is_a?(OpenSSL::PKey::RSA)
+                          keyish
+                        elsif ::File.readable?(::File.expand_path(keyish))
+                          file_contents = ::File.read(::File.expand_path(keyish))
+                          OpenSSL::PKey::RSA.new(file_contents)
+                        else
+                          OpenSSL::PKey::RSA.new(keyish)
+                        end
     end
   end
 
   private
 
-  def encrypt(key, value)
-    method = encryption_method(value)
+  def encrypt(namespace, key, value)
+    method         = encryption_method(value)
+    encryption_key = encryption_keys[namespace] || encryption_keys[:__default]
 
-    encryption_keys.each do |encryption_key|
-      return method.encrypt(key, value, encryption_key)
-    end
+    return value unless encryption_key
 
-    value
+    method.encrypt(key, value, encryption_key)
   end
 
   def encryption_method(value)
