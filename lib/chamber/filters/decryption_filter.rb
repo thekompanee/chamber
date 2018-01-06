@@ -34,7 +34,7 @@ class   DecryptionFilter
   attr_reader   :decryption_keys
 
   def initialize(options = {})
-    self.decryption_keys  = options.fetch(:decryption_keys, {})[:__default]
+    self.decryption_keys  = options.fetch(:decryption_keys, {}) || {}
     self.data             = options.fetch(:data).dup
     self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
   end
@@ -52,7 +52,7 @@ class   DecryptionFilter
       settings[key] = if value.respond_to? :each_pair
                         execute(value)
                       elsif key.match(secure_key_token)
-                        decryption_method(value).decrypt(key, value, decryption_keys)
+                        decrypt(key, value)
                       else
                         value
                       end
@@ -61,23 +61,29 @@ class   DecryptionFilter
     settings
   end
 
-  def decryption_keys=(keyish)
-    if keyish.nil?
-      @decryption_keys = nil
+  def decryption_keys=(other)
+    @decryption_keys = other.each_value.map do |keyish|
+      content = if ::File.readable?(::File.expand_path(keyish))
+                  ::File.read(::File.expand_path(keyish))
+                else
+                  keyish
+                end
 
-      return
+      OpenSSL::PKey::RSA.new(content)
     end
-
-    key_content      = if ::File.readable?(::File.expand_path(keyish))
-                         ::File.read(::File.expand_path(keyish))
-                       else
-                         keyish
-                       end
-
-    @decryption_keys = OpenSSL::PKey::RSA.new(key_content)
   end
 
   private
+
+  def decrypt(key, value)
+    method = decryption_method(value)
+
+    decryption_keys.each do |decryption_key|
+      return method.decrypt(key, value, decryption_key)
+    end
+
+    value
+  end
 
   def decryption_method(value)
     if value.respond_to?(:match)
