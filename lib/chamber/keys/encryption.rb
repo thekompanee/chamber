@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'pathname'
-require 'stringio'
 require 'chamber/keys/base'
 
 module  Chamber
