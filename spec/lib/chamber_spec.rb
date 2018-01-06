@@ -25,6 +25,25 @@ test:
   HEREDOC
 end
 
+File.open('/tmp/chamber/secure_settings_with_namespaces.yml', 'w+') do |file|
+  file.puts <<-HEREDOC
+development:
+  sub_key:
+    sub_sub_key:
+      _secure_development_setting: RPaB5BEuo4Ht+97GA41GSD+fW4xABbJ/CvDZtnh/UqpCoiAG9MlASlMsCrVEf6OH075Sm1X33Q3uJEoKEtdooqFF6rgUe9AV4rp1nrclFCv9/bJJEemeV3tVMPMFqItxxIdGzMMYE9CuiL74TCQzcnvadOl1qWlQ4y/q+l5t8YEziB6IZSKYXQJw8SUHBtTitfH/lnXqh27f2U6Y0WSlDC+LJHJLRo4x/0+Sc5CTRl78eGedctGjMjRCrzg7MKvKzaKx2Quw7MnG9d/eOy05/uLTho/SosEjL6wTHhMJMzWfeC5LPVuM4v9haSRZseZTkYeLczOpjn2W/PlOlvnWTw==
+
+production:
+  sub_key:
+    sub_sub_key:
+      _secure_production_setting: P1dbC/J3kALefhxbnlYQiJVFXnAQTnZIs8Te2Wuz+HtS6LaOgHPUMal8h5Utx9ezPDHWRpZDRuXDyKLXoikp7TrQdfR2bOva6TSMLK2XT0U5aCWhwXphYsTvfXl22IDsvYP38SUZqK7BXyChZpaVw7tj8634MTEsXdjEdHdIzEWcO/pWJ2Xh2f71+s9FkfEQH1Mj6Tyd2Hhp0iczJDi5wbJ7EW1ivCUrhCnxQQR7Q8+exUx+inzOEyq0NHJ6GfFXf7cHAV4jPYXJCvBqk9TG/7rVVUKivUZeLrPkmiSorVUZgzzL8MARlWCJABs+AhXEZko42rc/jfi9O/ONMLdy7Q==
+
+other:
+  sub_key:
+    sub_sub_key:
+      _secure_other_setting: BZtWwj2KAuwxDCMoHvGRQmZwonh25vDxQUYXSNEUaxAx2ySVKJf5BsD166m1NUCpDTNr2u/s9u3TEQJCDaji6QU3zNshrs9JCeyhs2ti7AR/ZoY2GYAOvATYIM4Hc8EsrlQjf+TWRwgLOwjd0QWnyUWPVPrHcS+vk13rkkoOe03fVhb3gMuqQJn9Mlw08qW7oAFfQc3Fy/TgvmkSekMCtEbhNpa75xbk6RvDhTZKpHPXTq9/6jDXlukFo4MYX3zQ6AeGM8Rd+QsvwAWrlXhOTZ3qx8gLFuGWaD6GgoUDO5MoBZkSni4Ej1n/sBsbmF0jFY+EM6Z5Ajhn4VWoMerKfw==
+  HEREDOC
+end
+
 File.open('/tmp/chamber/secure.yml', 'w+') do |file|
   file.puts <<-HEREDOC
 test:
@@ -264,6 +283,23 @@ describe Chamber do
     )
   end
   # rubocop:enable Lint/DuplicatedKey
+
+  it 'can handle decrypting values using the key for the namespace if it exists' do
+    Chamber.load(namespaces: %w{development production},
+                 files:      %w{/tmp/chamber/secure_settings_with_namespaces.yml},
+                 rootpath:   './spec/fixtures/keys/real/',
+                 basepath:   '/tmp/chamber/')
+
+    expect(Chamber.env.sub_key.sub_sub_key.development_setting).to eql 'hello development'
+    expect(Chamber.env.sub_key.sub_sub_key.production_setting).to  eql 'hello production'
+
+    Chamber.load(namespaces: %w{other},
+                 files:      %w{/tmp/chamber/secure_settings_with_namespaces.yml},
+                 rootpath:   './spec/fixtures/keys/real/',
+                 basepath:   '/tmp/chamber/')
+
+    expect(Chamber.env.sub_key.sub_sub_key.other_setting).to eql 'hello other'
+  end
 
   it 'can notify properly whether it responds to messages if the underlying ' \
      'settings does' do
