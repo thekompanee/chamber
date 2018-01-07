@@ -57,11 +57,17 @@ class   Runner < Thor
                 desc: 'The path to or contents of the public key (or keys) associated ' \
                       'with the project (typically .chamber.pub.pem)'
 
+  ################################################################################
+
   desc 'travis SUBCOMMAND ...ARGS',   'For manipulating Travis CI environment variables'
   subcommand 'travis', Chamber::Binary::Travis
 
+  ################################################################################
+
   desc 'heroku SUBCOMMAND ...ARGS',   'For manipulating Heroku environment variables'
   subcommand 'heroku', Chamber::Binary::Heroku
+
+  ################################################################################
 
   desc 'show', 'Displays the list of settings and their values'
 
@@ -70,8 +76,6 @@ class   Runner < Thor
                 aliases: '-e',
                 desc:    'Whether the displayed settings should be environment ' \
                          'variable compatible'
-
-  desc 'only_sensitive', 'Only show secured/securable settings'
 
   method_option :only_sensitive,
                 type:    :boolean,
@@ -83,13 +87,20 @@ class   Runner < Thor
     puts Commands::Show.call(options.merge(shell: self))
   end
 
+  ################################################################################
+
   desc 'files', 'Lists the settings files which are parsed with the given options'
+
   def files
     puts Commands::Files.call(options.merge(shell: self))
   end
 
-  desc 'compare', 'Displays the difference between what is currently stored in the ' \
-                  'Heroku application\'s config and what Chamber knows about locally'
+  ################################################################################
+
+  desc 'compare', 'Displays the difference between the settings in the first set ' \
+                  'of namespaces and the settings in the second set.  Useful for ' \
+                  'tracking down why there may be issues in development versus test ' \
+                  'or differences between staging and production.'
 
   method_option :keys_only,
                 type:    :boolean,
@@ -111,6 +122,8 @@ class   Runner < Thor
     Commands::Compare.call(options.merge(shell: self))
   end
 
+  ################################################################################
+
   desc 'secure', 'Secures any values which appear to need to be encrypted in any of ' \
                  'the settings files which match irrespective of namespaces'
 
@@ -128,7 +141,9 @@ class   Runner < Thor
     Commands::Secure.call(options.merge(shell: self))
   end
 
-  desc 'init', 'Sets Chamber up matching best practices for secure configuration ' \
+  ################################################################################
+
+  desc 'init', 'Sets Chamber up using best practices for secure configuration ' \
                'management'
 
   def init
