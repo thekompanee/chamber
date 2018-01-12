@@ -1,3 +1,50 @@
+Version v2.11.0 - January 12, 2018
+================================================================================
+
+Add
+--------------------------------------------------------------------------------
+  * on/off and 1/0 to boolean conversion
+  * Ability for EncryptionFilter to handle namespaced keys
+  * Keys::Base that other key classes inherit from
+  * EncryptionKey
+  * namespaced key detection to DecryptionKey
+  * Ability to generate multiple key pairs via init
+  * Ability to automatically convert ENV nils
+  * Ability to automatically convert ENV arrays
+  * Ability to automatically convert ENV booleans
+  * Ability to automatically convert ENV floats
+  * Ability to automatically convert ENV integers
+
+Change
+--------------------------------------------------------------------------------
+  * DecryptionFilter to attempt multiple keys
+  * EncryptionFilter.execute to use each_with_object
+  * EncryptionFilter to allow multiple encryption keys to be passed
+  * Runner to allow multiple keys to be specified
+  * DecryptionFilter to attempt multiple decryption keys
+  * Singularize decryption_keys variable
+  * key options to be able to be a hash
+  * Key so namespace detection only works with standard key names
+  * Configuration to force options to have been set
+  * default public key hash key due to Hashie conflict
+  * Key to always include the default key file path
+  * Fail silently if Key is not found
+  * Rename Key classes
+  * Rename all variables from singular 'key' to 'keys'
+  * Simplify the ContextResolver
+  * Consolidate definitions of the secure token
+
+Fix
+--------------------------------------------------------------------------------
+  * Hashie::Mash not handling converting nested hash keys to symbols
+  * SecureRandom not being defined
+
+Remove
+--------------------------------------------------------------------------------
+  * Unneeded require statments
+  * BooleanConversionFilter
+  * Environmentable module and inline its single usage
+
 Version v2.10.2 - December 29, 2017
 ================================================================================
 
