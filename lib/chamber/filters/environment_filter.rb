@@ -142,9 +142,9 @@ class   EnvironmentFilter
     case settings_value.class.name
     when 'TrueClass', 'FalseClass'
       case environment_value.downcase
-      when 'false', 'f', 'no'
+      when 'false', 'f', 'no', 'off', '0'
         false
-      when 'true', 't', 'yes'
+      when 'true', 't', 'yes', 'on', '1'
         true
       else
         fail ArgumentError, "Invalid value for Boolean: #{environment_value}"
