@@ -342,13 +342,31 @@ PrePush:
     required:                 false
     quiet:                    true
 
+  Brakeman:
+    enabled:                  false
+
+  GitLfs:
+    enabled:                  false
+
   Minitest:
     enabled:                  false
 
   ProtectedBranches:
     enabled:                  false
 
+  Pytest:
+    enabled:                  false
+
+  PythonNose:
+    enabled:                  false
+
+  RakeTarget:
+    enabled:                  false
+
   RSpec:
+    enabled:                  false
+
+  TestUnit:
     enabled:                  false
 
 PreRebase:
