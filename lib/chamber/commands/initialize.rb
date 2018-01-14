@@ -47,6 +47,13 @@ class   Initialize < Chamber::Commands::Base
     shell.say ''
 
     if namespaces.empty?
+      shell.say '.chamber.pem is your DEFAULT Chamber key.', :yellow
+      shell.say ''
+      shell.say 'If you would like a key which is used only for a certain environment (such as '
+      shell.say 'production), or your local machine, you can rerun the command like so:'
+      shell.say ''
+      shell.say '$ chamber init --namespaces="production my_machines_hostname"', :yellow
+      shell.say ''
     end
 
     shell.say ''
