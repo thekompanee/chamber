@@ -46,14 +46,8 @@ class   Initialize < Chamber::Commands::Base
     shell.say '********************************************************************************', :green
     shell.say ''
 
-    shell.say '.chamber.pem is a DEFAULT Chamber key.', :red
-    shell.say ''
-    shell.say 'If you would like a key which is used only for things such as a certain'
-    shell.say 'environment (such as production), or your local machine, you can rerun'
-    shell.say 'the command like so:'
-    shell.say ''
-    shell.say '$ chamber init --namespaces="production my_machines_hostname"', :yellow
-    shell.say ''
+    if namespaces.empty?
+    end
 
     shell.say 'The passphrase for your encrypted private key(s) are:'
     shell.say ''
