@@ -132,37 +132,24 @@ class   Initialize < Chamber::Commands::Base
     `chmod 644 #{key_pair.public_key_filepath}`
   end
 
-  # rubocop:disable Style/GuardClause
   def append_to_gitignore
     ::FileUtils.touch gitignore_filepath
 
     gitignore_contents = ::File.read(gitignore_filepath)
 
-    unless gitignore_contents =~ %r{^\*\*/settings/\*\-local\.yml$}
-      shell.append_to_file gitignore_filepath, "**/settings/*-local.yml\n"
-    end
-
-    unless gitignore_contents =~ %r{^\*\*/settings\-local\.yml$}
-      shell.append_to_file gitignore_filepath, "**/settings-local.yml\n"
-    end
-
-    unless gitignore_contents =~ /^\.chamber\*\.enc$/
-      shell.append_to_file gitignore_filepath, ".chamber*.enc\n"
-    end
-
-    unless gitignore_contents =~ /^\.chamber\*\.pem$/
-      shell.append_to_file gitignore_filepath, ".chamber*.pem\n"
-    end
-
-    unless gitignore_contents =~ /^\.chamber\*\.pem\.pass$/
-      shell.append_to_file gitignore_filepath, ".chamber*.enc.pass\n"
-    end
-
-    unless gitignore_contents =~ /^\!\.chamber\*\.pub\.pem$/
-      shell.append_to_file gitignore_filepath, "!.chamber*.pub.pem\n"
+    %w{
+      **/settings/*-local.yml
+      **/settings-local.yml
+      .chamber*.enc
+      .chamber*.pem
+      .chamber*.enc.pass
+      !.chamber*.pub.pem
+    }.each do |pattern|
+      unless gitignore_contents =~ Regexp.new(Regexp.escape(pattern))
+        shell.append_to_file gitignore_filepath, "#{pattern}\n"
+      end
     end
   end
-  # rubocop:enable Style/GuardClause
 
   def settings_template_filepath
     @settings_template_filepath ||= templates_path + 'settings.yml'
