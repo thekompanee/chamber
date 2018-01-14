@@ -5,33 +5,14 @@ Chamber is the auto-encrypting, extremely organizable, Heroku-loving,
 CLI-having, non-extra-repo-needing, non-Rails-specific-ing, CI-serving
 configuration management library.
 
-We [looked at all of the options out there][comparison] and thought something
-was still missing, so we wrote Chamber.  We made it with lots of ❤ and we hope
-you like it as much as we do.
+We looked at all of the options out there and thought something was still
+missing, so we wrote Chamber.  We made it with lots of ❤ and we hope you like it
+as much as we do.
 
-## Our Ten Commandments of Configuration Management
+## What Sets Chamber Apart?
 
-<img src="https://kompanee-public-assets.s3.amazonaws.com/readmes/chamber-ten-commandments.png" align="right" />
-
-1. Thou shalt be configurable, but use conventions so that configuration isn't
-   necessary
-1. Thou shalt seamlessly work [with Heroku][heroku] or other deployment
-   platforms, where custom settings may be stored in
-   [environment variables][env-vars]
-1. Thou shalt seamlessly work with [Travis CI][travis] and other cloud CI
-   platforms
-1. Thou shalt not force users to use arcane
-   [long_variables_to_keep_their_settings_organized][accessing]
-1. Thou shalt not require users keep a separate repo or cloud share sync just to
-   [keep their secure settings updated][encryption]
-1. Thou shalt not be bound to a single framework like Rails (it should be usable
-   in other frameworks as well as [in plain Ruby projects][plain-ruby])
-1. Thou shalt have an [easy-to-use CLI][cli] for scripting
-1. Thou shalt allow certain settings to be
-   [encrypted separately][namespace-keys] to allow levels of access.
-1. Thou shalt be [well][inch] [documented][wiki] with full test coverage
-1. Thou shalt not have to worry about [accidentally committing][commit-hook]
-   secure settings
+For an idea of how Chamber compares to other popular libraries, check out our
+[Gem Comparison][comparison].
 
 ## Basic Usage
 
