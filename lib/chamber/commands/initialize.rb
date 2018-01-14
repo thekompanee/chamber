@@ -157,6 +157,10 @@ class   Initialize < Chamber::Commands::Base
     unless gitignore_contents =~ /^\.chamber\*\.pem\.pass$/
       shell.append_to_file gitignore_filepath, ".chamber*.enc.pass\n"
     end
+
+    unless gitignore_contents =~ /^\!\.chamber\*\.pub\.pem$/
+      shell.append_to_file gitignore_filepath, "!.chamber*.pub.pem\n"
+    end
   end
   # rubocop:enable Style/GuardClause
 
