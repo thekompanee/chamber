@@ -38,7 +38,7 @@ class   Initialize < Chamber::Commands::Base
 
     append_to_gitignore
 
-    shell.copy_file settings_template_filepath, settings_filepath
+    shell.copy_file settings_template_filepath, settings_filepath, skip: true
 
     shell.say ''
     shell.say '********************************************************************************', :green
