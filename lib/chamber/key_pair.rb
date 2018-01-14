@@ -15,6 +15,10 @@ class  KeyPair
     self.key_file_path = Pathname.new(options.fetch(:key_file_path))
   end
 
+  def encrypted_private_key_passphrase_filepath
+    key_file_path + "#{encrypted_private_key_filename}.pass"
+  end
+
   def encrypted_private_key_filepath
     key_file_path + encrypted_private_key_filename
   end

@@ -49,16 +49,8 @@ class   Initialize < Chamber::Commands::Base
     if namespaces.empty?
     end
 
-    shell.say 'The passphrase for your encrypted private key(s) are:'
     shell.say ''
-
-    key_pairs.each do |key_pair|
-      shell.say "* #{key_pair.encrypted_private_key_filename}: "
-      shell.say key_pair.passphrase, :yellow
-    end
-
-    shell.say ''
-    shell.say 'Store these securely somewhere.'
+    shell.say 'Store these securely somewhere and do not check them into the repository.'
     shell.say ''
     shell.say 'You can send your team members any of the file(s) located at:'
     shell.say ''
@@ -69,9 +61,19 @@ class   Initialize < Chamber::Commands::Base
     end
 
     shell.say ''
-    shell.say 'and not have to worry about sending it via a secure medium (such as'
-    shell.say 'email), however do not send the passphrase along with it.  Give it to'
-    shell.say 'your team members in person.'
+    shell.say 'and not have to worry about sending it via a secure medium, however do'
+    shell.say 'not send the passphrase along with it.  Give it to your team members in'
+    shell.say 'person.'
+
+    shell.say 'The passphrases for your encrypted private key(s) are stored in the'
+    shell.say 'following locations:'
+    shell.say ''
+
+    key_pairs.each do |key_pair|
+      shell.say '* '
+      shell.say key_pair.encrypted_private_key_passphrase_filepath, :yellow
+    end
+
     shell.say ''
     shell.say 'In order for them to decrypt it (for use with Chamber), they can use something'
     shell.say 'like the following (swapping out the actual key filenames if necessary):'
@@ -96,9 +98,13 @@ class   Initialize < Chamber::Commands::Base
     shell.create_file key_pair.public_key_filepath,
                       key_pair.public_key_pem,
                       skip: true
+    shell.create_file key_pair.encrypted_private_key_passphrase_filepath,
+                      key_pair.passphrase,
+                      skip: true
 
     `chmod 600 #{key_pair.unencrypted_private_key_filepath}`
     `chmod 600 #{key_pair.encrypted_private_key_filepath}`
+    `chmod 600 #{key_pair.encrypted_private_key_passphrase_filepath}`
     `chmod 644 #{key_pair.public_key_filepath}`
   end
 
@@ -114,6 +120,10 @@ class   Initialize < Chamber::Commands::Base
 
     unless gitignore_contents =~ /^\.chamber\*\.pem$/
       shell.append_to_file gitignore_filepath, ".chamber*.pem\n"
+    end
+
+    unless gitignore_contents =~ /^\.chamber\*\.pem\.pass$/
+      shell.append_to_file gitignore_filepath, ".chamber*.pem.pass\n"
     end
   end
   # rubocop:enable Style/GuardClause
