@@ -49,46 +49,63 @@ class   Initialize < Chamber::Commands::Base
     if namespaces.empty?
       shell.say '.chamber.pem is your DEFAULT Chamber key.', :yellow
       shell.say ''
-      shell.say 'If you would like a key which is used only for a certain environment (such as '
+      shell.say 'If you would like a key which is used only for a certain environment (such as'
       shell.say 'production), or your local machine, you can rerun the command like so:'
       shell.say ''
       shell.say '$ chamber init --namespaces="production my_machines_hostname"', :yellow
       shell.say ''
+      shell.say 'You can find more information about namespace keys here:'
+      shell.say ''
+      shell.say '  * '
+      shell.say 'https://github.com/thekompanee/chamber/wiki/Namespaced-Key-Pairs', :blue
+      shell.say ''
+      shell.say '--------------------------------------------------------------------------------'
+      shell.say ''
     end
 
-    shell.say ''
-    shell.say 'Store these securely somewhere and do not check them into the repository.'
+    shell.say '                                Your Encrypted Keys'
     shell.say ''
     shell.say 'You can send your team members any of the file(s) located at:'
     shell.say ''
 
     key_pairs.each do |key_pair|
-      shell.say '* '
-      shell.say key_pair.encrypted_private_key_filepath, :yellow
+      shell.say '  * '
+      shell.say key_pair.encrypted_private_key_filepath.relative_path_from(Pathname.pwd), :yellow
     end
 
     shell.say ''
-    shell.say 'and not have to worry about sending it via a secure medium, however do'
+    shell.say 'and not have to worry about sending them via a secure medium, however do'
     shell.say 'not send the passphrase along with it.  Give it to your team members in'
     shell.say 'person.'
-
+    shell.say ''
+    shell.say 'You can learn more about encrypted keys here:'
+    shell.say ''
+    shell.say '  * '
+    shell.say 'https://github.com/thekompanee/chamber/wiki/Keypair-Encryption#the-encrypted-private-key', :blue
+    shell.say ''
+    shell.say '--------------------------------------------------------------------------------'
+    shell.say ''
+    shell.say '                                Your Key Passphrases'
+    shell.say ''
     shell.say 'The passphrases for your encrypted private key(s) are stored in the'
     shell.say 'following locations:'
     shell.say ''
 
     key_pairs.each do |key_pair|
-      shell.say '* '
-      shell.say key_pair.encrypted_private_key_passphrase_filepath, :yellow
+      shell.say '  * '
+      shell.say key_pair.encrypted_private_key_passphrase_filepath.relative_path_from(Pathname.pwd), :yellow
     end
 
     shell.say ''
     shell.say 'In order for them to decrypt it (for use with Chamber), they can use something'
     shell.say 'like the following (swapping out the actual key filenames if necessary):'
     shell.say ''
-    shell.say "$ cp #{key_pairs[0].encrypted_private_key_filepath} #{key_pairs[0].unencrypted_private_key_filepath}", :yellow
-    shell.say "$ ssh-keygen -p -f #{key_pairs[0].unencrypted_private_key_filepath}", :yellow
+    shell.say "$ cp #{key_pairs[0].encrypted_private_key_filepath.relative_path_from(Pathname.pwd)} #{key_pairs[0].unencrypted_private_key_filepath.relative_path_from(Pathname.pwd)}", :yellow
+    shell.say "$ ssh-keygen -p -f #{key_pairs[0].unencrypted_private_key_filepath.relative_path_from(Pathname.pwd)}", :yellow
     shell.say ''
     shell.say 'Enter the passphrase when prompted and leave the new passphrase blank.'
+    shell.say ''
+    shell.say '--------------------------------------------------------------------------------'
     shell.say ''
   end
   # rubocop:enable Metrics/LineLength, Metrics/MethodLength, Metrics/AbcSize
@@ -130,7 +147,7 @@ class   Initialize < Chamber::Commands::Base
     end
 
     unless gitignore_contents =~ /^\.chamber\*\.pem\.pass$/
-      shell.append_to_file gitignore_filepath, ".chamber*.pem.pass\n"
+      shell.append_to_file gitignore_filepath, ".chamber*.enc.pass\n"
     end
   end
   # rubocop:enable Style/GuardClause
