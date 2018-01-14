@@ -138,6 +138,14 @@ class   Initialize < Chamber::Commands::Base
 
     gitignore_contents = ::File.read(gitignore_filepath)
 
+    unless gitignore_contents =~ %r{^\*\*/settings/\*\-local\.yml$}
+      shell.append_to_file gitignore_filepath, "**/settings/*-local.yml\n"
+    end
+
+    unless gitignore_contents =~ %r{^\*\*/settings\-local\.yml$}
+      shell.append_to_file gitignore_filepath, "**/settings-local.yml\n"
+    end
+
     unless gitignore_contents =~ /^\.chamber\*\.enc$/
       shell.append_to_file gitignore_filepath, ".chamber*.enc\n"
     end
