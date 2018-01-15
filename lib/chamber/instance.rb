@@ -26,6 +26,10 @@ class   Instance
     files.secure
   end
 
+  def sign
+    files.sign
+  end
+
   def encrypt(data, options = {})
     config = configuration.to_hash.merge(options)
 
