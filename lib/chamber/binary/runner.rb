@@ -8,6 +8,7 @@ require 'chamber/commands/show'
 require 'chamber/commands/files'
 require 'chamber/commands/secure'
 require 'chamber/commands/sign'
+require 'chamber/commands/verify'
 require 'chamber/commands/compare'
 require 'chamber/commands/initialize'
 
@@ -149,10 +150,14 @@ class   Runner < Thor
 
   method_option :verify,
                 type:    :boolean,
-                default: true
+                default: false
 
   def sign
-    Commands::Sign.call(options.merge(shell: self))
+    if options[:verify]
+      Commands::Verify.call(options.merge(shell: self))
+    else
+      Commands::Sign.call(options.merge(shell: self))
+    end
   end
 
   ################################################################################

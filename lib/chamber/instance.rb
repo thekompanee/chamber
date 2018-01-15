@@ -30,6 +30,10 @@ class   Instance
     files.sign
   end
 
+  def verify
+    files.verify
+  end
+
   def encrypt(data, options = {})
     config = configuration.to_hash.merge(options)
 

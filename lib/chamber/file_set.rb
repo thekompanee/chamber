@@ -115,13 +115,15 @@ class   FileSet
   attr_reader   :namespaces,
                 :paths
   attr_accessor :decryption_keys,
-                :encryption_keys
+                :encryption_keys,
+                :basepath
 
   def initialize(options = {})
     self.namespaces      = options[:namespaces] || {}
     self.decryption_keys = options[:decryption_keys]
     self.encryption_keys = options[:encryption_keys]
     self.paths           = options.fetch(:files)
+    self.basepath        = options[:basepath]
   end
 
   ###
@@ -183,6 +185,14 @@ class   FileSet
 
   def sign
     files.each(&:sign)
+  end
+
+  def verify
+    files.each_with_object({}) do |file, memo|
+      relative_filepath = Pathname.new(file.to_s).relative_path_from(basepath).to_s
+
+      memo[relative_filepath] = file.verify
+    end
   end
 
   protected
