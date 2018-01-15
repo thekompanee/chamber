@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'openssl'
-require 'base64'
 require 'hashie/mash'
 require 'yaml'
 require 'chamber/encryption_methods/public_key'

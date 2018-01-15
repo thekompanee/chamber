@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'base64'
+
 module  Chamber
 module  EncryptionMethods
 class   PublicKey
