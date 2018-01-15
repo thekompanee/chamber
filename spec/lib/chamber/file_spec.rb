@@ -264,7 +264,7 @@ qGBhOsEkkwiTJYh8BVWOMekYReR42GI8E+Rpj5TCNlU+VN3H3YhKx1fueKIzGKP0Vjdraeg3vn5UwlBt
 HEREDOC
   end
 
-  it 'fails if there are no signature keys available', :time_mock do
+  it 'fails signing if there are no signature keys available' do
     seed      = SecureRandom.uuid
     file_path = "/tmp/settings-#{seed}.yml"
 
@@ -279,6 +279,48 @@ HEREDOC
     expect { settings_file.sign }.to \
       raise_error(ArgumentError).
         with_message('You asked to sign your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
+  end
+
+  it 'can verify a signature file', :time_mock do
+    seed           = SecureRandom.uuid
+    file_path      = "/tmp/settings-#{seed}.yml"
+    signature_path = "/tmp/settings-#{seed}.sig"
+
+    ::File.write(file_path, <<-HEREDOC, mode: 'w+')
+stuff:
+  another_setting: "Thanks for all the fish"
+HEREDOC
+
+    ::File.write(signature_path, <<-HEREDOC, mode: 'w+')
+Signed By: Jeff Felchner
+Signed At: 2012-07-26T18:00:00Z
+
+-----BEGIN CHAMBER SIGNATURE-----
+qGBhOsEkkwiTJYh8BVWOMekYReR42GI8E+Rpj5TCNlU+VN3H3YhKx1fueKIzGKP0Vjdraeg3vn5UwlBtJrVSp9iNRewXtuADF1RlkZ5ZRaRDs6/H+71KuPY7fPYdx47u0oVgSv5hEH3QehdAVA/Qh4rjoOg0IieJGcstckY/ADerNefraAVJ69sJc0ZaylSWxLDFDp4lHM4ytDHoWPTxSVT3KTAwjaxgc37LE+rhjOuOnsEJYwmyevAUW9sk7OBN4p8vn92Fsq7/SbKSFNIi/+HUOOF+yAinijQoUSfnByMBUoS5b4k4dHxadVEn9QDDtflQ5/Aosjb0718v7/tBhw==
+-----END CHAMBER SIGNATURE-----
+HEREDOC
+
+    settings_file = File.new  path:            file_path,
+                              encryption_keys: { signature: './spec/spec_key.pub' }
+
+    expect(settings_file.verify).to be true
+  end
+
+  it 'fails verifying if there are no signature keys available' do
+    seed      = SecureRandom.uuid
+    file_path = "/tmp/settings-#{seed}.yml"
+
+    ::File.write(file_path, <<-HEREDOC, mode: 'w+')
+stuff:
+  another_setting: "Thanks for all the fish"
+HEREDOC
+
+    settings_file = File.new  path:            file_path,
+                              encryption_keys: { foo: './spec/spec_key.pub' }
+
+    expect { settings_file.verify }.to \
+      raise_error(ArgumentError).
+        with_message('You asked to verify your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
   end
 end
 end

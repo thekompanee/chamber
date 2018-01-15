@@ -116,6 +116,17 @@ class   File < Pathname
     signature.write
   end
 
+  def verify
+    signature_key_contents = encryption_keys[:signature]
+
+    fail ArgumentError, 'You asked to verify your settings files but no signature key was found.  Run `chamber init --signature` to generate one.' \
+      unless signature_key_contents
+
+    signature = Files::Signature.new(to_s, read, signature_key_contents)
+
+    signature.verify
+  end
+
   private
 
   def secure_prefix
