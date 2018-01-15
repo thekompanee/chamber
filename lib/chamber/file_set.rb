@@ -181,6 +181,10 @@ class   FileSet
     files.each(&:secure)
   end
 
+  def sign
+    files.each(&:sign)
+  end
+
   protected
 
   ###
