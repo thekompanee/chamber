@@ -7,9 +7,9 @@ class   Base
     new(*args).resolve
   end
 
-  attr_accessor :namespaces,
-                :rootpath
-  attr_reader   :filenames
+  attr_accessor :rootpath
+  attr_reader   :filenames,
+                :namespaces
 
   def initialize(options = {})
     self.rootpath   = Pathname.new(options.fetch(:rootpath))
@@ -44,6 +44,18 @@ class   Base
   end
 
   private
+
+  def namespaces=(other)
+    @namespaces ||= begin
+                      keys = if other.respond_to?(:keys)
+                               other.keys.map(&:to_s)
+                             else
+                               other
+                             end
+
+                      keys + %w{signature}
+                    end
+  end
 
   def key_from_file_contents(filename)
     filename.readable? && filename.read
