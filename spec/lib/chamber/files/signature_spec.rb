@@ -15,7 +15,7 @@ describe Signature do
 
     file.write
 
-    signature_contents = File.read("/tmp/settings-#{seed}.sig")
+    signature_contents = ::File.read("/tmp/settings-#{seed}.sig")
 
     expect(signature_contents).to eql(<<-HEREDOC)
 Signed By: Jeff Felchner
@@ -35,7 +35,7 @@ HxXUpr8+UhpdOSgqM778KLZTHYjYnTnOfPzr5SiYCtFOgckdM2IxlmrYvYSP2a9Xw0gptXJLE1CxpT19
 
     file.write
 
-    signature_contents = File.read("/tmp/settings-#{seed}.sig")
+    signature_contents = ::File.read("/tmp/settings-#{seed}.sig")
 
     expect(signature_contents).to eql(<<-HEREDOC)
 Signed By: Jeff Felchner
