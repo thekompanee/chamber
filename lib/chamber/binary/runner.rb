@@ -146,6 +146,10 @@ class   Runner < Thor
   desc 'init', 'Sets Chamber up using best practices for secure configuration ' \
                'management'
 
+  method_option :signature,
+                type:    :boolean,
+                default: false
+
   def init
     Commands::Initialize.call(options.merge(shell: self))
   end

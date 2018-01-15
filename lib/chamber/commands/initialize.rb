@@ -16,13 +16,15 @@ class   Initialize < Chamber::Commands::Base
   end
 
   attr_accessor :basepath,
-                :namespaces
+                :namespaces,
+                :signature
 
   def initialize(options = {})
     super
 
     self.basepath   = Chamber.configuration.basepath
     self.namespaces = options.fetch(:namespaces, [])
+    self.signature  = options.fetch(:signature)
   end
 
   # rubocop:disable Metrics/LineLength, Metrics/MethodLength, Metrics/AbcSize
@@ -35,6 +37,13 @@ class   Initialize < Chamber::Commands::Base
                                       key_file_path: rootpath)
 
     key_pairs.each { |key_pair| generate_key_pair(key_pair) }
+
+    if signature
+      signature_key_pair = Chamber::KeyPair.new(namespace:     'signature',
+                                                key_file_path: rootpath)
+
+      generate_key_pair(signature_key_pair)
+    end
 
     append_to_gitignore
 
@@ -58,6 +67,42 @@ class   Initialize < Chamber::Commands::Base
       shell.say ''
       shell.say '  * '
       shell.say 'https://github.com/thekompanee/chamber/wiki/Namespaced-Key-Pairs', :blue
+      shell.say ''
+      shell.say '--------------------------------------------------------------------------------'
+      shell.say ''
+    end
+
+    if signature
+      shell.say '                                Your Signature Keys'
+      shell.say ''
+      shell.say 'Your signature keys, which will be used for verification, are located at:'
+      shell.say ''
+      shell.say '  * Public Key:            '
+      shell.say signature_key_pair.
+                  public_key_filepath.
+                  relative_path_from(Pathname.pwd), :yellow
+      shell.say '  * Private Key:           '
+      shell.say signature_key_pair.
+                  unencrypted_private_key_filepath.
+                  relative_path_from(Pathname.pwd), :yellow
+      shell.say '  * Encrypted Private Key: '
+      shell.say signature_key_pair.
+                  encrypted_private_key_filepath.
+                  relative_path_from(Pathname.pwd), :yellow
+      shell.say '  * Encrypted Passphrase:  '
+      shell.say signature_key_pair.
+                  encrypted_private_key_passphrase_filepath.
+                  relative_path_from(Pathname.pwd), :yellow
+
+      shell.say ''
+      shell.say 'The signature private keys should be thought of separately from the other'
+      shell.say 'project private keys you generate. They are not required to run the app'
+      shell.say 'and should only be given out to *very select* people.'
+      shell.say ''
+      shell.say 'You can find more information about settings verification here:'
+      shell.say ''
+      shell.say '  * '
+      shell.say 'https://github.com/thekompanee/chamber/wiki/Verifying-Settings', :blue
       shell.say ''
       shell.say '--------------------------------------------------------------------------------'
       shell.say ''
