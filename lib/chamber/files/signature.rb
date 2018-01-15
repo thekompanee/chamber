@@ -7,8 +7,9 @@ require 'time'
 module Chamber
 module Files
 class  Signature
-  SIGNATURE_HEADER = '-----BEGIN CHAMBER SIGNATURE-----'
-  SIGNATURE_FOOTER = '-----END CHAMBER SIGNATURE-----'
+  SIGNATURE_HEADER                    = '-----BEGIN CHAMBER SIGNATURE-----'
+  SIGNATURE_FOOTER                    = '-----END CHAMBER SIGNATURE-----'
+  SIGNATURE_IN_SIGNATURE_FILE_PATTERN = /#{SIGNATURE_HEADER}\n(.*)\n#{SIGNATURE_FOOTER}/
 
   attr_accessor :settings_content,
                 :settings_filename
@@ -43,6 +44,10 @@ Signed At: #{Time.now.utc.iso8601}
     HEREDOC
   end
 
+  def verify
+    signature_key.verify(digest, signature_content, settings_content)
+  end
+
   private
 
   def encoded_signature
@@ -51,13 +56,29 @@ Signed At: #{Time.now.utc.iso8601}
 
   def raw_signature
     @raw_signature ||= signature_key.
-                         sign(OpenSSL::Digest::SHA512.new, settings_content)
+                         sign(digest, settings_content)
   end
 
   def signature_filename
     @signature_filename ||= settings_filename.
                               sub('.yml', '.sig').
                               sub('.erb', '')
+  end
+
+  def encoded_signature_content
+    @encoded_signature_content ||= signature_filename.
+                                     read.
+                                     match(SIGNATURE_IN_SIGNATURE_FILE_PATTERN) do |match|
+      match[1]
+    end
+  end
+
+  def signature_content
+    @signature_content ||= Base64.strict_decode64(encoded_signature_content)
+  end
+
+  def digest
+    @digest ||= OpenSSL::Digest::SHA512.new
   end
 end
 end
