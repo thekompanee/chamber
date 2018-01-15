@@ -3,6 +3,7 @@
 require 'pathname'
 require 'yaml'
 require 'erb'
+require 'chamber/files/signature'
 
 ###
 # Internal: Represents a single file containing settings information in a given
@@ -103,6 +104,17 @@ class   File < Pathname
     write(file_contents)
   end
   # rubocop:enable Metrics/LineLength
+
+  def sign
+    signature_key_contents = decryption_keys[:signature]
+
+    fail ArgumentError, 'You asked to sign your settings files but no signature key was found.  Run `chamber init --signature` to generate one.' \
+      unless signature_key_contents
+
+    signature = Files::Signature.new(to_s, read, signature_key_contents)
+
+    signature.write
+  end
 
   private
 
