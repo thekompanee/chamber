@@ -7,6 +7,7 @@ require 'chamber/binary/heroku'
 require 'chamber/commands/show'
 require 'chamber/commands/files'
 require 'chamber/commands/secure'
+require 'chamber/commands/sign'
 require 'chamber/commands/compare'
 require 'chamber/commands/initialize'
 
@@ -139,6 +140,19 @@ class   Runner < Thor
 
   def secure
     Commands::Secure.call(options.merge(shell: self))
+  end
+
+  ################################################################################
+
+  desc 'sign', 'Creates or verifies signatures for all current settings files using ' \
+               'the signature private key.'
+
+  method_option :verify,
+                type:    :boolean,
+                default: true
+
+  def sign
+    Commands::Sign.call(options.merge(shell: self))
   end
 
   ################################################################################

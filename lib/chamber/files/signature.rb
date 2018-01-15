@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require 'base64'
 require 'pathname'
+require 'time'
 
 module Chamber
 module Files

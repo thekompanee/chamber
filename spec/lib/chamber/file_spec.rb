@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rspectacular'
+require 'securerandom'
 require 'chamber/file'
 require 'chamber/settings'
 require 'chamber/filters/encryption_filter'
@@ -236,6 +237,48 @@ HEREDOC
 stuff:
   _secure_another+_setting: #{secure_another_setting_encoded}
 HEREDOC
+  end
+
+  it 'can generate a signature file', :time_mock do
+    seed           = SecureRandom.uuid
+    file_path      = "/tmp/settings-#{seed}.yml"
+    signature_path = "/tmp/settings-#{seed}.sig"
+
+    ::File.write(file_path, <<-HEREDOC, mode: 'w+')
+stuff:
+  another_setting: "Thanks for all the fish"
+HEREDOC
+
+    settings_file = File.new  path:            file_path,
+                              decryption_keys: { signature: './spec/spec_key' }
+
+    settings_file.sign
+
+    expect(::File.read(signature_path)).to eql <<-HEREDOC
+Signed By: Jeff Felchner
+Signed At: 2012-07-26T18:00:00Z
+
+-----BEGIN CHAMBER SIGNATURE-----
+qGBhOsEkkwiTJYh8BVWOMekYReR42GI8E+Rpj5TCNlU+VN3H3YhKx1fueKIzGKP0Vjdraeg3vn5UwlBtJrVSp9iNRewXtuADF1RlkZ5ZRaRDs6/H+71KuPY7fPYdx47u0oVgSv5hEH3QehdAVA/Qh4rjoOg0IieJGcstckY/ADerNefraAVJ69sJc0ZaylSWxLDFDp4lHM4ytDHoWPTxSVT3KTAwjaxgc37LE+rhjOuOnsEJYwmyevAUW9sk7OBN4p8vn92Fsq7/SbKSFNIi/+HUOOF+yAinijQoUSfnByMBUoS5b4k4dHxadVEn9QDDtflQ5/Aosjb0718v7/tBhw==
+-----END CHAMBER SIGNATURE-----
+HEREDOC
+  end
+
+  it 'fails if there are no signature keys available', :time_mock do
+    seed      = SecureRandom.uuid
+    file_path = "/tmp/settings-#{seed}.yml"
+
+    ::File.write(file_path, <<-HEREDOC, mode: 'w+')
+stuff:
+  another_setting: "Thanks for all the fish"
+HEREDOC
+
+    settings_file = File.new  path:            file_path,
+                              decryption_keys: { foo: './spec/spec_key' }
+
+    expect { settings_file.sign }.to \
+      raise_error(ArgumentError).
+        with_message('You asked to sign your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
   end
 end
 end

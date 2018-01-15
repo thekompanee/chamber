@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspectacular', ["~> 0.46"]
   spec.add_development_dependency 'activerecord', ["~> 4.0"]
   spec.add_development_dependency 'activesupport', ["~> 4.0"]
+  spec.add_development_dependency 'timecop', ["~> 0.0"]
 end
