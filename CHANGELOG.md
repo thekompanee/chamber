@@ -1,3 +1,37 @@
+Version v2.12.0 - January 15, 2018
+================================================================================
+
+Add
+--------------------------------------------------------------------------------
+  * Ability to parse ISO8601 formatted environment variables
+  * chamber sign --verify
+  * File#verify
+  * Files::Signature#verify
+  * chamber sign
+  * Ability for Instance to sign its files
+  * Ability for FileSet to sign all of its Files
+  * Ability for File to create a signature for itself
+  * Files::Signature
+  * Ability for initialization to create signature key
+  * Generic local settings to gitignore
+  * Sinatra/Padrino integration
+
+Change
+--------------------------------------------------------------------------------
+  * Key::Base to always return the signature key if it exists
+  * Move base64 requires to the correct files
+  * Simplify condition in chamber secure
+  * Simplify gitignore additions
+  * Message formatting for initialization
+  * Initialization to create passphrase files
+  * initialization output to only show namespaces hint selectively
+  * Rails integration location
+
+Fix
+--------------------------------------------------------------------------------
+  * Public keys being incorrectly gitignored
+  * Asking to overwrite settings files on re-initialization
+
 Version v2.11.0 - January 12, 2018
 ================================================================================
 
