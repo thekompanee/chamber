@@ -184,6 +184,27 @@ describe  EnvironmentFilter do
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
 
+  it 'can extract a timestamp from the environment if an existing variable' \
+     'matches the composite key', :time_mock do
+
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING'] = '2018-01-01T12:00:00Z'
+
+    filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
+                                              data:              {
+                                                test_setting_group: {
+                                                  test_setting_level: {
+                                                    test_setting: Time.now.utc,
+                                                  },
+                                                },
+                                              })
+
+    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+
+    expect(test_setting).to eql Time.utc(2018, 1, 1, 12, 0, 0)
+
+    ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+  end
+
   it 'can extract a boolean from the environment if an existing variable' \
      'matches the composite key' do
 
@@ -233,6 +254,25 @@ describe  EnvironmentFilter do
     }.to \
       raise_error(ArgumentError)
         .with_message('Invalid value for Boolean: foobar')
+
+    ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+  end
+
+  it 'raises an error if the time value cannot be converted' do
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_ONE'] = 'foobar'
+
+    expect {
+      EnvironmentFilter.execute(
+        secure_key_prefix: '_secure_',
+        data:              {
+          test_setting_group: {
+            test_setting_one: Time.now.utc,
+          },
+        },
+      )
+    }.to \
+      raise_error(ArgumentError)
+        .with_message('invalid date: "foobar"')
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end

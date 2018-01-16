@@ -151,6 +151,8 @@ class   EnvironmentFilter
       end
     when 'Float'
       Float(environment_value)
+    when 'Time'
+      Time.iso8601(environment_value)
     when 'Array'
       YAML.safe_load(environment_value).tap do |parsed_value|
         unless parsed_value.is_a?(Array)
