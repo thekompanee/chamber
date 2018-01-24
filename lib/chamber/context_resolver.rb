@@ -2,8 +2,8 @@
 
 require 'pathname'
 require 'socket'
-require 'hashie/mash'
 
+require 'chamber/core_ext/hash'
 require 'chamber/keys/decryption'
 require 'chamber/keys/encryption'
 
@@ -12,7 +12,7 @@ class   ContextResolver
   attr_accessor :options
 
   def initialize(options = {})
-    self.options = options.dup
+    self.options = options.transform_keys(&:to_sym)
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/LineLength
