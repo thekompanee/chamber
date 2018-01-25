@@ -102,7 +102,7 @@ class   ContextResolver
 
     [
       ::Rails.env,
-      Socket.gethostname,
+      ::Socket.gethostname.tr('-.', ''),
     ]
   rescue LoadError
     []

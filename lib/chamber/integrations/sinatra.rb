@@ -19,7 +19,7 @@ module Sinatra
         basepath:   root,
         namespaces: {
           environment: -> { env },
-          hostname:    -> { Socket.gethostname },
+          hostname:    -> { ::Socket.gethostname.tr('-.', '') },
         },
       )
     end

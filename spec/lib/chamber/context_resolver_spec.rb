@@ -147,6 +147,15 @@ fQIDAQAB
     expect(options[:namespaces]).to     eql     %w{development my_host}
   end
 
+  it 'removes dashes and dots from hostnames for the purposes of namespace resolution' do
+    allow(Socket).to receive(:gethostname).and_return 'my-host.com'
+
+    options = ContextResolver.resolve(rootpath: rails_3_path,
+                                      preset:   'rails')
+
+    expect(options[:namespaces]).to eql %w{development myhostcom}
+  end
+
   it 'sets the basepath if inside a Rails 2 project' do
     allow(Socket).to receive(:gethostname).and_return 'my_host'
 
