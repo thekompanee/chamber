@@ -10,7 +10,7 @@ class   Decryption < Chamber::Keys::Base
                         \A          # Beginning of Filename
                         \.chamber   # Initial Chamber Prefix
                         \.          # Pre-Namespace Dot
-                        (\w+)       # Namespace
+                        ([\w\-\.]+) # Namespace
                         \.pem       # Extension
                         \z          # End of Filename
                       /x

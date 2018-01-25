@@ -133,10 +133,12 @@ describe  Decryption do
                           'spec/fixtures/keys/.chamber.pem',
                           'spec/fixtures/keys/.chamber.production.pem',
                           'spec/fixtures/keys/.chamber.test.pem',
+                          'spec/fixtures/keys/.chamber.example-host.com.pem',
                         ],
           )
 
     expect(key).to eql(
+                        :"example-host.com" => "example-host.com private key\n",
                         __default:   "default private key\n",
                         development: "development private key\n",
                         production:  "production private key\n",

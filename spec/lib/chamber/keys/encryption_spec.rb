@@ -121,10 +121,12 @@ describe  Encryption do
                           'spec/fixtures/keys/.chamber.pub.pem',
                           'spec/fixtures/keys/.chamber.production.pub.pem',
                           'spec/fixtures/keys/.chamber.test.pub.pem',
+                          'spec/fixtures/keys/.chamber.example-host.com.pub.pem',
                         ],
           )
 
     expect(key).to eql(
+                        :"example-host.com" => "example-host.com public key\n",
                         __default:   "default public key\n",
                         development: "development public key\n",
                         production:  "production public key\n",
