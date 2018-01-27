@@ -3,6 +3,8 @@
 require 'yaml'
 require 'hashie/mash'
 
+require 'chamber/errors/environment_conversion'
+
 module  Chamber
 module  Filters
 class   EnvironmentFilter
@@ -108,7 +110,9 @@ class   EnvironmentFilter
         { key => execute(value, environment_keys) }
       end,
       lambda do |key, value, environment_key|
-        { key => convert_environment_value(ENV[environment_key], value) }
+        { key => convert_environment_value(environment_key,
+                                           ENV[environment_key],
+                                           value) }
       end,
     )
   end
@@ -134,8 +138,8 @@ class   EnvironmentFilter
     environment_hash
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
-  def convert_environment_value(environment_value, settings_value)
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def convert_environment_value(environment_key, environment_value, settings_value)
     return settings_value unless environment_value
     return                if %w{___nil___ ___null___}.include?(environment_value)
 
@@ -164,8 +168,17 @@ class   EnvironmentFilter
     else
       environment_value
     end
+  rescue ArgumentError
+    raise Chamber::Errors::EnvironmentConversion, <<~HEREDOC
+      We attempted to convert '#{environment_key}' from '#{environment_value}' to a '#{settings_value.class.name}'.
+
+      Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+      or change the original YAML value to be something more generic (like a String).
+
+      For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+    HEREDOC
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end
 end
 end

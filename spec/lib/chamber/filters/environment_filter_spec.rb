@@ -80,8 +80,15 @@ describe  EnvironmentFilter do
         },
       )
     }.to \
-      raise_error(ArgumentError)
-        .with_message('Invalid value for Array: {"foobar": "bazqux"}')
+      raise_error(Chamber::Errors::EnvironmentConversion)
+        .with_message(<<~HEREDOC)
+          We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from '{"foobar": "bazqux"}' to a 'Array'.
+
+          Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+          or change the original YAML value to be something more generic (like a String).
+
+          For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+        HEREDOC
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
@@ -163,6 +170,32 @@ describe  EnvironmentFilter do
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
 
+  it 'raises an error if the integer value cannot be converted' do
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_ONE'] = 'foo'
+
+    expect {
+      EnvironmentFilter.execute(
+        secure_key_prefix: '_secure_',
+        data:              {
+          test_setting_group: {
+            test_setting_one: 1,
+          },
+        },
+      )
+    }.to \
+      raise_error(Chamber::Errors::EnvironmentConversion)
+        .with_message(<<~HEREDOC)
+          We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foo' to a 'Integer'.
+
+          Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+          or change the original YAML value to be something more generic (like a String).
+
+          For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+        HEREDOC
+
+    ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+  end
+
   it 'can extract a float from the environment if an existing variable' \
      'matches the composite key' do
 
@@ -180,6 +213,32 @@ describe  EnvironmentFilter do
     test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
 
     expect(test_setting).to be 2.3
+
+    ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
+  end
+
+  it 'raises an error if the float value cannot be converted' do
+    ENV['TEST_SETTING_GROUP_TEST_SETTING_ONE'] = 'foo'
+
+    expect {
+      EnvironmentFilter.execute(
+        secure_key_prefix: '_secure_',
+        data:              {
+          test_setting_group: {
+            test_setting_one: 1.0,
+          },
+        },
+      )
+    }.to \
+      raise_error(Chamber::Errors::EnvironmentConversion)
+        .with_message(<<~HEREDOC)
+          We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foo' to a 'Float'.
+
+          Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+          or change the original YAML value to be something more generic (like a String).
+
+          For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+        HEREDOC
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
@@ -252,8 +311,15 @@ describe  EnvironmentFilter do
         },
       )
     }.to \
-      raise_error(ArgumentError)
-        .with_message('Invalid value for Boolean: foobar')
+      raise_error(Chamber::Errors::EnvironmentConversion)
+        .with_message(<<~HEREDOC)
+          We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foobar' to a 'TrueClass'.
+
+          Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+          or change the original YAML value to be something more generic (like a String).
+
+          For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+        HEREDOC
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
@@ -271,8 +337,15 @@ describe  EnvironmentFilter do
         },
       )
     }.to \
-      raise_error(ArgumentError)
-        .with_message('invalid date: "foobar"')
+      raise_error(Chamber::Errors::EnvironmentConversion)
+        .with_message(<<~HEREDOC)
+          We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foobar' to a 'Time'.
+
+          Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+          or change the original YAML value to be something more generic (like a String).
+
+          For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+        HEREDOC
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
