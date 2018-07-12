@@ -77,7 +77,7 @@ build
 coverage
 coverage.data
 dist
-docs
+docs/**/*.*
 files/scripts/**/*.js
 files/scripts/**/*.py
 files/scripts/**/*.zip
@@ -87,6 +87,10 @@ pkg
 profile
 rdoc
 target
+
+# Documentation Code Is Used to Generate Static Files
+!docs/**/*.rb
+!docs/**/header.md
 
 # Local Configuration Files
 !.env.example
@@ -131,6 +135,7 @@ target
 .secrets
 .shellwreck.sh
 .terraform
+.tern-port
 Gemfile.local
 Procfile.local
 atlassian-ide-plugin.xml
