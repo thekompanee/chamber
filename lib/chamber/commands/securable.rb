@@ -53,7 +53,7 @@ module  Securable
     end
 
     `
-      git ls-files --other --ignored --exclude-from=.gitignore |
+      git ls-files --other --ignored --exclude-per-directory=.gitignore |
       sed -e "s|^|#{Shellwords.escape(rootpath.to_s)}/|" |
       grep --colour=never -E '#{shell_escaped_chamber_filenames.join('|')}'
     `.split("\n")
