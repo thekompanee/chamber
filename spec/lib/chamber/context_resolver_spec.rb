@@ -111,6 +111,24 @@ fQIDAQAB
     expect(options[:decryption_keys]).to eql({})
   end
 
+  it 'unfurls namespace hashes if they are passed in' do
+    options = ContextResolver.resolve(namespaces: {
+                                        environment: 'foo',
+                                        hostname:    'bar',
+                                      })
+
+    expect(options[:namespaces]).to eql %w{foo bar}
+  end
+
+  it 'processing lambdas and procs if they are passed in as namespaces' do
+    options = ContextResolver.resolve(namespaces: {
+                                        environment: -> { 'foo' },
+                                        hostname:    -> { 'bar' },
+                                      })
+
+    expect(options[:namespaces]).to eql %w{foo bar}
+  end
+
   it 'sets the information to a Rails preset even if it is not pointing to a Rails app' do
     options = ContextResolver.resolve(rootpath: './app',
                                       preset:   'rails')

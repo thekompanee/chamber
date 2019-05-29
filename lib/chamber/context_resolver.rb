@@ -30,6 +30,7 @@ class   ContextResolver
       options[:basepath]   ||= options[:rootpath]
     end
 
+    options[:namespaces]        = resolve_namespaces(options[:namespaces])
     options[:encryption_keys]   = Keys::Encryption.resolve(filenames:  options[:encryption_keys],
                                                            namespaces: options[:namespaces],
                                                            rootpath:   options[:rootpath])
@@ -51,6 +52,13 @@ class   ContextResolver
   end
 
   protected
+
+  def resolve_namespaces(other)
+    (other.respond_to?(:values) ? other.values : other)
+      .map do |namespace|
+        namespace.respond_to?(:call) ? namespace.call : namespace
+      end
+  end
 
   def resolve_preset
     if in_a_rails_project?
