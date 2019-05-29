@@ -1,3 +1,16 @@
+Version v2.12.5 - May 29, 2019
+================================================================================
+
+Change
+--------------------------------------------------------------------------------
+  * Remove Dots And Dashes From Namespaces When Resolving Filenames
+  * Extract key_filename_extension And DRY Up Other Methods
+  * Support .gitignore Files That Are Not At The Repository Root
+
+Fix
+--------------------------------------------------------------------------------
+  * Namespaces Passed As Hashes Not Being Transformed Properly
+
 Version v2.12.3 - January 27, 2018
 ================================================================================
 
