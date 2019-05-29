@@ -73,6 +73,16 @@ class   Base
       to_s.
       match(self.class::NAMESPACE_PATTERN) { |m| m[1].upcase }
   end
+
+  def generate_key_filenames
+    namespaces.map do |namespace|
+      rootpath + ".chamber.#{namespace}#{key_filename_extension}"
+    end
+  end
+
+  def default_key_file_path
+    Pathname.new(rootpath + ".chamber#{key_filename_extension}")
+  end
 end
 end
 end

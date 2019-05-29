@@ -27,14 +27,8 @@ class   Decryption < Chamber::Keys::Base
       join('_')
   end
 
-  def generate_key_filenames
-    namespaces.map do |namespace|
-      rootpath + ".chamber.#{namespace}.pem"
-    end
-  end
-
-  def default_key_file_path
-    Pathname.new(rootpath + '.chamber.pem')
+  def key_filename_extension
+    '.pem'
   end
 end
 end
