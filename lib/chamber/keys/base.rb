@@ -76,7 +76,7 @@ class   Base
 
   def generate_key_filenames
     namespaces.map do |namespace|
-      rootpath + ".chamber.#{namespace}#{key_filename_extension}"
+      rootpath + ".chamber.#{namespace.to_s.tr('.-', '')}#{key_filename_extension}"
     end
   end
 

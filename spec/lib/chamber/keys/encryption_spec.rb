@@ -54,6 +54,20 @@ describe  Encryption do
     ENV.delete('CHAMBER_DEVELOPMENT_PUBLIC_KEY')
   end
 
+  it 'can find namespaced key files when namespace contains special characters' do
+    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
+                             namespaces: %w{example-host.com})
+
+    expect(key).to include(examplehostcom: "example-host.com public key\n")
+  end
+
+  it 'can find namespaced key files when the namespace is a symbol' do
+    key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
+                             namespaces: [:'example-host.com'])
+
+    expect(key).to include(examplehostcom: "example-host.com public key\n")
+  end
+
   it 'can generate generic key filenames from namespaces' do
     key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
                              namespaces: %w{test production},
@@ -121,14 +135,16 @@ describe  Encryption do
                           'spec/fixtures/keys/.chamber.pub.pem',
                           'spec/fixtures/keys/.chamber.production.pub.pem',
                           'spec/fixtures/keys/.chamber.test.pub.pem',
+                          'spec/fixtures/keys/.chamber.examplehostcom.pub.pem',
                         ],
           )
 
     expect(key).to eql(
-                        __default:   "default public key\n",
-                        development: "development public key\n",
-                        production:  "production public key\n",
-                        test:        "test public key\n",
+                        __default:      "default public key\n",
+                        development:    "development public key\n",
+                        examplehostcom: "example-host.com public key\n",
+                        production:     "production public key\n",
+                        test:           "test public key\n",
                       )
   end
 

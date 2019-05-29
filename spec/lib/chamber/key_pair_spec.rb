@@ -61,24 +61,31 @@ describe KeyPair do
   end
 
   it 'can construct a namespaced private key filepath' do
-    key_pair = KeyPair.new(namespace:     'my-namespace',
+    key_pair = KeyPair.new(namespace:     'mynamespace',
                            key_file_path: './tmp/')
 
-    expect(key_pair.unencrypted_private_key_filepath.to_s).to eql './tmp/.chamber.my-namespace.pem'
+    expect(key_pair.unencrypted_private_key_filepath.to_s).to eql './tmp/.chamber.mynamespace.pem'
   end
 
   it 'can construct a namespaced encrypted private key filepath' do
-    key_pair = KeyPair.new(namespace:     'my-namespace',
+    key_pair = KeyPair.new(namespace:     'mynamespace',
                            key_file_path: './tmp/')
 
-    expect(key_pair.encrypted_private_key_filepath.to_s).to eql './tmp/.chamber.my-namespace.enc'
+    expect(key_pair.encrypted_private_key_filepath.to_s).to eql './tmp/.chamber.mynamespace.enc'
   end
 
   it 'can construct a namespaced public key filepath' do
-    key_pair = KeyPair.new(namespace:     'my-namespace',
+    key_pair = KeyPair.new(namespace:     'mynamespace',
                            key_file_path: './tmp/')
 
-    expect(key_pair.public_key_filepath.to_s).to eql './tmp/.chamber.my-namespace.pub.pem'
+    expect(key_pair.public_key_filepath.to_s).to eql './tmp/.chamber.mynamespace.pub.pem'
+  end
+
+  it 'knows to remove special characters from the namespace before adding it to the file' do
+    key_pair = KeyPair.new(namespace:     'my-name.space',
+                           key_file_path: './tmp/')
+
+    expect(key_pair.unencrypted_private_key_filepath.to_s).to eql './tmp/.chamber.mynamespace.pem'
   end
 end
 end
