@@ -6,7 +6,6 @@ require 'chamber/filters/decryption_filter'
 module    Chamber
 module    Filters
 describe  DecryptionFilter do
-  # rubocop:disable RSpec/ExampleLength
   it 'will attempt multiple keys to decrypt values' do
     allow(EncryptionMethods::PublicKey).to receive(:decrypt).and_call_original
 
@@ -52,7 +51,6 @@ describe  DecryptionFilter do
     expect(filtered_settings.other.sub_key.sub_sub_key._secure_setting).to eql \
       'hello other'
   end
-  # rubocop:enable RSpec/ExampleLength
 
   it 'will attempt to decrypt values which are marked as "secure"' do
     filtered_settings = DecryptionFilter.execute(
@@ -72,7 +70,6 @@ describe  DecryptionFilter do
     expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
   end
 
-  # rubocop:disable RSpec/ExampleLength
   it 'will correct decrypt values which contain multiline strings' do
     filtered_settings = DecryptionFilter.execute(
       secure_key_prefix: '_secure_',
@@ -110,7 +107,6 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
 -----END RSA PRIVATE KEY-----
     HEREDOC
   end
-  # rubocop:enable RSpec/ExampleLength
 
   it 'will not attempt to decrypt values which are not marked as "secure"' do
     filtered_settings = DecryptionFilter.execute(

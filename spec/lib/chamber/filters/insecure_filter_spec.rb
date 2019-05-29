@@ -41,7 +41,6 @@ describe  InsecureFilter do
     expect(filtered_settings.secure_group.insecure_nested_setting).to be_nil
   end
 
-  # rubocop:disable RSpec/ExampleLength
   it 'will not return values which are encrypted' do
     filtered_settings = InsecureFilter.execute(
       secure_key_prefix: '_secure_',
@@ -83,7 +82,6 @@ describe  InsecureFilter do
     expect(filtered_settings.secure_group._secure_other_nested_setting).to eql 'goodbye'
     expect(filtered_settings.secure_group.insecure_nested_setting?).to     be  false
   end
-  # rubocop:enable RSpec/ExampleLength
 end
 end
 end

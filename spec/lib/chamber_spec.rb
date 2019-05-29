@@ -163,7 +163,7 @@ describe Chamber do
                    first_namespace_call: -> { :first },
                  })
 
-    expect(Chamber.namespaces.to_a).to eql ['first']
+    expect(Chamber.namespaces.to_a).to eql %w{first}
   end
   # rubocop:enable Lint/DuplicatedKey
 

@@ -19,7 +19,6 @@ describe  EncryptionFilter do
       EncryptionFilter::BASE64_STRING_PATTERN
   end
 
-  # rubocop:disable RSpec/ExampleLength
   it 'will attempt to encrypt values with a key which matches the namespace of the ' \
      'value' do
 
@@ -86,7 +85,6 @@ describe  EncryptionFilter do
     expect(filtered_settings.other.sub_key.sub_sub_key._secure_setting).to match \
       EncryptionFilter::BASE64_STRING_PATTERN
   end
-  # rubocop:enable RSpec/ExampleLength
 
   it 'will not attempt to encrypt values which are not marked as "secure"' do
     filtered_settings = EncryptionFilter.execute(
@@ -165,7 +163,6 @@ describe  EncryptionFilter do
                                      'uF3CDIKRIC6U+mnM5SRMO4Dzysw=='
   end
 
-  # rubocop:disable RSpec/ExampleLength
   it 'will not attempt to encrypt large values if it guesses that they are already encrypted' do
     filtered_settings = EncryptionFilter.execute(
       secure_key_prefix: '_secure_',
@@ -215,13 +212,12 @@ describe  EncryptionFilter do
                                      'jjTyJPeW/1FE3+tP3G3HJAV4sgoO0YwhNY1Nji56igCl3UvEP' \
                                      'nEQcJgu0w/+dqSreqwp6TqaqXY3lzr8vi733lti4nss='
   end
-  # rubocop:enable RSpec/ExampleLength
 
   it 'can encrypt long multiline strings' do
     filtered_settings = EncryptionFilter.execute(
       secure_key_prefix: '_secure_',
       data:              {
-        _secure_multiline: <<-HEREDOC
+        _secure_multiline: <<-HEREDOC,
 -----BEGIN RSA PRIVATE KEY-----
 uQ431irYF7XGEwmsfNUcw++6Enjmt9MItVZJrfL4cUr84L1ccOEX9AThsxz2nkiO
 GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVaYKYuHwYVb1spGfreHQHRP90EMv3U5Ir

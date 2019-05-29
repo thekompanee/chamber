@@ -13,30 +13,31 @@ describe  ContextResolver do
 
   # rubocop:disable RSpec/InstanceVariable
   before(:each) { @old_chamber_key = ENV.delete('CHAMBER_KEY') }
+
   after(:each)  { ENV['CHAMBER_KEY'] = @old_chamber_key }
   # rubocop:enable RSpec/InstanceVariable
 
   it 'does not attempt to do any resolution if all valid options are passed in' do
     options = ContextResolver.resolve(basepath:   'my_path',
-                                      namespaces: ['ns'])
+                                      namespaces: %w{ns})
 
     expect(options[:basepath].to_s).to  eql 'my_path'
-    expect(options[:namespaces]).to     eql ['ns']
+    expect(options[:namespaces]).to     eql %w{ns}
   end
 
   it 'does not attempt to do any resolution if files are passed in in place of a ' \
      'basepath' do
 
     options = ContextResolver.resolve(files:      'my_files',
-                                      namespaces: ['ns'])
+                                      namespaces: %w{ns})
 
     expect(options[:files]).to          eql 'my_files'
-    expect(options[:namespaces]).to     eql ['ns']
+    expect(options[:namespaces]).to     eql %w{ns}
   end
 
   it 'defaults the basepath to the rootpath if none is explicitly set' do
     options = ContextResolver.resolve(rootpath:   './app',
-                                      namespaces: ['ns'])
+                                      namespaces: %w{ns})
 
     expect(options[:basepath].to_s).to eql './app'
   end

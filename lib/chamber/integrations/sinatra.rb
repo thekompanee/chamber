@@ -16,12 +16,12 @@ module Sinatra
       end
 
       Chamber.load(
-                    basepath:   root,
-                    namespaces: {
-                      environment: -> { env },
-                      hostname:    -> { Socket.gethostname },
-                    },
-                  )
+        basepath:   root,
+        namespaces: {
+          environment: -> { env },
+          hostname:    -> { Socket.gethostname },
+        },
+      )
     end
   end
 end

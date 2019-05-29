@@ -32,7 +32,7 @@ The names and logos for The Kompanee are trademarks of The Kompanee, Ltd.
 
 ## License
 
-Chamber is Copyright © 2014-2018 Jeff Felchner and Mark McEahern. It is free
+Chamber is Copyright © 2014-2019 Jeff Felchner and Mark McEahern. It is free
 software, and may be redistributed under the terms specified in the
 [LICENSE][license] file.
 

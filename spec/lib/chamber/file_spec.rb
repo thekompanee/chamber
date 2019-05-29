@@ -109,9 +109,10 @@ describe  File do
   end
 
   it 'can securely encrypt the settings contained in a file' do
-    tempfile      = create_tempfile_with_content <<-HEREDOC
+    tempfile = create_tempfile_with_content <<-HEREDOC
 _secure_setting: hello
-HEREDOC
+    HEREDOC
+
     settings_file = File.new  path:            tempfile.path,
                               encryption_keys: { __default: './spec/spec_key.pub' }
 
@@ -123,10 +124,10 @@ HEREDOC
   end
 
   it 'does not encrypt the settings contained in a file which are already secure' do
-    tempfile      = create_tempfile_with_content <<-HEREDOC
+    tempfile = create_tempfile_with_content <<-HEREDOC
 _secure_setting: hello
 _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
-HEREDOC
+    HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
                               encryption_keys: { __default: './spec/spec_key.pub' }
@@ -161,7 +162,7 @@ other:
     <<: *defaults
     _secure_another_setting: "Thanks for all the fish"
     regular_setting:         <%= 1 + 1 %>
-HEREDOC
+    HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
                               encryption_keys: { __default: './spec/spec_key.pub' }
@@ -183,7 +184,7 @@ other:
     <<: *defaults
     _secure_another_setting: #{secure_another_setting_encoded}
     regular_setting:         <%= 1 + 1 %>
-HEREDOC
+    HEREDOC
   end
 
   it 'can handle encrypting multiline strings' do
@@ -199,7 +200,7 @@ other:
       b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
       -----END RSA PRIVATE KEY-----
     something_else:  'right here'
-HEREDOC
+    HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
                               encryption_keys: { __default: './spec/spec_key.pub' }
@@ -214,16 +215,16 @@ other:
   stuff:
     _secure_setting: #{secure_setting_encoded}
     something_else:  'right here'
-HEREDOC
+    HEREDOC
   end
 
   it 'when rewriting the file, can handle names and values with regex special ' \
      'characters' do
 
-    tempfile      = create_tempfile_with_content <<-HEREDOC
+    tempfile = create_tempfile_with_content <<-HEREDOC
 stuff:
   _secure_another+_setting: "Thanks for +all the fish"
-HEREDOC
+    HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
                               encryption_keys: { __default: './spec/spec_key.pub' }
@@ -236,7 +237,7 @@ HEREDOC
     expect(::File.read(tempfile.path)).to eql <<-HEREDOC
 stuff:
   _secure_another+_setting: #{secure_another_setting_encoded}
-HEREDOC
+    HEREDOC
   end
 
   it 'can generate a signature file', :time_mock do
@@ -247,7 +248,7 @@ HEREDOC
     ::File.write(file_path, <<-HEREDOC, mode: 'w+')
 stuff:
   another_setting: "Thanks for all the fish"
-HEREDOC
+    HEREDOC
 
     settings_file = File.new  path:            file_path,
                               decryption_keys: { signature: './spec/spec_key' }
@@ -261,7 +262,7 @@ Signed At: 2012-07-26T18:00:00Z
 -----BEGIN CHAMBER SIGNATURE-----
 qGBhOsEkkwiTJYh8BVWOMekYReR42GI8E+Rpj5TCNlU+VN3H3YhKx1fueKIzGKP0Vjdraeg3vn5UwlBtJrVSp9iNRewXtuADF1RlkZ5ZRaRDs6/H+71KuPY7fPYdx47u0oVgSv5hEH3QehdAVA/Qh4rjoOg0IieJGcstckY/ADerNefraAVJ69sJc0ZaylSWxLDFDp4lHM4ytDHoWPTxSVT3KTAwjaxgc37LE+rhjOuOnsEJYwmyevAUW9sk7OBN4p8vn92Fsq7/SbKSFNIi/+HUOOF+yAinijQoUSfnByMBUoS5b4k4dHxadVEn9QDDtflQ5/Aosjb0718v7/tBhw==
 -----END CHAMBER SIGNATURE-----
-HEREDOC
+    HEREDOC
   end
 
   it 'fails signing if there are no signature keys available' do
@@ -271,7 +272,7 @@ HEREDOC
     ::File.write(file_path, <<-HEREDOC, mode: 'w+')
 stuff:
   another_setting: "Thanks for all the fish"
-HEREDOC
+    HEREDOC
 
     settings_file = File.new  path:            file_path,
                               decryption_keys: { foo: './spec/spec_key' }
@@ -289,7 +290,7 @@ HEREDOC
     ::File.write(file_path, <<-HEREDOC, mode: 'w+')
 stuff:
   another_setting: "Thanks for all the fish"
-HEREDOC
+    HEREDOC
 
     ::File.write(signature_path, <<-HEREDOC, mode: 'w+')
 Signed By: Jeff Felchner
@@ -298,7 +299,7 @@ Signed At: 2012-07-26T18:00:00Z
 -----BEGIN CHAMBER SIGNATURE-----
 qGBhOsEkkwiTJYh8BVWOMekYReR42GI8E+Rpj5TCNlU+VN3H3YhKx1fueKIzGKP0Vjdraeg3vn5UwlBtJrVSp9iNRewXtuADF1RlkZ5ZRaRDs6/H+71KuPY7fPYdx47u0oVgSv5hEH3QehdAVA/Qh4rjoOg0IieJGcstckY/ADerNefraAVJ69sJc0ZaylSWxLDFDp4lHM4ytDHoWPTxSVT3KTAwjaxgc37LE+rhjOuOnsEJYwmyevAUW9sk7OBN4p8vn92Fsq7/SbKSFNIi/+HUOOF+yAinijQoUSfnByMBUoS5b4k4dHxadVEn9QDDtflQ5/Aosjb0718v7/tBhw==
 -----END CHAMBER SIGNATURE-----
-HEREDOC
+    HEREDOC
 
     settings_file = File.new  path:            file_path,
                               encryption_keys: { signature: './spec/spec_key.pub' }
@@ -313,7 +314,7 @@ HEREDOC
     ::File.write(file_path, <<-HEREDOC, mode: 'w+')
 stuff:
   another_setting: "Thanks for all the fish"
-HEREDOC
+    HEREDOC
 
     settings_file = File.new  path:            file_path,
                               encryption_keys: { foo: './spec/spec_key.pub' }

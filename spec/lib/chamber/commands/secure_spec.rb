@@ -15,7 +15,7 @@ describe  Secure do
       basepath:        rootpath,
       rootpath:        rootpath,
       encryption_keys: rootpath + '../spec_key',
-      shell:           double.as_null_object,
+      shell:           double.as_null_object, # rubocop:disable RSpec/VerifiedDoubles
     }
   end
 
@@ -31,7 +31,7 @@ describe  Secure do
     settings_filename.write <<-HEREDOC
 test:
   _secure_my_unencrpyted_setting: hello
-HEREDOC
+    HEREDOC
 
     Secure.call(options)
 

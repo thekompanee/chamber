@@ -7,9 +7,15 @@ require 'time'
 module Chamber
 module Files
 class  Signature
-  SIGNATURE_HEADER                    = '-----BEGIN CHAMBER SIGNATURE-----'
-  SIGNATURE_FOOTER                    = '-----END CHAMBER SIGNATURE-----'
-  SIGNATURE_IN_SIGNATURE_FILE_PATTERN = /#{SIGNATURE_HEADER}\n(.*)\n#{SIGNATURE_FOOTER}/
+  SIGNATURE_HEADER          = '-----BEGIN CHAMBER SIGNATURE-----'
+  SIGNATURE_HEADER_PATTERN  = /\-\-\-\-\-BEGIN\sCHAMBER\sSIGNATURE\-\-\-\-\-/.freeze
+  SIGNATURE_FOOTER          = '-----END CHAMBER SIGNATURE-----'
+  SIGNATURE_FOOTER_PATTERN  = /\-\-\-\-\-END\sCHAMBER\sSIGNATURE\-\-\-\-\-/.freeze
+  SIGNATURE_IN_FILE_PATTERN = /
+                                #{SIGNATURE_HEADER_PATTERN}\n # Header
+                                (.*)\n                        # Signature Body
+                                #{SIGNATURE_FOOTER_PATTERN}   # Footer
+                              /x.freeze
 
   attr_accessor :settings_content,
                 :settings_filename
@@ -23,14 +29,14 @@ class  Signature
   end
 
   def signature_key=(keyish)
-    @signature_key ||= if keyish.is_a?(OpenSSL::PKey::RSA)
-                         keyish
-                       elsif ::File.readable?(::File.expand_path(keyish))
-                         file_contents = ::File.read(::File.expand_path(keyish))
-                         OpenSSL::PKey::RSA.new(file_contents)
-                       else
-                         OpenSSL::PKey::RSA.new(keyish)
-                       end
+    @signature_key = if keyish.is_a?(OpenSSL::PKey::RSA)
+                       keyish
+                     elsif ::File.readable?(::File.expand_path(keyish))
+                       file_contents = ::File.read(::File.expand_path(keyish))
+                       OpenSSL::PKey::RSA.new(file_contents)
+                     else
+                       OpenSSL::PKey::RSA.new(keyish)
+                     end
   end
 
   def write
@@ -68,7 +74,7 @@ Signed At: #{Time.now.utc.iso8601}
   def encoded_signature_content
     @encoded_signature_content ||= signature_filename.
                                      read.
-                                     match(SIGNATURE_IN_SIGNATURE_FILE_PATTERN) do |match|
+                                     match(SIGNATURE_IN_FILE_PATTERN) do |match|
       match[1]
     end
   end

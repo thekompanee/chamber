@@ -39,12 +39,12 @@ class   Instance
 
     Settings.
       new(
-      config.merge(
-        settings:     data,
-        pre_filters:  [Filters::EncryptionFilter],
-        post_filters: [],
-      ),
-    ).
+        config.merge(
+          settings:     data,
+          pre_filters:  [Filters::EncryptionFilter],
+          post_filters: [],
+        ),
+      ).
       to_hash
   end
 
@@ -53,15 +53,15 @@ class   Instance
 
     Settings.
       new(
-      config.merge(
-        settings:     data,
-        pre_filters:  [Filters::NamespaceFilter],
-        post_filters: [
-                        Filters::DecryptionFilter,
-                        Filters::FailedDecryptionFilter,
-                      ],
-      ),
-    ).
+        config.merge(
+          settings:     data,
+          pre_filters:  [Filters::NamespaceFilter],
+          post_filters: [
+                          Filters::DecryptionFilter,
+                          Filters::FailedDecryptionFilter,
+                        ],
+        ),
+      ).
       to_hash
   end
 

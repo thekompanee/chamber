@@ -10,6 +10,7 @@ describe  FileSet do
     FileUtils.mkdir '/tmp/settings' unless ::File.exist? '/tmp/settings'
     FileUtils.mkdir '/tmp/dash-set' unless ::File.exist? '/tmp/dash-set'
   end
+
   after(:each)  { FileUtils.rm_rf '/tmp/settings' if ::File.exist? '/tmp/settings' }
 
   it 'can consider directories containing YAML files' do
@@ -58,7 +59,7 @@ describe  FileSet do
     ::File.new('/tmp/settings/settings-blue.yml', 'w+')
 
     file_set = FileSet.new files:      '/tmp/settings/settings-blue.yml',
-                           namespaces: ['blue']
+                           namespaces: %w{blue}
 
     expect(file_set.filenames).to eql [
                                         '/tmp/settings/settings-blue.yml',
@@ -71,7 +72,7 @@ describe  FileSet do
     ::File.new('/tmp/settings/settings-blue.yml', 'w+')
 
     file_set = FileSet.new files:      '/tmp/settings/settings-blue.yml',
-                           namespaces: ['green']
+                           namespaces: %w{green}
 
     expect(file_set.filenames).to be_empty
 
@@ -84,7 +85,7 @@ describe  FileSet do
     ::File.new('/tmp/dash-set/settings.yml', 'w+')
 
     file_set = FileSet.new files:      '/tmp/dash-set/settings*.yml',
-                           namespaces: ['blue']
+                           namespaces: %w{blue}
 
     expect(file_set.filenames).to eql [
                                         '/tmp/dash-set/settings.yml',
@@ -165,7 +166,7 @@ describe  FileSet do
     ::File.new('/tmp/settings-blue.yml', 'w+')
 
     file_set = FileSet.new files:      '/tmp/settings*.yml',
-                           namespaces: ['blue']
+                           namespaces: %w{blue}
 
     expect(file_set.filenames).to eql  [
                                          '/tmp/settings.yml',
@@ -185,7 +186,7 @@ describe  FileSet do
                                          '/tmp/settings/credentials*.yml',
                                          '/tmp/settings/settings*.yml',
                                        ],
-                           namespaces: ['development']
+                           namespaces: %w{development}
 
     expect(file_set.filenames).to eql [
                                         '/tmp/settings/credentials-development.yml',

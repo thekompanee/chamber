@@ -27,6 +27,7 @@ class   Base
     end
   end
 
+  # rubocop:disable Performance/ChainArrayAllocation
   def filenames=(other)
     @filenames = begin
                    paths = Array(other).
@@ -42,19 +43,20 @@ class   Base
                      uniq
                  end
   end
+  # rubocop:enable Performance/ChainArrayAllocation
 
   private
 
   def namespaces=(other)
-    @namespaces ||= begin
-                      keys = if other.respond_to?(:keys)
-                               other.keys.map(&:to_s)
-                             else
-                               other
-                             end
+    @namespaces = begin
+                    keys = if other.respond_to?(:keys)
+                             other.keys.map(&:to_s)
+                           else
+                             other
+                           end
 
-                      keys + %w{signature}
-                    end
+                    keys + %w{signature}
+                  end
   end
 
   def key_from_file_contents(filename)

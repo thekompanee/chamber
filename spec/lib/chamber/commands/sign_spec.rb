@@ -17,7 +17,7 @@ describe  Sign do
       basepath:        rootpath,
       rootpath:        rootpath,
       decryption_keys: rootpath + '../../spec/fixtures/keys/real/.chamber.signature.pem',
-      shell:           double.as_null_object,
+      shell:           double.as_null_object, # rubocop:disable RSpec/VerifiedDoubles
     }
   end
 
@@ -33,7 +33,7 @@ describe  Sign do
     settings_filename.write <<-HEREDOC
 test:
   my_setting: hello
-HEREDOC
+    HEREDOC
 
     Sign.call(options)
 

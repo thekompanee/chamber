@@ -221,25 +221,25 @@ class   Settings
 
   def securable
     Settings.new(metadata.merge(
-                    settings:    raw_data,
-                    pre_filters: [Filters::SecureFilter],
-    ))
+                   settings:    raw_data,
+                   pre_filters: [Filters::SecureFilter],
+                 ))
   end
 
   def secure
     Settings.new(metadata.merge(
-                    settings:     raw_data,
-                    pre_filters:  [Filters::EncryptionFilter],
-                    post_filters: [Filters::TranslateSecureKeysFilter],
-    ))
+                   settings:     raw_data,
+                   pre_filters:  [Filters::EncryptionFilter],
+                   post_filters: [Filters::TranslateSecureKeysFilter],
+                 ))
   end
 
   def insecure
     Settings.new(metadata.merge(
-                    settings:     raw_data,
-                    pre_filters:  [Filters::InsecureFilter],
-                    post_filters: [Filters::TranslateSecureKeysFilter],
-    ))
+                   settings:     raw_data,
+                   pre_filters:  [Filters::InsecureFilter],
+                   post_filters: [Filters::TranslateSecureKeysFilter],
+                 ))
   end
 
   def method_missing(name, *args)
@@ -262,12 +262,14 @@ class   Settings
     @namespaces = NamespaceSet.new(raw_namespaces)
   end
 
+  # rubocop:disable Naming/MemoizedInstanceVariableName
   def raw_data
     @filtered_raw_data ||= pre_filters.inject(@raw_data) do |filtered_data, filter|
       filter.execute({ data: filtered_data }.
                      merge(metadata))
     end
   end
+  # rubocop:enable Naming/MemoizedInstanceVariableName
 
   def data
     @data ||= post_filters.inject(raw_data) do |filtered_data, filter|

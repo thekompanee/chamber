@@ -5,7 +5,16 @@ require 'base64'
 module  Chamber
 module  EncryptionMethods
 class   Ssl
-  LARGE_DATA_STRING_PATTERN = %r{\A([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})#([A-Za-z0-9\+\/#]*\={0,2})\z} # rubocop:disable Metrics/LineLength
+  BASE64_STRING_PATTERN     = %r{[A-Za-z0-9\+\/#]*\={0,2}}.freeze
+  LARGE_DATA_STRING_PATTERN = /
+                                \A
+                                (#{BASE64_STRING_PATTERN})
+                                \#
+                                (#{BASE64_STRING_PATTERN})
+                                \#
+                                (#{BASE64_STRING_PATTERN})
+                                \z
+                              /x.freeze
 
   def self.encrypt(_key, value, encryption_keys)
     value = YAML.dump(value)

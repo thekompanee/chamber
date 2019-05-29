@@ -44,7 +44,7 @@ describe  NamespaceSet do
   it 'can create itself from a single value' do
     namespace_set = NamespaceSet.new(:development)
 
-    expect(namespace_set).to eq ['development']
+    expect(namespace_set).to eq %w{development}
   end
 
   it 'when creating itself from another NamespaceSet, it creates a new NamespaceSet' do
@@ -107,17 +107,17 @@ describe  NamespaceSet do
   it 'does not allow duplicate items' do
     namespace_set = NamespaceSet[:development, :development]
 
-    expect(namespace_set).to eq ['development']
+    expect(namespace_set).to eq %w{development}
   end
 
   it 'will process a value by executing it if it is a callable' do
     namespace_set = NamespaceSet[-> { 'callable' }]
 
-    expect(namespace_set).to eq ['callable']
+    expect(namespace_set).to eq %w{callable}
 
     namespace_set = NamespaceSet.new(my_namespace: -> { 'callable' })
 
-    expect(namespace_set).to eq ['callable']
+    expect(namespace_set).to eq %w{callable}
   end
 
   it 'can compare itself to another NamespaceSet' do

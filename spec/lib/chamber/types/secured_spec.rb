@@ -7,7 +7,7 @@ require 'chamber/types/secured'
 module    Chamber
 module    Types
 describe  Secured do
-  BASE64_STRING_PATTERN = %r{[A-Za-z0-9\+/]{342}==}
+  BASE64_STRING_PATTERN = %r{[A-Za-z0-9\+/]{342}==}.freeze
 
   subject(:secured_type) do
     Secured.new(decryption_keys: { __default: './spec/spec_key' },

@@ -112,11 +112,11 @@ require 'chamber/settings'
 #
 module  Chamber
 class   FileSet
-  attr_reader   :namespaces,
-                :paths
   attr_accessor :decryption_keys,
                 :encryption_keys,
                 :basepath
+  attr_reader   :namespaces,
+                :paths
 
   def initialize(options = {})
     self.namespaces      = options[:namespaces] || {}
@@ -247,7 +247,7 @@ class   FileSet
   private
 
   def all_files
-    @all_files ||= file_globs.map { |fg| Pathname.glob(fg) }.flatten.uniq.sort
+    @all_files ||= file_globs.map { |fg| Pathname.glob(fg) }.flatten.uniq.sort # rubocop:disable Performance/ChainArrayAllocation
   end
 
   def non_namespaced_files

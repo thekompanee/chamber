@@ -25,7 +25,7 @@ class   Base
   protected
 
   def rootpath=(other)
-    @rootpath ||= Pathname.new(other)
+    @rootpath = Pathname.new(other)
   end
 end
 end

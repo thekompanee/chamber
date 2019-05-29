@@ -13,7 +13,7 @@ class   Decryption < Chamber::Keys::Base
                         (\w+)       # Namespace
                         \.pem       # Extension
                         \z          # End of Filename
-                      /x
+                      /x.freeze
 
   private
 

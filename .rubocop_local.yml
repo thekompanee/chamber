@@ -10,6 +10,9 @@ Layout/IndentHeredoc:
 Performance/RegexpMatch:
   Enabled:            false
 
+Style/ConstantVisibility:
+  Enabled:            false
+
 Style/InlineComment:
   Enabled:            false
 

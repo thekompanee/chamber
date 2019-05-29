@@ -12,7 +12,7 @@ require 'chamber/errors/decryption_failure'
 module  Chamber
 module  Filters
 class   DecryptionFilter
-  BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9\+/]{342}==\z}
+  BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9\+/]{342}==\z}.freeze
   LARGE_DATA_STRING_PATTERN = %r{
                                   \A                            # Beginning of String
                                   (
@@ -27,7 +27,7 @@ class   DecryptionFilter
                                     [A-Za-z0-9\+\/#]*\={0,2}    # Base64 Encoded Data
                                   )
                                   \z                            # End of String
-                                }x
+                                }x.freeze
 
   attr_accessor :data,
                 :secure_key_token
@@ -79,11 +79,9 @@ class   DecryptionFilter
     method = decryption_method(value)
 
     decryption_keys.each do |decryption_key|
-      begin
-        return method.decrypt(key, value, decryption_key)
-      rescue OpenSSL::PKey::RSAError
-        next
-      end
+      return method.decrypt(key, value, decryption_key)
+    rescue OpenSSL::PKey::RSAError
+      next
     end
 
     value

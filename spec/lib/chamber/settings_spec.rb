@@ -7,27 +7,27 @@ module    Chamber
 describe  Settings do
   it 'can verify that it is equal to another Settings object' do
     settings        = Settings.new(settings:   { setting: 'value' },
-                                   namespaces: ['good'])
+                                   namespaces: %w{good})
     other_settings  = Settings.new(settings:   { setting: 'value' },
-                                   namespaces: ['good'])
+                                   namespaces: %w{good})
 
     expect(settings).to eql other_settings
   end
 
   it 'does not consider itself equal if the namespaces are not equal' do
     settings        = Settings.new(settings:   { setting: 'value' },
-                                   namespaces: ['good'])
+                                   namespaces: %w{good})
     other_settings  = Settings.new(settings:   { setting: 'value' },
-                                   namespaces: ['bad'])
+                                   namespaces: %w{bad})
 
     expect(settings).not_to eql other_settings
   end
 
   it 'does not consider itself equal if the settings are not equal' do
     settings        = Settings.new(settings:   { setting: 'value' },
-                                   namespaces: ['good'])
+                                   namespaces: %w{good})
     other_settings  = Settings.new(settings:   { setting: 'value 1' },
-                                   namespaces: ['good'])
+                                   namespaces: %w{good})
 
     expect(settings).not_to eql other_settings
   end
@@ -87,13 +87,13 @@ describe  Settings do
                               there:      'was not that easy?',
                             })
 
-    expect(settings.to_s).to eql %w{
-                                   LEVEL_1_BODY="gracias"
-                                   LEVEL_1_LEVEL_2_ANOTHER="goodbye"
-                                   LEVEL_1_LEVEL_2_SOME_SETTING="hello"
-                                   MY_SETTING="value"
-                                   THERE="was not that easy?"
-                                 }.join(' ')
+    expect(settings.to_s).to eql [
+                                   'LEVEL_1_BODY="gracias"',
+                                   'LEVEL_1_LEVEL_2_ANOTHER="goodbye"',
+                                   'LEVEL_1_LEVEL_2_SOME_SETTING="hello"',
+                                   'MY_SETTING="value"',
+                                   'THERE="was not that easy?"',
+                                 ].join(' ')
   end
 
   it 'can convert itself into a string with custom options' do
@@ -120,7 +120,7 @@ LEVEL_1/LEVEL_2/ANOTHER: 'goodbye'
 LEVEL_1/LEVEL_2/SOME_SETTING: 'hello'
 MY_SETTING: 'value'
 THERE: 'was not that easy?'
-HEREDOC
+    HEREDOC
   end
 
   it 'can merge itself with a hash' do
@@ -135,9 +135,9 @@ HEREDOC
 
   it 'can merge itself with Settings' do
     settings       = Settings.new(settings:   { setting:       'value' },
-                                  namespaces: ['good'])
+                                  namespaces: %w{good})
     other_settings = Settings.new(settings:   { other_setting: 'another value' },
-                                  namespaces: ['bad'])
+                                  namespaces: %w{bad})
 
     merged_settings = settings.merge(other_settings)
 

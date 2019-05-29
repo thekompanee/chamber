@@ -70,10 +70,10 @@ class   File < Pathname
   # ```
   #
   def to_settings
-    @data ||= Settings.new(settings:        file_contents_hash,
-                           namespaces:      namespaces,
-                           decryption_keys: decryption_keys,
-                           encryption_keys: encryption_keys)
+    @to_settings ||= Settings.new(settings:        file_contents_hash,
+                                  namespaces:      namespaces,
+                                  decryption_keys: decryption_keys,
+                                  encryption_keys: encryption_keys)
   end
 
   # rubocop:disable Metrics/LineLength
@@ -92,13 +92,13 @@ class   File < Pathname
         sub!(
           /^(\s*)#{secure_prefix_pattern}#{escaped_name}(\s*):(\s*)['"]?#{escaped_value}['"]?$/,
           "\\1#{secure_prefix}#{name_pieces.last}\\2:\\3#{secure_value}",
-      )
+        )
 
       file_contents.
         sub!(
           /^(\s*)#{secure_prefix_pattern}#{escaped_name}(\s*):(\s*)\|((?:\n\1\s{2}.*)+)/,
           "\\1#{secure_prefix}#{name_pieces.last}\\2:\\3#{secure_value}",
-      )
+        )
     end
 
     write(file_contents)
