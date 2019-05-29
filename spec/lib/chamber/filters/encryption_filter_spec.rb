@@ -254,7 +254,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
     filtered_settings = EncryptionFilter.execute(
       secure_key_prefix: '_secure_',
       data:              {
-        _secure_my_secure_setting: 'A' * 120,
+        _secure_my_secure_setting: 'A' * 124,
       },
       encryption_keys:   { __default: './spec/spec_key.pub' },
     )
