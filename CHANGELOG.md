@@ -1,3 +1,29 @@
+Version v2.13.0 - May 30, 2019
+================================================================================
+
+Fix
+--------------------------------------------------------------------------------
+  * Add Missing Conditional For Heroku Cloud Adapter
+  * Quote Heroku App Name
+  * shell Option Not Being Passed to Subcommands
+
+Change
+--------------------------------------------------------------------------------
+  * Make Sure We're Escaping In The Proper Situations
+  * Convert Heroku Over To New Cloud Adapter
+  * Refactor Heroku Push
+  * Refactor The Keys Code
+
+Add
+--------------------------------------------------------------------------------
+  * New CircleCI Adapter
+  * CircleCI Binary
+  * Generic Cloud Commands
+  * CircleCi Cloud Adapter
+  * Option to Push Decryption Keys to Heroku
+  * Ability to Access rootpath From Chamber Configuration
+  * Ability to Convert Keys to Environment Variables
+
 Version v2.12.5 - May 29, 2019
 ================================================================================
 
