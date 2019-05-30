@@ -26,6 +26,12 @@ class   Base
     end
   end
 
+  def as_environment_variables
+    key_paths.select(&:readable?).each_with_object({}) do |path, memo|
+      memo[environment_variable_from_path(path)] = path.read
+    end
+  end
+
   private
 
   def key_paths

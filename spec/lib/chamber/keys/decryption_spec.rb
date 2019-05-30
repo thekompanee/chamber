@@ -68,6 +68,36 @@ describe  Decryption do
                    )
   end
 
+  it 'can convert keys to environment variables' do
+    key = Decryption.new(rootpath:   'spec/fixtures/keys/',
+                         namespaces: %w{test production},
+                         filenames:  %w{
+                                       spec/fixtures/keys/.chamber.development.pem
+                                     })
+
+    expect(key.as_environment_variables).to \
+      eql(
+        'CHAMBER_DEVELOPMENT_KEY' => "development private key\n",
+        'CHAMBER_PRODUCTION_KEY'  => "production private key\n",
+        'CHAMBER_TEST_KEY'        => "test private key\n",
+      )
+  end
+
+  it 'only shows readable files when converting to environment variables' do
+    key = Decryption.new(rootpath:   'spec/fixtures/keys/',
+                         namespaces: %w{production},
+                         filenames:  %w{
+                                       spec/fixtures/keys/.chamber.development.pem
+                                       spec/fixtures/keys/.chamber.idonotexist.pem
+                                     })
+
+    expect(key.as_environment_variables).to \
+      eql(
+        'CHAMBER_DEVELOPMENT_KEY' => "development private key\n",
+        'CHAMBER_PRODUCTION_KEY'  => "production private key\n",
+      )
+  end
+
   it 'can lookup generic key from namespaces by reading the environment' do
     ENV['CHAMBER_MISSING_KEY'] = 'environment private key'
 
