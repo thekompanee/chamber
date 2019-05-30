@@ -17,10 +17,10 @@ class   Encryption < Chamber::Keys::Base
 
   private
 
-  def environment_variable_from_filename(filename)
+  def environment_variable_from_path(path)
     [
       'CHAMBER',
-      namespace_from_filename(filename),
+      namespace_from_path(path),
       'PUBLIC_KEY',
     ].
       compact.

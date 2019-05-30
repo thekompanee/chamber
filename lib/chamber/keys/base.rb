@@ -18,66 +18,42 @@ class   Base
   end
 
   def resolve
-    filenames.each_with_object({}) do |filename, memo|
-      namespace = namespace_from_filename(filename) || '__default'
-      value     = key_from_file_contents(filename) ||
-                  key_from_environment_variable(filename)
+    key_paths.each_with_object({}) do |path, memo|
+      namespace = namespace_from_path(path) || '__default'
+      value     = path.readable? ? path.read : ENV[environment_variable_from_path(path)]
 
       memo[namespace.downcase.to_sym] = value if value
     end
   end
 
+  private
+
+  def key_paths
+    @key_paths = (filenames.any? ? filenames : [default_key_file_path]) +
+                 namespaces.map { |n| namespace_to_key_path(n) }
+  end
+
   # rubocop:disable Performance/ChainArrayAllocation
   def filenames=(other)
-    @filenames = begin
-                   paths = Array(other).
-                             map { |o| Pathname.new(o) }.
-                             compact
-
-                   paths << default_key_file_path if paths.empty?
-
-                   (
-                     paths +
-                     generate_key_filenames
-                   ).
-                     uniq
-                 end
+    @filenames = Array(other).
+                   map { |o| Pathname.new(o) }.
+                   compact
   end
   # rubocop:enable Performance/ChainArrayAllocation
 
-  private
-
   def namespaces=(other)
-    @namespaces = begin
-                    keys = if other.respond_to?(:keys)
-                             other.keys.map(&:to_s)
-                           else
-                             other
-                           end
-
-                    keys + %w{signature}
-                  end
+    @namespaces = other + %w{signature}
   end
 
-  def key_from_file_contents(filename)
-    filename.readable? && filename.read
-  end
-
-  def key_from_environment_variable(filename)
-    ENV[environment_variable_from_filename(filename)]
-  end
-
-  def namespace_from_filename(filename)
-    filename.
+  def namespace_from_path(path)
+    path.
       basename.
       to_s.
       match(self.class::NAMESPACE_PATTERN) { |m| m[1].upcase }
   end
 
-  def generate_key_filenames
-    namespaces.map do |namespace|
-      rootpath + ".chamber.#{namespace.to_s.tr('.-', '')}#{key_filename_extension}"
-    end
+  def namespace_to_key_path(namespace)
+    rootpath + ".chamber.#{namespace.to_s.tr('.-', '')}#{key_filename_extension}"
   end
 
   def default_key_file_path
