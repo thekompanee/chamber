@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
 require 'thor'
-require 'chamber/commands/heroku/clear'
-require 'chamber/commands/heroku/push'
-require 'chamber/commands/heroku/pull'
-require 'chamber/commands/heroku/compare'
+require 'chamber/commands/cloud/clear'
+require 'chamber/commands/cloud/push'
+require 'chamber/commands/cloud/pull'
+require 'chamber/commands/cloud/compare'
 
 module  Chamber
 module  Binary
 class   Heroku < Thor
+  include Thor::Actions
+
   class_option :app,
                type:     :string,
                aliases:  '-a',
@@ -26,7 +28,7 @@ class   Heroku < Thor
                          'would change if cleared'
 
   def clear
-    Commands::Heroku::Clear.call(options.merge(shell: self))
+    Commands::Cloud::Clear.call(options.merge(shell: self, adapter: 'heroku'))
   end
 
   desc 'push', 'Sends settings to Heroku so that they may be used in the application ' \
@@ -55,7 +57,7 @@ class   Heroku < Thor
                          'will be pushed'
 
   def push
-    Commands::Heroku::Push.call(options.merge(shell: self))
+    Commands::Cloud::Push.call(options.merge(shell: self, adapter: 'heroku'))
   end
 
   desc 'pull', 'Retrieves the environment variables for the application and stores ' \
@@ -67,7 +69,7 @@ class   Heroku < Thor
                       'stored. This file WILL BE OVERRIDDEN.'
 
   def pull
-    puts Commands::Heroku::Pull.call(options.merge(shell: self))
+    Commands::Cloud::Pull.call(options.merge(shell: self, adapter: 'heroku'))
   end
 
   desc 'compare', 'Displays the difference between what is currently stored in the ' \
@@ -82,7 +84,7 @@ class   Heroku < Thor
                          'which are marked as "_secure"'
 
   def compare
-    Commands::Heroku::Compare.call(options.merge(shell: self))
+    Commands::Cloud::Compare.call(options.merge(shell: self, adapter: 'heroku'))
   end
 end
 end
