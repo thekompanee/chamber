@@ -24,7 +24,7 @@ module  Heroku
   end
 
   def app_option
-    app ? " --app #{app}" : ''
+    app ? " --app='#{app}'" : ''
   end
 end
 end
