@@ -22,6 +22,8 @@ class   Base < Chamber::Commands::Base
     @adapter_class ||= case adapter_name
                        when 'circle_ci'
                          Chamber::Adapters::Cloud::CircleCi
+                       when 'heroku'
+                         Chamber::Adapters::Cloud::Heroku
                        else
                          fail ArgumentError,
                               "Invalid Chamber cloud adapter name: #{adapter_name}"
