@@ -12,12 +12,17 @@ class   Push < Chamber::Commands::Base
   include Chamber::Commands::Heroku
 
   def call
-    securable_environment_variables.each do |key, value|
+    environment_variables = securable_environment_variables.
+                              each_with_object({}) do |(key, value), memo|
+                                memo[key] = value.shellescape
+                              end
+
+    environment_variables.each do |key, value|
       if dry_run
         shell.say_status 'push', key, :blue
       else
         shell.say_status 'push', key, :green
-        heroku("config:set #{key}=#{value.shellescape}")
+        heroku(%Q{config:set #{key}="#{value}"})
       end
     end
   end
