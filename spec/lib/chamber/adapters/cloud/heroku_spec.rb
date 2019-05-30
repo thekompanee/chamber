@@ -26,6 +26,28 @@ describe Heroku do
     adapter.remove_environment_variable(environment_key)
   end
 
+  it 'can shellescape environment variables' do
+    adapter         = Heroku.new(app: ::Chamber.env.heroku.test_app_name)
+    environment_key = ::SecureRandom.base64(64).gsub(/[^a-zA-Z]+/, '')[0..16]
+
+    adapter.add_environment_variable(environment_key, '1234!1234')
+
+    expect(adapter.environment_variables[environment_key]).to eql '1234\!1234'
+
+    adapter.remove_environment_variable(environment_key)
+  end
+
+  it 'knows not to shellescape values with newlines' do
+    adapter         = Heroku.new(app: ::Chamber.env.heroku.test_app_name)
+    environment_key = ::SecureRandom.base64(64).gsub(/[^a-zA-Z]+/, '')[0..16]
+
+    adapter.add_environment_variable(environment_key, "1234!12\n34")
+
+    expect(adapter.environment_variables[environment_key]).to eql "1234!12\n34"
+
+    adapter.remove_environment_variable(environment_key)
+  end
+
   it 'can properly display errors' do
     adapter                 = Heroku.new(app: ::Chamber.env.heroku.test_app_name)
     invalid_environment_key = '12345\!-[]=!'

@@ -25,6 +25,7 @@ class   CircleCi
   end
 
   def add_environment_variable(name, value)
+    value   = value.gsub(/\n/, '\n')
     request = ::Net::HTTP::Post.new(request_uri(resource: 'envvar'))
 
     request.basic_auth api_token, ''

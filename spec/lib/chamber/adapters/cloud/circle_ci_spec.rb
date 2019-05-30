@@ -33,6 +33,21 @@ describe CircleCi do
     adapter.remove_environment_variable(environment_key)
   end
 
+  it 'knows to convert newlines to literal \\n strings' do
+    adapter = CircleCi.new(api_token: ::Chamber.env.circle_ci.api_token,
+                           project:   'chamber',
+                           username:  'thekompanee',
+                           vcs_type:  'github')
+
+    environment_key = ::SecureRandom.base64(64).gsub(/[^a-zA-Z]+/, '')[0..16]
+
+    adapter.add_environment_variable(environment_key, "123412\n34")
+
+    expect(adapter.environment_variables[environment_key]).to eql 'xxxx\n34'
+
+    adapter.remove_environment_variable(environment_key)
+  end
+
   it 'can properly display errors' do
     adapter = CircleCi.new(api_token: ::Chamber.env.circle_ci.api_token,
                            project:   'chamber',
