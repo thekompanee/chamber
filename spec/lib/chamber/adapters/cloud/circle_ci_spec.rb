@@ -9,6 +9,8 @@ module   Chamber
 module   Adapters
 module   Cloud
 describe CircleCi do
+  before(:each) { Chamber.load }
+
   it 'can retrieve environment variables' do
     adapter = CircleCi.new(api_token: ::Chamber.env.circle_ci.api_token,
                            project:   'chamber',

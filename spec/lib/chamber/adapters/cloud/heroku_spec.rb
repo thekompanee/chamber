@@ -9,6 +9,8 @@ module   Chamber
 module   Adapters
 module   Cloud
 describe Heroku do
+  before(:each) { Chamber.load }
+
   it 'can retrieve environment variables' do
     adapter = Heroku.new(app: ::Chamber.env.heroku.test_app_name)
 
