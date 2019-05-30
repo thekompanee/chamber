@@ -38,6 +38,14 @@ class   Heroku < Thor
                 desc:    'Does not actually push anything to Heroku, but instead ' \
                          'displays what would change if pushed'
 
+  method_option :keys,
+                type:    :boolean,
+                aliases: '-k',
+                desc:    'Pushes private Chamber keys to Heroku as environment ' \
+                         'variables. Chamber will automatically detect it and ' \
+                         'transparently decrypt your secure settings without any ' \
+                         'further synchronization.'
+
   method_option :only_sensitive,
                 type:    :boolean,
                 aliases: '-o',
