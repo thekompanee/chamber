@@ -8,7 +8,8 @@ class   Configuration
                 :decryption_keys,
                 :encryption_keys,
                 :files,
-                :namespaces
+                :namespaces,
+                :rootpath
 
   def initialize(options = {})
     options              = ContextResolver.resolve(options)
@@ -18,6 +19,7 @@ class   Configuration
     self.decryption_keys = options.fetch(:decryption_keys)
     self.encryption_keys = options.fetch(:encryption_keys)
     self.files           = options.fetch(:files)
+    self.rootpath        = options.fetch(:rootpath)
   end
 
   def to_hash
