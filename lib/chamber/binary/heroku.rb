@@ -26,7 +26,7 @@ class   Heroku < Thor
                          'would change if cleared'
 
   def clear
-    Commands::Heroku::Clear.call(options)
+    Commands::Heroku::Clear.call(options.merge(shell: self))
   end
 
   desc 'push', 'Sends settings to Heroku so that they may be used in the application ' \
@@ -55,7 +55,7 @@ class   Heroku < Thor
                          'will be pushed'
 
   def push
-    Commands::Heroku::Push.call(options)
+    Commands::Heroku::Push.call(options.merge(shell: self))
   end
 
   desc 'pull', 'Retrieves the environment variables for the application and stores ' \
@@ -67,7 +67,7 @@ class   Heroku < Thor
                       'stored. This file WILL BE OVERRIDDEN.'
 
   def pull
-    puts Commands::Heroku::Pull.call(options)
+    puts Commands::Heroku::Pull.call(options.merge(shell: self))
   end
 
   desc 'compare', 'Displays the difference between what is currently stored in the ' \
@@ -82,7 +82,7 @@ class   Heroku < Thor
                          'which are marked as "_secure"'
 
   def compare
-    Commands::Heroku::Compare.call(options)
+    Commands::Heroku::Compare.call(options.merge(shell: self))
   end
 end
 end

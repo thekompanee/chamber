@@ -24,7 +24,7 @@ class   Travis < Thor
                          'which are marked as "_secure"'
 
   def secure
-    Commands::Travis::Secure.call(options)
+    Commands::Travis::Secure.call(options.merge(shell: self))
   end
 end
 end
