@@ -27,10 +27,10 @@ class   Push < Chamber::Commands::Base
                                     namespaces: chamber.configuration.namespaces).
                                 as_environment_variables
                             else
-                            securable_environment_variables.
-                              each_with_object({}) do |(key, value), memo|
-                                memo[key] = value.shellescape
-                              end
+                              securable_environment_variables.
+                                each_with_object({}) do |(key, value), memo|
+                                  memo[key] = value.shellescape
+                                end
                             end
 
     environment_variables.each do |key, value|
