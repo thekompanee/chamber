@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require 'rspectacular'
-require 'chamber/commands/heroku/clear'
+require 'chamber/commands/cloud/pull'
 
 module    Chamber
 module    Commands
-module    Heroku
-describe  Clear do
+module    Cloud
+describe  Pull do
 end
 end
 end

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'rspectacular'
-require 'chamber/commands/heroku/push'
+require 'chamber/commands/cloud/push'
 
 module    Chamber
 module    Commands
-module    Heroku
+module    Cloud
 describe  Push do
 end
 end

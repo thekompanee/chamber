@@ -1,16 +1,14 @@
 # frozen_string_literal: true
 
-require 'chamber/commands/base'
+require 'chamber/commands/cloud/base'
 require 'chamber/commands/securable'
-require 'chamber/commands/heroku'
 require 'chamber/keys/decryption'
 
 module  Chamber
 module  Commands
-module  Heroku
-class   Push < Chamber::Commands::Base
+module  Cloud
+class   Push < Chamber::Commands::Cloud::Base
   include Chamber::Commands::Securable
-  include Chamber::Commands::Heroku
 
   attr_accessor :keys
 
@@ -27,10 +25,7 @@ class   Push < Chamber::Commands::Base
                                     namespaces: chamber.configuration.namespaces).
                                 as_environment_variables
                             else
-                              securable_environment_variables.
-                                each_with_object({}) do |(key, value), memo|
-                                  memo[key] = value.shellescape
-                                end
+                              securable_environment_variables
                             end
 
     environment_variables.each do |key, value|
@@ -38,7 +33,8 @@ class   Push < Chamber::Commands::Base
         shell.say_status 'push', key, :blue
       else
         shell.say_status 'push', key, :green
-        heroku(%Q{config:set #{key}="#{value}"})
+
+        adapter.add_environment_variable(key, value)
       end
     end
   end

@@ -8,17 +8,35 @@ require 'chamber/commands/cloud/compare'
 
 module  Chamber
 module  Binary
-class   Heroku < Thor
+class   CircleCi < Thor
   include Thor::Actions
 
-  class_option :app,
+  class_option :api_token,
                type:     :string,
-               aliases:  '-a',
+               aliases:  '-t',
                required: true,
-               desc:     'The name of the Heroku application whose config values will ' \
-                         'be affected'
+               desc:     'The API token to access your CircleCI project.'
 
-  desc 'clear', 'Removes all Heroku environment variables which match settings that ' \
+  class_option :project,
+               type:     :string,
+               aliases:  '-p',
+               required: true,
+               desc:     'The project name in your VCS (eg Github).'
+
+  class_option :username,
+               type:     :string,
+               aliases:  '-u',
+               required: true,
+               desc:     'The user/organization name in your VCS (eg Github).'
+
+  class_option :vcs_type,
+               type:    :string,
+               aliases: '-v',
+               default: 'github',
+               desc:    'The type of VCS your project is using.',
+               enum:    %w{github bitbucket}
+
+  desc 'clear', 'Removes all CircleCi environment variables which match settings that ' \
                 'Chamber knows about'
 
   method_option :dry_run,
@@ -28,22 +46,22 @@ class   Heroku < Thor
                          'would change if cleared'
 
   def clear
-    Commands::Cloud::Clear.call(options.merge(shell: self, adapter: 'heroku'))
+    Commands::Cloud::Clear.call(options.merge(shell: self, adapter: 'circle_ci'))
   end
 
-  desc 'push', 'Sends settings to Heroku so that they may be used in the application ' \
+  desc 'push', 'Sends settings to CircleCi so that they may be used in the application ' \
                'once it is deployed'
 
   method_option :dry_run,
                 type:    :boolean,
                 aliases: '-d',
-                desc:    'Does not actually push anything to Heroku, but instead ' \
+                desc:    'Does not actually push anything to CircleCi, but instead ' \
                          'displays what would change if pushed'
 
   method_option :keys,
                 type:    :boolean,
                 aliases: '-k',
-                desc:    'Pushes private Chamber keys to Heroku as environment ' \
+                desc:    'Pushes private Chamber keys to CircleCi as environment ' \
                          'variables. Chamber will automatically detect it and ' \
                          'transparently decrypt your secure settings without any ' \
                          'further synchronization.'
@@ -57,7 +75,7 @@ class   Heroku < Thor
                          'will be pushed'
 
   def push
-    Commands::Cloud::Push.call(options.merge(shell: self, adapter: 'heroku'))
+    Commands::Cloud::Push.call(options.merge(shell: self, adapter: 'circle_ci'))
   end
 
   desc 'pull', 'Retrieves the environment variables for the application and stores ' \
@@ -65,15 +83,15 @@ class   Heroku < Thor
 
   method_option :into,
                 type: :string,
-                desc: 'The file into which the Heroku config information should be ' \
+                desc: 'The file into which the CircleCi config information should be ' \
                       'stored. This file WILL BE OVERRIDDEN.'
 
   def pull
-    Commands::Cloud::Pull.call(options.merge(shell: self, adapter: 'heroku'))
+    Commands::Cloud::Pull.call(options.merge(shell: self, adapter: 'circle_ci'))
   end
 
   desc 'compare', 'Displays the difference between what is currently stored in the ' \
-                  'Heroku application\'s config and what Chamber knows about locally'
+                  'CircleCi application\'s config and what Chamber knows about locally'
 
   method_option :only_sensitive,
                 type:    :boolean,
@@ -84,7 +102,7 @@ class   Heroku < Thor
                          'which are marked as "_secure"'
 
   def compare
-    Commands::Cloud::Compare.call(options.merge(shell: self, adapter: 'heroku'))
+    Commands::Cloud::Compare.call(options.merge(shell: self, adapter: 'circle_ci'))
   end
 end
 end

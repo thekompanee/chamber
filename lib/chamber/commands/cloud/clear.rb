@@ -1,23 +1,21 @@
 # frozen_string_literal: true
 
-require 'chamber/commands/base'
-require 'chamber/commands/heroku'
+require 'chamber/commands/cloud/base'
 
 module  Chamber
 module  Commands
-module  Heroku
-class   Clear < Chamber::Commands::Base
-  include Chamber::Commands::Heroku
-
+module  Cloud
+class   Clear < Chamber::Commands::Cloud::Base
   def call
     chamber.to_environment.each_key do |key|
-      next unless configuration.match(key)
+      next unless adapter.environment_variables.has_key?(key)
 
       if dry_run
         shell.say_status 'remove', key, :blue
       else
         shell.say_status 'remove', key, :green
-        shell.say heroku("config:unset #{key}")
+
+        adapter.remove_environment_variable(key)
       end
     end
   end
