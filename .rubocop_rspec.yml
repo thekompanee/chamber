@@ -1,7 +1,11 @@
-# Last updated to 1.31.0
+# Last updated to 1.33.0
 
 require:
   - 'rubocop-rspec'
+
+################################################################################
+#                                  RSPEC
+################################################################################
 
 Capybara/FeatureMethods:
   Enabled:                        true
@@ -48,7 +52,10 @@ RSpec/ContextWording:
   Enabled:                        true
   Prefixes:
     - 'administrators'
+    - 'and'
     - 'anyone'
+    - 'but'
+    - 'or'
     - 'regular users'
     - 'when'
     - 'with'
@@ -67,6 +74,10 @@ RSpec/DescribedClass:
   Enabled:                        true
   SkipBlocks:                     false
   EnforcedStyle:                  'explicit'
+
+RSpec/Dialect:
+  Enabled:                        true
+  PreferredMethods:               {}
 
 RSpec/EmptyExampleGroup:
   Enabled:                        false
@@ -194,7 +205,7 @@ RSpec/NamedSubject:
 
 RSpec/NestedGroups:
   Enabled:                        true
-  Max:                            1
+  Max:                            2
 
 RSpec/NotToNot:
   Enabled:                        true
