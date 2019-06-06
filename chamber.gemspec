@@ -19,9 +19,17 @@ Gem::Specification.new do |spec|
   spec.executables   = ['chamber']
   spec.files         = Dir['{app,config,db,lib,templates}/**/*'] + %w{README.md LICENSE.txt}
 
-  spec.metadata['allowed_push_host'] = 'https://rubygems.org'
+  spec.metadata      = {
+    'allowed_push_host' => 'https://rubygems.org',
+    'bug_tracker_uri'   => 'https://github.com/thekompanee/chamber/issues',
+    'changelog_uri'     => 'https://github.com/thekompanee/chamber/blob/master/CHANGELOG.md',
+    'documentation_uri' => 'https://github.com/thekompanee/chamber/tree/releases/v2.13.0',
+    'homepage_uri'      => 'https://github.com/thekompanee/chamber',
+    'source_code_uri'   => 'https://github.com/thekompanee/chamber',
+    'wiki_uri'          => 'https://github.com/thekompanee/chamber/wiki',
+  }
 
-  spec.add_dependency             'thor',          ["< 0.21", ">= 0.19.1"]
+  spec.add_dependency             'thor',          [">= 0.19.1", "< 0.21"]
   spec.add_dependency             'hashie',        ["~> 3.3"]
 
   spec.add_development_dependency 'rspec',         ["~> 3.5"]
