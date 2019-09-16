@@ -79,9 +79,11 @@ class   DecryptionFilter
     method = decryption_method(value)
 
     decryption_keys.each do |decryption_key|
-      return method.decrypt(key, value, decryption_key)
-    rescue OpenSSL::PKey::RSAError
-      next
+      begin
+        return method.decrypt(key, value, decryption_key)
+      rescue OpenSSL::PKey::RSAError
+        next
+      end
     end
 
     value
