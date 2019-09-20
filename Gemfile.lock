@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    chamber (2.13.0)
+    chamber (2.13.1)
       hashie (~> 3.3)
       thor (>= 0.19.1, < 0.21)
 
