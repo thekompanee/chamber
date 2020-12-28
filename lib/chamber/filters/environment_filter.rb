@@ -162,7 +162,7 @@ class   EnvironmentFilter
           fail ArgumentError, "Invalid value for Array: #{environment_value}"
         end
       end
-    when 'Integer'
+    when 'Fixnum', 'Integer'
       Integer(environment_value)
     else
       environment_value

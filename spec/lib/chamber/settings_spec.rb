@@ -195,7 +195,7 @@ THERE: 'was not that easy?'
      'a Hash' do
     settings = Settings.new(settings: { setting: 'value' })
 
-    settings_hash = settings.to_hash
+    settings_hash            = settings.to_hash
     settings_hash['setting'] = 'foo'
 
     expect(settings.__send__(:data).object_id).not_to eql settings_hash.object_id
@@ -361,8 +361,8 @@ THERE: 'was not that easy?'
                  },
                )
 
-    expect { settings.my_encrypted_setting }.
-      to raise_error Chamber::Errors::DecryptionFailure
+    expect { settings.my_encrypted_setting }
+      .to raise_error Chamber::Errors::DecryptionFailure
   end
 
   it 'prefers environment variable values over encrypted values' do

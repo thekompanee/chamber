@@ -68,12 +68,12 @@ describe  EncryptionFilter do
                                )
 
     expect(EncryptionMethods::PublicKey)
-      .to have_received(:encrypt).
-            with(:_secure_setting, 'hello development', development_key)
+      .to have_received(:encrypt)
+            .with(:_secure_setting, 'hello development', development_key)
 
     expect(EncryptionMethods::PublicKey)
-      .to have_received(:encrypt).
-            with(:_secure_setting, 'hello other', default_key)
+      .to have_received(:encrypt)
+            .with(:_secure_setting, 'hello other', default_key)
 
     expect(filtered_settings.development.sub_key.sub_sub_key._secure_setting)
       .to match EncryptionFilter::BASE64_STRING_PATTERN

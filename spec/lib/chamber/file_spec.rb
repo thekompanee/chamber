@@ -21,34 +21,34 @@ describe  File do
     tempfile      = create_tempfile_with_content '{ test: settings }'
     settings_file = File.new path: tempfile.path
 
-    allow(Settings).to receive(:new).
-                         and_return :settings
+    allow(Settings).to receive(:new)
+                         .and_return :settings
 
     file_settings = settings_file.to_settings
 
     expect(file_settings).to  be :settings
-    expect(Settings).to       have_received(:new).
-                                with(settings:        { 'test' => 'settings' },
-                                     namespaces:      {},
-                                     decryption_keys: {},
-                                     encryption_keys: {})
+    expect(Settings).to       have_received(:new)
+                                .with(settings:        { 'test' => 'settings' },
+                                      namespaces:      {},
+                                      decryption_keys: {},
+                                      encryption_keys: {})
   end
 
   it 'can convert a file whose contents are empty' do
     tempfile      = create_tempfile_with_content ''
     settings_file = File.new path: tempfile.path
 
-    allow(Settings).to receive(:new).
-                         and_return :settings
+    allow(Settings).to receive(:new)
+                         .and_return :settings
 
     file_settings = settings_file.to_settings
 
     expect(file_settings).to  be :settings
-    expect(Settings).to       have_received(:new).
-                                with(settings:        {},
-                                     namespaces:      {},
-                                     decryption_keys: {},
-                                     encryption_keys: {})
+    expect(Settings).to       have_received(:new)
+                                .with(settings:        {},
+                                      namespaces:      {},
+                                      decryption_keys: {},
+                                      encryption_keys: {})
   end
 
   it 'throws an error when the file contents are malformed' do
@@ -69,13 +69,13 @@ describe  File do
 
     settings_file.to_settings
 
-    expect(Settings).to have_received(:new).
-                          with(settings:        { 'test' => 'settings' },
-                               namespaces:      {
-                                 environment: :development,
-                               },
-                               decryption_keys: {},
-                               encryption_keys: {})
+    expect(Settings).to have_received(:new)
+                          .with(settings:        { 'test' => 'settings' },
+                                namespaces:      {
+                                  environment: :development,
+                                },
+                                decryption_keys: {},
+                                encryption_keys: {})
   end
 
   it 'can handle files which contain ERB markup' do
@@ -85,27 +85,27 @@ describe  File do
     allow(Settings).to receive(:new)
 
     settings_file.to_settings
-    expect(Settings).to have_received(:new).
-                          with(settings:        { 'test' => 2 },
-                               namespaces:      {},
-                               decryption_keys: {},
-                               encryption_keys: {})
+    expect(Settings).to have_received(:new)
+                          .with(settings:        { 'test' => 2 },
+                                namespaces:      {},
+                                decryption_keys: {},
+                                encryption_keys: {})
   end
 
   it 'does not throw an error when attempting to convert a file which does not exist' do
     settings_file = File.new path: 'no/path'
 
-    allow(Settings).to receive(:new).
-                         and_return :settings
+    allow(Settings).to receive(:new)
+                         .and_return :settings
 
     file_settings = settings_file.to_settings
 
     expect(file_settings).to  be :settings
-    expect(Settings).to       have_received(:new).
-                                with(settings:        {},
-                                     namespaces:      {},
-                                     decryption_keys: {},
-                                     encryption_keys: {})
+    expect(Settings).to       have_received(:new)
+                                .with(settings:        {},
+                                      namespaces:      {},
+                                      decryption_keys: {},
+                                      encryption_keys: {})
   end
 
   it 'can securely encrypt the settings contained in a file' do
@@ -118,7 +118,7 @@ _secure_setting: hello
 
     settings_file.secure
 
-    settings_file = File.new path:           tempfile.path
+    settings_file = File.new path: tempfile.path
 
     expect(settings_file.to_settings.__send__(:raw_data)['_secure_setting']).to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
@@ -279,8 +279,8 @@ stuff:
                               decryption_keys: { foo: './spec/spec_key' }
 
     expect { settings_file.sign }.to \
-      raise_error(ArgumentError).
-        with_message('You asked to sign your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
+      raise_error(ArgumentError)
+        .with_message('You asked to sign your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
   end
 
   it 'can verify a signature file', :time_mock do
@@ -321,8 +321,8 @@ stuff:
                               encryption_keys: { foo: './spec/spec_key.pub' }
 
     expect { settings_file.verify }.to \
-      raise_error(ArgumentError).
-        with_message('You asked to verify your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
+      raise_error(ArgumentError)
+        .with_message('You asked to verify your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
   end
 end
 end

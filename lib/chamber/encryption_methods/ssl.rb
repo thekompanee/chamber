@@ -17,11 +17,11 @@ class   Ssl
                               /x.freeze
 
   def self.encrypt(_key, value, encryption_keys) # rubocop:disable Metrics/AbcSize
-    value = YAML.dump(value)
-    cipher = OpenSSL::Cipher.new('AES-128-CBC')
+    value         = YAML.dump(value)
+    cipher        = OpenSSL::Cipher.new('AES-128-CBC')
     cipher.encrypt
     symmetric_key = cipher.random_key
-    iv = cipher.random_iv
+    iv            = cipher.random_iv
 
     # encrypt all data with this key and iv
     encrypted_data = cipher.update(value) + cipher.final
@@ -39,20 +39,20 @@ class   Ssl
     if decryption_keys.nil?
       value
     else
-      key, iv, decoded_string = value.
-                                  match(LARGE_DATA_STRING_PATTERN).
-                                  captures.
-                                  map do |part|
+      key, iv, decoded_string = value
+                                  .match(LARGE_DATA_STRING_PATTERN)
+                                  .captures
+                                  .map do |part|
         Base64.strict_decode64(part)
       end
-      key = decryption_keys.private_decrypt(key)
+      key                     = decryption_keys.private_decrypt(key)
 
       cipher_dec = OpenSSL::Cipher.new('AES-128-CBC')
 
       cipher_dec.decrypt
 
       cipher_dec.key = key
-      cipher_dec.iv = iv
+      cipher_dec.iv  = iv
 
       begin
         unencrypted_value = cipher_dec.update(decoded_string) + cipher_dec.final

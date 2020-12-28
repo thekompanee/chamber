@@ -36,8 +36,8 @@ describe  Secured do
 
   it 'fails if passed something that it cannot be cast' do
     expect { secured_type.cast(3) }.to \
-      raise_error(ArgumentError).
-        with_message('Any attributes encrypted with Chamber must ' \
+      raise_error(ArgumentError)
+        .with_message('Any attributes encrypted with Chamber must ' \
                      'be either a Hash or a valid JSON string')
   end
 

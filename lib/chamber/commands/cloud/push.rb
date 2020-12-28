@@ -20,10 +20,10 @@ class   Push < Chamber::Commands::Cloud::Base
 
   def call
     environment_variables = if keys
-                              Keys::Decryption.
-                                new(rootpath:   chamber.configuration.rootpath,
-                                    namespaces: chamber.configuration.namespaces).
-                                as_environment_variables
+                              Keys::Decryption
+                                .new(rootpath:   chamber.configuration.rootpath,
+                                     namespaces: chamber.configuration.namespaces)
+                                .as_environment_variables
                             else
                               securable_environment_variables
                             end

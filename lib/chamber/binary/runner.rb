@@ -62,17 +62,17 @@ class   Runner < Thor
 
   ################################################################################
 
-  desc 'travis SUBCOMMAND ...ARGS',   'For manipulating Travis CI environment variables'
+  desc 'travis SUBCOMMAND ...ARGS', 'For manipulating Travis CI environment variables'
   subcommand 'travis', Chamber::Binary::Travis
 
   ################################################################################
 
-  desc 'heroku SUBCOMMAND ...ARGS',   'For manipulating Heroku environment variables'
+  desc 'heroku SUBCOMMAND ...ARGS', 'For manipulating Heroku environment variables'
   subcommand 'heroku', Chamber::Binary::Heroku
 
   ################################################################################
 
-  desc 'circleci SUBCOMMAND ...ARGS',   'For manipulating CircleCI environment variables'
+  desc 'circleci SUBCOMMAND ...ARGS', 'For manipulating CircleCI environment variables'
   subcommand 'circleci', Chamber::Binary::CircleCi
 
   ################################################################################

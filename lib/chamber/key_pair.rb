@@ -78,9 +78,9 @@ class  KeyPair
     @base_key_filename ||= [
                              '.chamber',
                              namespace ? namespace.tr('-.', '') : nil,
-                           ].
-                             compact.
-                             join('.')
+                           ]
+                             .compact
+                             .join('.')
   end
 end
 end

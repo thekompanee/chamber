@@ -90,14 +90,14 @@ class   File < Pathname
       escaped_name  = Regexp.escape(name_pieces.last)
       escaped_value = Regexp.escape(value)
 
-      file_contents.
-        sub!(
+      file_contents
+        .sub!(
           /^(\s*)#{secure_prefix_pattern}#{escaped_name}(\s*):(\s*)['"]?#{escaped_value}['"]?$/,
           "\\1#{secure_prefix}#{name_pieces.last}\\2:\\3#{secure_value}",
         )
 
-      file_contents.
-        sub!(
+      file_contents
+        .sub!(
           /^(\s*)#{secure_prefix_pattern}#{escaped_name}(\s*):(\s*)\|((?:\n\1\s{2}.*)+)/,
           "\\1#{secure_prefix}#{name_pieces.last}\\2:\\3#{secure_value}",
         )

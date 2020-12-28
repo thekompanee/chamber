@@ -39,7 +39,7 @@ describe  Encryption do
                              namespaces: [],
                              filenames:  'spec/fixtures/keys/.chamber.test.pub.pem')
 
-    expect(key).to eql(test:    "test public key\n")
+    expect(key).to eql(test: "test public key\n")
   end
 
   it 'can find namespaced key files by reading the environment' do
@@ -63,7 +63,7 @@ describe  Encryption do
 
   it 'can find namespaced key files when the namespace is a symbol' do
     key = Encryption.resolve(rootpath:   'spec/fixtures/keys/',
-                             namespaces: [:'example-host.com'])
+                             namespaces: %i{example-host.com})
 
     expect(key).to include(examplehostcom: "example-host.com public key\n")
   end

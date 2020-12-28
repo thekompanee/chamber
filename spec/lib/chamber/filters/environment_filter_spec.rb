@@ -185,7 +185,7 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
     }.to \
       raise_error(Chamber::Errors::EnvironmentConversion)
         .with_message(<<-HEREDOC)
-We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foo' to a 'Integer'.
+We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foo' to a '#{1.class.name}'.
 
 Unfortunately, this did not go as planned.  Please either verify that your value is convertable
 or change the original YAML value to be something more generic (like a String).

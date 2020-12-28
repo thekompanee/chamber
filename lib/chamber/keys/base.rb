@@ -41,9 +41,9 @@ class   Base
 
   # rubocop:disable Performance/ChainArrayAllocation
   def filenames=(other)
-    @filenames = Array(other).
-                   map { |o| Pathname.new(o) }.
-                   compact
+    @filenames = Array(other)
+                   .map { |o| Pathname.new(o) }
+                   .compact
   end
   # rubocop:enable Performance/ChainArrayAllocation
 
@@ -52,10 +52,10 @@ class   Base
   end
 
   def namespace_from_path(path)
-    path.
-      basename.
-      to_s.
-      match(self.class::NAMESPACE_PATTERN) { |m| m[1].upcase }
+    path
+      .basename
+      .to_s
+      .match(self.class::NAMESPACE_PATTERN) { |m| m[1].upcase }
   end
 
   def namespace_to_key_path(namespace)

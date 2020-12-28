@@ -1,11 +1,7 @@
 ---
 
-Layout/DotPosition:
-  Enabled:            false
-
-Layout/ExtraSpacing:
-  Enabled:            false
-
+# <<~HEREDOC Introduced In Ruby 2.3
+# https://github.com/ruby/ruby/commit/9a28a29b870b5f45d370bc8f16c431b435f0bbb3
 Layout/HeredocIndentation:
   Enabled:            false
 
@@ -15,23 +11,18 @@ Lint/EmptyFile:
     - 'spec/rails-3-test/config.ru'
     - 'spec/rails-4-test/config.ru'
 
+# Introduced In Ruby 2.4
+# https://apidock.com/ruby/v2_4_6/String/match%3F
 Performance/RegexpMatch:
   Enabled:            false
 
-Style/ConstantVisibility:
-  Enabled:            false
-
+# Introduced In Ruby 2.4
+# https://apidock.com/ruby/v2_4_6/Hash/transform_values
 Style/HashTransformValues:
-  Enabled:            false
-
-Style/InlineComment:
   Enabled:            false
 
 Style/StringConcatenation:
   Enabled:            false
-
-Style/SymbolArray:
-  EnforcedStyle:      'brackets'
 
 Style/OptionHash:
   Enabled:            false

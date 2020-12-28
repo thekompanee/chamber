@@ -63,20 +63,20 @@ Signed At: #{Time.now.utc.iso8601}
   end
 
   def raw_signature
-    @raw_signature ||= signature_key.
-                         sign(digest, settings_content)
+    @raw_signature ||= signature_key
+                         .sign(digest, settings_content)
   end
 
   def signature_filename
-    @signature_filename ||= settings_filename.
-                              sub('.yml', '.sig').
-                              sub('.erb', '')
+    @signature_filename ||= settings_filename
+                              .sub('.yml', '.sig')
+                              .sub('.erb', '')
   end
 
   def encoded_signature_content
-    @encoded_signature_content ||= signature_filename.
-                                     read.
-                                     match(SIGNATURE_IN_FILE_PATTERN) do |match|
+    @encoded_signature_content ||= signature_filename
+                                     .read
+                                     .match(SIGNATURE_IN_FILE_PATTERN) do |match|
       match[1]
     end
   end

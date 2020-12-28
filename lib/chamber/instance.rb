@@ -37,22 +37,22 @@ class   Instance
   def encrypt(data, options = {})
     config = configuration.to_hash.merge(options)
 
-    Settings.
-      new(
+    Settings
+      .new(
         config.merge(
           settings:     data,
           pre_filters:  [Filters::EncryptionFilter],
           post_filters: [],
         ),
-      ).
-      to_hash
+      )
+      .to_hash
   end
 
   def decrypt(data, options = {})
     config = configuration.to_hash.merge(options)
 
-    Settings.
-      new(
+    Settings
+      .new(
         config.merge(
           settings:     data,
           pre_filters:  [Filters::NamespaceFilter],
@@ -61,8 +61,8 @@ class   Instance
                           Filters::FailedDecryptionFilter,
                         ],
         ),
-      ).
-      to_hash
+      )
+      .to_hash
   end
 
   def to_s(options = {})

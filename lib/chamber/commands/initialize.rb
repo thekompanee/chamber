@@ -78,24 +78,24 @@ class   Initialize < Chamber::Commands::Base
       shell.say 'Your signature keys, which will be used for verification, are located at:'
       shell.say ''
       shell.say '  * Public Key:            '
-      shell.say signature_key_pair.
-                  public_key_filepath.
-                  relative_path_from(Pathname.pwd),
+      shell.say signature_key_pair
+                  .public_key_filepath
+                  .relative_path_from(Pathname.pwd),
                 :yellow
       shell.say '  * Private Key:           '
-      shell.say signature_key_pair.
-                  unencrypted_private_key_filepath.
-                  relative_path_from(Pathname.pwd),
+      shell.say signature_key_pair
+                  .unencrypted_private_key_filepath
+                  .relative_path_from(Pathname.pwd),
                 :yellow
       shell.say '  * Encrypted Private Key: '
-      shell.say signature_key_pair.
-                  encrypted_private_key_filepath.
-                  relative_path_from(Pathname.pwd),
+      shell.say signature_key_pair
+                  .encrypted_private_key_filepath
+                  .relative_path_from(Pathname.pwd),
                 :yellow
       shell.say '  * Encrypted Passphrase:  '
-      shell.say signature_key_pair.
-                  encrypted_private_key_passphrase_filepath.
-                  relative_path_from(Pathname.pwd),
+      shell.say signature_key_pair
+                  .encrypted_private_key_passphrase_filepath
+                  .relative_path_from(Pathname.pwd),
                 :yellow
 
       shell.say ''

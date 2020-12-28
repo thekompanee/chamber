@@ -20,10 +20,10 @@ class   Show < Chamber::Commands::Base
     if as_env
       settings.to_s(pair_separator: "\n")
     else
-      PP.
-        pp(settings.to_hash, StringIO.new, 60).
-        string.
-        chomp
+      PP
+        .pp(settings.to_hash, StringIO.new, 60)
+        .string
+        .chomp
     end
   end
 

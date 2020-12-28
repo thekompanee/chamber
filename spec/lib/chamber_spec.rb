@@ -123,7 +123,7 @@ describe Chamber do
   end
 
   it 'prefers values stored in environment variables over those in the YAML files' do
-    ENV['TEST_MY_SETTING'] = 'some_other_value'
+    ENV['TEST_MY_SETTING']                         = 'some_other_value'
     ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = '[1, 2, 3]'
 
     Chamber.load(basepath: '/tmp/chamber')

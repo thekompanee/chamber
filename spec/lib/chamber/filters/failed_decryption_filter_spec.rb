@@ -20,8 +20,8 @@ describe  FailedDecryptionFilter do
                                      'TcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
         },
       )
-    }.
-      to raise_error Chamber::Errors::DecryptionFailure
+    }
+      .to raise_error Chamber::Errors::DecryptionFailure
   end
 
   it 'does not raise an exception if it is not a secure key' do
@@ -38,8 +38,8 @@ describe  FailedDecryptionFilter do
                              'TcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
         },
       )
-    }.
-      not_to raise_error
+    }
+      .not_to raise_error
   end
 
   it 'does not raise an exception if it is not a secure value' do
@@ -50,8 +50,8 @@ describe  FailedDecryptionFilter do
           _secure_my_secure_setting: 'hello',
         },
       )
-    }.
-      not_to raise_error
+    }
+      .not_to raise_error
   end
 end
 end

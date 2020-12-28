@@ -22,9 +22,9 @@ class   Decryption < Chamber::Keys::Base
       'CHAMBER',
       namespace_from_path(path),
       'KEY',
-    ].
-      compact.
-      join('_')
+    ]
+      .compact
+      .join('_')
   end
 
   def key_filename_extension
