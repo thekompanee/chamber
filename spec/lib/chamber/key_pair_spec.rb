@@ -8,38 +8,41 @@ describe KeyPair do
   it 'can generate a private key' do
     key_pair = KeyPair.new(key_file_path: './tmp/')
 
-    expect(key_pair.unencrypted_private_key_pem).to match(
-      /
-        -----BEGIN\sRSA\sPRIVATE\sKEY-----\n # Private Key Header
-        .*                                   # Any Key Contents
-        -----END\sRSA\sPRIVATE\sKEY-----\n   # Private Key Footer
-      /xm,
-    )
+    expect(key_pair.unencrypted_private_key_pem)
+      .to match(
+            /
+              -----BEGIN\sRSA\sPRIVATE\sKEY-----\n # Private Key Header
+              .*                                   # Any Key Contents
+              -----END\sRSA\sPRIVATE\sKEY-----\n   # Private Key Footer
+            /xm,
+          )
   end
 
   it 'can generate a encrypted private key' do
     key_pair = KeyPair.new(key_file_path: './tmp/')
 
-    expect(key_pair.encrypted_private_key_pem).to match(
-      /
-        -----BEGIN\sRSA\sPRIVATE\sKEY-----\n # Private Key Header
-        Proc-Type:\s4,ENCRYPTED\n            # Encryption Header
-        .*                                   # Any Key Contents
-        -----END\sRSA\sPRIVATE\sKEY-----\n   # Private Key Footer
-      /xm,
-    )
+    expect(key_pair.encrypted_private_key_pem)
+      .to match(
+            /
+              -----BEGIN\sRSA\sPRIVATE\sKEY-----\n # Private Key Header
+              Proc-Type:\s4,ENCRYPTED\n            # Encryption Header
+              .*                                   # Any Key Contents
+              -----END\sRSA\sPRIVATE\sKEY-----\n   # Private Key Footer
+            /xm,
+          )
   end
 
   it 'can generate a public key' do
     key_pair = KeyPair.new(key_file_path: './tmp/')
 
-    expect(key_pair.public_key_pem).to match(
-      /
-        -----BEGIN\sPUBLIC\sKEY----- # Public Key Header
-        .*                           # Any Key Contents
-        -----END\sPUBLIC\sKEY-----\n # Public Key Footer
-      /xm,
-    )
+    expect(key_pair.public_key_pem)
+      .to match(
+            /
+              -----BEGIN\sPUBLIC\sKEY----- # Public Key Header
+              .*                           # Any Key Contents
+              -----END\sPUBLIC\sKEY-----\n # Public Key Footer
+            /xm,
+          )
   end
 
   it 'can construct a default private key filepath' do

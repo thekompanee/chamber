@@ -6,7 +6,7 @@ require 'fileutils'
 
 module    Chamber
 module    Commands
-describe  Secure do
+describe  Secure do # rubocop:disable RSpec/MultipleMemoizedHelpers
   let(:rootpath)           { Pathname.new(::File.expand_path('./spec/fixtures')) }
   let(:settings_directory) { rootpath + 'settings' }
   let(:settings_filename)  { settings_directory + 'unencrypted.yml' }
@@ -35,8 +35,8 @@ test:
 
     Secure.call(options)
 
-    expect(settings_filename.read).
-      to match %r{_secure_my_unencrpyted_setting: [A-Za-z0-9\+\/]{342}==}
+    expect(settings_filename.read)
+      .to match %r{_secure_my_unencrpyted_setting: [A-Za-z0-9+/]{342}==}
   end
 end
 end

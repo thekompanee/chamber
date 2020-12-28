@@ -27,7 +27,7 @@ class   Initialize < Chamber::Commands::Base
     self.signature  = options.fetch(:signature)
   end
 
-  # rubocop:disable Layout/LineLength, Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Layout/LineLength, Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
   def call
     key_pairs = namespaces.map do |namespace|
       Chamber::KeyPair.new(namespace:     namespace,
@@ -80,19 +80,23 @@ class   Initialize < Chamber::Commands::Base
       shell.say '  * Public Key:            '
       shell.say signature_key_pair.
                   public_key_filepath.
-                  relative_path_from(Pathname.pwd), :yellow
+                  relative_path_from(Pathname.pwd),
+                :yellow
       shell.say '  * Private Key:           '
       shell.say signature_key_pair.
                   unencrypted_private_key_filepath.
-                  relative_path_from(Pathname.pwd), :yellow
+                  relative_path_from(Pathname.pwd),
+                :yellow
       shell.say '  * Encrypted Private Key: '
       shell.say signature_key_pair.
                   encrypted_private_key_filepath.
-                  relative_path_from(Pathname.pwd), :yellow
+                  relative_path_from(Pathname.pwd),
+                :yellow
       shell.say '  * Encrypted Passphrase:  '
       shell.say signature_key_pair.
                   encrypted_private_key_passphrase_filepath.
-                  relative_path_from(Pathname.pwd), :yellow
+                  relative_path_from(Pathname.pwd),
+                :yellow
 
       shell.say ''
       shell.say 'The signature private keys should be thought of separately from the other'
@@ -153,7 +157,7 @@ class   Initialize < Chamber::Commands::Base
     shell.say '--------------------------------------------------------------------------------'
     shell.say ''
   end
-  # rubocop:enable Layout/LineLength, Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Layout/LineLength, Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
 
   protected
 
@@ -178,7 +182,7 @@ class   Initialize < Chamber::Commands::Base
   end
 
   def append_to_gitignore
-    ::FileUtils.touch gitignore_filepath
+    ::FileUtils.touch(gitignore_filepath)
 
     gitignore_contents = ::File.read(gitignore_filepath)
 
@@ -206,7 +210,7 @@ class   Initialize < Chamber::Commands::Base
 
   def gem_path
     @gem_path                   ||= Pathname.new(
-                                      ::File.expand_path('../../../..', __FILE__),
+                                      ::File.expand_path('../../..', __dir__),
                                     )
   end
 

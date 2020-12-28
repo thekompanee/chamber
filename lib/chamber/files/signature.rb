@@ -8,9 +8,9 @@ module Chamber
 module Files
 class  Signature
   SIGNATURE_HEADER          = '-----BEGIN CHAMBER SIGNATURE-----'
-  SIGNATURE_HEADER_PATTERN  = /\-\-\-\-\-BEGIN\sCHAMBER\sSIGNATURE\-\-\-\-\-/.freeze
+  SIGNATURE_HEADER_PATTERN  = /-----BEGIN\sCHAMBER\sSIGNATURE-----/.freeze
   SIGNATURE_FOOTER          = '-----END CHAMBER SIGNATURE-----'
-  SIGNATURE_FOOTER_PATTERN  = /\-\-\-\-\-END\sCHAMBER\sSIGNATURE\-\-\-\-\-/.freeze
+  SIGNATURE_FOOTER_PATTERN  = /-----END\sCHAMBER\sSIGNATURE-----/.freeze
   SIGNATURE_IN_FILE_PATTERN = /
                                 #{SIGNATURE_HEADER_PATTERN}\n # Header
                                 (.*)\n                        # Signature Body
@@ -84,7 +84,7 @@ Signed At: #{Time.now.utc.iso8601}
   end
 
   def digest
-    @digest ||= OpenSSL::Digest::SHA512.new
+    @digest ||= OpenSSL::Digest.new('SHA512')
   end
 end
 end

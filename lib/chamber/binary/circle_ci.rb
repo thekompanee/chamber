@@ -36,8 +36,9 @@ class   CircleCi < Thor
                desc:    'The type of VCS your project is using.',
                enum:    %w{github bitbucket}
 
-  desc 'clear', 'Removes all CircleCi environment variables which match settings that ' \
-                'Chamber knows about'
+  desc 'clear',
+       'Removes all CircleCi environment variables which match settings that Chamber ' \
+       'knows about'
 
   method_option :dry_run,
                 type:    :boolean,
@@ -49,8 +50,9 @@ class   CircleCi < Thor
     Commands::Cloud::Clear.call(options.merge(shell: self, adapter: 'circle_ci'))
   end
 
-  desc 'push', 'Sends settings to CircleCi so that they may be used in the application ' \
-               'once it is deployed'
+  desc 'push',
+       'Sends settings to CircleCi so that they may be used in the application ' \
+       'once it is deployed'
 
   method_option :dry_run,
                 type:    :boolean,
@@ -78,8 +80,9 @@ class   CircleCi < Thor
     Commands::Cloud::Push.call(options.merge(shell: self, adapter: 'circle_ci'))
   end
 
-  desc 'pull', 'Retrieves the environment variables for the application and stores ' \
-               'them in a temporary file'
+  desc 'pull',
+       'Retrieves the environment variables for the application and stores them in a ' \
+       'temporary file'
 
   method_option :into,
                 type: :string,
@@ -90,8 +93,9 @@ class   CircleCi < Thor
     Commands::Cloud::Pull.call(options.merge(shell: self, adapter: 'circle_ci'))
   end
 
-  desc 'compare', 'Displays the difference between what is currently stored in the ' \
-                  'CircleCi application\'s config and what Chamber knows about locally'
+  desc 'compare',
+       'Displays the difference between what is currently stored in the ' \
+       'CircleCi application\'s config and what Chamber knows about locally'
 
   method_option :only_sensitive,
                 type:    :boolean,

@@ -15,7 +15,7 @@ class   ContextResolver
     self.options = options.transform_keys(&:to_sym)
   end
 
-  # rubocop:disable Metrics/AbcSize, Layout/LineLength
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Layout/LineLength
   def resolve
     options[:rootpath]   ||= Pathname.pwd
     options[:rootpath]     = Pathname.new(options[:rootpath])
@@ -45,7 +45,7 @@ class   ContextResolver
 
     options
   end
-  # rubocop:enable Metrics/AbcSize, Layout/LineLength
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Layout/LineLength
 
   def self.resolve(options = {})
     new(options).resolve

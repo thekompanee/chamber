@@ -7,7 +7,7 @@ require 'chamber/commands/sign'
 
 module    Chamber
 module    Commands
-describe  Sign do
+describe  Sign do # rubocop:disable RSpec/MultipleMemoizedHelpers
   let(:rootpath)           { Pathname.new(::File.expand_path("./tmp/fixtures-#{SecureRandom.uuid}")) }
   let(:settings_directory) { rootpath + 'settings' }
   let(:settings_filename)  { settings_directory + 'settings.yml' }

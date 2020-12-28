@@ -61,7 +61,7 @@ describe CircleCi do
     expect {
       adapter.add_environment_variable(invalid_environment_key, '12341234')
     }.to raise_error(NameError)
-           .with_message("The variable name &apos;12345=!&apos; is invalid")
+           .with_message('The variable name &apos;12345=!&apos; is invalid')
   end
 
   it 'can remove environment variables' do

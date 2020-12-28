@@ -168,12 +168,12 @@ describe  Decryption do
           )
 
     expect(key).to eql(
-                        __default:      "default private key\n",
-                        development:    "development private key\n",
-                        examplehostcom: "example-host.com private key\n",
-                        production:     "production private key\n",
-                        test:           "test private key\n",
-                      )
+                     __default:      "default private key\n",
+                     development:    "development private key\n",
+                     examplehostcom: "example-host.com private key\n",
+                     production:     "production private key\n",
+                     test:           "test private key\n",
+                   )
   end
 
   it 'skips a key if it cannot be found' do
@@ -189,10 +189,10 @@ describe  Decryption do
           )
 
     expect(key).to eql(
-                        __default:   "default private key\n",
-                        development: "development private key\n",
-                        test:        "test private key\n",
-                      )
+                     __default:   "default private key\n",
+                     development: "development private key\n",
+                     test:        "test private key\n",
+                   )
   end
 end
 end

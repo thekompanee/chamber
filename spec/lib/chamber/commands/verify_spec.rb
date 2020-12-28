@@ -7,7 +7,7 @@ require 'chamber/commands/verify'
 
 module    Chamber
 module    Commands
-describe  Verify do
+describe  Verify do # rubocop:disable RSpec/MultipleMemoizedHelpers
   let(:rootpath)           { Pathname.new(::File.expand_path("./tmp/fixtures-#{SecureRandom.uuid}")) }
   let(:settings_directory) { rootpath + 'settings' }
   let(:settings_filename)  { settings_directory + 'settings.yml' }
@@ -48,8 +48,8 @@ QhGPAea/1RQZnh8ES+Esmr3ZssBtZJvxp+yW7wUMHc2D5Mq9SzLymuwSxLtOGuJsqlxMWW0FaOIK1F0A
     result = Verify.call(options)
 
     expect(result).to eql(
-      'settings/settings.yml' => true,
-    )
+                        'settings/settings.yml' => true,
+                      )
   end
 end
 end

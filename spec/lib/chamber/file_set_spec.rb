@@ -7,17 +7,17 @@ require 'fileutils'
 module    Chamber
 describe  FileSet do
   before(:each) do
-    FileUtils.mkdir '/tmp/settings' unless ::File.exist? '/tmp/settings'
-    FileUtils.mkdir '/tmp/dash-set' unless ::File.exist? '/tmp/dash-set'
+    ::FileUtils.mkdir('/tmp/settings') unless ::File.exist?('/tmp/settings')
+    ::FileUtils.mkdir('/tmp/dash-set') unless ::File.exist?('/tmp/dash-set')
   end
 
-  after(:each)  { FileUtils.rm_rf '/tmp/settings' if ::File.exist? '/tmp/settings' }
+  after(:each) { ::FileUtils.rm_rf('/tmp/settings') if ::File.exist?('/tmp/settings') }
 
   it 'can consider directories containing YAML files' do
     ::File.new('/tmp/settings/some_settings_file.yml', 'w+')
     ::File.new('/tmp/settings/another_settings_file.yml', 'w+')
 
-    file_set = FileSet.new files: '/tmp/settings'
+    file_set = FileSet.new(files: '/tmp/settings')
 
     expect(file_set.filenames).to eql [
                                         '/tmp/settings/another_settings_file.yml',
@@ -31,7 +31,7 @@ describe  FileSet do
     ::File.new('/tmp/settings/some_settings_file.yml', 'w+')
     ::File.new('/tmp/settings/another_settings_file.yml', 'w+')
 
-    file_set = FileSet.new files: '/tmp/settings/*.yml'
+    file_set = FileSet.new(files: '/tmp/settings/*.yml')
 
     expect(file_set.filenames).to eql [
                                         '/tmp/settings/another_settings_file.yml',
@@ -45,7 +45,7 @@ describe  FileSet do
     ::File.new('/tmp/settings/some_settings_file.yml', 'w+')
     ::File.new('/tmp/settings/another_settings_file.yml.erb', 'w+')
 
-    file_set = FileSet.new files: '/tmp/settings'
+    file_set = FileSet.new(files: '/tmp/settings')
 
     expect(file_set.filenames).to eql [
                                         '/tmp/settings/another_settings_file.yml.erb',
@@ -58,8 +58,8 @@ describe  FileSet do
   it 'can consider namespaced files' do
     ::File.new('/tmp/settings/settings-blue.yml', 'w+')
 
-    file_set = FileSet.new files:      '/tmp/settings/settings-blue.yml',
-                           namespaces: %w{blue}
+    file_set = FileSet.new(files:      '/tmp/settings/settings-blue.yml',
+                           namespaces: %w{blue})
 
     expect(file_set.filenames).to eql [
                                         '/tmp/settings/settings-blue.yml',
@@ -71,8 +71,8 @@ describe  FileSet do
   it 'does not consider namespaced files which are not relevant' do
     ::File.new('/tmp/settings/settings-blue.yml', 'w+')
 
-    file_set = FileSet.new files:      '/tmp/settings/settings-blue.yml',
-                           namespaces: %w{green}
+    file_set = FileSet.new(files:      '/tmp/settings/settings-blue.yml',
+                           namespaces: %w{green})
 
     expect(file_set.filenames).to be_empty
 
@@ -81,11 +81,10 @@ describe  FileSet do
 
   it 'does not consider non-namespaced files which have dashes in their paths as ' \
      'namespaced' do
-
     ::File.new('/tmp/dash-set/settings.yml', 'w+')
 
-    file_set = FileSet.new files:      '/tmp/dash-set/settings*.yml',
-                           namespaces: %w{blue}
+    file_set = FileSet.new(files:      '/tmp/dash-set/settings*.yml',
+                           namespaces: %w{blue})
 
     expect(file_set.filenames).to eql [
                                         '/tmp/dash-set/settings.yml',
@@ -97,10 +96,10 @@ describe  FileSet do
   it 'removes any duplicate files' do
     ::File.new('/tmp/settings.yml', 'w+')
 
-    file_set = FileSet.new files: [
+    file_set = FileSet.new(files: [
                                     '/tmp/settings.yml',
                                     '/tmp/settings.yml',
-                                  ]
+                                  ])
 
     expect(file_set.filenames).to eql [
                                         '/tmp/settings.yml',
@@ -113,10 +112,10 @@ describe  FileSet do
     ::File.new('/tmp/settings.yml', 'w+')
     ::File.new('/tmp/settings/new_file.yml', 'w+')
 
-    file_set = FileSet.new files: [
+    file_set = FileSet.new(files: [
                                     '/tmp/settings.yml',
                                     '/tmp/settings/*.yml',
-                                  ]
+                                  ])
 
     expect(file_set.filenames).to eql [
                                         '/tmp/settings.yml',
@@ -129,7 +128,7 @@ describe  FileSet do
   it 'can consider file paths as Pathnames' do
     ::File.new('/tmp/settings.yml', 'w+')
 
-    file_set = FileSet.new files: '/tmp/settings.yml'
+    file_set = FileSet.new(files: '/tmp/settings.yml')
 
     expect(file_set.filenames).to eql [
                                         '/tmp/settings.yml',
@@ -142,16 +141,16 @@ describe  FileSet do
     ::File.new('/tmp/settings/settings-blue.yml', 'w+')
     ::File.new('/tmp/settings/settings-green.yml', 'w+')
 
-    file_set = FileSet.new files:      '/tmp/settings/settings*.yml',
-                           namespaces: %w{blue green}
+    file_set = FileSet.new(files:      '/tmp/settings/settings*.yml',
+                           namespaces: %w{blue green})
 
     expect(file_set.filenames).to eql  [
                                          '/tmp/settings/settings-blue.yml',
                                          '/tmp/settings/settings-green.yml',
                                        ]
 
-    file_set = FileSet.new files:      '/tmp/settings/settings*.yml',
-                           namespaces: %w{green blue}
+    file_set = FileSet.new(files:      '/tmp/settings/settings*.yml',
+                           namespaces: %w{green blue})
 
     expect(file_set.filenames).to eql  [
                                          '/tmp/settings/settings-green.yml',
@@ -165,8 +164,8 @@ describe  FileSet do
     ::File.new('/tmp/settings.yml', 'w+')
     ::File.new('/tmp/settings-blue.yml', 'w+')
 
-    file_set = FileSet.new files:      '/tmp/settings*.yml',
-                           namespaces: %w{blue}
+    file_set = FileSet.new(files:      '/tmp/settings*.yml',
+                           namespaces: %w{blue})
 
     expect(file_set.filenames).to eql  [
                                          '/tmp/settings.yml',
@@ -178,15 +177,14 @@ describe  FileSet do
 
   it 'considers each glob independently, placing non-namespaced and namespaced ' \
      'versions of the globs files above those in subsequent globs' do
-
     ::File.new('/tmp/settings/credentials-development.yml', 'w+')
     ::File.new('/tmp/settings/settings.yml', 'w+')
 
-    file_set = FileSet.new files:      [
+    file_set = FileSet.new(files:      [
                                          '/tmp/settings/credentials*.yml',
                                          '/tmp/settings/settings*.yml',
                                        ],
-                           namespaces: %w{development}
+                           namespaces: %w{development})
 
     expect(file_set.filenames).to eql [
                                         '/tmp/settings/credentials-development.yml',
@@ -199,7 +197,7 @@ describe  FileSet do
   it "can yield each file's settings when converting" do
     ::File.new('/tmp/settings.yml', 'w+')
 
-    file_set = FileSet.new files: '/tmp/settings.yml'
+    file_set = FileSet.new(files: '/tmp/settings.yml')
 
     file_set.to_settings do |settings|
       expect(settings).to eql Settings.new
@@ -210,10 +208,9 @@ describe  FileSet do
 
   it 'can convert settings without yielding to the block by using an intermediate ' \
      'settings object' do
-
     ::File.new('/tmp/settings.yml', 'w+')
 
-    file_set = FileSet.new files: '/tmp/settings.yml'
+    file_set = FileSet.new(files: '/tmp/settings.yml')
 
     expect(file_set.to_settings).to eql Settings.new
 

@@ -7,7 +7,7 @@ require 'chamber/settings'
 require 'chamber/filters/encryption_filter'
 require 'tempfile'
 
-# rubocop:disable Metrics/LineLength
+# rubocop:disable Layout/LineLength
 def create_tempfile_with_content(content)
   tempfile = Tempfile.new('settings')
   tempfile.puts content
@@ -170,8 +170,8 @@ other:
     settings_file.secure
 
     file_contents                  = ::File.read(tempfile.path)
-    secure_setting_encoded         = file_contents[%r{    _secure_setting:       ([A-Za-z0-9\+/]{342}==)$}, 1]
-    secure_another_setting_encoded = file_contents[%r{    _secure_another_setting: ([A-Za-z0-9\+/]{342}==)$}, 1]
+    secure_setting_encoded         = file_contents[%r{    _secure_setting:       ([A-Za-z0-9+/]{342}==)$}, 1]
+    secure_another_setting_encoded = file_contents[%r{    _secure_another_setting: ([A-Za-z0-9+/]{342}==)$}, 1]
 
     expect(::File.read(tempfile.path)).to eql <<-HEREDOC
 defaults:
@@ -232,7 +232,7 @@ stuff:
     settings_file.secure
 
     file_contents                  = ::File.read(tempfile.path)
-    secure_another_setting_encoded = file_contents[%r{  _secure_another\+_setting: ([A-Za-z0-9\+/]{342}==)$}, 1]
+    secure_another_setting_encoded = file_contents[%r{  _secure_another\+_setting: ([A-Za-z0-9+/]{342}==)$}, 1]
 
     expect(::File.read(tempfile.path)).to eql <<-HEREDOC
 stuff:
@@ -325,4 +325,4 @@ stuff:
   end
 end
 end
-# rubocop:enable Metrics/LineLength
+# rubocop:enable Layout/LineLength

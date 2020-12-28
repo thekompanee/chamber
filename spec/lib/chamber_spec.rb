@@ -155,7 +155,7 @@ describe Chamber do
     expect(Chamber.namespaces.to_a).to eql %w{first second}
   end
 
-  # rubocop:disable Lint/DuplicatedKey
+  # rubocop:disable Lint/DuplicateHashKey
   it 'does not load the same namespace twice' do
     Chamber.load(basepath:   '/tmp/chamber',
                  namespaces: {
@@ -165,7 +165,7 @@ describe Chamber do
 
     expect(Chamber.namespaces.to_a).to eql %w{first}
   end
-  # rubocop:enable Lint/DuplicatedKey
+  # rubocop:enable Lint/DuplicateHashKey
 
   it 'will load settings files which are only namespaced' do
     Chamber.load(basepath:   '/tmp/chamber',
@@ -191,7 +191,6 @@ describe Chamber do
 
   it 'still raises an error if you try to send a message which the settings hash ' \
      'does not understand' do
-
     expect { Chamber.env.i_do_not_know }.to raise_error NoMethodError
   end
 
@@ -217,7 +216,6 @@ describe Chamber do
 
   it 'loads YAML files from the "settings" directory under the base directory if ' \
      'any exist' do
-
     expect(Chamber.sub_settings.my_sub_setting).to eql 'my_sub_setting_value'
   end
 
@@ -227,7 +225,6 @@ describe Chamber do
 
   it 'loads namespaced YAML files in the "settings" directory if they correspond to ' \
      'a value namespace' do
-
     Chamber.load(basepath:   '/tmp/chamber',
                  namespaces: {
                    my_namespace: -> { 'blue' },
@@ -256,33 +253,32 @@ describe Chamber do
 
   it 'loads the entire inline namespaced file if no namespaces are passed in since ' \
      'it does not know they are namespaced' do
-
     Chamber.load(basepath: '/tmp/chamber')
 
     expect(Chamber['blue']['my_settings_for_inline_namespace']).to eql 'my_value_for_inline_namespace'
     expect(Chamber['my_non_inline_namespaced_setting']).to         eql 'my_value_for_non_inline_namespace'
   end
 
-  # rubocop:disable Lint/DuplicatedKey
+  # rubocop:disable Lint/DuplicateHashKey
   it 'can convert the settings to their environment variable versions' do
     Chamber.load(basepath: '/tmp/chamber')
 
     expect(Chamber.to_environment).to eql(
-      'SUB_SETTINGS_MY_SUB_SETTING'             => 'my_sub_setting_value',
-      'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY' => '["item 1", "item 2", "item 3"]',
-      'TEST_ANOTHER_LEVEL_LEVEL_THREE_A_SCALAR' => 'hello',
-      'TEST_ANOTHER_LEVEL_SETTING_ONE'          => '1',
-      'TEST_ANOTHER_LEVEL_SETTING_TWO'          => '2',
-      'TEST_MY_DYNAMIC_SETTING'                 => '2',
-      'TEST_MY_SETTING'                         => 'my_value',
-      'TEST_MY_FTP_URL'                         => 'ftp://username:password@127.0.0.1',
-      'TEST_MY_SETTING'                         => 'my_value',
-      'TEST_MY_BOOLEAN'                         => 'false',
-      'BLUE_MY_SETTINGS_FOR_INLINE_NAMESPACE'   => 'my_value_for_inline_namespace',
-      'MY_NON_INLINE_NAMESPACED_SETTING'        => 'my_value_for_non_inline_namespace',
-    )
+                                        'SUB_SETTINGS_MY_SUB_SETTING'             => 'my_sub_setting_value',
+                                        'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY' => '["item 1", "item 2", "item 3"]',
+                                        'TEST_ANOTHER_LEVEL_LEVEL_THREE_A_SCALAR' => 'hello',
+                                        'TEST_ANOTHER_LEVEL_SETTING_ONE'          => '1',
+                                        'TEST_ANOTHER_LEVEL_SETTING_TWO'          => '2',
+                                        'TEST_MY_DYNAMIC_SETTING'                 => '2',
+                                        'TEST_MY_SETTING'                         => 'my_value',
+                                        'TEST_MY_FTP_URL'                         => 'ftp://username:password@127.0.0.1',
+                                        'TEST_MY_SETTING'                         => 'my_value',
+                                        'TEST_MY_BOOLEAN'                         => 'false',
+                                        'BLUE_MY_SETTINGS_FOR_INLINE_NAMESPACE'   => 'my_value_for_inline_namespace',
+                                        'MY_NON_INLINE_NAMESPACED_SETTING'        => 'my_value_for_non_inline_namespace',
+                                      )
   end
-  # rubocop:enable Lint/DuplicatedKey
+  # rubocop:enable Lint/DuplicateHashKey
 
   it 'can handle decrypting values using the key for the namespace if it exists' do
     Chamber.load(namespaces: %w{development production},
@@ -303,7 +299,6 @@ describe Chamber do
 
   it 'can notify properly whether it responds to messages if the underlying ' \
      'settings does' do
-
     expect(Chamber.respond_to?(:sub_settings)).to be_a TrueClass
   end
 
@@ -312,11 +307,11 @@ describe Chamber do
 
     expect(Chamber.filenames).to  eql ['/tmp/chamber/settings.yml']
     expect(Chamber.to_hash).to    include(
-      'test' => include(
-        'my_setting' => 'my_value',
-        'my_ftp_url' => 'ftp://username:password@127.0.0.1',
-      ),
-    )
+                                    'test' => include(
+                                                'my_setting' => 'my_value',
+                                                'my_ftp_url' => 'ftp://username:password@127.0.0.1',
+                                              ),
+                                  )
   end
 
   it 'ignores the basepath if file patterns are explicitly passed in' do

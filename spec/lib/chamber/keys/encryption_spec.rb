@@ -140,12 +140,12 @@ describe  Encryption do
           )
 
     expect(key).to eql(
-                        __default:      "default public key\n",
-                        development:    "development public key\n",
-                        examplehostcom: "example-host.com public key\n",
-                        production:     "production public key\n",
-                        test:           "test public key\n",
-                      )
+                     __default:      "default public key\n",
+                     development:    "development public key\n",
+                     examplehostcom: "example-host.com public key\n",
+                     production:     "production public key\n",
+                     test:           "test public key\n",
+                   )
   end
 
   it 'skips a key if it cannot be found' do
@@ -161,10 +161,10 @@ describe  Encryption do
           )
 
     expect(key).to eql(
-                        __default:   "default public key\n",
-                        development: "development public key\n",
-                        test:        "test public key\n",
-                      )
+                     __default:   "default public key\n",
+                     development: "development public key\n",
+                     test:        "test public key\n",
+                   )
   end
 end
 end

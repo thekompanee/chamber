@@ -42,38 +42,43 @@ describe  InsecureFilter do
   end
 
   it 'will not return values which are encrypted' do
-    filtered_settings = InsecureFilter.execute(
-      secure_key_prefix: '_secure_',
-      data:              {
-        _secure_setting:       'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpss' \
-                               'pg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzC' \
-                               'MJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YG' \
-                               'DJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6ag' \
-                               'y1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMn' \
-                               'gJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfN' \
-                               'xMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
-        secure_setting:        'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpss' \
-                               'pg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzC' \
-                               'MJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YG' \
-                               'DJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6ag' \
-                               'y1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMn' \
-                               'gJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfN' \
-                               'xMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
-        _secure_other_setting: 'hello',
-        secure_group:          {
-          _secure_nested_setting:       'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYTh' \
-                                        'aV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4' \
-                                        'akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGy' \
-                                        'dkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9' \
-                                        'ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8' \
-                                        'QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZ' \
-                                        'gfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMn' \
-                                        'z84XzmUp2Y0H1jPgGkBKQJKArfQ==',
-          _secure_other_nested_setting: 'goodbye',
-          insecure_nested_setting:      'dinner',
-        },
-      },
-    )
+    filtered_settings = \
+      InsecureFilter
+        .execute(
+          secure_key_prefix: '_secure_',
+          data:              {
+            _secure_setting:       'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYTha' \
+                                   'V4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4ak' \
+                                   'un6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkE' \
+                                   'jY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8M' \
+                                   'v4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/' \
+                                   '1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86' \
+                                   'wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmU' \
+                                   'p2Y0H1jPgGkBKQJKArfQ==',
+            secure_setting:        'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYTha' \
+                                   'V4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4ak' \
+                                   'un6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkE' \
+                                   'jY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8M' \
+                                   'v4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/' \
+                                   '1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86' \
+                                   'wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmU' \
+                                   'p2Y0H1jPgGkBKQJKArfQ==',
+            _secure_other_setting: 'hello',
+            secure_group:          {
+              _secure_nested_setting:       'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnM' \
+                                            'oYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3Fxpt' \
+                                            'THwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLS' \
+                                            'z4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34E' \
+                                            'Sz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf' \
+                                            '6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS' \
+                                            '7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX' \
+                                            '8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1' \
+                                            'jPgGkBKQJKArfQ==',
+              _secure_other_nested_setting: 'goodbye',
+              insecure_nested_setting:      'dinner',
+            },
+          },
+        )
 
     expect(filtered_settings._secure_setting?).to                          be  false
     expect(filtered_settings.secure_setting?).to                           be  false

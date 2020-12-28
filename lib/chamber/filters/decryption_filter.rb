@@ -12,19 +12,19 @@ require 'chamber/errors/decryption_failure'
 module  Chamber
 module  Filters
 class   DecryptionFilter
-  BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9\+/]{342}==\z}.freeze
+  BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9+/]{342}==\z}.freeze
   LARGE_DATA_STRING_PATTERN = %r{
                                   \A                            # Beginning of String
                                   (
-                                    [A-Za-z0-9\+\/#]*\={0,2}    # Base64 Encoded Key
+                                    [A-Za-z0-9+/#]*={0,2}       # Base64 Encoded Key
                                   )
                                   \#                            # Separator
                                   (
-                                    [A-Za-z0-9\+\/#]*\={0,2}    # Base64 Encoded IV
+                                    [A-Za-z0-9+/#]*={0,2}       # Base64 Encoded IV
                                   )
                                   \#                            # Separator
                                   (
-                                    [A-Za-z0-9\+\/#]*\={0,2}    # Base64 Encoded Data
+                                    [A-Za-z0-9+/#]*={0,2}       # Base64 Encoded Data
                                   )
                                   \z                            # End of String
                                 }x.freeze
@@ -75,6 +75,7 @@ class   DecryptionFilter
 
   private
 
+  # rubocop:disable Style/RedundantBegin
   def decrypt(key, value)
     method = decryption_method(value)
 
@@ -88,6 +89,7 @@ class   DecryptionFilter
 
     value
   end
+  # rubocop:enable Style/RedundantBegin
 
   def decryption_method(value)
     if value.respond_to?(:match)

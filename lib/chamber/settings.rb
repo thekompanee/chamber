@@ -182,9 +182,10 @@ class   Settings
   # Returns a new Settings object
   #
   def merge(other)
-    other_settings = if other.is_a? Settings
+    other_settings = case other
+                     when Settings
                        other
-                     elsif other.is_a? Hash
+                     when Hash
                        Settings.new(settings: other)
                      end
 

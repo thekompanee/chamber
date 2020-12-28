@@ -18,8 +18,9 @@ class   Heroku < Thor
                desc:     'The name of the Heroku application whose config values will ' \
                          'be affected'
 
-  desc 'clear', 'Removes all Heroku environment variables which match settings that ' \
-                'Chamber knows about'
+  desc 'clear',
+       'Removes all Heroku environment variables which match settings that ' \
+       'Chamber knows about'
 
   method_option :dry_run,
                 type:    :boolean,
@@ -31,8 +32,9 @@ class   Heroku < Thor
     Commands::Cloud::Clear.call(options.merge(shell: self, adapter: 'heroku'))
   end
 
-  desc 'push', 'Sends settings to Heroku so that they may be used in the application ' \
-               'once it is deployed'
+  desc 'push',
+       'Sends settings to Heroku so that they may be used in the application ' \
+       'once it is deployed'
 
   method_option :dry_run,
                 type:    :boolean,
@@ -60,8 +62,9 @@ class   Heroku < Thor
     Commands::Cloud::Push.call(options.merge(shell: self, adapter: 'heroku'))
   end
 
-  desc 'pull', 'Retrieves the environment variables for the application and stores ' \
-               'them in a temporary file'
+  desc 'pull',
+       'Retrieves the environment variables for the application and stores ' \
+       'them in a temporary file'
 
   method_option :into,
                 type: :string,
@@ -72,8 +75,9 @@ class   Heroku < Thor
     Commands::Cloud::Pull.call(options.merge(shell: self, adapter: 'heroku'))
   end
 
-  desc 'compare', 'Displays the difference between what is currently stored in the ' \
-                  'Heroku application\'s config and what Chamber knows about locally'
+  desc 'compare',
+       'Displays the difference between what is currently stored in the ' \
+       'Heroku application\'s config and what Chamber knows about locally'
 
   method_option :only_sensitive,
                 type:    :boolean,

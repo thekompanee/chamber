@@ -18,7 +18,7 @@ module  Binary
 class   Runner < Thor
   include Thor::Actions
 
-  source_root ::File.expand_path('../../../../templates', __FILE__)
+  source_root ::File.expand_path('../../../templates', __dir__)
 
   class_option  :rootpath,
                 type:    :string,
@@ -105,10 +105,11 @@ class   Runner < Thor
 
   ################################################################################
 
-  desc 'compare', 'Displays the difference between the settings in the first set ' \
-                  'of namespaces and the settings in the second set.  Useful for ' \
-                  'tracking down why there may be issues in development versus test ' \
-                  'or differences between staging and production.'
+  desc 'compare',
+       'Displays the difference between the settings in the first set ' \
+       'of namespaces and the settings in the second set.  Useful for ' \
+       'tracking down why there may be issues in development versus test ' \
+       'or differences between staging and production.'
 
   method_option :keys_only,
                 type:    :boolean,
@@ -132,8 +133,9 @@ class   Runner < Thor
 
   ################################################################################
 
-  desc 'secure', 'Secures any values which appear to need to be encrypted in any of ' \
-                 'the settings files which match irrespective of namespaces'
+  desc 'secure',
+       'Secures any values which appear to need to be encrypted in any of ' \
+       'the settings files which match irrespective of namespaces'
 
   method_option :only_sensitive,
                 type:    :boolean,
@@ -151,8 +153,9 @@ class   Runner < Thor
 
   ################################################################################
 
-  desc 'sign', 'Creates or verifies signatures for all current settings files using ' \
-               'the signature private key.'
+  desc 'sign',
+       'Creates or verifies signatures for all current settings files using ' \
+       'the signature private key.'
 
   method_option :verify,
                 type:    :boolean,
@@ -168,8 +171,8 @@ class   Runner < Thor
 
   ################################################################################
 
-  desc 'init', 'Sets Chamber up using best practices for secure configuration ' \
-               'management'
+  desc 'init',
+       'Sets Chamber up using best practices for secure configuration management'
 
   method_option :signature,
                 type:    :boolean,

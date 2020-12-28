@@ -15,11 +15,11 @@ class   Heroku
   end
 
   def add_environment_variable(name, value)
-    value = value.shellescape unless value =~ /\n/
+    value = value.shellescape unless value.include?("\n")
 
     response = heroku(%Q{config:set #{name}="#{value}"})
 
-    fail NameError, "The variable name '#{name}' is invalid" if response.match?(/invalid/)
+    fail NameError, "The variable name '#{name}' is invalid" if response.include?('invalid')
 
     response
   end

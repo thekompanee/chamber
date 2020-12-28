@@ -3,21 +3,19 @@
 require 'active_support/json'
 require 'chamber'
 
-# rubocop:disable Lint/HandleExceptions, Layout/EmptyLinesAroundModuleBody
 module  Chamber
-
 begin
   require 'active_record/type/value'
 
   CHAMBER_TYPE_VALUE_SUPERCLASS = ActiveRecord::Type::Value
-rescue LoadError
+rescue LoadError # rubocop:disable Lint/SuppressedException
 end
 
 begin
   require 'active_model/type/value'
 
   CHAMBER_TYPE_VALUE_SUPERCLASS = ActiveModel::Type::Value
-rescue LoadError
+rescue LoadError # rubocop:disable Lint/SuppressedException
 end
 
 module  Types
@@ -30,6 +28,8 @@ class   Secured < CHAMBER_TYPE_VALUE_SUPERCLASS
                                          Chamber.configuration.encryption_keys)
     self.decryption_keys = options.fetch(:decryption_keys,
                                          Chamber.configuration.decryption_keys)
+
+    super()
   end
 
   def type
@@ -78,4 +78,3 @@ class   Secured < CHAMBER_TYPE_VALUE_SUPERCLASS
 end
 end
 end
-# rubocop:enable Lint/HandleExceptions, Layout/EmptyLinesAroundModuleBody

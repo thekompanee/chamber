@@ -10,8 +10,8 @@ require 'chamber/encryption_methods/none'
 module    Chamber
 module    Filters
 class     EncryptionFilter
-  BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9\+\/]{342}==\z}.freeze
-  BASE64_SUBSTRING_PATTERN  = %r{[A-Za-z0-9\+\/#]*\={0,2}}.freeze
+  BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9+/]{342}==\z}.freeze
+  BASE64_SUBSTRING_PATTERN  = %r{[A-Za-z0-9+/#]*={0,2}}.freeze
   LARGE_DATA_STRING_PATTERN = /
                                 \A
                                 (#{BASE64_SUBSTRING_PATTERN})

@@ -39,18 +39,21 @@ class   CircleCi
     response['name']
   end
 
+  # rubocop:disable Layout/MultilineAssignmentLayout
   def environment_variables
-    @environment_variables ||= begin
-      request = ::Net::HTTP::Get.new(request_uri(resource: 'envvar'))
+    @environment_variables ||= \
+      begin
+        request = ::Net::HTTP::Get.new(request_uri(resource: 'envvar'))
 
-      request.basic_auth api_token, ''
-      request['Content-Type'] = 'application/json'
+        request.basic_auth api_token, ''
+        request['Content-Type'] = 'application/json'
 
-      ::JSON
-        .parse(response(request).body)
-        .each_with_object({}) { |e, m| m[e['name']] = e['value'] }
-    end
+        ::JSON
+          .parse(response(request).body)
+          .each_with_object({}) { |e, m| m[e['name']] = e['value'] }
+      end
   end
+  # rubocop:enable Layout/MultilineAssignmentLayout
 
   def remove_environment_variable(name)
     request = ::Net::HTTP::Delete.new(request_uri(resource: "envvar/#{name}"))

@@ -71,10 +71,8 @@ class   NamespaceSet
   # Internal: Iterates over each namespace value and allows it to be used in
   # a block.
   #
-  def each
-    namespaces.each do |namespace|
-      yield namespace
-    end
+  def each(&block)
+    namespaces.each(&block)
   end
 
   ###

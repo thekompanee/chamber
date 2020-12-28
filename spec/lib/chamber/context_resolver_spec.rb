@@ -5,17 +5,15 @@ require 'chamber/context_resolver'
 
 module    Chamber
 module    Commands
-describe  ContextResolver do
-  let(:rails_2_path)      { ::File.expand_path('../../../rails-2-test', __FILE__) }
-  let(:rails_3_path)      { ::File.expand_path('../../../rails-3-test', __FILE__) }
-  let(:rails_4_path)      { ::File.expand_path('../../../rails-4-test', __FILE__) }
-  let(:rails_engine_path) { ::File.expand_path('../../../rails-engine-test', __FILE__) }
+describe  ContextResolver do # rubocop:disable RSpec/MultipleMemoizedHelpers
+  let(:rails_2_path)      { ::File.expand_path('../../rails-2-test', __dir__) }
+  let(:rails_3_path)      { ::File.expand_path('../../rails-3-test', __dir__) }
+  let(:rails_4_path)      { ::File.expand_path('../../rails-4-test', __dir__) }
+  let(:rails_engine_path) { ::File.expand_path('../../rails-engine-test', __dir__) }
 
-  # rubocop:disable RSpec/InstanceVariable
   before(:each) { @old_chamber_key = ENV.delete('CHAMBER_KEY') }
 
   after(:each)  { ENV['CHAMBER_KEY'] = @old_chamber_key }
-  # rubocop:enable RSpec/InstanceVariable
 
   it 'does not attempt to do any resolution if all valid options are passed in' do
     options = ContextResolver.resolve(basepath:   'my_path',
@@ -27,7 +25,6 @@ describe  ContextResolver do
 
   it 'does not attempt to do any resolution if files are passed in in place of a ' \
      'basepath' do
-
     options = ContextResolver.resolve(files:      'my_files',
                                       namespaces: %w{ns})
 
