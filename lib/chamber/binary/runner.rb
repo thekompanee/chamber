@@ -161,6 +161,10 @@ class   Runner < Thor
                 type:    :boolean,
                 default: false
 
+  method_option :signature_name,
+                type:    :string,
+                default: `git config --get 'user.name'`.chomp
+
   def sign
     if options[:verify]
       Commands::Verify.call(options.merge(shell: self))

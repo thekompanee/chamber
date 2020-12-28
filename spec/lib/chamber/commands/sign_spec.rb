@@ -18,6 +18,7 @@ describe  Sign do # rubocop:disable RSpec/MultipleMemoizedHelpers
       rootpath:        rootpath,
       decryption_keys: rootpath + '../../spec/fixtures/keys/real/.chamber.signature.pem',
       shell:           double.as_null_object, # rubocop:disable RSpec/VerifiedDoubles
+      signature_name:  'Suzy Q Robinson',
     }
   end
 
@@ -38,7 +39,7 @@ test:
     Sign.call(options)
 
     expect(signature_filename.read).to eql(<<-HEREDOC)
-Signed By: Jeff Felchner
+Signed By: Suzy Q Robinson
 Signed At: 2012-07-26T18:00:00Z
 
 -----BEGIN CHAMBER SIGNATURE-----

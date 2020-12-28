@@ -11,14 +11,15 @@ describe Signature do
     seed = SecureRandom.uuid
     file = Signature.new("/tmp/settings-#{seed}.yml",
                          'my settings content',
-                         'spec/spec_key')
+                         'spec/spec_key',
+                         'Suzy Q Robinson')
 
     file.write
 
     signature_contents = ::File.read("/tmp/settings-#{seed}.sig")
 
     expect(signature_contents).to eql(<<-HEREDOC)
-Signed By: Jeff Felchner
+Signed By: Suzy Q Robinson
 Signed At: 2012-07-26T18:00:00Z
 
 -----BEGIN CHAMBER SIGNATURE-----
@@ -31,14 +32,15 @@ HxXUpr8+UhpdOSgqM778KLZTHYjYnTnOfPzr5SiYCtFOgckdM2IxlmrYvYSP2a9Xw0gptXJLE1CxpT19
     seed = SecureRandom.uuid
     file = Signature.new("/tmp/settings-#{seed}.yml.erb",
                          'my settings content',
-                         'spec/spec_key')
+                         'spec/spec_key',
+                         'Suzy Q Robinson')
 
     file.write
 
     signature_contents = ::File.read("/tmp/settings-#{seed}.sig")
 
     expect(signature_contents).to eql(<<-HEREDOC)
-Signed By: Jeff Felchner
+Signed By: Suzy Q Robinson
 Signed At: 2012-07-26T18:00:00Z
 
 -----BEGIN CHAMBER SIGNATURE-----
@@ -53,7 +55,7 @@ HxXUpr8+UhpdOSgqM778KLZTHYjYnTnOfPzr5SiYCtFOgckdM2IxlmrYvYSP2a9Xw0gptXJLE1CxpT19
     signature_filename = "/tmp/settings-#{seed}.sig"
 
     ::File.write(signature_filename, <<-HEREDOC, mode: 'w+')
-Signed By: Jeff Felchner
+Signed By: Suzy Q Robinson
 Signed At: 2012-07-26T18:00:00Z
 
 -----BEGIN CHAMBER SIGNATURE-----
@@ -63,7 +65,8 @@ HxXUpr8+UhpdOSgqM778KLZTHYjYnTnOfPzr5SiYCtFOgckdM2IxlmrYvYSP2a9Xw0gptXJLE1CxpT19
 
     file = Signature.new(settings_filename,
                          'my settings content',
-                         'spec/spec_key.pub')
+                         'spec/spec_key.pub',
+                         'Suzy Q Robinson')
 
     expect(file.verify).to be true
   end

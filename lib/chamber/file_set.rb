@@ -114,7 +114,8 @@ module  Chamber
 class   FileSet
   attr_accessor :decryption_keys,
                 :encryption_keys,
-                :basepath
+                :basepath,
+                :signature_name
   attr_reader   :namespaces,
                 :paths
 
@@ -124,6 +125,7 @@ class   FileSet
     self.encryption_keys = options[:encryption_keys]
     self.paths           = options.fetch(:files)
     self.basepath        = options[:basepath]
+    self.signature_name  = options[:signature_name]
   end
 
   ###
@@ -234,7 +236,8 @@ class   FileSet
           File.new(path:            file,
                    namespaces:      namespaces,
                    decryption_keys: decryption_keys,
-                   encryption_keys: encryption_keys)
+                   encryption_keys: encryption_keys,
+                   signature_name:  signature_name)
         end
 
         sorted_relevant_files += relevant_glob_files

@@ -251,12 +251,13 @@ stuff:
     HEREDOC
 
     settings_file = File.new  path:            file_path,
-                              decryption_keys: { signature: './spec/spec_key' }
+                              decryption_keys: { signature: './spec/spec_key' },
+                              signature_name:  'Suzy Q Robinson'
 
     settings_file.sign
 
     expect(::File.read(signature_path)).to eql <<-HEREDOC
-Signed By: Jeff Felchner
+Signed By: Suzy Q Robinson
 Signed At: 2012-07-26T18:00:00Z
 
 -----BEGIN CHAMBER SIGNATURE-----
@@ -293,7 +294,7 @@ stuff:
     HEREDOC
 
     ::File.write(signature_path, <<-HEREDOC, mode: 'w+')
-Signed By: Jeff Felchner
+Signed By: Suzy Q Robinson
 Signed At: 2012-07-26T18:00:00Z
 
 -----BEGIN CHAMBER SIGNATURE-----

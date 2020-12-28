@@ -37,7 +37,7 @@ test:
     HEREDOC
 
     signature_filename.write <<-HEREDOC
-Signed By: Jeff Felchner
+Signed By: Suzy Q Robinson
 Signed At: 2012-07-26T18:00:00Z
 
 -----BEGIN CHAMBER SIGNATURE-----

@@ -43,6 +43,8 @@ class   ContextResolver
                                     options[:basepath] + 'settings',
                                   ]
 
+    options[:signature_name]    = options[:signature_name]
+
     options
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Layout/LineLength

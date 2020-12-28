@@ -13,7 +13,8 @@ module  Chamber
 class   File < Pathname
   attr_accessor :namespaces,
                 :decryption_keys,
-                :encryption_keys
+                :encryption_keys,
+                :signature_name
 
   ###
   # Internal: Creates a settings file representing a path to a file on the
@@ -46,6 +47,7 @@ class   File < Pathname
     self.namespaces      = options[:namespaces]      || {}
     self.decryption_keys = options[:decryption_keys] || {}
     self.encryption_keys = options[:encryption_keys] || {}
+    self.signature_name  = options[:signature_name]
 
     super options.fetch(:path)
   end
@@ -111,7 +113,7 @@ class   File < Pathname
     fail ArgumentError, 'You asked to sign your settings files but no signature key was found.  Run `chamber init --signature` to generate one.' \
       unless signature_key_contents
 
-    signature = Files::Signature.new(to_s, read, signature_key_contents)
+    signature = Files::Signature.new(to_s, read, signature_key_contents, signature_name)
 
     signature.write
   end
@@ -122,7 +124,7 @@ class   File < Pathname
     fail ArgumentError, 'You asked to verify your settings files but no signature key was found.  Run `chamber init --signature` to generate one.' \
       unless signature_key_contents
 
-    signature = Files::Signature.new(to_s, read, signature_key_contents)
+    signature = Files::Signature.new(to_s, read, signature_key_contents, signature_name)
 
     signature.verify
   end

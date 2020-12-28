@@ -18,14 +18,16 @@ class  Signature
                               /x.freeze
 
   attr_accessor :settings_content,
-                :settings_filename
+                :settings_filename,
+                :signature_name
 
   attr_reader   :signature_key
 
-  def initialize(settings_filename, settings_content, signature_key)
+  def initialize(settings_filename, settings_content, signature_key, signature_name)
     self.signature_key     = signature_key
     self.settings_content  = settings_content
     self.settings_filename = Pathname.new(settings_filename)
+    self.signature_name    = signature_name
   end
 
   def signature_key=(keyish)
@@ -41,7 +43,7 @@ class  Signature
 
   def write
     signature_filename.write(<<-HEREDOC, 0, mode: 'w+')
-Signed By: #{`git config --get 'user.name'`.chomp}
+Signed By: #{signature_name}
 Signed At: #{Time.now.utc.iso8601}
 
 #{SIGNATURE_HEADER}

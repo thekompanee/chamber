@@ -9,7 +9,8 @@ class   Configuration
                 :encryption_keys,
                 :files,
                 :namespaces,
-                :rootpath
+                :rootpath,
+                :signature_name
 
   def initialize(options = {})
     options              = ContextResolver.resolve(options)
@@ -20,6 +21,7 @@ class   Configuration
     self.encryption_keys = options.fetch(:encryption_keys)
     self.files           = options.fetch(:files)
     self.rootpath        = options.fetch(:rootpath)
+    self.signature_name  = options.fetch(:signature_name)
   end
 
   def to_hash
@@ -29,6 +31,7 @@ class   Configuration
       encryption_keys: encryption_keys,
       files:           files,
       namespaces:      namespaces,
+      signature_name:  signature_name,
     }
   end
 end
