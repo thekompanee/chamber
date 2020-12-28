@@ -76,7 +76,7 @@ class   File < Pathname
                                   encryption_keys: encryption_keys)
   end
 
-  # rubocop:disable Metrics/LineLength
+  # rubocop:disable Layout/LineLength
   def secure
     insecure_settings = to_settings.insecure.to_flattened_name_hash
     secure_settings   = to_settings.insecure.secure.to_flattened_name_hash
@@ -103,7 +103,7 @@ class   File < Pathname
 
     write(file_contents)
   end
-  # rubocop:enable Metrics/LineLength
+  # rubocop:enable Layout/LineLength
 
   def sign
     signature_key_contents = decryption_keys[:signature]

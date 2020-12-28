@@ -4,8 +4,14 @@ Layout/DotPosition:
 Layout/ExtraSpacing:
   Enabled:            false
 
-Layout/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled:            false
+
+Lint/EmptyFile:
+  Exclude:
+    - 'spec/rails-2-test/config.ru'
+    - 'spec/rails-3-test/config.ru'
+    - 'spec/rails-4-test/config.ru'
 
 Performance/RegexpMatch:
   Enabled:            false
@@ -13,7 +19,13 @@ Performance/RegexpMatch:
 Style/ConstantVisibility:
   Enabled:            false
 
+Style/HashTransformValues:
+  Enabled:            false
+
 Style/InlineComment:
+  Enabled:            false
+
+Style/StringConcatenation:
   Enabled:            false
 
 Style/SymbolArray:

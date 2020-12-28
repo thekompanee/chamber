@@ -22,7 +22,7 @@ class   Settings
                 :decryption_keys
   attr_reader   :namespaces
 
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/LineLength
+  # rubocop:disable Metrics/CyclomaticComplexity, Layout/LineLength
   def initialize(options = {})
     self.namespaces      = options[:namespaces]      || []
     self.raw_data        = options[:settings]        || {}
@@ -38,7 +38,7 @@ class   Settings
                                                           Filters::TranslateSecureKeysFilter,
                                                         ]
   end
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/LineLength
+  # rubocop:enable Metrics/CyclomaticComplexity, Layout/LineLength
 
   ###
   # Internal: Converts a Settings object into a hash that is compatible as an
@@ -188,14 +188,14 @@ class   Settings
                        Settings.new(settings: other)
                      end
 
-    # rubocop:disable Metrics/LineLength
+    # rubocop:disable Layout/LineLength
     Settings.new(
       encryption_keys: encryption_keys.any? ? encryption_keys : other_settings.encryption_keys,
       decryption_keys: decryption_keys.any? ? decryption_keys : other_settings.decryption_keys,
       namespaces:      (namespaces + other_settings.namespaces),
       settings:        raw_data.merge(other_settings.raw_data),
     )
-    # rubocop:enable Metrics/LineLength
+    # rubocop:enable Layout/LineLength
   end
 
   ###

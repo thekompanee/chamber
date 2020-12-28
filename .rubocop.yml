@@ -1,3 +1,5 @@
+---
+
 inherit_from:
   - '.rubocop_core.yml'
   - '.rubocop_performance.yml'

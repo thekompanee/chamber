@@ -27,7 +27,7 @@ class   Initialize < Chamber::Commands::Base
     self.signature  = options.fetch(:signature)
   end
 
-  # rubocop:disable Metrics/LineLength, Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Layout/LineLength, Metrics/MethodLength, Metrics/AbcSize
   def call
     key_pairs = namespaces.map do |namespace|
       Chamber::KeyPair.new(namespace:     namespace,
@@ -153,7 +153,7 @@ class   Initialize < Chamber::Commands::Base
     shell.say '--------------------------------------------------------------------------------'
     shell.say ''
   end
-  # rubocop:enable Metrics/LineLength, Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Layout/LineLength, Metrics/MethodLength, Metrics/AbcSize
 
   protected
 
