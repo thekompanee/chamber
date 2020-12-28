@@ -1,3 +1,5 @@
+---
+
 development:
   setting:                development_value
   # The following will become 'secure_setting'

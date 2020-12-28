@@ -1,4 +1,5 @@
 ---
+
 development:
   my_setting: my_dev_value
   my_boolean: 'false'
@@ -8,9 +9,9 @@ development:
     setting_two: 4
     level_three:
       an_array:
-      - item 8
-      - item 2
-      - item 0
+        - item 8
+        - item 2
+        - item 0
       a_scalar: hello
 test:
   my_setting: my_value
@@ -22,7 +23,7 @@ test:
     setting_two: 2
     level_three:
       an_array:
-      - item 1
-      - item 2
-      - item 3
+        - item 1
+        - item 2
+        - item 3
       a_scalar: hello

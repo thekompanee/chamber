@@ -1,3 +1,5 @@
+---
+
 # This is an opinionated list of which hooks are valuable to run and what their
 # out-of-the-box settings should be.
 # -------------------------------------------------------------------------------
@@ -142,6 +144,9 @@ PreCommit:
   FileSize:
     enabled:                  true
     size_limit_bytes:         1_000_000
+    exclude:
+      - 'db/structure.sql'
+      - 'db/schema.rb'
 
   FixMe:
     enabled:                  true
@@ -481,7 +486,7 @@ PostCheckout:
     enabled:                  true
 
   GitLfs:
-    enabled:                  true
+    enabled:                  false
     flags:
       - 'post-checkout'
 
@@ -509,7 +514,7 @@ PostCommit:
     enabled:                  false
 
   GitLfs:
-    enabled:                  true
+    enabled:                  false
     flags:
       - 'post-commit'
 
@@ -537,7 +542,7 @@ PostMerge:
     enabled:                  false
 
   GitLfs:
-    enabled:                  true
+    enabled:                  false
     flags:
       - 'post-merge'
 
