@@ -23,6 +23,7 @@ describe  Decryption do
   end
 
   it 'can find default keys by reading the environment' do
+    old_chamber_key    = ENV['CHAMBER_KEY']
     ENV['CHAMBER_KEY'] = 'environment private key'
 
     key = Decryption.resolve(rootpath:   'spec/fixtures/',
@@ -31,7 +32,7 @@ describe  Decryption do
 
     expect(key).to eql(__default: 'environment private key')
 
-    ENV.delete('CHAMBER_KEY')
+    ENV['CHAMBER_KEY'] = old_chamber_key
   end
 
   it 'can find namespaced key files by reading files' do
