@@ -18,6 +18,12 @@ class   Heroku < Thor
                desc:     'The name of the Heroku application whose config values will ' \
                          'be affected'
 
+  class_option :api_token,
+               type:     :string,
+               aliases:  '-t',
+               required: true,
+               desc:     'The API token to access your Heroku project.'
+
   desc 'clear',
        'Removes all Heroku environment variables which match settings that ' \
        'Chamber knows about'

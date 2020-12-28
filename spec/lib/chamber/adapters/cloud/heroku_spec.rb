@@ -12,13 +12,15 @@ describe Heroku do
   before(:each) { Chamber.load }
 
   it 'can retrieve environment variables' do
-    adapter = Heroku.new(app: ::Chamber.env.heroku.test_app_name)
+    adapter = Heroku.new(app:       ::Chamber.env.heroku.test_app_name,
+                         api_token: ::Chamber.env.heroku.api_token)
 
     expect(adapter.environment_variables['FOO']).to eql 'BAR'
   end
 
   it 'can add environment variables' do
-    adapter         = Heroku.new(app: ::Chamber.env.heroku.test_app_name)
+    adapter         = Heroku.new(app:       ::Chamber.env.heroku.test_app_name,
+                                 api_token: ::Chamber.env.heroku.api_token)
     environment_key = ::SecureRandom.base64(64).gsub(/[^a-zA-Z]+/, '')[0..16]
 
     adapter.add_environment_variable(environment_key, '12341234')
@@ -28,40 +30,32 @@ describe Heroku do
     adapter.remove_environment_variable(environment_key)
   end
 
-  it 'can shellescape environment variables' do
-    adapter         = Heroku.new(app: ::Chamber.env.heroku.test_app_name)
+  it 'knows to convert newlines to literal \\n strings' do
+    adapter         = Heroku.new(app:       ::Chamber.env.heroku.test_app_name,
+                                 api_token: ::Chamber.env.heroku.api_token)
     environment_key = ::SecureRandom.base64(64).gsub(/[^a-zA-Z]+/, '')[0..16]
 
-    adapter.add_environment_variable(environment_key, '1234!1234')
+    adapter.add_environment_variable(environment_key, "123412\n34")
 
-    expect(adapter.environment_variables[environment_key]).to eql '1234\!1234'
-
-    adapter.remove_environment_variable(environment_key)
-  end
-
-  it 'knows not to shellescape values with newlines' do
-    adapter         = Heroku.new(app: ::Chamber.env.heroku.test_app_name)
-    environment_key = ::SecureRandom.base64(64).gsub(/[^a-zA-Z]+/, '')[0..16]
-
-    adapter.add_environment_variable(environment_key, "1234!12\n34")
-
-    expect(adapter.environment_variables[environment_key]).to eql "1234!12\n34"
+    expect(adapter.environment_variables[environment_key]).to eql '123412\n34'
 
     adapter.remove_environment_variable(environment_key)
   end
 
   it 'can properly display errors' do
-    adapter                 = Heroku.new(app: ::Chamber.env.heroku.test_app_name)
+    adapter                 = Heroku.new(app:       ::Chamber.env.heroku.test_app_name,
+                                         api_token: ::Chamber.env.heroku.api_token)
     invalid_environment_key = '12345\!-[]=!'
 
     expect {
       adapter.add_environment_variable(invalid_environment_key, '12341234')
     }.to raise_error(NameError)
-           .with_message("The variable name '12345\\!-[]=!' is invalid")
+           .with_message('Config var key must not include =.')
   end
 
   it 'can remove environment variables' do
-    adapter         = Heroku.new(app: ::Chamber.env.heroku.test_app_name)
+    adapter         = Heroku.new(app:       ::Chamber.env.heroku.test_app_name,
+                                 api_token: ::Chamber.env.heroku.api_token)
     environment_key = ::SecureRandom.base64(64).gsub(/[^a-zA-Z]+/, '')[0..16]
 
     adapter.add_environment_variable(environment_key, '12341234')

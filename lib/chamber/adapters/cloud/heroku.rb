@@ -8,38 +8,65 @@ module  Chamber
 module  Adapters
 module  Cloud
 class   Heroku
-  attr_accessor :app
+  API_HOST     = 'api.heroku.com'
+  API_PORT     = 443
+  API_BASE_URI = ''
+
+  attr_accessor :api_token,
+                :app
 
   def initialize(options = {})
-    self.app = options.fetch(:app)
+    self.api_token = options.fetch(:api_token)
+    self.app       = options.fetch(:app)
   end
 
-  def add_environment_variable(name, value)
-    value = value.shellescape unless value.include?("\n")
+  def add_environment_variable(name, value) # rubocop:disable Metrics/AbcSize
+    value   = value.gsub(/\n/, '\n') if value
+    request = ::Net::HTTP::Patch.new(config_vars_uri)
 
-    response = heroku(%Q{config:set #{name}="#{value}"})
+    request['Authorization'] = "Bearer #{api_token}"
+    request['Accept']        = 'application/vnd.heroku+json; version=3'
+    request['Content-Type']  = 'application/json'
+    request.body             = ::JSON.dump(Hash[name, value])
 
-    fail NameError, "The variable name '#{name}' is invalid" if response.include?('invalid')
+    response = ::JSON.parse(response(request).body)
+
+    fail NameError, response['message'] if response['message']
 
     response
   end
 
   def environment_variables
-    @environment_variables ||= ::JSON.parse(heroku('config --json'))
+    request = ::Net::HTTP::Get.new(config_vars_uri)
+
+    request['Authorization'] = "Bearer #{api_token}"
+    request['Accept']        = 'application/vnd.heroku+json; version=3'
+
+    response = ::JSON.parse(response(request).body)
+
+    fail NameError, response['message'] if response['message']
+
+    response
   end
 
   def remove_environment_variable(name)
-    heroku("config:unset #{name}")
+    add_environment_variable(name, nil)
   end
 
   private
 
-  def heroku(command)
-    Bundler.with_clean_env { `heroku #{command}#{app_option} 2>&1` }
+  def config_vars_uri
+    "#{API_BASE_URI}/apps/#{app}/config-vars"
   end
 
-  def app_option
-    app ? " --app='#{app}'" : ''
+  def response(request)
+    connection.request(request)
+  end
+
+  def connection
+    @connection ||= ::Net::HTTP.new(API_HOST, API_PORT).tap do |conn|
+      conn.use_ssl = true
+    end
   end
 end
 end
