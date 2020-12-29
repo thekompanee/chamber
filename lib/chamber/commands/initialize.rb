@@ -11,20 +11,20 @@ require 'chamber/commands/base'
 module  Chamber
 module  Commands
 class   Initialize < Chamber::Commands::Base
-  def self.call(options = {})
-    new(options).call
+  def self.call(**args)
+    new(**args).call
   end
 
   attr_accessor :basepath,
                 :namespaces,
                 :signature
 
-  def initialize(options = {})
-    super
+  def initialize(signature:, namespaces: [], **args)
+    super(**args)
 
     self.basepath   = Chamber.configuration.basepath
-    self.namespaces = options.fetch(:namespaces, [])
-    self.signature  = options.fetch(:signature)
+    self.namespaces = namespaces
+    self.signature  = signature
   end
 
   # rubocop:disable Layout/LineLength, Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity

@@ -24,8 +24,5 @@ Style/HashTransformValues:
 Style/StringConcatenation:
   Enabled:            false
 
-Style/OptionHash:
-  Enabled:            false
-
 Security/YAMLLoad:
   Enabled:            false

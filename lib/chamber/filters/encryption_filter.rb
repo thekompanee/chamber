@@ -26,14 +26,14 @@ class     EncryptionFilter
                 :secure_key_token
   attr_reader   :encryption_keys
 
-  def initialize(options = {})
-    self.encryption_keys  = options.fetch(:encryption_keys, {}) || {}
-    self.data             = options.fetch(:data).dup
-    self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
+  def initialize(data:, secure_key_prefix:, encryption_keys: {}, **_args)
+    self.encryption_keys  = encryption_keys || {}
+    self.data             = data.dup
+    self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
 
-  def self.execute(options = {})
-    new(options).__send__(:execute)
+  def self.execute(**args)
+    new(**args).__send__(:execute)
   end
 
   protected

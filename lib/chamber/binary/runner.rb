@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'thor'
+require 'chamber/core_ext/hash'
 require 'chamber/rubinius_fix'
 require 'chamber/binary/travis'
 require 'chamber/binary/heroku'
@@ -92,7 +93,7 @@ class   Runner < Thor
                          'Useful for debugging.'
 
   def show
-    puts Commands::Show.call(options.merge(shell: self))
+    puts Commands::Show.call(**options.transform_keys(&:to_sym).merge(shell: self))
   end
 
   ################################################################################
@@ -100,7 +101,7 @@ class   Runner < Thor
   desc 'files', 'Lists the settings files which are parsed with the given options'
 
   def files
-    puts Commands::Files.call(options.merge(shell: self))
+    puts Commands::Files.call(**options.transform_keys(&:to_sym).merge(shell: self))
   end
 
   ################################################################################
@@ -118,17 +119,19 @@ class   Runner < Thor
                          'of the two sets of settings'
 
   method_option :first,
-                type: :array,
-                desc: 'The list of namespaces which will be used as the source of ' \
-                      'the comparison'
+                type:     :array,
+                required: true,
+                desc:     'The list of namespaces which will be used as the source of ' \
+                          'the comparison'
 
   method_option :second,
-                type: :array,
-                desc: 'The list of namespaces which will be used as the destination ' \
-                      'of the comparison'
+                type:     :array,
+                required: true,
+                desc:     'The list of namespaces which will be used as the ' \
+                          'destination of the comparison'
 
   def compare
-    Commands::Compare.call(options.merge(shell: self))
+    Commands::Compare.call(**options.transform_keys(&:to_sym).merge(shell: self))
   end
 
   ################################################################################
@@ -148,7 +151,7 @@ class   Runner < Thor
                          'what values would be encrypted'
 
   def secure
-    Commands::Secure.call(options.merge(shell: self))
+    Commands::Secure.call(**options.transform_keys(&:to_sym).merge(shell: self))
   end
 
   ################################################################################
@@ -167,9 +170,9 @@ class   Runner < Thor
 
   def sign
     if options[:verify]
-      Commands::Verify.call(options.merge(shell: self))
+      Commands::Verify.call(**options.transform_keys(&:to_sym).merge(shell: self))
     else
-      Commands::Sign.call(options.merge(shell: self))
+      Commands::Sign.call(**options.transform_keys(&:to_sym).merge(shell: self))
     end
   end
 
@@ -183,7 +186,7 @@ class   Runner < Thor
                 default: false
 
   def init
-    Commands::Initialize.call(options.merge(shell: self))
+    Commands::Initialize.call(**options.transform_keys(&:to_sym).merge(shell: self))
   end
 end
 end

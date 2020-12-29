@@ -5,16 +5,16 @@ require 'hashie/mash'
 module  Chamber
 module  Filters
 class   SecureFilter
-  def self.execute(options = {})
-    new(options).__send__(:execute)
+  def self.execute(**args)
+    new(**args).__send__(:execute)
   end
 
   attr_accessor :data,
                 :secure_key_token
 
-  def initialize(options = {})
-    self.data             = Hashie::Mash.new(options.fetch(:data))
-    self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
+  def initialize(data:, secure_key_prefix:, **_args)
+    self.data             = Hashie::Mash.new(data)
+    self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
 
   protected

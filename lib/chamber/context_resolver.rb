@@ -3,7 +3,6 @@
 require 'pathname'
 require 'socket'
 
-require 'chamber/core_ext/hash'
 require 'chamber/keys/decryption'
 require 'chamber/keys/encryption'
 
@@ -11,8 +10,8 @@ module  Chamber
 class   ContextResolver
   attr_accessor :options
 
-  def initialize(options = {})
-    self.options = options.transform_keys(&:to_sym)
+  def initialize(**args)
+    self.options = args
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Layout/LineLength
@@ -49,8 +48,8 @@ class   ContextResolver
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Layout/LineLength
 
-  def self.resolve(options = {})
-    new(options).resolve
+  def self.resolve(**args)
+    new(**args).resolve
   end
 
   protected

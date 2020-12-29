@@ -6,15 +6,15 @@ require 'chamber/instance'
 module  Chamber
 module  Commands
 module  Securable
-  def initialize(options = {})
-    super
+  def initialize(only_sensitive: nil, **args)
+    super(**args)
 
-    ignored_settings_options        = options
+    ignored_settings_options        = args
                                         .merge(files: ignored_settings_filepaths)
                                         .reject { |k, _v| k == 'basepath' }
-    self.ignored_settings_instance  = Chamber::Instance.new(ignored_settings_options)
-    self.current_settings_instance  = Chamber::Instance.new(options)
-    self.only_sensitive             = options[:only_sensitive]
+    self.ignored_settings_instance  = Chamber::Instance.new(**ignored_settings_options)
+    self.current_settings_instance  = Chamber::Instance.new(**args)
+    self.only_sensitive             = only_sensitive
   end
 
   protected

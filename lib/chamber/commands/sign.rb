@@ -5,8 +5,8 @@ require 'chamber/commands/base'
 module  Chamber
 module  Commands
 class   Sign < Chamber::Commands::Base
-  def initialize(options = {})
-    super(options.merge(namespaces: ['*']))
+  def initialize(**args)
+    super(**args.merge(namespaces: ['*']))
   end
 
   def call

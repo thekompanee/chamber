@@ -5,16 +5,16 @@ require 'hashie/mash'
 module  Chamber
 module  Filters
 class   NamespaceFilter
-  def self.execute(options = {})
-    new(options).__send__(:execute)
+  def self.execute(**args)
+    new(**args).__send__(:execute)
   end
 
   attr_accessor :data,
                 :namespaces
 
-  def initialize(options = {})
-    self.data       = Hashie::Mash.new(options.fetch(:data))
-    self.namespaces = options.fetch(:namespaces)
+  def initialize(data:, namespaces:, **_args)
+    self.data       = Hashie::Mash.new(data)
+    self.namespaces = namespaces
   end
 
   protected

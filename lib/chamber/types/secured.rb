@@ -23,11 +23,10 @@ class   Secured < CHAMBER_TYPE_VALUE_SUPERCLASS
   attr_accessor :decryption_keys,
                 :encryption_keys
 
-  def initialize(options = {})
-    self.encryption_keys = options.fetch(:encryption_keys,
-                                         Chamber.configuration.encryption_keys)
-    self.decryption_keys = options.fetch(:decryption_keys,
-                                         Chamber.configuration.decryption_keys)
+  def initialize(decryption_keys: ::Chamber.configuration.decryption_keys,
+                 encryption_keys: ::Chamber.configuration.encryption_keys)
+    self.decryption_keys = decryption_keys
+    self.encryption_keys = encryption_keys
 
     super()
   end

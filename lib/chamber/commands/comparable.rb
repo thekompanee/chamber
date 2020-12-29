@@ -5,10 +5,10 @@ require 'tempfile'
 module  Chamber
 module  Commands
 module  Comparable
-  def initialize(options = {})
+  def initialize(keys_only:, **args)
     super
 
-    self.keys_only = options[:keys_only]
+    self.keys_only = keys_only
   end
 
   def call

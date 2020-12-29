@@ -9,10 +9,10 @@ module  Cloud
 class   Pull < Chamber::Commands::Cloud::Base
   attr_accessor :target_file
 
-  def initialize(options = {})
+  def initialize(into:, **args)
     super
 
-    self.target_file = options[:into]
+    self.target_file = into
   end
 
   def call

@@ -36,7 +36,7 @@ test:
   my_setting: hello
     HEREDOC
 
-    Sign.call(options)
+    Sign.call(**options)
 
     expect(signature_filename.read).to eql(<<-HEREDOC)
 Signed By: Suzy Q Robinson

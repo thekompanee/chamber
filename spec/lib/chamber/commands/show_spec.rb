@@ -17,7 +17,7 @@ describe  Show do
   end
 
   it 'can return values formatted as environment variables' do
-    expect(Show.call(options.merge(as_env: true)))
+    expect(Show.call(**options.merge(as_env: true)))
       .to eql(
             <<-HEREDOC.chomp)
 ANOTHER_LEVEL_LEVEL_THREE_A_SCALAR="hello"
@@ -32,7 +32,7 @@ MY_SETTING="my_value"
   end
 
   it 'can return values filtered by whether or not they are secure' do
-    expect(Show.call(options.merge(as_env: true, only_sensitive: true)))
+    expect(Show.call(**options.merge(as_env: true, only_sensitive: true)))
       .to eql(
             <<-HEREDOC.chomp)
 MY_SECURE_SETTINGS="my_secure_value"
@@ -40,7 +40,7 @@ MY_SECURE_SETTINGS="my_secure_value"
   end
 
   it 'can return values formatted as a hash' do
-    expect(Show.call(options))
+    expect(Show.call(**options))
       .to eql(
             <<-HEREDOC.chomp)
 {"my_setting"=>"my_value",

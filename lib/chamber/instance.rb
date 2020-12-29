@@ -9,9 +9,9 @@ class   Instance
   attr_accessor :configuration,
                 :files
 
-  def initialize(options = {})
-    self.configuration = Configuration.new  options
-    self.files         = FileSet.new        configuration.to_hash
+  def initialize(**args)
+    self.configuration = Configuration.new(**args)
+    self.files         = FileSet.new(**configuration.to_hash)
   end
 
   def settings
@@ -34,12 +34,12 @@ class   Instance
     files.verify
   end
 
-  def encrypt(data, options = {})
-    config = configuration.to_hash.merge(options)
+  def encrypt(data, **args)
+    config = configuration.to_hash.merge(**args)
 
     Settings
       .new(
-        config.merge(
+        **config.merge(
           settings:     data,
           pre_filters:  [Filters::EncryptionFilter],
           post_filters: [],
@@ -48,12 +48,12 @@ class   Instance
       .to_hash
   end
 
-  def decrypt(data, options = {})
-    config = configuration.to_hash.merge(options)
+  def decrypt(data, **args)
+    config = configuration.to_hash.merge(**args)
 
     Settings
       .new(
-        config.merge(
+        **config.merge(
           settings:     data,
           pre_filters:  [Filters::NamespaceFilter],
           post_filters: [
@@ -65,8 +65,8 @@ class   Instance
       .to_hash
   end
 
-  def to_s(options = {})
-    settings.to_s(options)
+  def to_s(**args)
+    settings.to_s(**args)
   end
 
   def method_missing(name, *args)

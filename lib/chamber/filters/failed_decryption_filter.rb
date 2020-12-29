@@ -7,16 +7,16 @@ module  Filters
 class   FailedDecryptionFilter
   BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9+/]{342}==\z}.freeze
 
-  def self.execute(options = {})
-    new(options).__send__(:execute)
+  def self.execute(**args)
+    new(**args).__send__(:execute)
   end
 
   attr_accessor :data,
                 :secure_key_token
 
-  def initialize(options = {})
-    self.data             = options.fetch(:data).dup
-    self.secure_key_token = /\A#{Regexp.escape(options.fetch(:secure_key_prefix))}/
+  def initialize(data:, secure_key_prefix:, **_args)
+    self.data             = data.dup
+    self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
 
   protected

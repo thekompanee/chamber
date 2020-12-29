@@ -9,10 +9,10 @@ class  KeyPair
                 :namespace,
                 :passphrase
 
-  def initialize(options = {})
-    self.namespace     = options[:namespace]
-    self.passphrase    = options.fetch(:passphrase, SecureRandom.uuid)
-    self.key_file_path = Pathname.new(options.fetch(:key_file_path))
+  def initialize(key_file_path:, namespace: nil, passphrase: ::SecureRandom.uuid)
+    self.namespace     = namespace
+    self.passphrase    = passphrase
+    self.key_file_path = Pathname.new(key_file_path)
   end
 
   def encrypted_private_key_passphrase_filepath

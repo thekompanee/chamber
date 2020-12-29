@@ -33,7 +33,7 @@ test:
   _secure_my_unencrpyted_setting: hello
     HEREDOC
 
-    Secure.call(options)
+    Secure.call(**options)
 
     expect(settings_filename.read)
       .to match %r{_secure_my_unencrpyted_setting: [A-Za-z0-9+/]{342}==}

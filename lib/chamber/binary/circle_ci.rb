@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'thor'
+require 'chamber/core_ext/hash'
 require 'chamber/commands/cloud/clear'
 require 'chamber/commands/cloud/push'
 require 'chamber/commands/cloud/pull'
@@ -47,7 +48,9 @@ class   CircleCi < Thor
                          'would change if cleared'
 
   def clear
-    Commands::Cloud::Clear.call(options.merge(shell: self, adapter: 'circle_ci'))
+    Commands::Cloud::Clear.call(**options
+                                    .transform_keys(&:to_sym)
+                                    .merge(shell: self, adapter: 'circle_ci'))
   end
 
   desc 'push',
@@ -77,7 +80,9 @@ class   CircleCi < Thor
                          'will be pushed'
 
   def push
-    Commands::Cloud::Push.call(options.merge(shell: self, adapter: 'circle_ci'))
+    Commands::Cloud::Push.call(**options
+                                   .transform_keys(&:to_sym)
+                                   .merge(shell: self, adapter: 'circle_ci'))
   end
 
   desc 'pull',
@@ -90,7 +95,9 @@ class   CircleCi < Thor
                       'stored. This file WILL BE OVERRIDDEN.'
 
   def pull
-    Commands::Cloud::Pull.call(options.merge(shell: self, adapter: 'circle_ci'))
+    Commands::Cloud::Pull.call(**options
+                                   .transform_keys(&:to_sym)
+                                   .merge(shell: self, adapter: 'circle_ci'))
   end
 
   desc 'compare',
@@ -106,7 +113,9 @@ class   CircleCi < Thor
                          'which are marked as "_secure"'
 
   def compare
-    Commands::Cloud::Compare.call(options.merge(shell: self, adapter: 'circle_ci'))
+    Commands::Cloud::Compare.call(**options
+                                      .transform_keys(&:to_sym)
+                                      .merge(shell: self, adapter: 'circle_ci'))
   end
 end
 end

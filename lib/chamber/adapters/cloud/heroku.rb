@@ -15,9 +15,9 @@ class   Heroku
   attr_accessor :api_token,
                 :app
 
-  def initialize(options = {})
-    self.api_token = options.fetch(:api_token)
-    self.app       = options.fetch(:app)
+  def initialize(api_token:, app:)
+    self.api_token = api_token
+    self.app       = app
   end
 
   def add_environment_variable(name, value) # rubocop:disable Metrics/AbcSize

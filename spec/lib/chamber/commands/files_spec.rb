@@ -15,7 +15,7 @@ describe  Files do
   end
 
   it 'can return values formatted as environment variables' do
-    files = Files.call(options)
+    files = Files.call(**options)
 
     expect(files.size).to   be      1
     expect(files.first).to  include 'spec/fixtures/settings.yml'

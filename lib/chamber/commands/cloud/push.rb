@@ -12,10 +12,10 @@ class   Push < Chamber::Commands::Cloud::Base
 
   attr_accessor :keys
 
-  def initialize(options = {})
-    super
+  def initialize(keys:, **args)
+    super(**args)
 
-    self.keys = options[:keys]
+    self.keys = keys
   end
 
   def call

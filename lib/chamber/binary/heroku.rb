@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'thor'
+require 'chamber/core_ext/hash'
 require 'chamber/commands/cloud/clear'
 require 'chamber/commands/cloud/push'
 require 'chamber/commands/cloud/pull'
@@ -35,7 +36,9 @@ class   Heroku < Thor
                          'would change if cleared'
 
   def clear
-    Commands::Cloud::Clear.call(options.merge(shell: self, adapter: 'heroku'))
+    Commands::Cloud::Clear.call(**options
+                                    .transform_keys(&:to_sym)
+                                    .merge(shell: self, adapter: 'heroku'))
   end
 
   desc 'push',
@@ -65,7 +68,9 @@ class   Heroku < Thor
                          'will be pushed'
 
   def push
-    Commands::Cloud::Push.call(options.merge(shell: self, adapter: 'heroku'))
+    Commands::Cloud::Push.call(**options
+                                   .transform_keys(&:to_sym)
+                                   .merge(shell: self, adapter: 'heroku'))
   end
 
   desc 'pull',
@@ -78,7 +83,9 @@ class   Heroku < Thor
                       'stored. This file WILL BE OVERRIDDEN.'
 
   def pull
-    Commands::Cloud::Pull.call(options.merge(shell: self, adapter: 'heroku'))
+    Commands::Cloud::Pull.call(**options
+                                   .transform_keys(&:to_sym)
+                                   .merge(shell: self, adapter: 'heroku'))
   end
 
   desc 'compare',
@@ -94,7 +101,9 @@ class   Heroku < Thor
                          'which are marked as "_secure"'
 
   def compare
-    Commands::Cloud::Compare.call(options.merge(shell: self, adapter: 'heroku'))
+    Commands::Cloud::Compare.call(**options
+                                      .transform_keys(&:to_sym)
+                                      .merge(shell: self, adapter: 'heroku'))
   end
 end
 end

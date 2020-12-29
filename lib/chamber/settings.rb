@@ -16,29 +16,40 @@ require 'chamber/filters/failed_decryption_filter'
 #
 module  Chamber
 class   Settings
-  attr_accessor :pre_filters,
-                :post_filters,
+  attr_accessor :decryption_keys,
                 :encryption_keys,
-                :decryption_keys
+                :post_filters,
+                :pre_filters,
+                :secure_key_prefix
   attr_reader   :namespaces
 
-  # rubocop:disable Metrics/CyclomaticComplexity, Layout/LineLength
-  def initialize(options = {})
-    self.namespaces      = options[:namespaces]      || []
-    self.raw_data        = options[:settings]        || {}
-    self.decryption_keys = options[:decryption_keys] || {}
-    self.encryption_keys = options[:encryption_keys] || {}
-    self.pre_filters     = options[:pre_filters]     || [
-                                                          Filters::NamespaceFilter,
-                                                        ]
-    self.post_filters    = options[:post_filters]    || [
-                                                          Filters::DecryptionFilter,
-                                                          Filters::EnvironmentFilter,
-                                                          Filters::FailedDecryptionFilter,
-                                                          Filters::TranslateSecureKeysFilter,
-                                                        ]
+  # rubocop:disable Metrics/ParameterLists
+  def initialize(
+                  decryption_keys:   {},
+                  encryption_keys:   {},
+                  namespaces:        [],
+                  pre_filters:       [
+                                       Filters::NamespaceFilter,
+                                     ],
+                  post_filters:      [
+                                       Filters::DecryptionFilter,
+                                       Filters::EnvironmentFilter,
+                                       Filters::FailedDecryptionFilter,
+                                       Filters::TranslateSecureKeysFilter,
+                                     ],
+                  secure_key_prefix: '_secure_',
+                  settings:          {},
+                  **_args
+                )
+    self.decryption_keys   = decryption_keys
+    self.encryption_keys   = encryption_keys
+    self.namespaces        = namespaces
+    self.post_filters      = post_filters
+    self.pre_filters       = pre_filters
+    self.raw_data          = settings
+    self.secure_key_prefix = secure_key_prefix
   end
-  # rubocop:enable Metrics/CyclomaticComplexity, Layout/LineLength
+  # rubocop:enable Metrics/ParameterLists
 
   ###
   # Internal: Converts a Settings object into a hash that is compatible as an
@@ -79,15 +90,11 @@ class   Settings
   #                 } ).to_s
   #   # => 'MY_KEY="my value" MY_OTHER_KEY="my other value"'
   #
-  def to_s(options = {})
-    hierarchical_separator = options[:hierarchical_separator] || '_'
-    pair_separator         = options[:pair_separator]         || ' '
-    value_surrounder       = options[:value_surrounder]       || '"'
-    name_value_separator   = options[:name_value_separator]   || '='
-
-    concatenated_name_hash = to_concatenated_name_hash(hierarchical_separator)
-
-    pairs = concatenated_name_hash.to_a.map do |key, value|
+  def to_s(hierarchical_separator: '_',
+           pair_separator:         ' ',
+           value_surrounder:       '"',
+           name_value_separator:   '=')
+    pairs = to_concatenated_name_hash(hierarchical_separator).to_a.map do |key, value|
       "#{key.upcase}#{name_value_separator}#{value_surrounder}#{value}#{value_surrounder}"
     end
 
@@ -221,14 +228,14 @@ class   Settings
   end
 
   def securable
-    Settings.new(metadata.merge(
+    Settings.new(**metadata.merge(
                    settings:    raw_data,
                    pre_filters: [Filters::SecureFilter],
                  ))
   end
 
   def secure
-    Settings.new(metadata.merge(
+    Settings.new(**metadata.merge(
                    settings:     raw_data,
                    pre_filters:  [Filters::EncryptionFilter],
                    post_filters: [Filters::TranslateSecureKeysFilter],
@@ -236,7 +243,7 @@ class   Settings
   end
 
   def insecure
-    Settings.new(metadata.merge(
+    Settings.new(**metadata.merge(
                    settings:     raw_data,
                    pre_filters:  [Filters::InsecureFilter],
                    post_filters: [Filters::TranslateSecureKeysFilter],
@@ -266,21 +273,15 @@ class   Settings
   # rubocop:disable Naming/MemoizedInstanceVariableName
   def raw_data
     @filtered_raw_data ||= pre_filters.inject(@raw_data) do |filtered_data, filter|
-      filter.execute({ data: filtered_data }
-                     .merge(metadata))
+      filter.execute(**{ data: filtered_data }.merge(metadata))
     end
   end
   # rubocop:enable Naming/MemoizedInstanceVariableName
 
   def data
     @data ||= post_filters.inject(raw_data) do |filtered_data, filter|
-      filter.execute({ data: filtered_data }
-                     .merge(metadata))
+      filter.execute(**{ data: filtered_data }.merge(metadata))
     end
-  end
-
-  def secure_key_prefix
-    '_secure_'
   end
 
   def metadata

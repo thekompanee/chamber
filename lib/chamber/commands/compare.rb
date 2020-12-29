@@ -12,18 +12,15 @@ class   Compare < Chamber::Commands::Base
   attr_accessor :first_settings_instance,
                 :second_settings_instance
 
-  def self.call(options = {})
-    new(options).call
+  def self.call(**args)
+    new(**args).call
   end
 
-  def initialize(options = {})
-    super
+  def initialize(first:, second:, **args)
+    super(**args)
 
-    first_settings_options        = options.merge(namespaces: options[:first])
-    self.first_settings_instance  = Chamber::Instance.new(first_settings_options)
-
-    second_settings_options       = options.merge(namespaces: options[:second])
-    self.second_settings_instance = Chamber::Instance.new(second_settings_options)
+    self.first_settings_instance  = Chamber::Instance.new(args.merge(namespaces: first))
+    self.second_settings_instance = Chamber::Instance.new(args.merge(namespaces: second))
   end
 
   protected

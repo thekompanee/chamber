@@ -45,7 +45,7 @@ QhGPAea/1RQZnh8ES+Esmr3ZssBtZJvxp+yW7wUMHc2D5Mq9SzLymuwSxLtOGuJsqlxMWW0FaOIK1F0A
 -----END CHAMBER SIGNATURE-----
     HEREDOC
 
-    result = Verify.call(options)
+    result = Verify.call(**options)
 
     expect(result).to eql(
                         'settings/settings.yml' => true,

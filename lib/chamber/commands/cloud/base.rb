@@ -8,10 +8,10 @@ module  Cloud
 class   Base < Chamber::Commands::Base
   attr_accessor :adapter
 
-  def initialize(options = {})
-    super
+  def initialize(adapter:, **args)
+    super(**args)
 
-    self.adapter = adapter_class(options[:adapter]).new(options)
+    self.adapter = adapter_class(adapter).new(**args)
   end
 
   private

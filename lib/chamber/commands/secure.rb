@@ -8,8 +8,8 @@ module  Commands
 class   Secure < Chamber::Commands::Base
   include Chamber::Commands::Securable
 
-  def initialize(options = {})
-    super(options.merge(namespaces: ['*']))
+  def initialize(**args)
+    super(**args.merge(namespaces: ['*']))
   end
 
   def call

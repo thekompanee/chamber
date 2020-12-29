@@ -12,8 +12,8 @@ class   Configuration
                 :rootpath,
                 :signature_name
 
-  def initialize(options = {})
-    options              = ContextResolver.resolve(options)
+  def initialize(**args)
+    options              = ContextResolver.resolve(**args)
 
     self.basepath        = options.fetch(:basepath)
     self.namespaces      = options.fetch(:namespaces)

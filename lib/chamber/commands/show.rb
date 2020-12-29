@@ -9,11 +9,11 @@ class   Show < Chamber::Commands::Base
   attr_accessor :as_env,
                 :only_sensitive
 
-  def initialize(options = {})
-    super
+  def initialize(as_env: nil, only_sensitive: nil, **args)
+    super(**args)
 
-    self.as_env         = options[:as_env]
-    self.only_sensitive = options[:only_sensitive]
+    self.as_env         = as_env
+    self.only_sensitive = only_sensitive
   end
 
   def call

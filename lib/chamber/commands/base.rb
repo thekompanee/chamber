@@ -6,26 +6,20 @@ require 'chamber/instance'
 module  Chamber
 module  Commands
 class   Base
-  def self.call(options = {})
-    new(options).call
+  def self.call(**args)
+    new(**args).call
   end
 
   attr_accessor :chamber,
-                :shell,
-                :dry_run
-  attr_reader   :rootpath
+                :dry_run,
+                :rootpath,
+                :shell
 
-  def initialize(options = {})
-    self.chamber  = Chamber::Instance.new options
-    self.shell    = options[:shell]
-    self.rootpath = options[:rootpath]
-    self.dry_run  = options[:dry_run]
-  end
-
-  protected
-
-  def rootpath=(other)
-    @rootpath = Pathname.new(other)
+  def initialize(shell: nil, rootpath: nil, dry_run: nil, **args)
+    self.chamber  = Chamber::Instance.new(rootpath: rootpath, **args)
+    self.shell    = shell
+    self.rootpath = chamber.configuration.rootpath
+    self.dry_run  = dry_run
   end
 end
 end

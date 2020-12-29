@@ -43,13 +43,13 @@ class   File < Pathname
   #   Chamber::File.new path: '/tmp/settings.yml'
   #   # => <Chamber::File>
   #
-  def initialize(options = {})
-    self.namespaces      = options[:namespaces]      || {}
-    self.decryption_keys = options[:decryption_keys] || {}
-    self.encryption_keys = options[:encryption_keys] || {}
-    self.signature_name  = options[:signature_name]
+  def initialize(path:, namespaces: {}, decryption_keys: {}, encryption_keys: {}, signature_name: nil)
+    self.namespaces      = namespaces
+    self.decryption_keys = decryption_keys
+    self.encryption_keys = encryption_keys
+    self.signature_name  = signature_name
 
-    super options.fetch(:path)
+    super path
   end
 
   ###

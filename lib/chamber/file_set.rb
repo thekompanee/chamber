@@ -119,14 +119,21 @@ class   FileSet
   attr_reader   :namespaces,
                 :paths
 
-  def initialize(options = {})
-    self.namespaces      = options[:namespaces] || {}
-    self.decryption_keys = options[:decryption_keys]
-    self.encryption_keys = options[:encryption_keys]
-    self.paths           = options.fetch(:files)
-    self.basepath        = options[:basepath]
-    self.signature_name  = options[:signature_name]
+  # rubocop:disable Metrics/ParameterLists
+  def initialize(files:,
+                 basepath:        nil,
+                 decryption_keys: nil,
+                 encryption_keys: nil,
+                 namespaces:      {},
+                 signature_name:  nil)
+    self.basepath        = basepath
+    self.decryption_keys = decryption_keys
+    self.encryption_keys = encryption_keys
+    self.namespaces      = namespaces
+    self.paths           = files
+    self.signature_name  = signature_name
   end
+  # rubocop:enable Metrics/ParameterLists
 
   ###
   # Internal: Returns an Array of the ordered list of files that was processed

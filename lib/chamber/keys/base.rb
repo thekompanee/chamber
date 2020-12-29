@@ -3,18 +3,18 @@
 module  Chamber
 module  Keys
 class   Base
-  def self.resolve(*args)
-    new(*args).resolve
+  def self.resolve(**args)
+    new(**args).resolve
   end
 
   attr_accessor :rootpath
   attr_reader   :filenames,
                 :namespaces
 
-  def initialize(options = {})
-    self.rootpath   = Pathname.new(options.fetch(:rootpath))
-    self.namespaces = options.fetch(:namespaces)
-    self.filenames  = options[:filenames]
+  def initialize(rootpath:, namespaces:, filenames: nil)
+    self.rootpath   = Pathname.new(rootpath)
+    self.namespaces = namespaces
+    self.filenames  = filenames
   end
 
   def resolve

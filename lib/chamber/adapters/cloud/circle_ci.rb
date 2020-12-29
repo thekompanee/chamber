@@ -17,11 +17,11 @@ class   CircleCi
                 :username,
                 :vcs_type
 
-  def initialize(options = {})
-    self.api_token = options.fetch(:api_token)
-    self.project   = options.fetch(:project)
-    self.username  = options.fetch(:username)
-    self.vcs_type  = options.fetch(:vcs_type)
+  def initialize(api_token:, project:, username:, vcs_type:)
+    self.api_token = api_token
+    self.project   = project
+    self.username  = username
+    self.vcs_type  = vcs_type
   end
 
   def add_environment_variable(name, value)
