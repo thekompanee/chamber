@@ -12,6 +12,8 @@ module  Chamber
   end
 
   def to_s(options = {})
+    return '' unless @instance
+
     instance.to_s(options)
   end
 
