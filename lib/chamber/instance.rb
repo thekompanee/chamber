@@ -92,15 +92,5 @@ class   Instance
       )
       .to_hash
   end
-
-  def method_missing(name, *args)
-    return settings.public_send(name, *args) if settings.respond_to?(name)
-
-    super
-  end
-
-  def respond_to_missing?(name, include_private = false)
-    settings.respond_to?(name, include_private)
-  end
 end
 end
