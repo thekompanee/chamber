@@ -46,7 +46,60 @@ For an idea of how Chamber compares to other popular libraries, check out our
 Basic Usage
 --------------------------------------------------------------------------------
 
-You can view our Basic Usage Guide [here][basic-usage].  Otherwise, for the full
+Before starting this guide, make sure you [install chamber][installation].
+
+Once your app is initialized, you should have a `settings.yml` file somewhere.
+A lot of times it's the root of your project and sometimes it's in a framework
+specific location.
+
+Inside of here you can define any settings you'd like like so:
+
+```yaml
+# settings.yml
+
+smtp_username: 'my_username'
+smtp_password: 'my_password'
+```
+
+From there you can access your settings by using the special `Chamber.env`
+constant.
+
+```ruby
+Chamber.env.smtp_password
+# => 'my_password'
+```
+
+If you want to encrypt a setting, prefix the setting name with `_secure_` like
+so:
+
+```ruby
+# settings.yml
+
+smtp_username:         'my_username'
+_secure_smtp_password: 'my_password'
+```
+
+And then run `chamber secure`.  Your settings file will have an encrypted value:
+
+```ruby
+# settings.yml
+
+smtp_username:         'my_username'
+_secure_smtp_password: JL5hAVux4tERpv49QPWxy9H0VC2Rnk7V8/e8+1XOwPcXcoH/a7Lh253UY/v9m8nI/Onb+ZG9nZ082J4M/BmLa+f7jwMEwufIqbUhUah9eKIW8xcxlppBYpl7JVGf2HJF5TfCN44gMQNgGNzboCQXKqRyeGFm4u772Sg9V2gEx/q7qJ6F4jg7v/cltCFLmJfXA2SHA5Dai4p9L4IvMVVJGm34k5j7KOegNqpVWs2RY99cagjPuzc9VM2XSUsXgqcUJdmH8YtPW8Kqkyg0oYlRh6VQWABlWXwTZz74QjTTjqtqfoELIoFTMBDh+cCvuUTAE5m06LhlqauVrB4UnBsd5g==
+```
+
+which you still access the same way because Chamber handles the decryption for
+you:
+
+```ruby
+Chamber.env.smtp_password
+# => 'my_password'
+```
+
+Full Reference
+--------------------------------------------------------------------------------
+
+There's so much to Chamber, we couldn't put it all in the README.  For the full
 Chamber guide, visit the [wiki][wiki].
 
 Credits
@@ -64,11 +117,10 @@ The names and logos for The Kompanee are trademarks of The Kompanee, Ltd.
 License
 --------------------------------------------------------------------------------
 
-Chamber is Copyright © 2014-2019 Jeff Felchner and Mark McEahern. It is free
+Chamber is Copyright © 2014-2021 Jeff Felchner and Mark McEahern. It is free
 software, and may be redistributed under the terms specified in the
 [LICENSE][license] file.
 
-[basic-usage]:   https://github.com/thekompanee/chamber/wiki/Basic-Usage
 [comparison]:    https://github.com/thekompanee/chamber/wiki/Gem-Comparison
 [jeff-profile]:  https://github.com/jfelchner
 [kompanee-logo]: https://kompanee-public-assets.s3.amazonaws.com/readmes/kompanee-horizontal-black.png
@@ -76,3 +128,4 @@ software, and may be redistributed under the terms specified in the
 [license]:       https://github.com/thekompanee/chamber/blob/master/LICENSE.txt
 [mark-profile]:  https://github.com/m5rk
 [wiki]:          https://github.com/thekompanee/chamber/wiki
+[installation]:  https://github.com/thekompanee/chamber/wiki/Installation
