@@ -18,6 +18,10 @@ class   Instance
     @settings ||= files.to_settings { |settings| @settings = settings }
   end
 
+  def [](key)
+    settings.[](key)
+  end
+
   def filenames
     files.filenames
   end
@@ -32,6 +36,22 @@ class   Instance
 
   def verify
     files.verify
+  end
+
+  def to_environment
+    settings.to_environment
+  end
+
+  def to_s(**args)
+    settings.to_s(**args)
+  end
+
+  def to_hash
+    settings.to_hash
+  end
+
+  def namespaces
+    settings.namespaces
   end
 
   def encrypt(data, **args)
@@ -63,10 +83,6 @@ class   Instance
         ),
       )
       .to_hash
-  end
-
-  def to_s(**args)
-    settings.to_s(**args)
   end
 
   def method_missing(name, *args)
