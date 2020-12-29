@@ -114,10 +114,6 @@ describe Chamber do
     expect(Chamber[:test][:my_setting]).to eql 'my_value'
   end
 
-  it 'can access the settings through method-based access' do
-    expect(Chamber.test.my_setting).to eql 'my_value'
-  end
-
   it 'can access the settings via "env"' do
     expect(Chamber.env.test.my_setting).to eql 'my_value'
   end
@@ -127,9 +123,9 @@ describe Chamber do
     ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = '[1, 2, 3]'
 
     Chamber.load(basepath: '/tmp/chamber')
-    expect(Chamber.test.my_setting).to eql 'some_other_value'
-    expect(Chamber.test.another_level.level_three.an_array).to eql [1, 2, 3]
-    expect(Chamber.test.my_dynamic_setting).to be 2
+    expect(Chamber[:test][:my_setting]).to eql 'some_other_value'
+    expect(Chamber[:test][:another_level][:level_three]['an_array']).to eql [1, 2, 3]
+    expect(Chamber[:test][:my_dynamic_setting]).to be 2
 
     ENV.delete 'TEST_MY_SETTING'
     ENV.delete 'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'
@@ -141,8 +137,8 @@ describe Chamber do
                    my_namespace: -> { 'blue' },
                  })
 
-    expect(Chamber.other.everything).to        eql 'works'
-    expect(Chamber.test.my_dynamic_setting).to be  2
+    expect(Chamber[:other][:everything]).to        eql 'works'
+    expect(Chamber[:test][:my_dynamic_setting]).to be  2
   end
 
   it 'loads multiple namespaces if it is called twice' do
@@ -209,14 +205,14 @@ describe Chamber do
                    my_namespace: -> { 'blue' },
                  })
 
-    expect(Chamber.test.my_setting).to                eql 'my_value'
-    expect(Chamber.test.my_other_setting).to          eql 'my_other_value'
-    expect(Chamber.test.another_level.setting_one).to be  3
+    expect(Chamber[:test][:my_setting]).to                eql 'my_value'
+    expect(Chamber[:test][:my_other_setting]).to          eql 'my_other_value'
+    expect(Chamber[:test][:another_level][:setting_one]).to be  3
   end
 
   it 'loads YAML files from the "settings" directory under the base directory if ' \
      'any exist' do
-    expect(Chamber.sub_settings.my_sub_setting).to eql 'my_sub_setting_value'
+    expect(Chamber[:sub_settings][:my_sub_setting]).to eql 'my_sub_setting_value'
   end
 
   it 'does not load YAML files from the "settings" directory if it is namespaced' do
@@ -297,13 +293,8 @@ describe Chamber do
     expect(Chamber.env.sub_key.sub_sub_key.other_setting).to eql 'hello other'
   end
 
-  it 'can notify properly whether it responds to messages if the underlying ' \
-     'settings does' do
-    expect(Chamber.respond_to?(:sub_settings)).to be_a TrueClass
-  end
-
   it 'can explicitly specify files without specifying a basepath' do
-    Chamber.load files: ['/tmp/chamber/settings.yml']
+    Chamber.load(files: ['/tmp/chamber/settings.yml'])
 
     expect(Chamber.filenames).to  eql ['/tmp/chamber/settings.yml']
     expect(Chamber.to_hash).to    include(
@@ -315,20 +306,20 @@ describe Chamber do
   end
 
   it 'ignores the basepath if file patterns are explicitly passed in' do
-    Chamber.load basepath: '/tmp/chamber',
-                 files:    'settings.yml'
+    Chamber.load(basepath: '/tmp/chamber',
+                 files:    'settings.yml')
 
     expect(Chamber.filenames).to eql ['settings.yml']
   end
 
   it 'can render itself as a string even if it has not been loaded' do
-    Chamber.load basepath: '/'
+    Chamber.load(basepath: '/')
 
     expect(Chamber.to_s).to eql ''
   end
 
   it 'can determine settings even if it has not been loaded' do
-    Chamber.load basepath: '/'
+    Chamber.load(basepath: '/')
 
     expect(Chamber.to_hash).to eql({})
   end
@@ -337,6 +328,6 @@ describe Chamber do
     Chamber.load(files:           '/tmp/chamber/secure.yml',
                  decryption_keys: './spec/spec_key')
 
-    expect(Chamber.test.my_encrpyted_setting).to eql 'hello'
+    expect(Chamber[:test][:my_encrpyted_setting]).to eql 'hello'
   end
 end
