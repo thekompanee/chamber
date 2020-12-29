@@ -81,16 +81,6 @@ module  Chamber
     instance.to_s(**args)
   end
 
-  def method_missing(name, *args)
-    return instance.public_send(name, *args) if instance.respond_to?(name)
-
-    super
-  end
-
-  def respond_to_missing?(name, include_private = false)
-    instance.respond_to?(name, include_private)
-  end
-
   module_function :[],
                   :configuration,
                   :decrypt,
@@ -103,7 +93,6 @@ module  Chamber
                   :instance,
                   :instance=,
                   :load,
-                  :method_missing,
                   :namespaces,
                   :respond_to_missing?,
                   :secure,
