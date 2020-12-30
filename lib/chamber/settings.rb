@@ -275,21 +275,6 @@ class   Settings
                  ))
   end
 
-  def method_missing(name, *args)
-    if data.respond_to?(name)
-      warn "WARNING: Object notation access is deprecated and will be removed in Chamber 3.0.  You attempted to access the '#{name}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-object-notation-access for full details. Called from: '#{caller.to_a.first}'" # rubocop:disable Layout/LineLength
-      warn "WARNING: Predicate methods are deprecated and will be removed in Chamber 3.0.  You attempted to access the '#{name}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-predicate-accessors for full details. Called from: '#{caller.to_a.first}'" if name.to_s.end_with?('?') # rubocop:disable Layout/LineLength
-
-      data.public_send(name, *args)
-    else
-      super
-    end
-  end
-
-  def respond_to_missing?(name, include_private = false)
-    data.respond_to?(name, include_private)
-  end
-
   protected
 
   def raw_data=(new_raw_data)

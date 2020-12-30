@@ -12,7 +12,7 @@ describe CircleCi do
   before(:each) { Chamber.load }
 
   it 'can retrieve environment variables' do
-    adapter = CircleCi.new(api_token: ::Chamber.env.circle_ci.api_token,
+    adapter = CircleCi.new(api_token: ::Chamber[:circle_ci][:api_token],
                            project:   'chamber',
                            username:  'thekompanee',
                            vcs_type:  'github')
@@ -21,7 +21,7 @@ describe CircleCi do
   end
 
   it 'can add environment variables' do
-    adapter = CircleCi.new(api_token: ::Chamber.env.circle_ci.api_token,
+    adapter = CircleCi.new(api_token: ::Chamber[:circle_ci][:api_token],
                            project:   'chamber',
                            username:  'thekompanee',
                            vcs_type:  'github')
@@ -36,7 +36,7 @@ describe CircleCi do
   end
 
   it 'knows to convert newlines to literal \\n strings' do
-    adapter = CircleCi.new(api_token: ::Chamber.env.circle_ci.api_token,
+    adapter = CircleCi.new(api_token: ::Chamber[:circle_ci][:api_token],
                            project:   'chamber',
                            username:  'thekompanee',
                            vcs_type:  'github')
@@ -51,7 +51,7 @@ describe CircleCi do
   end
 
   it 'can properly display errors' do
-    adapter = CircleCi.new(api_token: ::Chamber.env.circle_ci.api_token,
+    adapter = CircleCi.new(api_token: ::Chamber[:circle_ci][:api_token],
                            project:   'chamber',
                            username:  'thekompanee',
                            vcs_type:  'github')
@@ -65,7 +65,7 @@ describe CircleCi do
   end
 
   it 'can remove environment variables' do
-    adapter = CircleCi.new(api_token: ::Chamber.env.circle_ci.api_token,
+    adapter = CircleCi.new(api_token: ::Chamber[:circle_ci][:api_token],
                            project:   'chamber',
                            username:  'thekompanee',
                            vcs_type:  'github')

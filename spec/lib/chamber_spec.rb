@@ -115,7 +115,7 @@ describe Chamber do
   end
 
   it 'can access the settings via "env"' do
-    expect(Chamber.env.test.my_setting).to eql 'my_value'
+    expect(Chamber.env[:test][:my_setting]).to eql 'my_value'
   end
 
   it 'prefers values stored in environment variables over those in the YAML files' do
@@ -185,12 +185,6 @@ describe Chamber do
     expect(Chamber[:only_namespaced_sub_settings]).to be_nil
   end
 
-  it 'still raises an error if you try to send a message which the settings hash ' \
-     'does not understand' do
-    expect { Chamber.env.i_do_not_know }
-      .to raise_error(NoMethodError)
-  end
-
   it 'does not raise an exception if a namespaced file does not exist' do
     Chamber.load(basepath:   '/tmp/chamber',
                  namespaces: {
@@ -209,7 +203,7 @@ describe Chamber do
 
     expect(Chamber[:test][:my_setting]).to                eql 'my_value'
     expect(Chamber[:test][:my_other_setting]).to          eql 'my_other_value'
-    expect(Chamber[:test][:another_level][:setting_one]).to be  3
+    expect(Chamber[:test][:another_level][:setting_one]).to be 3
   end
 
   it 'loads YAML files from the "settings" directory under the base directory if ' \
@@ -285,15 +279,15 @@ describe Chamber do
                  rootpath:   './spec/fixtures/keys/real/',
                  basepath:   '/tmp/chamber/')
 
-    expect(Chamber.env.sub_key.sub_sub_key.development_setting).to eql 'hello development'
-    expect(Chamber.env.sub_key.sub_sub_key.production_setting).to  eql 'hello production'
+    expect(Chamber.env[:sub_key][:sub_sub_key][:development_setting]).to eql 'hello development'
+    expect(Chamber.env[:sub_key][:sub_sub_key][:production_setting]).to  eql 'hello production'
 
     Chamber.load(namespaces: %w{other},
                  files:      %w{/tmp/chamber/secure_settings_with_namespaces.yml},
                  rootpath:   './spec/fixtures/keys/real/',
                  basepath:   '/tmp/chamber/')
 
-    expect(Chamber.env.sub_key.sub_sub_key.other_setting).to eql 'hello other'
+    expect(Chamber.env[:sub_key][:sub_sub_key][:other_setting]).to eql 'hello other'
   end
 
   it 'can explicitly specify files without specifying a basepath' do

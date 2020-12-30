@@ -20,7 +20,8 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting  = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql 'value 2'
 
@@ -45,7 +46,8 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql [4, 5, 6]
 
@@ -60,7 +62,8 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql %w{4 5 6}
 
@@ -106,7 +109,8 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
                                                 },
                                               })
 
-    another_setting = filtered_data.test_setting_group.test_setting_level.another_setting
+    another_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['another_setting']
 
     expect(another_setting).to eql 'value 3'
 
@@ -127,7 +131,8 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be nil
 
@@ -142,7 +147,8 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be nil
 
@@ -163,7 +169,8 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be 2
 
@@ -210,7 +217,8 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be 2.3
 
@@ -258,7 +266,8 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql Time.utc(2018, 1, 1, 12, 0, 0)
 
@@ -288,13 +297,13 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
                                                 },
                                               })
 
-    expect(filtered_data.test_setting_group.test_setting_one).to   be false
-    expect(filtered_data.test_setting_group.test_setting_two).to   be true
-    expect(filtered_data.test_setting_group.test_setting_three).to be false
-    expect(filtered_data.test_setting_group.test_setting_four).to  be true
-    expect(filtered_data.test_setting_group.test_setting_five).to  be false
-    expect(filtered_data.test_setting_group.test_setting_six).to   be true
-    expect(filtered_data.test_setting_group.test_setting_seven).to be false
+    expect(filtered_data['test_setting_group']['test_setting_one']).to   be false
+    expect(filtered_data['test_setting_group']['test_setting_two']).to   be true
+    expect(filtered_data['test_setting_group']['test_setting_three']).to be false
+    expect(filtered_data['test_setting_group']['test_setting_four']).to  be true
+    expect(filtered_data['test_setting_group']['test_setting_five']).to  be false
+    expect(filtered_data['test_setting_group']['test_setting_six']).to   be true
+    expect(filtered_data['test_setting_group']['test_setting_seven']).to be false
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
@@ -361,7 +370,8 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be 1
   end
@@ -378,7 +388,8 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql '2'
 

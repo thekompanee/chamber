@@ -47,10 +47,10 @@ describe  DecryptionFilter do
           },
         )
 
-    expect(filtered_settings.development.sub_key.sub_sub_key._secure_setting)
+    expect(filtered_settings['development']['sub_key']['sub_sub_key']['_secure_setting'])
       .to eql 'hello development'
 
-    expect(filtered_settings.other.sub_key.sub_sub_key._secure_setting)
+    expect(filtered_settings['other']['sub_key']['sub_sub_key']['_secure_setting'])
       .to eql 'hello other'
   end
 
@@ -72,7 +72,7 @@ describe  DecryptionFilter do
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
+    expect(filtered_settings['_secure_my_secure_setting']).to eql 'hello'
   end
 
   it 'will correct decrypt values which contain multiline strings' do
@@ -105,7 +105,7 @@ describe  DecryptionFilter do
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to eql <<-HEREDOC
+    expect(filtered_settings['_secure_my_secure_setting']).to eql <<-HEREDOC
 -----BEGIN RSA PRIVATE KEY-----
 uQ431irYF7XGEwmsfNUcw++6Enjmt9MItVZJrfL4cUr84L1ccOEX9AThsxz2nkiO
 GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVaYKYuHwYVb1spGfreHQHRP90EMv3U5Ir
@@ -133,7 +133,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    my_secure_setting = filtered_settings.my_secure_setting
+    my_secure_setting = filtered_settings['my_secure_setting']
 
     expect(my_secure_setting).to eql 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYT' \
                                      'haV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJU' \
@@ -162,7 +162,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    secure_setting = filtered_settings.secure_setting
+    secure_setting = filtered_settings['secure_setting']
 
     expect(secure_setting).to eql 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4m' \
                                   'psspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ5' \
@@ -191,7 +191,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    my_secure_setting = filtered_settings._secure_my_secure_setting
+    my_secure_setting = filtered_settings['_secure_my_secure_setting']
 
     expect(my_secure_setting).to eql 'cJbFe0NI5\wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4' \
                                      'mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ' \
@@ -213,7 +213,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
                    __default: './spec/spec_key',
                  })
 
-    expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
+    expect(filtered_settings['_secure_my_secure_setting']).to eql 'hello'
   end
 
   it 'simply returns the encrypted string if there is no decryption key' do
@@ -233,7 +233,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           },
         )
 
-    my_secure_setting = filtered_settings._secure_my_secure_setting
+    my_secure_setting = filtered_settings['_secure_my_secure_setting']
 
     expect(my_secure_setting).to eql 'cJbFe0NI5\wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4' \
                                      'mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ' \
@@ -262,8 +262,8 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to be_a Integer
-    expect(filtered_settings._secure_my_secure_setting).to be   12_345
+    expect(filtered_settings['_secure_my_secure_setting']).to be_a ::Integer
+    expect(filtered_settings['_secure_my_secure_setting']).to be   12_345
   end
 
   it 'can decrypt a number that has not been yamlled' do
@@ -284,7 +284,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to eql '12345'
+    expect(filtered_settings['_secure_my_secure_setting']).to eql '12345'
   end
 
   it 'can decrypt a string that has not been yamlled' do
@@ -305,7 +305,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
+    expect(filtered_settings['_secure_my_secure_setting']).to eql 'hello'
   end
 
   it 'can decrypt a Regex/Complex Object via Public Key' do
@@ -327,8 +327,8 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to be_a(::Regexp)
-    expect(filtered_settings._secure_my_secure_setting).to eql(/^(.*\\.|)example\\.com$/)
+    expect(filtered_settings['_secure_my_secure_setting']).to be_a(::Regexp)
+    expect(filtered_settings['_secure_my_secure_setting']).to eql(/^(.*\\.|)example\\.com$/)
   end
 
   it 'can decrypt a Regex/Complex Object via SSL' do
@@ -357,8 +357,8 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to      be_a(::Regexp)
-    expect(filtered_settings._secure_my_secure_setting.to_s).to eql(%r{^(.*\\.|)example\\.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz}.to_s)
+    expect(filtered_settings['_secure_my_secure_setting']).to      be_a(::Regexp)
+    expect(filtered_settings['_secure_my_secure_setting'].to_s).to eql(%r{^(.*\\.|)example\\.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz}.to_s)
   end
 
   it 'can decrypt a Date' do
@@ -380,8 +380,8 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to     be_a(::Date)
-    expect(filtered_settings._secure_my_secure_setting).to eql ::Date.new(2020, 1, 1)
+    expect(filtered_settings['_secure_my_secure_setting']).to     be_a(::Date)
+    expect(filtered_settings['_secure_my_secure_setting']).to eql ::Date.new(2020, 1, 1)
   end
 
   it 'can decrypt a Time' do
@@ -403,8 +403,8 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to     be_a(::Time)
-    expect(filtered_settings._secure_my_secure_setting).to eql ::Time.utc(2020,
+    expect(filtered_settings['_secure_my_secure_setting']).to     be_a(::Time)
+    expect(filtered_settings['_secure_my_secure_setting']).to eql ::Time.utc(2020,
                                                                           1,
                                                                           1,
                                                                           0,
@@ -433,8 +433,8 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to be_a(::Symbol)
-    expect(filtered_settings._secure_my_secure_setting).to be :foo_symbol
+    expect(filtered_settings['_secure_my_secure_setting']).to be_a(::Symbol)
+    expect(filtered_settings['_secure_my_secure_setting']).to be :foo_symbol
     expect(::Chamber::EncryptionMethods::PublicKey).to \
       have_received(:warn)
         .with(include('WARNING: Recursive data structures'))
@@ -467,8 +467,8 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to be_a(::Symbol)
-    expect(filtered_settings._secure_my_secure_setting).to be :abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
+    expect(filtered_settings['_secure_my_secure_setting']).to be_a(::Symbol)
+    expect(filtered_settings['_secure_my_secure_setting']).to be :abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
     expect(::Chamber::EncryptionMethods::Ssl).to \
       have_received(:warn)
         .with(include('WARNING: Recursive data structures'))
@@ -505,7 +505,7 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
           decryption_keys:   { __default: './spec/spec_key' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting).to eql 'long' * 100
+    expect(filtered_settings['_secure_my_secure_setting']).to eql 'long' * 100
   end
 
   it 'does not warn if decrypting nil' do

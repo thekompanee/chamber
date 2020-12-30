@@ -15,7 +15,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -75,13 +75,13 @@ describe  EncryptionFilter do
       .to have_received(:encrypt)
             .with(:_secure_setting, 'hello other', default_key)
 
-    expect(filtered_settings.development.sub_key.sub_sub_key._secure_setting)
+    expect(filtered_settings['development']['sub_key']['sub_sub_key']['_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
 
-    expect(filtered_settings.production.sub_key.sub_sub_key._secure_setting)
+    expect(filtered_settings['production']['sub_key']['sub_sub_key']['_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
 
-    expect(filtered_settings.other.sub_key.sub_sub_key._secure_setting)
+    expect(filtered_settings['other']['sub_key']['sub_sub_key']['_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -94,7 +94,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings.my_secure_setting).to eql 'hello'
+    expect(filtered_settings['my_secure_setting']).to eql 'hello'
   end
 
   it 'will not attempt to encrypt values even if they are prefixed with "secure"' do
@@ -106,7 +106,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings.secure_setting).to eql 'hello'
+    expect(filtered_settings['secure_setting']).to eql 'hello'
   end
 
   it 'will attempt to encrypt values if they are not properly encoded' do
@@ -118,7 +118,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -131,7 +131,7 @@ describe  EncryptionFilter do
                                                    __default: './spec/spec_key.pub',
                                                  })
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -153,7 +153,7 @@ describe  EncryptionFilter do
           encryption_keys:   { __default: './spec/spec_key.pub' },
         )
 
-    my_secure_setting = filtered_settings._secure_my_secure_setting
+    my_secure_setting = filtered_settings['_secure_my_secure_setting']
 
     expect(my_secure_setting).to eql 'fNI5wlBniNhEU4396pmhWwx+A09bRAMJOUASuP7Pzprew' \
                                      'BX8CXYqL+v/uXOJpIRCLDjwe8quuC+j9iLcPU7HBRMr05' \
@@ -195,7 +195,7 @@ describe  EncryptionFilter do
           encryption_keys:   { __default: './spec/spec_key.pub' },
         )
 
-    my_secure_setting = filtered_settings._secure_my_secure_setting
+    my_secure_setting = filtered_settings['_secure_my_secure_setting']
 
     expect(my_secure_setting).to eql 'AcMY7ALLoGZRakL3ibyo2WB438ipdMDIjsa4SCDBP2saOY63A' \
                                      'D3C/SZanexlYDQoYoYC0V5J5EvKHgGMDAU8qnp9LjzU5VCwJ3' \
@@ -242,7 +242,7 @@ describe  EncryptionFilter do
           },
         )
 
-    my_secure_setting = filtered_settings._secure_multiline
+    my_secure_setting = filtered_settings['_secure_multiline']
 
     expect(my_secure_setting).to match(EncryptionFilter::LARGE_DATA_STRING_PATTERN)
   end
@@ -258,7 +258,7 @@ describe  EncryptionFilter do
           encryption_keys:   { __default: './spec/spec_key.pub' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
 
     filtered_settings = EncryptionFilter.execute(
@@ -269,7 +269,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
 
@@ -282,7 +282,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
 
@@ -295,7 +295,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -308,7 +308,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
 
@@ -321,7 +321,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -334,7 +334,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -347,7 +347,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -360,7 +360,7 @@ describe  EncryptionFilter do
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
 end
