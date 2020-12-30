@@ -14,7 +14,7 @@ describe  TranslateSecureKeysFilter do
                           },
                         )
 
-    expect(filtered_settings.my_secure_setting).to eql 'hello'
+    expect(filtered_settings['my_secure_setting']).to eql 'hello'
   end
 
   it 'will not translate keys if they do not start with "_secure_"' do
@@ -25,7 +25,7 @@ describe  TranslateSecureKeysFilter do
                           },
                         )
 
-    expect(filtered_settings.my_secure_setting).to eql 'hello'
+    expect(filtered_settings['my_secure_setting']).to eql 'hello'
   end
 
   it 'will not translate the key if it starts with "secure"' do
@@ -36,7 +36,7 @@ describe  TranslateSecureKeysFilter do
                           },
                         )
 
-    expect(filtered_settings.secure_setting).to eql 'hello'
+    expect(filtered_settings['secure_setting']).to eql 'hello'
   end
 end
 end

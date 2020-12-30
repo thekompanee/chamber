@@ -199,25 +199,13 @@ THERE: 'was not that easy?'
     settings_hash['setting'] = 'foo'
 
     expect(settings.__send__(:data).object_id).not_to eql settings_hash.object_id
-    expect(settings.setting).to eql 'value'
+    expect(settings[:setting]).to eql 'value'
   end
 
   it 'allows messages to be passed through to the underlying data' do
     settings = Settings.new(settings: { setting: 'value' })
 
-    expect(settings.setting).to eql 'value'
-  end
-
-  it 'will still raise an error if the underlying data does not respond to it' do
-    settings = Settings.new(settings: { setting: 'value' })
-
-    expect { settings.unknown }.to raise_error NoMethodError
-  end
-
-  it 'can notify properly whether it responds to messages if the underlying data does' do
-    settings = Settings.new(settings: { setting: 'value' })
-
-    expect(settings.respond_to?(:setting)).to be_a TrueClass
+    expect(settings[:setting]).to eql 'value'
   end
 
   it 'only includes namespaced data if any exists' do
@@ -376,7 +364,7 @@ THERE: 'was not that easy?'
                             pre_filters:     [],
                             post_filters:    [Filters::EncryptionFilter])
 
-    expect(settings._secure_my_encrypted_setting)
+    expect(settings[:_secure_my_encrypted_setting])
       .to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -391,7 +379,7 @@ THERE: 'was not that easy?'
 
     secure_settings = settings.secure
 
-    expect(secure_settings.my_encrypted_setting)
+    expect(secure_settings[:my_encrypted_setting])
       .to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -424,9 +412,9 @@ THERE: 'was not that easy?'
 
     secured_settings = settings.securable
 
-    expect(secured_settings.my_encrypted_setting).to    eql 'hello'
-    expect(secured_settings.my_unencrypted_setting).to  eql 'nifty'
-    expect(secured_settings.my_insecure_setting?).to    be  false
+    expect(secured_settings[:my_encrypted_setting]).to    eql 'hello'
+    expect(secured_settings[:my_unencrypted_setting]).to  eql 'nifty'
+    expect(secured_settings[:my_insecure_setting]).to     be  nil
   end
 
   it 'can filter unencrypted settings' do
@@ -452,9 +440,9 @@ THERE: 'was not that easy?'
 
     secured_settings = settings.insecure
 
-    expect(secured_settings.my_encrypted_setting?).to   be  false
-    expect(secured_settings.my_unencrypted_setting).to  eql 'nifty'
-    expect(secured_settings.my_insecure_setting?).to    be  false
+    expect(secured_settings[:my_encrypted_setting]).to   be  nil
+    expect(secured_settings[:my_unencrypted_setting]).to eql 'nifty'
+    expect(secured_settings[:my_insecure_setting]).to    be  nil
   end
 
   it 'raises an exception when it accesses a value which cannot be decrypted' do
@@ -473,7 +461,7 @@ THERE: 'was not that easy?'
                  },
                )
 
-    expect { settings.my_encrypted_setting }
+    expect { settings[:my_encrypted_setting] }
       .to raise_error Chamber::Errors::DecryptionFailure
   end
 
@@ -512,8 +500,8 @@ THERE: 'was not that easy?'
                  },
                )
 
-    expect(settings.my_encrypted_setting).to                       eql 'my env setting'
-    expect(settings.encrypted_group.my_encrypted_group_setting).to eql 'my env group'
+    expect(settings[:my_encrypted_setting]).to                         eql 'my env setting'
+    expect(settings[:encrypted_group][:my_encrypted_group_setting]).to eql 'my env group'
 
     ENV['MY_ENCRYPTED_SETTING']                       = nil
     ENV['ENCRYPTED_GROUP_MY_ENCRYPTED_GROUP_SETTING'] = nil

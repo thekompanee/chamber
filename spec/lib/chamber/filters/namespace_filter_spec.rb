@@ -20,8 +20,8 @@ describe  NamespaceFilter do
                           namespaces: %w{namespace_value other_namespace_value},
                         )
 
-    expect(filtered_settings.namespace_setting).to eql 'value 1'
-    expect(filtered_settings.other_namespace_setting).to eql 'value 2'
+    expect(filtered_settings['namespace_setting']).to eql 'value 1'
+    expect(filtered_settings['other_namespace_setting']).to eql 'value 2'
   end
 
   it 'ignores data which is not part of a namespace' do
@@ -39,8 +39,8 @@ describe  NamespaceFilter do
                                       },
                         )
 
-    expect(filtered_settings.namespace_setting).to eql 'value 1'
-    expect(filtered_settings.non_namespaced_setting).to be_nil
+    expect(filtered_settings['namespace_setting']).to eql 'value 1'
+    expect(filtered_settings['non_namespaced_setting']).to be_nil
   end
 
   it 'ignores namespaces which do not exist in the data' do
@@ -53,7 +53,7 @@ describe  NamespaceFilter do
                           namespaces: %w{namespace_value other_namespace_value},
                         )
 
-    expect(filtered_settings.namespace_setting).to eql 'value 1'
+    expect(filtered_settings['namespace_setting']).to eql 'value 1'
   end
 
   it 'does not filter data if it does not include any namespaces' do
@@ -64,7 +64,7 @@ describe  NamespaceFilter do
                           namespaces: [],
                         )
 
-    expect(filtered_settings.non_namespaced_setting).to eql 'value 1'
+    expect(filtered_settings['non_namespaced_setting']).to eql 'value 1'
   end
 
   it 'can filter if it is given NamespaceSets' do

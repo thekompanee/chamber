@@ -12,7 +12,7 @@ describe  InsecureFilter do
                                                  _secure_my_secure_setting: 'hello',
                                                })
 
-    expect(filtered_settings._secure_my_secure_setting).to match 'hello'
+    expect(filtered_settings['_secure_my_secure_setting']).to match 'hello'
   end
 
   it 'will not return values which are not marked as "secure"' do
@@ -21,7 +21,7 @@ describe  InsecureFilter do
                                                  my_secure_setting: 'hello',
                                                })
 
-    expect(filtered_settings.my_secure_setting).to be_nil
+    expect(filtered_settings['my_secure_setting']).to be_nil
   end
 
   it 'will properly return values even if they are mixed and deeply nested' do
@@ -35,10 +35,10 @@ describe  InsecureFilter do
                                                  },
                                                })
 
-    expect(filtered_settings._secure_setting).to                      eql 'hello'
-    expect(filtered_settings.secure_setting).to                       be_nil
-    expect(filtered_settings.secure_group._secure_nested_setting).to  eql 'movie'
-    expect(filtered_settings.secure_group.insecure_nested_setting).to be_nil
+    expect(filtered_settings['_secure_setting']).to                         eql 'hello'
+    expect(filtered_settings['secure_setting']).to                          be_nil
+    expect(filtered_settings['secure_group']['_secure_nested_setting']).to  eql 'movie'
+    expect(filtered_settings['secure_group']['insecure_nested_setting']).to be_nil
   end
 
   it 'will not return values which are encrypted' do
@@ -80,12 +80,12 @@ describe  InsecureFilter do
           },
         )
 
-    expect(filtered_settings._secure_setting?).to                          be  false
-    expect(filtered_settings.secure_setting?).to                           be  false
-    expect(filtered_settings._secure_other_setting).to                     eql 'hello'
-    expect(filtered_settings.secure_group._secure_nested_setting?).to      be  false
-    expect(filtered_settings.secure_group._secure_other_nested_setting).to eql 'goodbye'
-    expect(filtered_settings.secure_group.insecure_nested_setting?).to     be  false
+    expect(filtered_settings['_secure_setting']).to                              be  nil
+    expect(filtered_settings['secure_setting']).to                               be  nil
+    expect(filtered_settings['_secure_other_setting']).to                        eql 'hello'
+    expect(filtered_settings['secure_group']['_secure_nested_setting']).to       be  nil
+    expect(filtered_settings['secure_group']['_secure_other_nested_setting']).to eql 'goodbye'
+    expect(filtered_settings['secure_group']['insecure_nested_setting']).to      be  nil
   end
 end
 end

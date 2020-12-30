@@ -12,15 +12,15 @@ describe Heroku do
   before(:each) { Chamber.load }
 
   it 'can retrieve environment variables' do
-    adapter = Heroku.new(app:       ::Chamber.env.heroku.test_app_name,
-                         api_token: ::Chamber.env.heroku.api_token)
+    adapter = Heroku.new(app:       ::Chamber[:heroku][:test_app_name],
+                         api_token: ::Chamber[:heroku][:api_token])
 
     expect(adapter.environment_variables['FOO']).to eql 'BAR'
   end
 
   it 'can add environment variables' do
-    adapter         = Heroku.new(app:       ::Chamber.env.heroku.test_app_name,
-                                 api_token: ::Chamber.env.heroku.api_token)
+    adapter         = Heroku.new(app:       ::Chamber[:heroku][:test_app_name],
+                                 api_token: ::Chamber[:heroku][:api_token])
     environment_key = ::SecureRandom.base64(64).gsub(/[^a-zA-Z]+/, '')[0..16]
 
     adapter.add_environment_variable(environment_key, '12341234')
@@ -31,8 +31,8 @@ describe Heroku do
   end
 
   it 'knows to convert newlines to literal \\n strings' do
-    adapter         = Heroku.new(app:       ::Chamber.env.heroku.test_app_name,
-                                 api_token: ::Chamber.env.heroku.api_token)
+    adapter         = Heroku.new(app:       ::Chamber[:heroku][:test_app_name],
+                                 api_token: ::Chamber[:heroku][:api_token])
     environment_key = ::SecureRandom.base64(64).gsub(/[^a-zA-Z]+/, '')[0..16]
 
     adapter.add_environment_variable(environment_key, "123412\n34")
@@ -43,8 +43,8 @@ describe Heroku do
   end
 
   it 'can properly display errors' do
-    adapter                 = Heroku.new(app:       ::Chamber.env.heroku.test_app_name,
-                                         api_token: ::Chamber.env.heroku.api_token)
+    adapter                 = Heroku.new(app:       ::Chamber[:heroku][:test_app_name],
+                                         api_token: ::Chamber[:heroku][:api_token])
     invalid_environment_key = '12345\!-[]=!'
 
     expect {
@@ -54,8 +54,8 @@ describe Heroku do
   end
 
   it 'can remove environment variables' do
-    adapter         = Heroku.new(app:       ::Chamber.env.heroku.test_app_name,
-                                 api_token: ::Chamber.env.heroku.api_token)
+    adapter         = Heroku.new(app:       ::Chamber[:heroku][:test_app_name],
+                                 api_token: ::Chamber[:heroku][:api_token])
     environment_key = ::SecureRandom.base64(64).gsub(/[^a-zA-Z]+/, '')[0..16]
 
     adapter.add_environment_variable(environment_key, '12341234')
