@@ -40,7 +40,7 @@ class   Secured < CHAMBER_TYPE_VALUE_SUPERCLASS
     when ::Hash
       value
     when ::String
-      ::ActiveSupport::JSON.decode(value)
+      ::JSON.parse(value)
     when ::NilClass
       nil
     else
@@ -63,7 +63,7 @@ class   Secured < CHAMBER_TYPE_VALUE_SUPERCLASS
   def serialize(value)
     fail ::ArgumentError, 'Any attributes encrypted with Chamber must be a Hash' unless value.is_a?(::Hash)
 
-    ::ActiveSupport::JSON.encode(
+    ::JSON.dump(
       ::Chamber.encrypt(value,
                         decryption_keys: decryption_keys,
                         encryption_keys: encryption_keys),
