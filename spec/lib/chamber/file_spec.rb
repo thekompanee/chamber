@@ -19,7 +19,7 @@ module    Chamber
 describe  File do
   it 'can convert file contents to settings' do
     tempfile      = create_tempfile_with_content '{ test: settings }'
-    settings_file = File.new path: tempfile.path
+    settings_file = File.new(path: tempfile.path)
 
     allow(Settings).to receive(:new)
                          .and_return :settings
@@ -36,7 +36,7 @@ describe  File do
 
   it 'can convert a file whose contents are empty' do
     tempfile      = create_tempfile_with_content ''
-    settings_file = File.new path: tempfile.path
+    settings_file = File.new(path: tempfile.path)
 
     allow(Settings).to receive(:new)
                          .and_return :settings
@@ -53,17 +53,17 @@ describe  File do
 
   it 'throws an error when the file contents are malformed' do
     tempfile      = create_tempfile_with_content '{ test : '
-    settings_file = File.new path: tempfile.path
+    settings_file = File.new(path: tempfile.path)
 
     expect { settings_file.to_settings }.to raise_error Psych::SyntaxError
   end
 
   it 'passes any namespaces through to the settings' do
     tempfile      = create_tempfile_with_content '{ test: settings }'
-    settings_file = File.new  path:       tempfile.path,
-                              namespaces: {
-                                environment: :development,
-                              }
+    settings_file = File.new(path:       tempfile.path,
+                             namespaces: {
+                               environment: :development,
+                             })
 
     allow(Settings).to receive(:new)
 
@@ -80,7 +80,7 @@ describe  File do
 
   it 'can handle files which contain ERB markup' do
     tempfile      = create_tempfile_with_content '{ test: <%= 1 + 1 %> }'
-    settings_file = File.new  path: tempfile.path
+    settings_file = File.new(path: tempfile.path)
 
     allow(Settings).to receive(:new)
 
@@ -93,7 +93,7 @@ describe  File do
   end
 
   it 'does not throw an error when attempting to convert a file which does not exist' do
-    settings_file = File.new path: 'no/path'
+    settings_file = File.new(path: 'no/path')
 
     allow(Settings).to receive(:new)
                          .and_return :settings
@@ -113,12 +113,12 @@ describe  File do
 _secure_setting: hello
     HEREDOC
 
-    settings_file = File.new  path:            tempfile.path,
-                              encryption_keys: { __default: './spec/spec_key.pub' }
+    settings_file = File.new(path:            tempfile.path,
+                             encryption_keys: { __default: './spec/spec_key.pub' })
 
     settings_file.secure
 
-    settings_file = File.new path: tempfile.path
+    settings_file = File.new(path: tempfile.path)
 
     expect(settings_file.to_settings.__send__(:raw_data)['_secure_setting']).to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
@@ -129,12 +129,12 @@ _secure_setting: hello
 _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
     HEREDOC
 
-    settings_file = File.new  path:            tempfile.path,
-                              encryption_keys: { __default: './spec/spec_key.pub' }
+    settings_file = File.new(path:            tempfile.path,
+                             encryption_keys: { __default: './spec/spec_key.pub' })
 
     settings_file.secure
 
-    settings_file        = File.new path: tempfile.path
+    settings_file        = File.new(path: tempfile.path)
     raw_data             = settings_file.to_settings.__send__(:raw_data)
     secure_setting       = raw_data['_secure_setting']
     other_secure_setting = raw_data['_secure_other_setting']
@@ -164,8 +164,8 @@ other:
     regular_setting:         <%= 1 + 1 %>
     HEREDOC
 
-    settings_file = File.new  path:            tempfile.path,
-                              encryption_keys: { __default: './spec/spec_key.pub' }
+    settings_file = File.new(path:            tempfile.path,
+                             encryption_keys: { __default: './spec/spec_key.pub' })
 
     settings_file.secure
 
@@ -202,8 +202,8 @@ other:
     something_else:  'right here'
     HEREDOC
 
-    settings_file = File.new  path:            tempfile.path,
-                              encryption_keys: { __default: './spec/spec_key.pub' }
+    settings_file = File.new(path:            tempfile.path,
+                             encryption_keys: { __default: './spec/spec_key.pub' })
 
     settings_file.secure
 
@@ -226,8 +226,8 @@ stuff:
   _secure_another+_setting: "Thanks for +all the fish"
     HEREDOC
 
-    settings_file = File.new  path:            tempfile.path,
-                              encryption_keys: { __default: './spec/spec_key.pub' }
+    settings_file = File.new(path:            tempfile.path,
+                             encryption_keys: { __default: './spec/spec_key.pub' })
 
     settings_file.secure
 
@@ -250,9 +250,9 @@ stuff:
   another_setting: "Thanks for all the fish"
     HEREDOC
 
-    settings_file = File.new  path:            file_path,
-                              decryption_keys: { signature: './spec/spec_key' },
-                              signature_name:  'Suzy Q Robinson'
+    settings_file = File.new(path:            file_path,
+                             decryption_keys: { signature: './spec/spec_key' },
+                             signature_name:  'Suzy Q Robinson')
 
     settings_file.sign
 
@@ -275,8 +275,8 @@ stuff:
   another_setting: "Thanks for all the fish"
     HEREDOC
 
-    settings_file = File.new  path:            file_path,
-                              decryption_keys: { foo: './spec/spec_key' }
+    settings_file = File.new(path:            file_path,
+                             decryption_keys: { foo: './spec/spec_key' })
 
     expect { settings_file.sign }.to \
       raise_error(ArgumentError)
@@ -317,8 +317,8 @@ stuff:
   another_setting: "Thanks for all the fish"
     HEREDOC
 
-    settings_file = File.new  path:            file_path,
-                              encryption_keys: { foo: './spec/spec_key.pub' }
+    settings_file = File.new(path:            file_path,
+                             encryption_keys: { foo: './spec/spec_key.pub' })
 
     expect { settings_file.verify }.to \
       raise_error(ArgumentError)

@@ -27,11 +27,11 @@ class   Heroku
     request['Authorization'] = "Bearer #{api_token}"
     request['Accept']        = 'application/vnd.heroku+json; version=3'
     request['Content-Type']  = 'application/json'
-    request.body             = ::JSON.dump(Hash[name, value])
+    request.body             = ::JSON.dump(::Hash[name, value])
 
     response = ::JSON.parse(response(request).body)
 
-    fail NameError, response['message'] if response['message']
+    fail ::NameError, response['message'] if response['message']
 
     response
   end
@@ -44,7 +44,7 @@ class   Heroku
 
     response = ::JSON.parse(response(request).body)
 
-    fail NameError, response['message'] if response['message']
+    fail ::NameError, response['message'] if response['message']
 
     response
   end

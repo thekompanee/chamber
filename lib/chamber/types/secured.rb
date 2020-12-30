@@ -37,14 +37,14 @@ class   Secured < CHAMBER_TYPE_VALUE_SUPERCLASS
 
   def cast(value)
     case value
-    when Hash
+    when ::Hash
       value
-    when String
+    when ::String
       ::ActiveSupport::JSON.decode(value)
-    when NilClass
+    when ::NilClass
       nil
     else
-      fail ArgumentError, 'Any attributes encrypted with Chamber must be either a Hash or a valid JSON string'
+      fail ::ArgumentError, 'Any attributes encrypted with Chamber must be either a Hash or a valid JSON string'
     end
   end
   alias type_cast_from_user cast
@@ -54,19 +54,19 @@ class   Secured < CHAMBER_TYPE_VALUE_SUPERCLASS
 
     return if value.nil?
 
-    Chamber.decrypt(value,
-                    decryption_keys: decryption_keys,
-                    encryption_keys: encryption_keys)
+    ::Chamber.decrypt(value,
+                      decryption_keys: decryption_keys,
+                      encryption_keys: encryption_keys)
   end
   alias type_cast_from_database deserialize
 
   def serialize(value)
-    fail ArgumentError, 'Any attributes encrypted with Chamber must be a Hash' unless value.is_a?(Hash)
+    fail ::ArgumentError, 'Any attributes encrypted with Chamber must be a Hash' unless value.is_a?(::Hash)
 
     ::ActiveSupport::JSON.encode(
-      Chamber.encrypt(value,
-                      decryption_keys: decryption_keys,
-                      encryption_keys: encryption_keys),
+      ::Chamber.encrypt(value,
+                        decryption_keys: decryption_keys,
+                        encryption_keys: encryption_keys),
     )
   end
   alias type_cast_for_database serialize

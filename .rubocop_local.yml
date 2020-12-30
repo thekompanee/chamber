@@ -16,6 +16,9 @@ Lint/EmptyFile:
 Performance/RegexpMatch:
   Enabled:            false
 
+Security/YAMLLoad:
+  Enabled:            false
+
 # Introduced In Ruby 2.4
 # https://apidock.com/ruby/v2_4_6/Hash/transform_values
 Style/HashTransformValues:
@@ -24,5 +27,5 @@ Style/HashTransformValues:
 Style/StringConcatenation:
   Enabled:            false
 
-Security/YAMLLoad:
+Style/RedundantBegin:
   Enabled:            false

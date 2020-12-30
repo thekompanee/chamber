@@ -75,7 +75,6 @@ class   DecryptionFilter
 
   private
 
-  # rubocop:disable Style/RedundantBegin
   def decrypt(key, value)
     method = decryption_method(value)
 
@@ -89,7 +88,6 @@ class   DecryptionFilter
 
     value
   end
-  # rubocop:enable Style/RedundantBegin
 
   def decryption_method(value)
     if value.respond_to?(:match)
