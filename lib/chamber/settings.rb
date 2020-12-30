@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'hashie/mash'
 require 'chamber/namespace_set'
 require 'chamber/filters/namespace_filter'
 require 'chamber/filters/encryption_filter'
@@ -25,6 +24,7 @@ class   Settings
                 :pre_filters,
                 :secure_key_prefix
   attr_reader   :namespaces
+  attr_writer   :raw_data
 
   # rubocop:disable Metrics/ParameterLists
   def initialize(
@@ -49,7 +49,7 @@ class   Settings
     self.namespaces        = namespaces
     self.post_filters      = post_filters
     self.pre_filters       = pre_filters
-    self.raw_data          = settings
+    self.raw_data          = settings.dup
     self.secure_key_prefix = secure_key_prefix
   end
   # rubocop:enable Metrics/ParameterLists
@@ -112,7 +112,7 @@ class   Settings
   # Returns a Hash
   #
   def to_hash
-    data.to_hash
+    data.dup
   end
 
   ###
@@ -276,10 +276,6 @@ class   Settings
 
   protected
 
-  def raw_data=(new_raw_data)
-    @raw_data   = Hashie::Mash.new(new_raw_data)
-  end
-
   def namespaces=(raw_namespaces)
     @namespaces = NamespaceSet.new(raw_namespaces)
   end
@@ -293,9 +289,10 @@ class   Settings
   # rubocop:enable Naming/MemoizedInstanceVariableName
 
   def data
-    @data ||= post_filters.inject(raw_data) do |filtered_data, filter|
-      filter.execute(**{ data: filtered_data }.deep_merge(metadata))
-    end
+    @data ||= post_filters
+                .inject(raw_data) do |filtered_data, filter|
+                  filter.execute(**{ data: filtered_data }.deep_merge(metadata))
+                end
   end
 
   def metadata

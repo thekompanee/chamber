@@ -41,7 +41,6 @@ class   ContextResolver
                                     options[:basepath] + 'settings*.yml',
                                     options[:basepath] + 'settings',
                                   ]
-
     options[:signature_name]    = options[:signature_name]
 
     options

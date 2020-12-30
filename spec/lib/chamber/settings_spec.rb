@@ -161,9 +161,8 @@ THERE: 'was not that easy?'
   it 'can convert itself into a hash' do
     settings = Settings.new(settings: { 'setting' => 'value' })
 
-    expect(settings.to_hash).to     eql('setting' => 'value')
-    expect(settings.to_hash).to     be_a Hash
-    expect(settings.to_hash).not_to be_a Hashie::Mash
+    expect(settings.to_hash).to eql('setting' => 'value')
+    expect(settings.to_hash).to be_a ::Hash
   end
 
   it 'can convert itself into a hash with flattened names' do
@@ -187,8 +186,7 @@ THERE: 'was not that easy?'
             %w{level_1 body}                 => 'gracias',
             %w{there}                        => 'was not that easy?',
           )
-    expect(settings.to_flattened_name_hash).to     be_a Hash
-    expect(settings.to_flattened_name_hash).not_to be_a Hashie::Mash
+    expect(settings.to_flattened_name_hash).to be_a ::Hash
   end
 
   it 'does not allow manipulation of the internal setting hash when converted to ' \

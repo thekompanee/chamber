@@ -32,7 +32,6 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.1.0'
 
   spec.add_dependency             'thor',          [">= 0.20.3", "< 2.0"]
-  spec.add_dependency             'hashie',        ["~> 3.3"]
 
   spec.add_development_dependency 'rspec',         ["~> 3.5"]
   spec.add_development_dependency 'rspectacular',  ["~> 0.46"]
