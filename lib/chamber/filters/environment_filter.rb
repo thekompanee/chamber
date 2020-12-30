@@ -4,10 +4,13 @@ require 'yaml'
 require 'hashie/mash'
 
 require 'chamber/errors/environment_conversion'
+require 'chamber/refinements/hash'
 
 module  Chamber
 module  Filters
 class   EnvironmentFilter
+  using ::Chamber::Refinements::Hash
+
   ###
   # Internal: Allows the existing environment to be injected into the passed in
   # hash.  The hash that is passed in is *not* modified, instead a new hash is
@@ -127,11 +130,11 @@ class   EnvironmentFilter
       environment_keys = parent_keys.dup.push(environment_key)
 
       if value.respond_to? :each_pair
-        environment_hash.merge!(hash_block.call(key, value, environment_keys))
+        environment_hash.deep_merge!(hash_block.call(key, value, environment_keys))
       else
         environment_key = environment_keys.join('_').upcase
 
-        environment_hash.merge!(value_block.call(key, value, environment_key))
+        environment_hash.deep_merge!(value_block.call(key, value, environment_key))
       end
     end
 

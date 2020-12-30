@@ -3,9 +3,12 @@
 require 'chamber/configuration'
 require 'chamber/file_set'
 require 'chamber/settings'
+require 'chamber/refinements/hash'
 
 module  Chamber
 class   Instance
+  using ::Chamber::Refinements::Hash
+
   attr_accessor :configuration,
                 :files
 
@@ -63,11 +66,11 @@ class   Instance
   end
 
   def encrypt(data, **args)
-    config = configuration.to_hash.merge(**args)
+    config = configuration.to_hash.deep_merge(**args)
 
     Settings
       .new(
-        **config.merge(
+        **config.deep_merge(
           settings:     data,
           pre_filters:  [Filters::EncryptionFilter],
           post_filters: [],
@@ -77,11 +80,11 @@ class   Instance
   end
 
   def decrypt(data, **args)
-    config = configuration.to_hash.merge(**args)
+    config = configuration.to_hash.deep_merge(**args)
 
     Settings
       .new(
-        **config.merge(
+        **config.deep_merge(
           settings:     data,
           pre_filters:  [Filters::NamespaceFilter],
           post_filters: [

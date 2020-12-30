@@ -2,15 +2,18 @@
 
 require 'shellwords'
 require 'chamber/instance'
+require 'chamber/refinements/hash'
 
 module  Chamber
 module  Commands
 module  Securable
+  using ::Chamber::Refinements::Hash
+
   def initialize(only_sensitive: nil, **args)
     super(**args)
 
     ignored_settings_options        = args
-                                        .merge(files: ignored_settings_filepaths)
+                                        .deep_merge(files: ignored_settings_filepaths)
                                         .reject { |k, _v| k == 'basepath' }
     self.ignored_settings_instance  = Chamber::Instance.new(**ignored_settings_options)
     self.current_settings_instance  = Chamber::Instance.new(**args)

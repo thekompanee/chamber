@@ -10,12 +10,15 @@ require 'chamber/filters/secure_filter'
 require 'chamber/filters/translate_secure_keys_filter'
 require 'chamber/filters/insecure_filter'
 require 'chamber/filters/failed_decryption_filter'
+require 'chamber/refinements/hash'
 
 ###
 # Internal: Represents the base settings storage needed for Chamber.
 #
 module  Chamber
 class   Settings
+  using ::Chamber::Refinements::Hash
+
   attr_accessor :decryption_keys,
                 :encryption_keys,
                 :post_filters,
@@ -145,8 +148,8 @@ class   Settings
       flattened_name_components = parent_keys.dup.push(key)
 
       if value.respond_to?(:each_pair)
-        flattened_name_hash.merge!(to_flattened_name_hash(value,
-                                                          flattened_name_components))
+        flattened_name_hash
+          .deep_merge!(to_flattened_name_hash(value, flattened_name_components))
       else
         flattened_name_hash[flattened_name_components] = value
       end
@@ -201,7 +204,7 @@ class   Settings
       encryption_keys: encryption_keys.any? ? encryption_keys : other_settings.encryption_keys,
       decryption_keys: decryption_keys.any? ? decryption_keys : other_settings.decryption_keys,
       namespaces:      (namespaces + other_settings.namespaces),
-      settings:        raw_data.merge(other_settings.raw_data),
+      settings:        raw_data.deep_merge(other_settings.raw_data),
     )
     # rubocop:enable Layout/LineLength
   end
@@ -249,14 +252,14 @@ class   Settings
   end
 
   def securable
-    Settings.new(**metadata.merge(
+    Settings.new(**metadata.deep_merge(
                    settings:    raw_data,
                    pre_filters: [Filters::SecureFilter],
                  ))
   end
 
   def secure
-    Settings.new(**metadata.merge(
+    Settings.new(**metadata.deep_merge(
                    settings:     raw_data,
                    pre_filters:  [Filters::EncryptionFilter],
                    post_filters: [Filters::TranslateSecureKeysFilter],
@@ -264,7 +267,7 @@ class   Settings
   end
 
   def insecure
-    Settings.new(**metadata.merge(
+    Settings.new(**metadata.deep_merge(
                    settings:     raw_data,
                    pre_filters:  [Filters::InsecureFilter],
                    post_filters: [Filters::TranslateSecureKeysFilter],
@@ -284,14 +287,14 @@ class   Settings
   # rubocop:disable Naming/MemoizedInstanceVariableName
   def raw_data
     @filtered_raw_data ||= pre_filters.inject(@raw_data) do |filtered_data, filter|
-      filter.execute(**{ data: filtered_data }.merge(metadata))
+      filter.execute(**{ data: filtered_data }.deep_merge(metadata))
     end
   end
   # rubocop:enable Naming/MemoizedInstanceVariableName
 
   def data
     @data ||= post_filters.inject(raw_data) do |filtered_data, filter|
-      filter.execute(**{ data: filtered_data }.merge(metadata))
+      filter.execute(**{ data: filtered_data }.deep_merge(metadata))
     end
   end
 
