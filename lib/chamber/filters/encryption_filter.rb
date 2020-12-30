@@ -67,7 +67,8 @@ class     EncryptionFilter
 
   def encrypt(namespace, key, value)
     method         = encryption_method(value)
-    encryption_key = encryption_keys[namespace] || encryption_keys[:__default]
+    namespace_key  = namespace ? namespace.to_sym : nil
+    encryption_key = encryption_keys[namespace_key] || encryption_keys[:__default]
 
     return value unless encryption_key
 

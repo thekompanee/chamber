@@ -10,7 +10,7 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: 'hello',
+                            '_secure_my_secure_setting' => 'hello',
                           },
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
@@ -38,24 +38,24 @@ describe  EncryptionFilter do
     filtered_settings        = EncryptionFilter.execute(
                                  secure_key_prefix: '_secure_',
                                  data:              {
-                                   development: {
-                                     sub_key: {
-                                       sub_sub_key: {
-                                         _secure_setting: 'hello development',
+                                   'development' => {
+                                     'sub_key' => {
+                                       'sub_sub_key' => {
+                                         '_secure_setting' => 'hello development',
                                        },
                                      },
                                    },
-                                   production:  {
-                                     sub_key: {
-                                       sub_sub_key: {
-                                         _secure_setting: 'hello production',
+                                   'production'  => {
+                                     'sub_key' => {
+                                       'sub_sub_key' => {
+                                         '_secure_setting' => 'hello production',
                                        },
                                      },
                                    },
-                                   other:       {
-                                     sub_key: {
-                                       sub_sub_key: {
-                                         _secure_setting: 'hello other',
+                                   'other'       => {
+                                     'sub_key' => {
+                                       'sub_sub_key' => {
+                                         '_secure_setting' => 'hello other',
                                        },
                                      },
                                    },
@@ -69,11 +69,11 @@ describe  EncryptionFilter do
 
     expect(EncryptionMethods::PublicKey)
       .to have_received(:encrypt)
-            .with(:_secure_setting, 'hello development', development_key)
+            .with('_secure_setting', 'hello development', development_key)
 
     expect(EncryptionMethods::PublicKey)
       .to have_received(:encrypt)
-            .with(:_secure_setting, 'hello other', default_key)
+            .with('_secure_setting', 'hello other', default_key)
 
     expect(filtered_settings['development']['sub_key']['sub_sub_key']['_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
@@ -89,7 +89,7 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            my_secure_setting: 'hello',
+                            'my_secure_setting' => 'hello',
                           },
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
@@ -101,7 +101,7 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            secure_setting: 'hello',
+                            'secure_setting' => 'hello',
                           },
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
@@ -113,7 +113,7 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: 'fNI5\jwlBn',
+                            '_secure_my_secure_setting' => 'fNI5\jwlBn',
                           },
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
@@ -125,7 +125,7 @@ describe  EncryptionFilter do
   it 'will attempt to encrypt values if they are numbers' do
     filtered_settings = EncryptionFilter.execute(secure_key_prefix: '_secure_',
                                                  data:              {
-                                                   _secure_my_secure_setting: 12_345,
+                                                   '_secure_my_secure_setting' => 12_345,
                                                  },
                                                  encryption_keys:   {
                                                    __default: './spec/spec_key.pub',
@@ -141,14 +141,15 @@ describe  EncryptionFilter do
         .execute(
           secure_key_prefix: '_secure_',
           data:              {
-            _secure_my_secure_setting: 'fNI5wlBniNhEU4396pmhWwx+A09bRAMJOUASuP7PzprewB' \
-                                       'X8CXYqL+v/uXOJpIRCLDjwe8quuC+j9iLcPU7HBRMr054g' \
-                                       'GxeqZexbLevXcPk7SrMis3qeEKmnAuarQGXe7ZAntidMY9' \
-                                       'Lx4pqSkhYXwQnI48d2Dh44qfaS9w2OrehSkpdFRnuxQeOp' \
-                                       'CKO/bleB0J88WGkytCohyHCRIpbaEjEC3UD52pnqMeu/Cl' \
-                                       'Nm+PBgE6Ci94pu5UUnZuIE/y+P4A3wgD6G/u8hgvAW51Jw' \
-                                       'Vryg/im1rayGAwWYNgupQ/5LDmjffwx7Q3fyMH2uF3CDIK' \
-                                       'RIC6U+mnM5SRMO4Dzysw==',
+            '_secure_my_secure_setting' => 'fNI5wlBniNhEU4396pmhWwx+A09bRAMJOUASuP7Pz' \
+                                           'prewBX8CXYqL+v/uXOJpIRCLDjwe8quuC+j9iLcPU' \
+                                           '7HBRMr054gGxeqZexbLevXcPk7SrMis3qeEKmnAua' \
+                                           'rQGXe7ZAntidMY9Lx4pqSkhYXwQnI48d2Dh44qfaS' \
+                                           '9w2OrehSkpdFRnuxQeOpCKO/bleB0J88WGkytCohy' \
+                                           'HCRIpbaEjEC3UD52pnqMeu/ClNm+PBgE6Ci94pu5U' \
+                                           'UnZuIE/y+P4A3wgD6G/u8hgvAW51JwVryg/im1ray' \
+                                           'GAwWYNgupQ/5LDmjffwx7Q3fyMH2uF3CDIKRIC6U+' \
+                                           'mnM5SRMO4Dzysw==',
           },
           encryption_keys:   { __default: './spec/spec_key.pub' },
         )
@@ -171,26 +172,29 @@ describe  EncryptionFilter do
         .execute(
           secure_key_prefix: '_secure_',
           data:              {
-            _secure_my_secure_setting: 'AcMY7ALLoGZRakL3ibyo2WB438ipdMDIjsa4SCDBP2saOY6' \
-                                       '3AD3C/SZanexlYDQoYoYC0V5J5EvKHgGMDAU8qnp9LjzU5V' \
-                                       'CwJ3SVRGz3J0c7LXgTlC585Lgy8LX+/yjYFm4D13hlMvvso' \
-                                       'I35Bo8EVkTSU2+0gRSjRpQJeK1o7az5+fBuNmFipevA4YfL' \
-                                       'narnpwo2d2oO+BqStI2QQI1UWwN2R04rvOdHoEzA6DLsdvY' \
-                                       'X+QTKDk4K5oSKXfuMBvzOCaCGT75cmt85ZY7XZnwbKi6c4m' \
-                                       'tL1ajrCr8sQFTA/GyG1EiYLFp1uQco0m2/S9yFf26REjax4' \
-                                       'ZE6O/ilXgT6xg==#YAm25swWRQx4ip1RjVzpGQ==#vRGvgj' \
-                                       'ErI+dATM4UOtFkkgefFpFTvxGpHN0gRbf1VCO4K07eqAQPb' \
-                                       '46BDI67a8iNum9cBphes7oGmuNnUvBg4JiZhKsXnolcRWdI' \
-                                       'TDVh/XYNioXRmesvj4x+tY0FVhkLV2zubRVfC7CDJgin6wR' \
-                                       'HP+bcZhICDD2YqB+XRS4ou66UeaiGA4eV4G6sPIo+DPjDM3' \
-                                       'm8JFnuRFMvGk73wthbN4MdAp9xONt5wfobJUiUR11k2iAqw' \
-                                       'hx7Wyj0imz/afI8goDTdMfQt3VDOYqYG3y2AcYOfsOL6m0G' \
-                                       'tQRlKvtsvw+m8/ICwSGiL2Loup0j/jDGhFi1lwf4ded8aSw' \
-                                       'yS+2/Ks9C008dsJwpR1SxJ59z1KSzdQcTcrJTnxd+2qpOVV' \
-                                       'IoaRGud2tSV+5wKXy9dWRflLsjEtBRFReFurTVQPodjDy+L' \
-                                       'hs452/O/+KAJOXMKeYegCGOe8z9tLD3teljjTyJPeW/1FE3' \
-                                       '+tP3G3HJAV4sgoO0YwhNY1Nji56igCl3UvEPnEQcJgu0w/+' \
-                                       'dqSreqwp6TqaqXY3lzr8vi733lti4nss=',
+            '_secure_my_secure_setting' => 'AcMY7ALLoGZRakL3ibyo2WB438ipdMDIjsa4SCDBP' \
+                                           '2saOY63AD3C/SZanexlYDQoYoYC0V5J5EvKHgGMDA' \
+                                           'U8qnp9LjzU5VCwJ3SVRGz3J0c7LXgTlC585Lgy8LX' \
+                                           '+/yjYFm4D13hlMvvsoI35Bo8EVkTSU2+0gRSjRpQJ' \
+                                           'eK1o7az5+fBuNmFipevA4YfLnarnpwo2d2oO+BqSt' \
+                                           'I2QQI1UWwN2R04rvOdHoEzA6DLsdvYX+QTKDk4K5o' \
+                                           'SKXfuMBvzOCaCGT75cmt85ZY7XZnwbKi6c4mtL1aj' \
+                                           'rCr8sQFTA/GyG1EiYLFp1uQco0m2/S9yFf26REjax' \
+                                           '4ZE6O/ilXgT6xg==#YAm25swWRQx4ip1RjVzpGQ==' \
+                                           '#vRGvgjErI+dATM4UOtFkkgefFpFTvxGpHN0gRbf1' \
+                                           'VCO4K07eqAQPb46BDI67a8iNum9cBphes7oGmuNnU' \
+                                           'vBg4JiZhKsXnolcRWdITDVh/XYNioXRmesvj4x+tY' \
+                                           '0FVhkLV2zubRVfC7CDJgin6wRHP+bcZhICDD2YqB+' \
+                                           'XRS4ou66UeaiGA4eV4G6sPIo+DPjDM3m8JFnuRFMv' \
+                                           'Gk73wthbN4MdAp9xONt5wfobJUiUR11k2iAqwhx7W' \
+                                           'yj0imz/afI8goDTdMfQt3VDOYqYG3y2AcYOfsOL6m' \
+                                           '0GtQRlKvtsvw+m8/ICwSGiL2Loup0j/jDGhFi1lwf' \
+                                           '4ded8aSwyS+2/Ks9C008dsJwpR1SxJ59z1KSzdQcT' \
+                                           'crJTnxd+2qpOVVIoaRGud2tSV+5wKXy9dWRflLsjE' \
+                                           'tBRFReFurTVQPodjDy+Lhs452/O/+KAJOXMKeYegC' \
+                                           'GOe8z9tLD3teljjTyJPeW/1FE3+tP3G3HJAV4sgoO' \
+                                           '0YwhNY1Nji56igCl3UvEPnEQcJgu0w/+dqSreqwp6' \
+                                           'TqaqXY3lzr8vi733lti4nss=',
           },
           encryption_keys:   { __default: './spec/spec_key.pub' },
         )
@@ -224,18 +228,18 @@ describe  EncryptionFilter do
         .execute(
           secure_key_prefix: '_secure_',
           data:              {
-            _secure_multiline: "-----BEGIN RSA PRIVATE KEY-----" \
-                               "uQ431irYF7XGEwmsfNUcw++6Enjmt9MIt" \
-                               "VZJrfL4cUr84L1ccOEX9AThsxz2nkiO\n" \
-                               "GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVa" \
-                               "YKYuHwYVb1spGfreHQHRP90EMv3U5Ir\n" \
-                               "xs0YFwKBgAJKGol+GM1oFodg48v4QA6hl" \
-                               "F5z49v83wU+AS2f3aMVfjkTYgAEAoCT\n" \
-                               "qoSi7wkYK3NvftVgVi8Z2+1WEzp3S590U" \
-                               "kkHmjc5o+HfS657v2fnqkekJyinB+OH\n" \
-                               "b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI" \
-                               "1Sqc8RsF/H8lRvj5ai5\n" \
-                               "-----END RSA PRIVATE KEY-----",
+            '_secure_multiline' => "-----BEGIN RSA PRIVATE KEY-----" \
+                                   "uQ431irYF7XGEwmsfNUcw++6Enjmt9MIt" \
+                                   "VZJrfL4cUr84L1ccOEX9AThsxz2nkiO\n" \
+                                   "GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVa" \
+                                   "YKYuHwYVb1spGfreHQHRP90EMv3U5Ir\n" \
+                                   "xs0YFwKBgAJKGol+GM1oFodg48v4QA6hl" \
+                                   "F5z49v83wU+AS2f3aMVfjkTYgAEAoCT\n" \
+                                   "qoSi7wkYK3NvftVgVi8Z2+1WEzp3S590U" \
+                                   "kkHmjc5o+HfS657v2fnqkekJyinB+OH\n" \
+                                   "b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI" \
+                                   "1Sqc8RsF/H8lRvj5ai5\n" \
+                                   "-----END RSA PRIVATE KEY-----",
           },
           encryption_keys:   {
             __default: './spec/spec_key.pub',
@@ -253,7 +257,7 @@ describe  EncryptionFilter do
         .execute(
           secure_key_prefix: '_secure_',
           data:              {
-            _secure_my_secure_setting: 'A' * 119,
+            '_secure_my_secure_setting' => 'A' * 119,
           },
           encryption_keys:   { __default: './spec/spec_key.pub' },
         )
@@ -264,7 +268,7 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: 'A' * 124,
+                            '_secure_my_secure_setting' => 'A' * 124,
                           },
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
@@ -277,7 +281,7 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: 'long' * 100,
+                            '_secure_my_secure_setting' => 'long' * 100,
                           },
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )
