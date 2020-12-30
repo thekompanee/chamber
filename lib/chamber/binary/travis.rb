@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 require 'thor'
-require 'chamber/core_ext/hash'
 require 'chamber/commands/travis/secure'
+require 'chamber/refinements/hash'
 
 module  Chamber
 module  Binary
-class   Travis < Thor
+class   Travis < ::Thor
+  using ::Chamber::Refinements::Hash
+
   desc 'secure',
        'Uses your Travis CI public key to encrypt the settings you have ' \
        'chosen not to commit to the repo'
@@ -26,7 +28,9 @@ class   Travis < Thor
                          'which are marked as "_secure"'
 
   def secure
-    Commands::Travis::Secure.call(**options.transform_keys(&:to_sym).merge(shell: self))
+    Commands::Travis::Secure.call(**options
+                                    .deep_transform_keys(&:to_sym)
+                                    .merge(shell: self))
   end
 end
 end

@@ -1,16 +1,17 @@
 # frozen_string_literal: true
 
 require 'thor'
-require 'chamber/core_ext/hash'
 require 'chamber/commands/cloud/clear'
 require 'chamber/commands/cloud/push'
 require 'chamber/commands/cloud/pull'
 require 'chamber/commands/cloud/compare'
+require 'chamber/refinements/hash'
 
 module  Chamber
 module  Binary
-class   Heroku < Thor
-  include Thor::Actions
+class   Heroku < ::Thor
+  include ::Thor::Actions
+  using ::Chamber::Refinements::Hash
 
   class_option :app,
                type:     :string,
@@ -37,7 +38,7 @@ class   Heroku < Thor
 
   def clear
     Commands::Cloud::Clear.call(**options
-                                    .transform_keys(&:to_sym)
+                                    .deep_transform_keys(&:to_sym)
                                     .merge(shell: self, adapter: 'heroku'))
   end
 
@@ -69,7 +70,7 @@ class   Heroku < Thor
 
   def push
     Commands::Cloud::Push.call(**options
-                                   .transform_keys(&:to_sym)
+                                   .deep_transform_keys(&:to_sym)
                                    .merge(shell: self, adapter: 'heroku'))
   end
 
@@ -84,7 +85,7 @@ class   Heroku < Thor
 
   def pull
     Commands::Cloud::Pull.call(**options
-                                   .transform_keys(&:to_sym)
+                                   .deep_transform_keys(&:to_sym)
                                    .merge(shell: self, adapter: 'heroku'))
   end
 
@@ -102,7 +103,7 @@ class   Heroku < Thor
 
   def compare
     Commands::Cloud::Compare.call(**options
-                                      .transform_keys(&:to_sym)
+                                      .deep_transform_keys(&:to_sym)
                                       .merge(shell: self, adapter: 'heroku'))
   end
 end
