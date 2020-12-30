@@ -4,6 +4,7 @@ require 'pathname'
 require 'yaml'
 require 'erb'
 require 'chamber/files/signature'
+require 'chamber/refinements/hash'
 
 ###
 # Internal: Represents a single file containing settings information in a given
@@ -11,6 +12,8 @@ require 'chamber/files/signature'
 #
 module  Chamber
 class   File < Pathname
+  using ::Chamber::Refinements::Hash
+
   attr_accessor :namespaces,
                 :decryption_keys,
                 :encryption_keys,
@@ -143,7 +146,7 @@ class   File < Pathname
     file_contents = read
     erb_result    = ERB.new(file_contents).result
 
-    YAML.load(erb_result) || {}
+    (YAML.load(erb_result) || {}).deep_transform_keys(&:to_s)
   rescue Errno::ENOENT
     {}
   end

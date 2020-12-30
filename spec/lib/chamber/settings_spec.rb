@@ -244,6 +244,16 @@ THERE: 'was not that easy?'
     expect(settings).to eq('my_encrypted_setting' => 'hello')
   end
 
+  it 'can access settings with bracket notation with symbol keys and string accessor' do
+    settings = Settings.new(settings: {
+                              my_setting: {
+                                my_inner_setting: 'hello',
+                              },
+                            })
+
+    expect(settings['my_setting']['my_inner_setting']).to eql 'hello'
+  end
+
   it 'can dig into the data if the data contains symbol keys and accessed via string' do
     settings = Settings.new(settings: {
                               my_setting: 'hello',
