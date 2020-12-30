@@ -7,10 +7,13 @@ require 'chamber/encryption_methods/public_key'
 require 'chamber/encryption_methods/ssl'
 require 'chamber/encryption_methods/none'
 require 'chamber/errors/decryption_failure'
+require 'chamber/refinements/deep_dup'
 
 module  Chamber
 module  Filters
 class   DecryptionFilter
+  using ::Chamber::Refinements::DeepDup
+
   BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9+/]{342}==\z}.freeze
   LARGE_DATA_STRING_PATTERN = %r{
                                   \A                            # Beginning of String
@@ -34,7 +37,7 @@ class   DecryptionFilter
 
   def initialize(data:, secure_key_prefix:, decryption_keys: {}, **_args)
     self.decryption_keys  = decryption_keys || {}
-    self.data             = data.dup
+    self.data             = data.deep_dup
     self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
 

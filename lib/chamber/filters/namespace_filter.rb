@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require 'chamber/refinements/hash'
+require 'chamber/refinements/deep_dup'
 
 module  Chamber
 module  Filters
 class   NamespaceFilter
   using ::Chamber::Refinements::Hash
+  using ::Chamber::Refinements::DeepDup
 
   def self.execute(**args)
     new(**args).__send__(:execute)
@@ -15,7 +17,7 @@ class   NamespaceFilter
                 :namespaces
 
   def initialize(data:, namespaces:, **_args)
-    self.data       = data.dup
+    self.data       = data.deep_dup
     self.namespaces = namespaces
   end
 
@@ -27,7 +29,7 @@ class   NamespaceFilter
         filtered_data.deep_merge!(data[namespace]) if data[namespace]
       end
     else
-      data.dup
+      data
     end
   end
 

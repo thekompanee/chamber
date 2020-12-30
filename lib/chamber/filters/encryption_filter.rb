@@ -5,10 +5,13 @@ require 'yaml'
 require 'chamber/encryption_methods/public_key'
 require 'chamber/encryption_methods/ssl'
 require 'chamber/encryption_methods/none'
+require 'chamber/refinements/deep_dup'
 
 module    Chamber
 module    Filters
 class     EncryptionFilter
+  using ::Chamber::Refinements::DeepDup
+
   BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9+/]{342}==\z}.freeze
   BASE64_SUBSTRING_PATTERN  = %r{[A-Za-z0-9+/#]*={0,2}}.freeze
   LARGE_DATA_STRING_PATTERN = /
@@ -27,7 +30,7 @@ class     EncryptionFilter
 
   def initialize(data:, secure_key_prefix:, encryption_keys: {}, **_args)
     self.encryption_keys  = encryption_keys || {}
-    self.data             = data.dup
+    self.data             = data.deep_dup
     self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
 

@@ -3,11 +3,13 @@
 require 'yaml'
 require 'chamber/errors/environment_conversion'
 require 'chamber/refinements/hash'
+require 'chamber/refinements/deep_dup'
 
 module  Chamber
 module  Filters
 class   EnvironmentFilter
   using ::Chamber::Refinements::Hash
+  using ::Chamber::Refinements::DeepDup
 
   ###
   # Internal: Allows the existing environment to be injected into the passed in
@@ -125,7 +127,7 @@ class   EnvironmentFilter
 
     settings.each_pair do |key, value|
       environment_key  = key.to_s.gsub(secure_key_token, '')
-      environment_keys = parent_keys.dup.push(environment_key)
+      environment_keys = parent_keys.deep_dup.push(environment_key)
 
       if value.respond_to? :each_pair
         environment_hash.deep_merge!(hash_block.call(key, value, environment_keys))

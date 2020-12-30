@@ -9,6 +9,7 @@ require 'chamber/filters/secure_filter'
 require 'chamber/filters/translate_secure_keys_filter'
 require 'chamber/filters/insecure_filter'
 require 'chamber/filters/failed_decryption_filter'
+require 'chamber/refinements/deep_dup'
 require 'chamber/refinements/hash'
 
 ###
@@ -17,6 +18,7 @@ require 'chamber/refinements/hash'
 module  Chamber
 class   Settings
   using ::Chamber::Refinements::Hash
+  using ::Chamber::Refinements::DeepDup
 
   attr_accessor :decryption_keys,
                 :encryption_keys,
@@ -49,7 +51,7 @@ class   Settings
     self.namespaces        = namespaces
     self.post_filters      = post_filters
     self.pre_filters       = pre_filters
-    self.raw_data          = settings.dup
+    self.raw_data          = settings.deep_dup
     self.secure_key_prefix = secure_key_prefix
   end
   # rubocop:enable Metrics/ParameterLists
@@ -145,7 +147,7 @@ class   Settings
     flattened_name_hash = {}
 
     hash.each_pair do |key, value|
-      flattened_name_components = parent_keys.dup.push(key)
+      flattened_name_components = parent_keys.deep_dup.push(key)
 
       if value.respond_to?(:each_pair)
         flattened_name_hash
