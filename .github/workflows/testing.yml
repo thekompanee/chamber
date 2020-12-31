@@ -53,6 +53,6 @@ jobs:
 
       - name:                     "Run RSpec"
         run:                      |
-          bundle exec rspec
+          bundle exec rspec  --exclude-pattern='**/*heroku*'
         env:
           CHAMBER_KEY:            "${{ secrets.CHAMBER_KEY }}"
