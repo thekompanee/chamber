@@ -256,6 +256,118 @@ THERE: 'was not that easy?'
     expect(settings).to eq('my_encrypted_setting' => 'hello')
   end
 
+  it 'can dig into the data if the data contains symbol keys and accessed via string' do
+    settings = Settings.new(settings: {
+                              my_setting: 'hello',
+                            })
+
+    expect(settings.dig!('my_setting')).to eql 'hello'
+  end
+
+  it 'can dig into the data if the data contains string keys and accessed via string' do
+    settings = Settings.new(settings: {
+                              'my_setting' => 'hello',
+                            })
+
+    expect(settings.dig!('my_setting')).to eql 'hello'
+  end
+
+  it 'can dig into the data if the data contains symbol keys and accessed via symbol' do
+    settings = Settings.new(settings: {
+                              my_setting: 'hello',
+                            })
+
+    expect(settings.dig!(:my_setting)).to eql 'hello'
+  end
+
+  it 'can dig into the data if the data contains string keys and accessed via symbol' do
+    settings = Settings.new(settings: {
+                              'my_setting' => 'hello',
+                            })
+
+    expect(settings.dig!(:my_setting)).to eql 'hello'
+  end
+
+  it 'can dig into arrays if the data contains it' do
+    settings = Settings.new(settings: {
+                              'my_setting' => %w{
+                                                hello
+                                              },
+                            })
+
+    expect(settings.dig!(:my_setting, 0)).to eql 'hello'
+  end
+
+  it 'can dig deeply into the data' do
+    settings = Settings.new(settings: {
+                              my_setting: {
+                                my_inner_setting: [
+                                                    {
+                                                      'my_array' => 'hello',
+                                                    },
+                                                  ],
+                              },
+                            })
+
+    expect(settings.dig!('my_setting', 'my_inner_setting', 0, 'my_array')).to eql 'hello'
+  end
+
+  it 'does not allow the user to dig past hash keys that do not exist' do
+    settings = Settings.new(settings: {
+                              my_setting: {
+                                my_inner_setting: %w{
+                                                    hello
+                                                  },
+                              },
+                            })
+
+    expect { settings.dig!('my_setting', 'my_invalid_setting', 0) }
+      .to raise_error(::KeyError)
+            .with_message(/key not found: "my_invalid_setting"/)
+  end
+
+  it 'does not allow the user to dig past array indices that do not exist' do
+    settings = Settings.new(settings: {
+                              my_setting: {
+                                my_inner_setting: [
+                                                    {
+                                                      'my_array' => 'hello',
+                                                    },
+                                                  ],
+                              },
+                            })
+
+    expect { settings.dig!('my_setting', 'my_inner_setting', 1, 'my_array') }
+      .to raise_error(::IndexError)
+            .with_message('index 1 outside of array bounds: -1...1')
+  end
+
+  it 'can allow the user to dig past hash keys that do not exist' do
+    settings = Settings.new(settings: {
+                              my_setting: {
+                                my_inner_setting: %w{
+                                                    hello
+                                                  },
+                              },
+                            })
+
+    expect(settings.dig('my_setting', 'my_invalid_setting', 0)).to be nil
+  end
+
+  it 'can allow the user to dig past array indices that do not exist' do
+    settings = Settings.new(settings: {
+                              my_setting: {
+                                my_inner_setting: [
+                                                    {
+                                                      'my_array' => 'hello',
+                                                    },
+                                                  ],
+                              },
+                            })
+
+    expect(settings.dig('my_setting', 'my_inner_setting', 1, 'my_array')).to be nil
+  end
+
   it 'can encrypt a setting if it finds a secure key' do
     settings = Settings.new(settings:        {
                               _secure_my_encrypted_setting: 'hello',

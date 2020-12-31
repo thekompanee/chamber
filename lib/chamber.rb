@@ -23,6 +23,14 @@ module  Chamber
     instance.[](key)
   end
 
+  def dig!(*args)
+    instance.dig!(*args)
+  end
+
+  def dig(*args)
+    instance.dig(*args)
+  end
+
   def configuration
     instance.configuration
   end
@@ -86,6 +94,8 @@ module  Chamber
   module_function :[],
                   :configuration,
                   :decrypt,
+                  :dig!,
+                  :dig,
                   :encrypt,
                   :env,
                   :filenames,

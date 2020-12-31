@@ -227,6 +227,20 @@ class   Settings
     namespaces  == other.namespaces
   end
 
+  def dig!(*args)
+    args.inject(data) do |data_value, bracket_value|
+      key = bracket_value.is_a?(::Symbol) ? bracket_value.to_s : bracket_value
+
+      data_value.fetch(key)
+    end
+  end
+
+  def dig(*args)
+    dig!(*args)
+  rescue ::KeyError, ::IndexError # rubocop:disable Lint/ShadowedException
+    nil
+  end
+
   def securable
     Settings.new(**metadata.merge(
                    settings:    raw_data,
