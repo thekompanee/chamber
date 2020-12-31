@@ -3,6 +3,7 @@
 require 'rspectacular'
 require 'chamber/settings'
 
+# rubocop:disable Style/SingleArgumentDig
 module    Chamber
 describe  Settings do
   it 'can verify that it is equal to another Settings object' do
@@ -424,7 +425,7 @@ THERE: 'was not that easy?'
 
     expect(secured_settings['my_encrypted_setting']).to    eql 'hello'
     expect(secured_settings['my_unencrypted_setting']).to  eql 'nifty'
-    expect(secured_settings['my_insecure_setting']).to     be  nil
+    expect(secured_settings.dig('my_insecure_setting')).to be  nil
   end
 
   it 'can filter unencrypted settings' do
@@ -450,9 +451,9 @@ THERE: 'was not that easy?'
 
     secured_settings = settings.insecure
 
-    expect(secured_settings['my_encrypted_setting']).to   be  nil
-    expect(secured_settings['my_unencrypted_setting']).to eql 'nifty'
-    expect(secured_settings['my_insecure_setting']).to    be  nil
+    expect(secured_settings.dig('my_encrypted_setting')).to be  nil
+    expect(secured_settings['my_unencrypted_setting']).to   eql 'nifty'
+    expect(secured_settings.dig('my_insecure_setting')).to  be  nil
   end
 
   it 'raises an exception when it accesses a value which cannot be decrypted' do
@@ -522,3 +523,4 @@ THERE: 'was not that easy?'
   end
 end
 end
+# rubocop:enable Style/SingleArgumentDig

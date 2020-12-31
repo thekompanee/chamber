@@ -91,6 +91,7 @@ only_namespaced_sub_settings:
   HEREDOC
 end
 
+# rubocop:disable Style/SingleArgumentDig
 describe Chamber do
   before(:each) { Chamber.load(basepath: '/tmp/chamber') }
 
@@ -182,7 +183,7 @@ describe Chamber do
 
     Chamber.load(basepath: '/tmp/chamber')
 
-    expect(Chamber[:only_namespaced_sub_settings]).to be_nil
+    expect(Chamber.dig('only_namespaced_sub_settings')).to be_nil
   end
 
   it 'does not raise an exception if a namespaced file does not exist' do
@@ -211,7 +212,7 @@ describe Chamber do
   end
 
   it 'does not load YAML files from the "settings" directory if it is namespaced' do
-    expect(Chamber['sub_settings-namespaced']).to be_nil
+    expect(Chamber.dig('sub_settings-namespaced')).to be nil
   end
 
   it 'loads namespaced YAML files in the "settings" directory if they correspond to ' \
@@ -239,7 +240,7 @@ describe Chamber do
                    my_namespace: -> { 'blue' },
                  })
 
-    expect(Chamber['my_non_inline_namespaced_setting']).not_to eql 'my_value_for_non_inline_namespace'
+    expect(Chamber.dig('my_non_inline_namespaced_setting')).not_to eql 'my_value_for_non_inline_namespace'
   end
 
   it 'loads the entire inline namespaced file if no namespaces are passed in since ' \
@@ -326,3 +327,4 @@ describe Chamber do
     expect(Chamber['test']['my_encrpyted_setting']).to eql 'hello'
   end
 end
+# rubocop:enable Style/SingleArgumentDig
