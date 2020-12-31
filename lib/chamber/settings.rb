@@ -227,6 +227,27 @@ class   Settings
     namespaces  == other.namespaces
   end
 
+  def [](key)
+    warn "WARNING: Bracket access will require strings instead of symbols in Chamber 3.0.  You attempted to access the '#{key}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-bracket-indifferent-access for full details." if key.is_a?(::Symbol) # rubocop:disable Layout/LineLength
+    warn "WARNING: Accessing a non-existent key ('#{key}') with brackets will fail in Chamber 3.0.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#bracket-access-now-fails-on-non-existent-keys for full details." unless data.has_key?(key) # rubocop:disable Layout/LineLength
+
+    data.[](key)
+  end
+
+  def dig!(*args)
+    args.inject(data) do |data_value, bracket_value|
+      key = bracket_value.is_a?(::Symbol) ? bracket_value.to_s : bracket_value
+
+      data_value.fetch(key)
+    end
+  end
+
+  def dig(*args)
+    dig!(*args)
+  rescue ::KeyError, ::IndexError # rubocop:disable Lint/ShadowedException
+    nil
+  end
+
   def securable
     Settings.new(**metadata.merge(
                    settings:    raw_data,
@@ -251,9 +272,14 @@ class   Settings
   end
 
   def method_missing(name, *args)
-    return data.public_send(name, *args) if data.respond_to?(name)
+    if data.respond_to?(name)
+      warn "WARNING: Object notation access is deprecated and will be removed in Chamber 3.0.  You attempted to access the '#{name}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-object-notation-access for full details." # rubocop:disable Layout/LineLength
+      warn "WARNING: Predicate methods are deprecated and will be removed in Chamber 3.0.  You attempted to access the '#{name}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-predicate-accessors for full details." if name.end_with?('?') # rubocop:disable Layout/LineLength
 
-    super
+      data.public_send(name, *args)
+    else
+      super
+    end
   end
 
   def respond_to_missing?(name, include_private = false)

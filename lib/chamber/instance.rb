@@ -22,6 +22,14 @@ class   Instance
     settings.[](key)
   end
 
+  def dig!(*args)
+    settings.dig!(*args)
+  end
+
+  def dig(*args)
+    settings.dig(*args)
+  end
+
   def filenames
     files.filenames
   end
