@@ -6,11 +6,6 @@ Lint/EmptyFile:
     - 'spec/rails-3-test/config.ru'
     - 'spec/rails-4-test/config.ru'
 
-# Introduced In Ruby 2.4
-# https://apidock.com/ruby/v2_4_6/String/match%3F
-Performance/RegexpMatch:
-  Enabled:            false
-
 # Rubocop Thinks Pathnames Are Strings
 Style/StringConcatenation:
   Enabled:            false
