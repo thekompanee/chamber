@@ -11,10 +11,6 @@ module  Chamber
     self.instance = Instance.new(**args)
   end
 
-  def env
-    instance.settings
-  end
-
   def instance
     @instance ||= Instance.new
   end
@@ -87,7 +83,6 @@ module  Chamber
                   :dig!,
                   :dig,
                   :encrypt,
-                  :env,
                   :filenames,
                   :files,
                   :instance,

@@ -114,10 +114,6 @@ describe Chamber do
     expect(Chamber['test'][:my_setting]).to eql 'my_value'
   end
 
-  it 'can access the settings via "env"' do
-    expect(Chamber.env['test'][:my_setting]).to eql 'my_value'
-  end
-
   it 'prefers values stored in environment variables over those in the YAML files' do
     ENV['TEST_MY_SETTING']                         = 'some_other_value'
     ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = '[1, 2, 3]'
@@ -279,15 +275,15 @@ describe Chamber do
                  rootpath:   './spec/fixtures/keys/real/',
                  basepath:   '/tmp/chamber/')
 
-    expect(Chamber.env['sub_key'][:sub_sub_key][:development_setting]).to eql 'hello development'
-    expect(Chamber.env['sub_key'][:sub_sub_key][:production_setting]).to  eql 'hello production'
+    expect(Chamber['sub_key'][:sub_sub_key][:development_setting]).to eql 'hello development'
+    expect(Chamber['sub_key'][:sub_sub_key][:production_setting]).to  eql 'hello production'
 
     Chamber.load(namespaces: %w{other},
                  files:      %w{/tmp/chamber/secure_settings_with_namespaces.yml},
                  rootpath:   './spec/fixtures/keys/real/',
                  basepath:   '/tmp/chamber/')
 
-    expect(Chamber.env['sub_key'][:sub_sub_key][:other_setting]).to eql 'hello other'
+    expect(Chamber['sub_key'][:sub_sub_key][:other_setting]).to eql 'hello other'
   end
 
   it 'can explicitly specify files without specifying a basepath' do
