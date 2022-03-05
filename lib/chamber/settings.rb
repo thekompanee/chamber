@@ -228,8 +228,8 @@ class   Settings
   end
 
   def [](key)
-    warn "WARNING: Bracket access will require strings instead of symbols in Chamber 3.0.  You attempted to access the '#{key}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-bracket-indifferent-access for full details." if key.is_a?(::Symbol) # rubocop:disable Layout/LineLength
-    warn "WARNING: Accessing a non-existent key ('#{key}') with brackets will fail in Chamber 3.0.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#bracket-access-now-fails-on-non-existent-keys for full details." unless data.has_key?(key) # rubocop:disable Layout/LineLength
+    warn "WARNING: Bracket access will require strings instead of symbols in Chamber 3.0.  You attempted to access the '#{key}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-bracket-indifferent-access for full details. Called from: '#{caller.to_a.first}'" if key.is_a?(::Symbol) # rubocop:disable Layout/LineLength
+    warn "WARNING: Accessing a non-existent key ('#{key}') with brackets will fail in Chamber 3.0.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#bracket-access-now-fails-on-non-existent-keys for full details. Called from: '#{caller.to_a.first}'" unless data.has_key?(key) # rubocop:disable Layout/LineLength
 
     data.[](key)
   end
@@ -273,8 +273,8 @@ class   Settings
 
   def method_missing(name, *args)
     if data.respond_to?(name)
-      warn "WARNING: Object notation access is deprecated and will be removed in Chamber 3.0.  You attempted to access the '#{name}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-object-notation-access for full details." # rubocop:disable Layout/LineLength
-      warn "WARNING: Predicate methods are deprecated and will be removed in Chamber 3.0.  You attempted to access the '#{name}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-predicate-accessors for full details." if name.to_s.end_with?('?') # rubocop:disable Layout/LineLength
+      warn "WARNING: Object notation access is deprecated and will be removed in Chamber 3.0.  You attempted to access the '#{name}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-object-notation-access for full details. Called from: '#{caller.to_a.first}'" # rubocop:disable Layout/LineLength
+      warn "WARNING: Predicate methods are deprecated and will be removed in Chamber 3.0.  You attempted to access the '#{name}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-predicate-accessors for full details. Called from: '#{caller.to_a.first}'" if name.to_s.end_with?('?') # rubocop:disable Layout/LineLength
 
       data.public_send(name, *args)
     else
