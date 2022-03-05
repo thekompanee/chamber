@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 require 'chamber/errors/decryption_failure'
+require 'chamber/refinements/deep_dup'
 
 module  Chamber
 module  Filters
 class   FailedDecryptionFilter
+  using ::Chamber::Refinements::DeepDup
+
   BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9+/]{342}==\z}.freeze
 
   def self.execute(**args)
@@ -15,7 +18,7 @@ class   FailedDecryptionFilter
                 :secure_key_token
 
   def initialize(data:, secure_key_prefix:, **_args)
-    self.data             = data.dup
+    self.data             = data.deep_dup
     self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
 

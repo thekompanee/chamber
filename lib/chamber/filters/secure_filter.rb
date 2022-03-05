@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require 'chamber/refinements/deep_dup'
+
 module  Chamber
 module  Filters
 class   SecureFilter
+  using ::Chamber::Refinements::DeepDup
+
   def self.execute(**args)
     new(**args).__send__(:execute)
   end
@@ -11,7 +15,7 @@ class   SecureFilter
                 :secure_key_token
 
   def initialize(data:, secure_key_prefix:, **_args)
-    self.data             = data.dup
+    self.data             = data.deep_dup
     self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
 
