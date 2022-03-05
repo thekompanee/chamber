@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'hashie/mash'
 require 'chamber/namespace_set'
 require 'chamber/filters/namespace_filter'
 require 'chamber/filters/encryption_filter'
@@ -11,12 +10,15 @@ require 'chamber/filters/translate_secure_keys_filter'
 require 'chamber/filters/insecure_filter'
 require 'chamber/filters/failed_decryption_filter'
 require 'chamber/refinements/enumerable'
+require 'chamber/refinements/hash'
 
 ###
 # Internal: Represents the base settings storage needed for Chamber.
 #
 module  Chamber
 class   Settings
+  using ::Chamber::Refinements::Hash
+
   attr_accessor :decryption_keys,
                 :encryption_keys,
                 :post_filters,
@@ -205,7 +207,7 @@ class   Settings
       encryption_keys: encryption_keys.any? ? encryption_keys : other_settings.encryption_keys,
       decryption_keys: decryption_keys.any? ? decryption_keys : other_settings.decryption_keys,
       namespaces:      (namespaces + other_settings.namespaces),
-      settings:        raw_data.merge(other_settings.raw_data),
+      settings:        raw_data.deep_merge(other_settings.raw_data),
     )
     # rubocop:enable Layout/LineLength
   end
@@ -279,7 +281,7 @@ class   Settings
   protected
 
   def raw_data=(new_raw_data)
-    @raw_data   = Hashie::Mash.new(new_raw_data)
+    @raw_data = new_raw_data.dup
   end
 
   def namespaces=(raw_namespaces)

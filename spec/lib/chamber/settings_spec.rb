@@ -210,13 +210,13 @@ THERE: 'was not that easy?'
 
   it 'only includes namespaced data if any exists' do
     settings = Settings.new(settings:   {
-                              namespace_value:       {
-                                namespace_setting: 'value',
+                              'namespace_value'       => {
+                                'namespace_setting' => 'value',
                               },
-                              other_namespace_value: {
-                                other_namespace_setting: 'value',
+                              'other_namespace_value' => {
+                                'other_namespace_setting' => 'value',
                               },
-                              non_namespace_setting: 'other value',
+                              'non_namespace_setting' => 'other value',
                             },
                             namespaces: %w{namespace_value other_namespace_value})
 
@@ -334,7 +334,7 @@ THERE: 'was not that easy?'
 
   it 'can encrypt a setting if it finds a secure key' do
     settings = Settings.new(settings:        {
-                              _secure_my_encrypted_setting: 'hello',
+                              '_secure_my_encrypted_setting' => 'hello',
                             },
                             encryption_keys: { __default: './spec/spec_key.pub' },
                             pre_filters:     [],
