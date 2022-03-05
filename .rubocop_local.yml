@@ -11,11 +11,6 @@ Lint/EmptyFile:
 Performance/RegexpMatch:
   Enabled:            false
 
-# Introduced In Ruby 2.4
-# https://apidock.com/ruby/v2_4_6/Hash/transform_values
-Style/HashTransformValues:
-  Enabled:            false
-
 # Rubocop Thinks Pathnames Are Strings
 Style/StringConcatenation:
   Enabled:            false

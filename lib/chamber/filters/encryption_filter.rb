@@ -50,7 +50,7 @@ class     EncryptionFilter
   end
 
   def encryption_keys=(other)
-    @encryption_keys = other.each_with_object({}) do |(namespace, keyish), memo|
+    @encryption_keys = other.each_with_object({}) do |(namespace, keyish), memo| # rubocop:disable Style/HashTransformValues
       memo[namespace] = if keyish.is_a?(OpenSSL::PKey::RSA)
                           keyish
                         elsif ::File.readable?(::File.expand_path(keyish))
