@@ -363,12 +363,10 @@ describe  File do
     tempfile      = test.create_tempfile '{ test: !ruby/symbol foo }'
     settings_file = File.new(path: tempfile.path)
 
-    allow(settings_file).to receive(:warn)
-
-    file_settings = settings_file.to_settings
-
-    expect(file_settings.to_hash).to eql('test' => :foo)
-    expect(settings_file).to have_received(:warn).with(include('WARNING: Recursive data structures'))
+    expect { settings_file.to_settings }
+      .to \
+        raise_error(::Chamber::Errors::DisallowedClass)
+          .with_message(include('Tried to load unspecified class: Symbol'))
   end
 end
 end

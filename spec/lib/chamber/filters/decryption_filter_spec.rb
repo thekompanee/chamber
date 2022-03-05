@@ -429,65 +429,55 @@ describe  DecryptionFilter do
   end
 
   it 'warns when attempting to decrypt an unpermitted class type via Public Key' do
-    allow(::Chamber::EncryptionMethods::PublicKey).to receive(:warn)
-
-    filtered_settings = \
-      DecryptionFilter
-        .execute(
-          secure_key_prefix: '_secure_',
-          data:              {
-            '_secure_my_secure_setting' => 'm8McltRqgOJK5OCI6t6pfnbSIovnWOMyFy0RdQUw' \
-                                           'xP4ea6gloTy8RbUoKlmPajnlYBFt7BlVeWW+xk/t' \
-                                           's2+pGnI8d1+waAqxtwpNOgRdM18x47DUaFkojkLQ' \
-                                           'f6VbtzfAe3Ruy8ZhDMN44K3M50pZhpwNauntzypr' \
-                                           'DJtc8AXSI2wMBQPc5b2gk4C0rXYVMuSQmV/NDxMo' \
-                                           'BI7xIH2JGGNmAwStZqiK/kQrMTj5aZKJIr+GKS3N' \
-                                           'hpWzJriT8X934MyolmwPEBUwUTUSu/jUNWuMUjBH' \
-                                           'w/Xc3YkiBuGJK8UzshX3oFGwLMzQn1gxkFENAIgh' \
-                                           'ZYScPfuJ5A1fcX5CbUAk7w==',
-          },
-          decryption_keys:   { __default: './spec/spec_key' },
-        )
-
-    expect(filtered_settings['_secure_my_secure_setting']).to be_a(::Symbol)
-    expect(filtered_settings['_secure_my_secure_setting']).to be :foo_symbol
-    expect(::Chamber::EncryptionMethods::PublicKey).to \
-      have_received(:warn)
-        .with(include('WARNING: Recursive data structures'))
+    expect {
+      DecryptionFilter.execute(
+        secure_key_prefix: '_secure_',
+        data:              {
+          '_secure_my_secure_setting' => 'm8McltRqgOJK5OCI6t6pfnbSIovnWOMyFy0RdQUw' \
+                                         'xP4ea6gloTy8RbUoKlmPajnlYBFt7BlVeWW+xk/t' \
+                                         's2+pGnI8d1+waAqxtwpNOgRdM18x47DUaFkojkLQ' \
+                                         'f6VbtzfAe3Ruy8ZhDMN44K3M50pZhpwNauntzypr' \
+                                         'DJtc8AXSI2wMBQPc5b2gk4C0rXYVMuSQmV/NDxMo' \
+                                         'BI7xIH2JGGNmAwStZqiK/kQrMTj5aZKJIr+GKS3N' \
+                                         'hpWzJriT8X934MyolmwPEBUwUTUSu/jUNWuMUjBH' \
+                                         'w/Xc3YkiBuGJK8UzshX3oFGwLMzQn1gxkFENAIgh' \
+                                         'ZYScPfuJ5A1fcX5CbUAk7w==',
+        },
+        decryption_keys:   { __default: './spec/spec_key' },
+      )
+    }
+      .to \
+        raise_error(::Chamber::Errors::DisallowedClass)
+          .with_message(include('Tried to load unspecified class: Symbol'))
   end
 
   it 'warns when attempting to decrypt an unpermitted class type via SSL' do
-    allow(::Chamber::EncryptionMethods::Ssl).to receive(:warn)
-
-    filtered_settings = \
-      DecryptionFilter
-        .execute(
-          secure_key_prefix: '_secure_',
-          data:              {
-            '_secure_my_secure_setting' => 'QbDa3B75HTzeY9419VbSd3pivmE9hXQUeNIu2Tou' \
-                                           'lyLB5eCs13w7VkhKBSq5YO7dHqTuBiktVPR9bECr' \
-                                           'xQsH2atXKn3Dnfm2CnWNQYGVo5QZzFP+NfnlOXhg' \
-                                           'xvjTj6RoYeG932MO3oqb7fjxvb3FlPDOzE7bscOd' \
-                                           'gbho4JHPKqFlKavTWgJa15fxJnzNmsh4WvtYe9yA' \
-                                           'nqpHDc7M3z4v2EgR+Gfm/pYsDeHJRUpxhUJzTDn9' \
-                                           'B1tmUnPOPYwfb7przIlrDsk+sFdPvGK7YAMSVz8X' \
-                                           'c1nxq1J16Cie4ZWQentBitWAmF1EP9dvYeNyjSSe' \
-                                           'qxLaF+YjLBa/oYgBsShPbA==#JMmY1z4T+0k9han' \
-                                           'nTXqcig==#3G5bfeHFNQQCdXLXzeihFIhZx1b4Lf' \
-                                           'Hac1kA2gQFw03MFx2yA3fKTt3+mIwOK1+GBObddg' \
-                                           'qeHVx4e4hmxPj/2pfnSduEgvNRiZ7V7qnR0n/J6c' \
-                                           'h675rkvH7Dp5pNA2gXh5q5OMuT/5J0QvgpU8EhUZ' \
-                                           'aMv13z3iPI/zMMldyVeJCxKCd8pAQhUgOUe6RAcw' \
-                                           '45',
-          },
-          decryption_keys:   { __default: './spec/spec_key' },
-        )
-
-    expect(filtered_settings['_secure_my_secure_setting']).to be_a(::Symbol)
-    expect(filtered_settings['_secure_my_secure_setting']).to be :abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
-    expect(::Chamber::EncryptionMethods::Ssl).to \
-      have_received(:warn)
-        .with(include('WARNING: Recursive data structures'))
+    expect {
+      DecryptionFilter.execute(
+        secure_key_prefix: '_secure_',
+        data:              {
+          '_secure_my_secure_setting' => 'QbDa3B75HTzeY9419VbSd3pivmE9hXQUeNIu2Tou' \
+                                         'lyLB5eCs13w7VkhKBSq5YO7dHqTuBiktVPR9bECr' \
+                                         'xQsH2atXKn3Dnfm2CnWNQYGVo5QZzFP+NfnlOXhg' \
+                                         'xvjTj6RoYeG932MO3oqb7fjxvb3FlPDOzE7bscOd' \
+                                         'gbho4JHPKqFlKavTWgJa15fxJnzNmsh4WvtYe9yA' \
+                                         'nqpHDc7M3z4v2EgR+Gfm/pYsDeHJRUpxhUJzTDn9' \
+                                         'B1tmUnPOPYwfb7przIlrDsk+sFdPvGK7YAMSVz8X' \
+                                         'c1nxq1J16Cie4ZWQentBitWAmF1EP9dvYeNyjSSe' \
+                                         'qxLaF+YjLBa/oYgBsShPbA==#JMmY1z4T+0k9han' \
+                                         'nTXqcig==#3G5bfeHFNQQCdXLXzeihFIhZx1b4Lf' \
+                                         'Hac1kA2gQFw03MFx2yA3fKTt3+mIwOK1+GBObddg' \
+                                         'qeHVx4e4hmxPj/2pfnSduEgvNRiZ7V7qnR0n/J6c' \
+                                         'h675rkvH7Dp5pNA2gXh5q5OMuT/5J0QvgpU8EhUZ' \
+                                         'aMv13z3iPI/zMMldyVeJCxKCd8pAQhUgOUe6RAcw' \
+                                         '45',
+        },
+        decryption_keys:   { __default: './spec/spec_key' },
+      )
+    }
+      .to \
+        raise_error(::Chamber::Errors::DisallowedClass)
+          .with_message(include('Tried to load unspecified class: Symbol'))
   end
 
   it 'can decrypt large encrypted data' do

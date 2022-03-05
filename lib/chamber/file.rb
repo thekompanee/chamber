@@ -139,7 +139,7 @@ class   File < Pathname
     @secure_prefix_pattern ||= Regexp.escape(secure_prefix)
   end
 
-  def file_contents_hash # rubocop:disable Metrics/CyclomaticComplexity
+  def file_contents_hash
     file_contents = read
     erb_result    = ERB.new(file_contents).result
 
@@ -152,23 +152,13 @@ class   File < Pathname
                                           ::Regexp,
                                         ]) || {}
     rescue ::Psych::DisallowedClass => error
-      warn <<~HEREDOC
-        WARNING: Recursive data structures (complex classes) being loaded from Chamber
-        has been deprecated and will be removed in 3.0.
-
-        See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#limiting-complex-classes
-        for full details.
-
+      raise ::Chamber::Errors::DisallowedClass, <<~HEREDOC
         #{error.message}
 
-        Called from: '#{caller.to_a[2]}'
-      HEREDOC
+        You attempted to load a class instance via your Chamber settings that is not allowed.
 
-      if YAML.respond_to?(:unsafe_load)
-        YAML.unsafe_load(erb_result) || {}
-      else
-        YAML.load(erb_result) || {}
-      end
+        See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#limiting-complex-classes for full details.
+      HEREDOC
     end
   rescue Errno::ENOENT
     {}

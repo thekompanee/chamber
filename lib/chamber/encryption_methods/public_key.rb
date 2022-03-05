@@ -2,6 +2,8 @@
 
 require 'base64'
 
+require 'chamber/errors/disallowed_class'
+
 module  Chamber
 module  EncryptionMethods
 class   PublicKey
@@ -20,33 +22,21 @@ class   PublicKey
       unencrypted_value = decryption_key.private_decrypt(decoded_string)
 
       begin
-        _unserialized_value = begin
-                                YAML.safe_load(unencrypted_value,
-                                               aliases:           true,
-                                               permitted_classes: [
-                                                                    ::Date,
-                                                                    ::Time,
-                                                                    ::Regexp,
-                                                                  ])
-                              rescue ::Psych::DisallowedClass => error
-                                warn <<~HEREDOC
-                                  WARNING: Recursive data structures (complex classes) being loaded from Chamber
-                                  has been deprecated and will be removed in 3.0.
+        YAML.safe_load(unencrypted_value,
+                       aliases:           true,
+                       permitted_classes: [
+                                            ::Date,
+                                            ::Time,
+                                            ::Regexp,
+                                          ])
+      rescue ::Psych::DisallowedClass => error
+        raise ::Chamber::Errors::DisallowedClass, <<~HEREDOC
+          #{error.message}
 
-                                  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#limiting-complex-classes
-                                  for full details.
+          You attempted to load a class instance via your Chamber settings that is not allowed.
 
-                                  #{error.message}
-
-                                  Called from: '#{caller.to_a[8]}'
-                                HEREDOC
-
-                                if YAML.respond_to?(:unsafe_load)
-                                  YAML.unsafe_load(unencrypted_value)
-                                else
-                                  YAML.load(unencrypted_value)
-                                end
-                              end
+          See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#limiting-complex-classes for full details.
+        HEREDOC
       rescue TypeError
         unencrypted_value
       end

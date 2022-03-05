@@ -14,6 +14,3 @@ Performance/RegexpMatch:
 # Rubocop Thinks Pathnames Are Strings
 Style/StringConcatenation:
   Enabled:            false
-
-Security/YAMLLoad:
-  Enabled:            false
