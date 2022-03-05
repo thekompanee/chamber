@@ -308,6 +308,172 @@ b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
     expect(filtered_settings._secure_my_secure_setting).to eql 'hello'
   end
 
+  it 'can decrypt a Regex/Complex Object via Public Key' do
+    filtered_settings = \
+      DecryptionFilter
+        .execute(
+          secure_key_prefix: '_secure_',
+          data:              {
+            _secure_my_secure_setting: 'k0zVCImR6l5T+8mPDmARL4xYJCYjhNZ2eVOOIXIa' \
+                                       'CK66ECFHyTsn1fcf8VW6lu2+veQC1DanvK4qHIC3' \
+                                       'suYeZorGoy7ImskfqSXlPotOG1NGhi98NUkVOZ0R' \
+                                       'HRU27e74OUpQR0lrL6js/+L3F34B24j1Q0385+N8' \
+                                       '6jREz8GFwtcq38oQcqu3oq/L8+NyC8zhSiw2YYlm' \
+                                       'dsh0itAgvX18Odfp4DiRl7IBywUlnRrIWbnWSn2B' \
+                                       'NW5dnyuxQxdJabG/f7uN5WoN6yJsg6R3cK4UXAGk' \
+                                       'NLiRIf1gwwi8X/7CxoTgBufgb+E/r/D1a2Qt4jH6' \
+                                       'vnF9pjujmLPvfeNO2hCfNw==',
+          },
+          decryption_keys:   { __default: './spec/spec_key' },
+        )
+
+    expect(filtered_settings._secure_my_secure_setting).to be_a(::Regexp)
+    expect(filtered_settings._secure_my_secure_setting).to eql(/^(.*\\.|)example\\.com$/)
+  end
+
+  it 'can decrypt a Regex/Complex Object via SSL' do
+    filtered_settings = \
+      DecryptionFilter
+        .execute(
+          secure_key_prefix: '_secure_',
+          data:              {
+            _secure_my_secure_setting: 'au4zXBf6WW6Aexk48KlcP7OIw+B8VEmo2x67+CFn' \
+                                       'GOIOVvOx/iU7bh8DDQCtkGQwZjJ1GUM+yj49H7nS' \
+                                       'PAq39k/KhKGjZ526DaPuWR8PxJbx/j9FeifFknBu' \
+                                       'WCDLrhlYnI2LmREUnJanPfhzB3DAmjslVhvZkZKR' \
+                                       'DgNLhMGUTqHHLb91cAV5+zZi+Pl1Pk9BOlZNaW+C' \
+                                       'NAnYoSHdcSjFW0GDbguiwJGqrj96PegB0rd1AbyN' \
+                                       'Js3s8MN7cmSLe7bmKnis80HXPy6s9940z5OLt3Hb' \
+                                       'dBAvHCZi4P+J4v3skf9voZjrQh/+QXrEQ53uzFJE' \
+                                       'E4bnUYw3GQoA8PqFxLNIVA==#XIgXdLlQjVzdU/8' \
+                                       'qSgLS0w==#9sYdofYOZZIBGfNrGsI6ZmD1+1VxzQ' \
+                                       'CHYL/Uyh1ulYnH/MUX9Oe21QnVcIGjYC+eZDxbiC' \
+                                       '+xFF91vl6+pwowuhVV90OGtMZIPPb3/JmkOrvSFS' \
+                                       '5OMDZQP3EJ3HUbo4upeYdIx12/5WPoxrYSOAxRFG' \
+                                       'ylRfV2nlWG/mBNci9Wx61zVWvEmxKBYsSqSpiCER' \
+                                       'uqKh742OIgUK6oN6Lq0veVOXBEyNLbt/EGXJ1x4U' \
+                                       'd4tL8=',
+          },
+          decryption_keys:   { __default: './spec/spec_key' },
+        )
+
+    expect(filtered_settings._secure_my_secure_setting).to      be_a(::Regexp)
+    expect(filtered_settings._secure_my_secure_setting.to_s).to eql(%r{^(.*\\.|)example\\.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz}.to_s)
+  end
+
+  it 'can decrypt a Date' do
+    filtered_settings = \
+      DecryptionFilter
+        .execute(
+          secure_key_prefix: '_secure_',
+          data:              {
+            _secure_my_secure_setting: 'fhM8yqBFFrL3KBM8d0dqzE0uCANcs952XDBrC63z' \
+                                       'ddviCGMmNn2yp5072lqNQ1VkbGBGGvr+gM7knQvU' \
+                                       '4+AJFpWRvw0ZXuPogrA6o3fQ+XbBZtMxY5REs01i' \
+                                       '2/hgT8qfysI5yDbKLQfDkEUZDO/1g7gopcgVWjDx' \
+                                       'vYjQaTXzZoTafnzFFyonHTt24yKig+SZVKFfiSNK' \
+                                       'epm2Ah4O8zy8Kxqsnk2BCHldsptPJ79EF6Mpxbhr' \
+                                       'YWKs0wO9GatR0WZPhAGfEnCC9Jkbm0Vq7XqxCRZf' \
+                                       'gIf0zUDWNIO6+IG7cBNUu+ZJZGE0OgMT+a9r2+hv' \
+                                       'YvxId4kRn4RDzCchQ3PBhg==',
+          },
+          decryption_keys:   { __default: './spec/spec_key' },
+        )
+
+    expect(filtered_settings._secure_my_secure_setting).to     be_a(::Date)
+    expect(filtered_settings._secure_my_secure_setting).to eql ::Date.new(2020, 1, 1)
+  end
+
+  it 'can decrypt a Time' do
+    filtered_settings = \
+      DecryptionFilter
+        .execute(
+          secure_key_prefix: '_secure_',
+          data:              {
+            _secure_my_secure_setting: 'TDkLRbW/vNs8EH8R0dD+Zuuwx7OZQjzJ5UdImpG1' \
+                                       'ztadmKXg/A2OXZwPThiea8NChJ8PlLkNhVdGClHh' \
+                                       'TnVfJI2/4AqOdt0PklcfZ6K0LdvkeSXG3GG0CCVO' \
+                                       'C8Dre+cwU+luIzRpoqIwgc9Z6bGO2rXFVm8ffZIA' \
+                                       'JLv09JZ81cz1kdxnI+YR2q6cpoAGp5nFAx7Bb2wl' \
+                                       'baahqDyZhhx63feHb4smDwu7V3V7pxGp+LZn1yRj' \
+                                       'SrwtD3xEEQBnzeqNGgLfN/aiYFsdQZby7SEcYyQZ' \
+                                       'YGSC40kTW/gQMQI1d9m767mDhO8e7r++ec6ZDs+I' \
+                                       'HsN2D8UjXB7GnWFF4wrxHA==',
+          },
+          decryption_keys:   { __default: './spec/spec_key' },
+        )
+
+    expect(filtered_settings._secure_my_secure_setting).to     be_a(::Time)
+    expect(filtered_settings._secure_my_secure_setting).to eql ::Time.utc(2020,
+                                                                          1,
+                                                                          1,
+                                                                          0,
+                                                                          0,
+                                                                          0)
+  end
+
+  it 'warns when attempting to decrypt an unpermitted class type via Public Key' do
+    allow(::Chamber::EncryptionMethods::PublicKey).to receive(:warn)
+
+    filtered_settings = \
+      DecryptionFilter
+        .execute(
+          secure_key_prefix: '_secure_',
+          data:              {
+            _secure_my_secure_setting: 'm8McltRqgOJK5OCI6t6pfnbSIovnWOMyFy0RdQUw' \
+                                       'xP4ea6gloTy8RbUoKlmPajnlYBFt7BlVeWW+xk/t' \
+                                       's2+pGnI8d1+waAqxtwpNOgRdM18x47DUaFkojkLQ' \
+                                       'f6VbtzfAe3Ruy8ZhDMN44K3M50pZhpwNauntzypr' \
+                                       'DJtc8AXSI2wMBQPc5b2gk4C0rXYVMuSQmV/NDxMo' \
+                                       'BI7xIH2JGGNmAwStZqiK/kQrMTj5aZKJIr+GKS3N' \
+                                       'hpWzJriT8X934MyolmwPEBUwUTUSu/jUNWuMUjBH' \
+                                       'w/Xc3YkiBuGJK8UzshX3oFGwLMzQn1gxkFENAIgh' \
+                                       'ZYScPfuJ5A1fcX5CbUAk7w==',
+          },
+          decryption_keys:   { __default: './spec/spec_key' },
+        )
+
+    expect(filtered_settings._secure_my_secure_setting).to be_a(::Symbol)
+    expect(filtered_settings._secure_my_secure_setting).to be :foo_symbol
+    expect(::Chamber::EncryptionMethods::PublicKey).to \
+      have_received(:warn)
+        .with(include('WARNING: Recursive data structures'))
+  end
+
+  it 'warns when attempting to decrypt an unpermitted class type via SSL' do
+    allow(::Chamber::EncryptionMethods::Ssl).to receive(:warn)
+
+    filtered_settings = \
+      DecryptionFilter
+        .execute(
+          secure_key_prefix: '_secure_',
+          data:              {
+            _secure_my_secure_setting: 'QbDa3B75HTzeY9419VbSd3pivmE9hXQUeNIu2Tou' \
+                                       'lyLB5eCs13w7VkhKBSq5YO7dHqTuBiktVPR9bECr' \
+                                       'xQsH2atXKn3Dnfm2CnWNQYGVo5QZzFP+NfnlOXhg' \
+                                       'xvjTj6RoYeG932MO3oqb7fjxvb3FlPDOzE7bscOd' \
+                                       'gbho4JHPKqFlKavTWgJa15fxJnzNmsh4WvtYe9yA' \
+                                       'nqpHDc7M3z4v2EgR+Gfm/pYsDeHJRUpxhUJzTDn9' \
+                                       'B1tmUnPOPYwfb7przIlrDsk+sFdPvGK7YAMSVz8X' \
+                                       'c1nxq1J16Cie4ZWQentBitWAmF1EP9dvYeNyjSSe' \
+                                       'qxLaF+YjLBa/oYgBsShPbA==#JMmY1z4T+0k9han' \
+                                       'nTXqcig==#3G5bfeHFNQQCdXLXzeihFIhZx1b4Lf' \
+                                       'Hac1kA2gQFw03MFx2yA3fKTt3+mIwOK1+GBObddg' \
+                                       'qeHVx4e4hmxPj/2pfnSduEgvNRiZ7V7qnR0n/J6c' \
+                                       'h675rkvH7Dp5pNA2gXh5q5OMuT/5J0QvgpU8EhUZ' \
+                                       'aMv13z3iPI/zMMldyVeJCxKCd8pAQhUgOUe6RAcw' \
+                                       '45',
+          },
+          decryption_keys:   { __default: './spec/spec_key' },
+        )
+
+    expect(filtered_settings._secure_my_secure_setting).to be_a(::Symbol)
+    expect(filtered_settings._secure_my_secure_setting).to be :abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
+    expect(::Chamber::EncryptionMethods::Ssl).to \
+      have_received(:warn)
+        .with(include('WARNING: Recursive data structures'))
+  end
+
   it 'can decrypt large encrypted data' do
     filtered_settings = \
       DecryptionFilter

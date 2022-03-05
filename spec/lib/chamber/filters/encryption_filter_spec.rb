@@ -285,6 +285,84 @@ describe  EncryptionFilter do
     expect(filtered_settings._secure_my_secure_setting)
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
+
+  it 'will encrypt values which are Regexes via public key' do
+    filtered_settings = EncryptionFilter.execute(
+                          secure_key_prefix: '_secure_',
+                          data:              {
+                            _secure_my_secure_setting: /^(.*\\.|)example\\.com$/,
+                          },
+                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                        )
+
+    expect(filtered_settings._secure_my_secure_setting)
+      .to match EncryptionFilter::BASE64_STRING_PATTERN
+  end
+
+  it 'will encrypt values which are Regexes via SSL' do
+    filtered_settings = EncryptionFilter.execute(
+                          secure_key_prefix: '_secure_',
+                          data:              {
+                            _secure_my_secure_setting: %r{^(.*\\.|)example\\.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz},
+                          },
+                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                        )
+
+    expect(filtered_settings._secure_my_secure_setting)
+      .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
+  end
+
+  it 'will encrypt values which are Dates' do
+    filtered_settings = EncryptionFilter.execute(
+                          secure_key_prefix: '_secure_',
+                          data:              {
+                            _secure_my_secure_setting: ::Date.new(2020, 1, 1),
+                          },
+                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                        )
+
+    expect(filtered_settings._secure_my_secure_setting)
+      .to match EncryptionFilter::BASE64_STRING_PATTERN
+  end
+
+  it 'will encrypt values which are Times' do
+    filtered_settings = EncryptionFilter.execute(
+                          secure_key_prefix: '_secure_',
+                          data:              {
+                            _secure_my_secure_setting: ::Time.utc(2020, 1, 1, 0, 0, 0),
+                          },
+                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                        )
+
+    expect(filtered_settings._secure_my_secure_setting)
+      .to match EncryptionFilter::BASE64_STRING_PATTERN
+  end
+
+  it 'will encrypt values which are unsupported via Public Key' do
+    filtered_settings = EncryptionFilter.execute(
+                          secure_key_prefix: '_secure_',
+                          data:              {
+                            _secure_my_secure_setting: :foo_symbol,
+                          },
+                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                        )
+
+    expect(filtered_settings._secure_my_secure_setting)
+      .to match EncryptionFilter::BASE64_STRING_PATTERN
+  end
+
+  it 'will encrypt values which are unsupported via SSL' do
+    filtered_settings = EncryptionFilter.execute(
+                          secure_key_prefix: '_secure_',
+                          data:              {
+                            _secure_my_secure_setting: :abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz,
+                          },
+                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                        )
+
+    expect(filtered_settings._secure_my_secure_setting)
+      .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
+  end
 end
 end
 end

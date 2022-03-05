@@ -75,7 +75,7 @@ class     EncryptionFilter
   end
 
   def encryption_method(value)
-    value_is_encrypted = value.respond_to?(:match) &&
+    value_is_encrypted = value.is_a?(::String) &&
                            (value.match(BASE64_STRING_PATTERN) ||
                             value.match(LARGE_DATA_STRING_PATTERN))
 

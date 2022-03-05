@@ -92,7 +92,7 @@ class   DecryptionFilter
   # rubocop:enable Style/RedundantBegin
 
   def decryption_method(value)
-    if value.respond_to?(:match)
+    if value.is_a?(::String)
       if value.match(BASE64_STRING_PATTERN)
         EncryptionMethods::PublicKey
       elsif value.match(LARGE_DATA_STRING_PATTERN)

@@ -331,6 +331,45 @@ stuff:
         raise_error(ArgumentError)
           .with_message('You asked to verify your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
   end
+
+  it 'can parse Regex values' do
+    tempfile      = test.create_tempfile '{ test: !ruby/regexp /^(.*\\.|)example\\.com$/ }'
+    settings_file = File.new(path: tempfile.path)
+
+    file_settings = settings_file.to_settings
+
+    expect(file_settings.to_hash).to eql('test' => /^(.*\.|)example\.com$/)
+  end
+
+  it 'can parse Date values' do
+    tempfile      = test.create_tempfile '{ test: !ruby/date "2020-01-01" }'
+    settings_file = File.new(path: tempfile.path)
+
+    file_settings = settings_file.to_settings
+
+    expect(file_settings.to_hash).to eql('test' => ::Date.new(2020, 1, 1))
+  end
+
+  it 'can parse Time values' do
+    tempfile      = test.create_tempfile '{ test: !ruby/time "2020-01-01T00:00:00Z" }'
+    settings_file = File.new(path: tempfile.path)
+
+    file_settings = settings_file.to_settings
+
+    expect(file_settings.to_hash).to eql('test' => ::Time.utc(2020, 1, 1, 0, 0, 0))
+  end
+
+  it 'warns when parsing unpermitted classes' do
+    tempfile      = test.create_tempfile '{ test: !ruby/symbol foo }'
+    settings_file = File.new(path: tempfile.path)
+
+    allow(settings_file).to receive(:warn)
+
+    file_settings = settings_file.to_settings
+
+    expect(file_settings.to_hash).to eql('test' => :foo)
+    expect(settings_file).to have_received(:warn).with(include('WARNING: Recursive data structures'))
+  end
 end
 end
 # rubocop:enable Layout/LineLength

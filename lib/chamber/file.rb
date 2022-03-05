@@ -143,7 +143,33 @@ class   File < Pathname
     file_contents = read
     erb_result    = ERB.new(file_contents).result
 
-    YAML.load(erb_result) || {}
+    begin
+      YAML.safe_load(erb_result,
+                     aliases:           true,
+                     permitted_classes: [
+                                          ::Date,
+                                          ::Time,
+                                          ::Regexp,
+                                        ]) || {}
+    rescue ::Psych::DisallowedClass => error
+      warn <<-HEREDOC
+WARNING: Recursive data structures (complex classes) being loaded from Chamber
+has been deprecated and will be removed in 3.0.
+
+See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#limiting-complex-classes
+for full details.
+
+#{error.message}
+
+Called from: '#{caller.to_a[2]}'
+      HEREDOC
+
+      if YAML.respond_to?(:unsafe_load)
+        YAML.unsafe_load(erb_result) || {}
+      else
+        YAML.load(erb_result) || {}
+      end
+    end
   rescue Errno::ENOENT
     {}
   end
