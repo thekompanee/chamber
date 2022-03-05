@@ -107,15 +107,15 @@ describe Chamber do
   end
 
   it 'processes settings files through ERB before YAML' do
-    expect(Chamber[:test][:my_dynamic_setting]).to be 2
+    expect(Chamber['test'][:my_dynamic_setting]).to be 2
   end
 
   it 'can access settings through a hash-like syntax' do
-    expect(Chamber[:test][:my_setting]).to eql 'my_value'
+    expect(Chamber['test'][:my_setting]).to eql 'my_value'
   end
 
   it 'can access the settings via "env"' do
-    expect(Chamber.env[:test][:my_setting]).to eql 'my_value'
+    expect(Chamber.env['test'][:my_setting]).to eql 'my_value'
   end
 
   it 'prefers values stored in environment variables over those in the YAML files' do
@@ -123,9 +123,9 @@ describe Chamber do
     ENV['TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'] = '[1, 2, 3]'
 
     Chamber.load(basepath: '/tmp/chamber')
-    expect(Chamber[:test][:my_setting]).to eql 'some_other_value'
-    expect(Chamber[:test][:another_level][:level_three]['an_array']).to eql [1, 2, 3]
-    expect(Chamber[:test][:my_dynamic_setting]).to be 2
+    expect(Chamber['test'][:my_setting]).to eql 'some_other_value'
+    expect(Chamber['test'][:another_level][:level_three]['an_array']).to eql [1, 2, 3]
+    expect(Chamber['test'][:my_dynamic_setting]).to be 2
 
     ENV.delete 'TEST_MY_SETTING'
     ENV.delete 'TEST_ANOTHER_LEVEL_LEVEL_THREE_AN_ARRAY'
@@ -137,8 +137,8 @@ describe Chamber do
                    my_namespace: -> { 'blue' },
                  })
 
-    expect(Chamber[:other][:everything]).to        eql 'works'
-    expect(Chamber[:test][:my_dynamic_setting]).to be  2
+    expect(Chamber['other'][:everything]).to        eql 'works'
+    expect(Chamber['test'][:my_dynamic_setting]).to be  2
   end
 
   it 'loads multiple namespaces if it is called twice' do
@@ -169,7 +169,7 @@ describe Chamber do
                    my_namespace: -> { 'blue' },
                  })
 
-    expect(Chamber[:only_namespaced_sub_settings][:another_sub_setting]).to eql 'namespaced'
+    expect(Chamber['only_namespaced_sub_settings'][:another_sub_setting]).to eql 'namespaced'
   end
 
   it 'clears all settings each time the settings are loaded' do
@@ -178,11 +178,11 @@ describe Chamber do
                    my_namespace: -> { 'blue' },
                  })
 
-    expect(Chamber[:only_namespaced_sub_settings][:another_sub_setting]).to eql 'namespaced'
+    expect(Chamber['only_namespaced_sub_settings'][:another_sub_setting]).to eql 'namespaced'
 
     Chamber.load(basepath: '/tmp/chamber')
 
-    expect(Chamber[:only_namespaced_sub_settings]).to be_nil
+    expect(Chamber['only_namespaced_sub_settings']).to be_nil
   end
 
   it 'does not raise an exception if a namespaced file does not exist' do
@@ -201,14 +201,14 @@ describe Chamber do
                    my_namespace: -> { 'blue' },
                  })
 
-    expect(Chamber[:test][:my_setting]).to                eql 'my_value'
-    expect(Chamber[:test][:my_other_setting]).to          eql 'my_other_value'
-    expect(Chamber[:test][:another_level][:setting_one]).to be 3
+    expect(Chamber['test'][:my_setting]).to                eql 'my_value'
+    expect(Chamber['test'][:my_other_setting]).to          eql 'my_other_value'
+    expect(Chamber['test'][:another_level][:setting_one]).to be 3
   end
 
   it 'loads YAML files from the "settings" directory under the base directory if ' \
      'any exist' do
-    expect(Chamber[:sub_settings][:my_sub_setting]).to eql 'my_sub_setting_value'
+    expect(Chamber['sub_settings'][:my_sub_setting]).to eql 'my_sub_setting_value'
   end
 
   it 'does not load YAML files from the "settings" directory if it is namespaced' do
@@ -279,15 +279,15 @@ describe Chamber do
                  rootpath:   './spec/fixtures/keys/real/',
                  basepath:   '/tmp/chamber/')
 
-    expect(Chamber.env[:sub_key][:sub_sub_key][:development_setting]).to eql 'hello development'
-    expect(Chamber.env[:sub_key][:sub_sub_key][:production_setting]).to  eql 'hello production'
+    expect(Chamber.env['sub_key'][:sub_sub_key][:development_setting]).to eql 'hello development'
+    expect(Chamber.env['sub_key'][:sub_sub_key][:production_setting]).to  eql 'hello production'
 
     Chamber.load(namespaces: %w{other},
                  files:      %w{/tmp/chamber/secure_settings_with_namespaces.yml},
                  rootpath:   './spec/fixtures/keys/real/',
                  basepath:   '/tmp/chamber/')
 
-    expect(Chamber.env[:sub_key][:sub_sub_key][:other_setting]).to eql 'hello other'
+    expect(Chamber.env['sub_key'][:sub_sub_key][:other_setting]).to eql 'hello other'
   end
 
   it 'can explicitly specify files without specifying a basepath' do
@@ -325,6 +325,6 @@ describe Chamber do
     Chamber.load(files:           '/tmp/chamber/secure.yml',
                  decryption_keys: './spec/spec_key')
 
-    expect(Chamber[:test][:my_encrpyted_setting]).to eql 'hello'
+    expect(Chamber['test'][:my_encrpyted_setting]).to eql 'hello'
   end
 end
