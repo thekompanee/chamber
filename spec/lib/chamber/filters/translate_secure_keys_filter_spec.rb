@@ -10,7 +10,7 @@ describe  TranslateSecureKeysFilter do
     filtered_settings = TranslateSecureKeysFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: 'hello',
+                            '_secure_my_secure_setting' => 'hello',
                           },
                         )
 
@@ -21,7 +21,7 @@ describe  TranslateSecureKeysFilter do
     filtered_settings = TranslateSecureKeysFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            my_secure_setting: 'hello',
+                            'my_secure_setting' => 'hello',
                           },
                         )
 
@@ -32,7 +32,7 @@ describe  TranslateSecureKeysFilter do
     filtered_settings = TranslateSecureKeysFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            secure_setting: 'hello',
+                            'secure_setting' => 'hello',
                           },
                         )
 

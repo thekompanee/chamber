@@ -115,7 +115,7 @@ class   Settings
   # Returns a Hash
   #
   def to_hash
-    data.to_hash
+    data.to_hash.dup
   end
 
   ###

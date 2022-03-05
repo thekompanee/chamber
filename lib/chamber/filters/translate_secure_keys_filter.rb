@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'hashie/mash'
-
 module  Chamber
 module  Filters
 class   TranslateSecureKeysFilter
@@ -20,7 +18,7 @@ class   TranslateSecureKeysFilter
   protected
 
   def execute(raw_data = data)
-    settings = Hashie::Mash.new
+    settings = {}
 
     raw_data.each_pair do |key, value|
       value = execute(value) if value.respond_to? :each_pair

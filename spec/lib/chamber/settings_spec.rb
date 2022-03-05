@@ -161,9 +161,8 @@ THERE: 'was not that easy?'
   it 'can convert itself into a hash' do
     settings = Settings.new(settings: { setting: 'value' })
 
-    expect(settings.to_hash).to     eql('setting' => 'value')
-    expect(settings.to_hash).to     be_a Hash
-    expect(settings.to_hash).not_to be_a Hashie::Mash
+    expect(settings.to_hash).to eql('setting' => 'value')
+    expect(settings.to_hash).to be_a Hash
   end
 
   it 'can convert itself into a hash with flattened names' do
@@ -187,8 +186,7 @@ THERE: 'was not that easy?'
             %w{level_1 body}                 => 'gracias',
             %w{there}                        => 'was not that easy?',
           )
-    expect(settings.to_flattened_name_hash).to     be_a Hash
-    expect(settings.to_flattened_name_hash).not_to be_a Hashie::Mash
+    expect(settings.to_flattened_name_hash).to be_a Hash
   end
 
   it 'does not allow manipulation of the internal setting hash when converted to ' \
@@ -368,20 +366,20 @@ THERE: 'was not that easy?'
   it 'can filter securable settings' do
     settings = Settings.new(
                  settings:        {
-                   _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcd' \
-                                                   'VD+p0pUdnMoYThaV4mpsspg/ZTBtmjx' \
-                                                   '7kMwcF6cjXFLDVw3FxptTHwzJUd4aku' \
-                                                   'n6EZ57m+QzCMJYnfY95gB2/emEAQLSz' \
-                                                   '4/YwsE4LDGydkEjY1ZprfXznf+rU31Y' \
-                                                   'GDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4' \
-                                                   'cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z' \
-                                                   '8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u' \
-                                                   '2CJ0sN5eINMngJBfv5ZFrZgfXc86wdg' \
-                                                   'UKc8aaoX8OQA1kKTcdgbE9NcAhNr1+W' \
-                                                   'fNxMnz84XzmUp2Y0H1jPgGkBKQJKArf' \
-                                                   'Q==',
-                   _secure_my_unencrypted_setting: 'nifty',
-                   my_insecure_setting:            'goodbye',
+                   '_secure_my_encrypted_setting'   => 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcd' \
+                                                       'VD+p0pUdnMoYThaV4mpsspg/ZTBtmjx' \
+                                                       '7kMwcF6cjXFLDVw3FxptTHwzJUd4aku' \
+                                                       'n6EZ57m+QzCMJYnfY95gB2/emEAQLSz' \
+                                                       '4/YwsE4LDGydkEjY1ZprfXznf+rU31Y' \
+                                                       'GDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4' \
+                                                       'cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z' \
+                                                       '8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u' \
+                                                       '2CJ0sN5eINMngJBfv5ZFrZgfXc86wdg' \
+                                                       'UKc8aaoX8OQA1kKTcdgbE9NcAhNr1+W' \
+                                                       'fNxMnz84XzmUp2Y0H1jPgGkBKQJKArf' \
+                                                       'Q==',
+                   '_secure_my_unencrypted_setting' => 'nifty',
+                   'my_insecure_setting'            => 'goodbye',
                  },
                  decryption_keys: { __default: './spec/spec_key' },
                )
@@ -476,8 +474,8 @@ THERE: 'was not that easy?'
                  },
                )
 
-    expect(settings['my_encrypted_setting']).to                         eql 'my env setting'
-    expect(settings['encrypted_group'][:my_encrypted_group_setting]).to eql 'my env group'
+    expect(settings['my_encrypted_setting']).to                          eql 'my env setting'
+    expect(settings['encrypted_group']['my_encrypted_group_setting']).to eql 'my env group'
 
     ENV['MY_ENCRYPTED_SETTING']                       = nil
     ENV['ENCRYPTED_GROUP_MY_ENCRYPTED_GROUP_SETTING'] = nil
