@@ -236,9 +236,7 @@ class   Settings
   def [](key)
     fail ::ArgumentError, 'Bracket access with anything other than a String is unsupported.' unless key.is_a?(::String)
 
-    warn "WARNING: Accessing a non-existent key ('#{key}') with brackets will fail in Chamber 3.0.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#bracket-access-now-fails-on-non-existent-keys for full details. Called from: '#{caller.to_a.first}'" unless data.has_key?(key) # rubocop:disable Layout/LineLength
-
-    data.[](key)
+    data.fetch(key)
   end
 
   def dig!(*args)

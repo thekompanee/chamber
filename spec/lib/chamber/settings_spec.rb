@@ -357,6 +357,13 @@ THERE: 'was not that easy?'
       .to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
 
+  it 'does not allow non-existent keys to be accessed via brackets' do
+    settings = Settings.new(settings: { my_setting: 'hello' })
+
+    expect { settings['is_this_my_setting'] }
+      .to raise_error(::KeyError)
+  end
+
   it 'can check if it is equal to other items which can be converted into hashes' do
     settings = Settings.new(settings: { setting: 'value' })
 
@@ -388,7 +395,6 @@ THERE: 'was not that easy?'
 
     expect(secured_settings['my_encrypted_setting']).to    eql 'hello'
     expect(secured_settings['my_unencrypted_setting']).to  eql 'nifty'
-    expect(secured_settings['my_insecure_setting']).to     be  nil
   end
 
   it 'can filter unencrypted settings' do
@@ -414,9 +420,7 @@ THERE: 'was not that easy?'
 
     secured_settings = settings.insecure
 
-    expect(secured_settings['my_encrypted_setting']).to   be  nil
     expect(secured_settings['my_unencrypted_setting']).to eql 'nifty'
-    expect(secured_settings['my_insecure_setting']).to    be  nil
   end
 
   it 'raises an exception when it accesses a value which cannot be decrypted' do
