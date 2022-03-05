@@ -10,6 +10,7 @@ require 'chamber/filters/secure_filter'
 require 'chamber/filters/translate_secure_keys_filter'
 require 'chamber/filters/insecure_filter'
 require 'chamber/filters/failed_decryption_filter'
+require 'chamber/refinements/enumerable'
 
 ###
 # Internal: Represents the base settings storage needed for Chamber.
@@ -41,6 +42,9 @@ class   Settings
                   settings:          {},
                   **_args
                 )
+
+    ::Chamber::Refinements::Enumerable.deep_validate_keys(settings, &:to_s)
+
     self.decryption_keys   = decryption_keys
     self.encryption_keys   = encryption_keys
     self.namespaces        = namespaces
