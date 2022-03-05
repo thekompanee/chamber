@@ -49,10 +49,10 @@ class   Settings
 
     self.decryption_keys   = decryption_keys
     self.encryption_keys   = encryption_keys
-    self.namespaces        = namespaces
+    self.namespaces        = NamespaceSet.new(namespaces)
     self.post_filters      = post_filters
     self.pre_filters       = pre_filters
-    self.raw_data          = settings
+    self.raw_data          = settings.dup
     self.secure_key_prefix = secure_key_prefix
   end
   # rubocop:enable Metrics/ParameterLists
@@ -280,13 +280,8 @@ class   Settings
 
   protected
 
-  def raw_data=(new_raw_data)
-    @raw_data = new_raw_data.dup
-  end
-
-  def namespaces=(raw_namespaces)
-    @namespaces = NamespaceSet.new(raw_namespaces)
-  end
+  attr_writer :namespaces,
+              :raw_data
 
   # rubocop:disable Naming/MemoizedInstanceVariableName
   def raw_data
