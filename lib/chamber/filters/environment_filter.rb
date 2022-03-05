@@ -110,9 +110,11 @@ class   EnvironmentFilter
         { key => execute(value, environment_keys) }
       end,
       lambda do |key, value, environment_key|
-        { key => convert_environment_value(environment_key,
+        {
+          key => convert_environment_value(environment_key,
                                            ENV[environment_key],
-                                           value) }
+                                           value),
+        }
       end,
     )
   end

@@ -139,7 +139,7 @@ class   File < Pathname
     @secure_prefix_pattern ||= Regexp.escape(secure_prefix)
   end
 
-  def file_contents_hash
+  def file_contents_hash # rubocop:disable Metrics/CyclomaticComplexity
     file_contents = read
     erb_result    = ERB.new(file_contents).result
 

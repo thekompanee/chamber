@@ -20,14 +20,14 @@ class   Heroku
     self.app       = app
   end
 
-  def add_environment_variable(name, value) # rubocop:disable Metrics/AbcSize
+  def add_environment_variable(name, value)
     value   = value.gsub(/\n/, '\n') if value
     request = ::Net::HTTP::Patch.new(config_vars_uri)
 
     request['Authorization'] = "Bearer #{api_token}"
     request['Accept']        = 'application/vnd.heroku+json; version=3'
     request['Content-Type']  = 'application/json'
-    request.body             = ::JSON.dump(Hash[name, value])
+    request.body             = ::JSON.dump({ name => value })
 
     response = ::JSON.parse(response(request).body)
 

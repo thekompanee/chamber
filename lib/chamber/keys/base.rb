@@ -39,13 +39,13 @@ class   Base
                  namespaces.map { |n| namespace_to_key_path(n) }
   end
 
-  # rubocop:disable Performance/ChainArrayAllocation
+  # rubocop:disable Performance/ChainArrayAllocation, Performance/MapCompact
   def filenames=(other)
     @filenames = Array(other)
                    .map { |o| Pathname.new(o) }
                    .compact
   end
-  # rubocop:enable Performance/ChainArrayAllocation
+  # rubocop:enable Performance/ChainArrayAllocation, Performance/MapCompact
 
   def namespaces=(other)
     @namespaces = other + %w{signature}

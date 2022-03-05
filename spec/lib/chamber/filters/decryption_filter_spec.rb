@@ -83,24 +83,24 @@ describe  DecryptionFilter do
           data:              {
             _secure_my_secure_setting: 'Q0ImhgdRmOdXEx04E3TnMoW/c6ckuce+y4kYGYWIJM6W/n'  \
                                        'BJBFjnqcFru/6wo+TVEZxowxjxJNv8H6SuxYmahxMRl7Aa'  \
-                                        'jTrJ/QD+bKzbStL7D2oViB1dDNUz4GZxeNDSMU0oF9e67i' \
-                                        'h6AmnxAgI0RlEterOMyWOPHJIUrLquBRlIs0JyP8yermN9' \
-                                        'KWOAeLZdJlIGSyfwEU+sWQtafJ3jiNAPqWTGJxHfQZTQHn' \
-                                        '+q4SnZPPnBPK0dZiZzqOrtkzmVPR7SAT5Ube4CxJWhkpWp' \
-                                        'l5rPgamqVsG/P0AalMqLxuPUXqSdOEWKkK6jerbElVyQ7F' \
-                                        'dRBLau2JXHpDZYGw8KTA==#EPCuIel5w17aUZfpHOuFNQ=' \
-                                        '=#VzcE0BIuqA7xUMYEZkWZa4kOPse95Niow+e/FhKAlG/7' \
-                                        'uYYTmkRbxRiMLtzH1Swzyz0NHF/BJPa1rKRbcVCGjK8v13' \
-                                        'O9zJY8UdCQYsrdQaTIOA95NIcxwLCbrYencDzZFxYtOgio' \
-                                        'yXbW9OCPnjDe9ozkCw6prRclgJyvadvKWqBgaJkluIdikC' \
-                                        'DLX+Dy7fjkLtq5GqPFeFjHKwRGMLQB5dYk1VNAKgzhnSpU' \
-                                        'kJJZA2Z7P54NhQQ83Doypfwb16LfKFax9575XeUWZeURxl' \
-                                        '7Ric4MrjJYrc3u5biTzToMQBITGEsComsTDpfB3FVtZhob' \
-                                        'NjzdkhEGzf6F2iRjjHDsQfaUebAPxDVFa31p5XGQN7YJDe' \
-                                        'AXYBLb16kAhv8N5DGwiukPjtUVXUfFQzaTnJWm/eIhQKFH' \
-                                        '8rkVawAr9wAeoSz7cwWFyD+pq5QF9GlxPU5ZotNjrqO4rz' \
-                                        '/s8+bkt2XwBANTVCZrTb9gnE9FyIqFmRZ9L8Ef43KE02wD' \
-                                        'cUnrKp3oOMSItWnY5rFJew0eAU+CHQ==',
+                                       'jTrJ/QD+bKzbStL7D2oViB1dDNUz4GZxeNDSMU0oF9e67i' \
+                                       'h6AmnxAgI0RlEterOMyWOPHJIUrLquBRlIs0JyP8yermN9' \
+                                       'KWOAeLZdJlIGSyfwEU+sWQtafJ3jiNAPqWTGJxHfQZTQHn' \
+                                       '+q4SnZPPnBPK0dZiZzqOrtkzmVPR7SAT5Ube4CxJWhkpWp' \
+                                       'l5rPgamqVsG/P0AalMqLxuPUXqSdOEWKkK6jerbElVyQ7F' \
+                                       'dRBLau2JXHpDZYGw8KTA==#EPCuIel5w17aUZfpHOuFNQ=' \
+                                       '=#VzcE0BIuqA7xUMYEZkWZa4kOPse95Niow+e/FhKAlG/7' \
+                                       'uYYTmkRbxRiMLtzH1Swzyz0NHF/BJPa1rKRbcVCGjK8v13' \
+                                       'O9zJY8UdCQYsrdQaTIOA95NIcxwLCbrYencDzZFxYtOgio' \
+                                       'yXbW9OCPnjDe9ozkCw6prRclgJyvadvKWqBgaJkluIdikC' \
+                                       'DLX+Dy7fjkLtq5GqPFeFjHKwRGMLQB5dYk1VNAKgzhnSpU' \
+                                       'kJJZA2Z7P54NhQQ83Doypfwb16LfKFax9575XeUWZeURxl' \
+                                       '7Ric4MrjJYrc3u5biTzToMQBITGEsComsTDpfB3FVtZhob' \
+                                       'NjzdkhEGzf6F2iRjjHDsQfaUebAPxDVFa31p5XGQN7YJDe' \
+                                       'AXYBLb16kAhv8N5DGwiukPjtUVXUfFQzaTnJWm/eIhQKFH' \
+                                       '8rkVawAr9wAeoSz7cwWFyD+pq5QF9GlxPU5ZotNjrqO4rz' \
+                                       '/s8+bkt2XwBANTVCZrTb9gnE9FyIqFmRZ9L8Ef43KE02wD' \
+                                       'cUnrKp3oOMSItWnY5rFJew0eAU+CHQ==',
           },
           decryption_keys:   { __default: './spec/spec_key' },
         )

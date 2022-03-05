@@ -211,7 +211,8 @@ THERE: 'was not that easy?'
   it 'will still raise an error if the underlying data does not respond to it' do
     settings = Settings.new(settings: { setting: 'value' })
 
-    expect { settings.unknown }.to raise_error NoMethodError
+    expect { settings.unknown }
+      .to raise_error(NoMethodError)
   end
 
   it 'can notify properly whether it responds to messages if the underlying data does' do

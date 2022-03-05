@@ -8,17 +8,21 @@ require 'chamber/filters/encryption_filter'
 require 'tempfile'
 
 # rubocop:disable Layout/LineLength
-def create_tempfile_with_content(content)
-  tempfile = Tempfile.new('settings')
-  tempfile.puts content
-  tempfile.rewind
-  tempfile
+class ChamberTest
+  def create_tempfile(content)
+    tempfile = Tempfile.new('settings')
+    tempfile.puts content
+    tempfile.rewind
+    tempfile
+  end
 end
 
 module    Chamber
 describe  File do
+  let(:test) { ::ChamberTest.new }
+
   it 'can convert file contents to settings' do
-    tempfile      = create_tempfile_with_content '{ test: settings }'
+    tempfile      = test.create_tempfile '{ test: settings }'
     settings_file = File.new path: tempfile.path
 
     allow(Settings).to receive(:new)
@@ -35,7 +39,7 @@ describe  File do
   end
 
   it 'can convert a file whose contents are empty' do
-    tempfile      = create_tempfile_with_content ''
+    tempfile      = test.create_tempfile ''
     settings_file = File.new path: tempfile.path
 
     allow(Settings).to receive(:new)
@@ -52,14 +56,15 @@ describe  File do
   end
 
   it 'throws an error when the file contents are malformed' do
-    tempfile      = create_tempfile_with_content '{ test : '
+    tempfile      = test.create_tempfile '{ test : '
     settings_file = File.new path: tempfile.path
 
-    expect { settings_file.to_settings }.to raise_error Psych::SyntaxError
+    expect { settings_file.to_settings }
+      .to raise_error(Psych::SyntaxError)
   end
 
   it 'passes any namespaces through to the settings' do
-    tempfile      = create_tempfile_with_content '{ test: settings }'
+    tempfile      = test.create_tempfile '{ test: settings }'
     settings_file = File.new  path:       tempfile.path,
                               namespaces: {
                                 environment: :development,
@@ -79,8 +84,8 @@ describe  File do
   end
 
   it 'can handle files which contain ERB markup' do
-    tempfile      = create_tempfile_with_content '{ test: <%= 1 + 1 %> }'
-    settings_file = File.new  path: tempfile.path
+    tempfile      = test.create_tempfile '{ test: <%= 1 + 1 %> }'
+    settings_file = File.new path: tempfile.path
 
     allow(Settings).to receive(:new)
 
@@ -109,7 +114,7 @@ describe  File do
   end
 
   it 'can securely encrypt the settings contained in a file' do
-    tempfile = create_tempfile_with_content <<-HEREDOC
+    tempfile = test.create_tempfile <<-HEREDOC
 _secure_setting: hello
     HEREDOC
 
@@ -124,7 +129,7 @@ _secure_setting: hello
   end
 
   it 'does not encrypt the settings contained in a file which are already secure' do
-    tempfile = create_tempfile_with_content <<-HEREDOC
+    tempfile = test.create_tempfile <<-HEREDOC
 _secure_setting: hello
 _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
     HEREDOC
@@ -151,7 +156,7 @@ _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8Mvdv
   end
 
   it 'does not rewrite the entire file but only the encrypted settings' do
-    tempfile = create_tempfile_with_content <<-HEREDOC
+    tempfile = test.create_tempfile <<-HEREDOC
 defaults:
   stuff: &defaults
     _secure_setting:       hello
@@ -188,7 +193,7 @@ other:
   end
 
   it 'can handle encrypting multiline strings' do
-    tempfile = create_tempfile_with_content <<-HEREDOC
+    tempfile = test.create_tempfile <<-HEREDOC
 other:
   stuff:
     _secure_setting: |
@@ -221,7 +226,7 @@ other:
   it 'when rewriting the file, can handle names and values with regex special ' \
      'characters' do
 
-    tempfile = create_tempfile_with_content <<-HEREDOC
+    tempfile = test.create_tempfile <<-HEREDOC
 stuff:
   _secure_another+_setting: "Thanks for +all the fish"
     HEREDOC
@@ -278,9 +283,10 @@ stuff:
     settings_file = File.new  path:            file_path,
                               decryption_keys: { foo: './spec/spec_key' }
 
-    expect { settings_file.sign }.to \
-      raise_error(ArgumentError)
-        .with_message('You asked to sign your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
+    expect { settings_file.sign }
+      .to \
+        raise_error(ArgumentError)
+          .with_message('You asked to sign your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
   end
 
   it 'can verify a signature file', :time_mock do
@@ -320,9 +326,10 @@ stuff:
     settings_file = File.new  path:            file_path,
                               encryption_keys: { foo: './spec/spec_key.pub' }
 
-    expect { settings_file.verify }.to \
-      raise_error(ArgumentError)
-        .with_message('You asked to verify your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
+    expect { settings_file.verify }
+      .to \
+        raise_error(ArgumentError)
+          .with_message('You asked to verify your settings files but no signature key was found.  Run `chamber init --signature` to generate one.')
   end
 end
 end

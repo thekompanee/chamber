@@ -35,7 +35,7 @@ class   Ssl
     Base64.strict_encode64(encrypted_data)
   end
 
-  def self.decrypt(key, value, decryption_keys) # rubocop:disable Metrics/AbcSize
+  def self.decrypt(key, value, decryption_keys) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
     if decryption_keys.nil?
       value
     else

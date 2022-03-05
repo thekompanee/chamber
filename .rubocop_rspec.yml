@@ -1,6 +1,6 @@
 ---
 
-# Last updated to 2.1.0
+# Last updated to 2.9.0
 
 require:
   - 'rubocop-rspec'
@@ -24,8 +24,17 @@ RSpec/AroundBlock:
 RSpec/Be:
   Enabled:                        true
 
+RSpec/BeEq:
+  Enabled:                        true
+
 RSpec/BeEql:
   Enabled:                        true
+
+RSpec/BeNil:
+  # `be_nil` is not as strict as `be(nil)`
+  # `be_nil` calls `nil?` on the object
+  # `be(nil)` checks that it is actually the NullObject instance
+  Enabled:                        false
 
 RSpec/BeforeAfterAll:
   Enabled:                        true
@@ -111,8 +120,12 @@ RSpec/EmptyLineAfterSubject:
     - '**/factories/*.rb'
 
 RSpec/ExampleLength:
-  Enabled:                        false
-  Max:                            50
+  Enabled:                        true
+  CountAsOne:
+    - 'array'
+    - 'hash'
+    - 'heredoc'
+  Max:                            35
 
 RSpec/ExampleWithoutDescription:
   Enabled:                        true
@@ -121,6 +134,9 @@ RSpec/ExampleWithoutDescription:
 RSpec/ExampleWording:
   Enabled:                        true
   IgnoredWords:                   []
+
+RSpec/ExcessiveDocstringSpacing:
+  Enabled:                        true
 
 RSpec/ExpectActual:
   Enabled:                        true
@@ -146,6 +162,9 @@ RSpec/FactoryBot/CreateList:
 RSpec/FactoryBot/FactoryClassName:
   Enabled:                        true
 
+RSpec/FactoryBot/SyntaxMethods:
+  Enabled:                        true
+
 RSpec/FilePath:
   Enabled:                        true
   IgnoreMethods:                  false
@@ -162,6 +181,9 @@ RSpec/HookArgument:
   EnforcedStyle:                  'each'
 
 RSpec/HooksBeforeExamples:
+  Enabled:                        true
+
+RSpec/IdenticalEqualityAssertion:
   Enabled:                        true
 
 RSpec/ImplicitBlockExpectation:
@@ -253,6 +275,9 @@ RSpec/PredicateMatcher:
   EnforcedStyle:                  'inflected'
   AllowedExplicitMatchers:        []
 
+RSpec/Rails/AvoidSetupHook:
+  Enabled:                        true
+
 RSpec/Rails/HttpStatus:
   Enabled:                        true
   EnforcedStyle:                  'numeric'
@@ -298,6 +323,9 @@ RSpec/SingleArgumentMessageChain:
   Enabled:                        true
 
 RSpec/StubbedMock:
+  Enabled:                        true
+
+RSpec/SubjectDeclaration:
   Enabled:                        true
 
 RSpec/SubjectStub:

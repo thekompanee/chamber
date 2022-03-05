@@ -21,6 +21,7 @@ Performance/RegexpMatch:
 Style/HashTransformValues:
   Enabled:            false
 
+# Rubocop Thinks Pathnames Are Strings
 Style/StringConcatenation:
   Enabled:            false
 
