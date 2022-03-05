@@ -141,26 +141,24 @@ class   File < Pathname
 
   def file_contents_hash
     file_contents = read
-    erb_result    = ERB.new(file_contents).result
+    erb_result    = ::ERB.new(file_contents).result
 
-    begin
-      YAML.safe_load(erb_result,
+    ::YAML.safe_load(erb_result,
                      aliases:           true,
                      permitted_classes: [
                                           ::Date,
                                           ::Time,
                                           ::Regexp,
                                         ]) || {}
-    rescue ::Psych::DisallowedClass => error
-      raise ::Chamber::Errors::DisallowedClass, <<~HEREDOC
-        #{error.message}
+  rescue ::Psych::DisallowedClass => error
+    raise ::Chamber::Errors::DisallowedClass, <<~HEREDOC
+      #{error.message}
 
-        You attempted to load a class instance via your Chamber settings that is not allowed.
+      You attempted to load a class instance via your Chamber settings that is not allowed.
 
-        See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#limiting-complex-classes for full details.
-      HEREDOC
-    end
-  rescue Errno::ENOENT
+      See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#limiting-complex-classes for full details.
+    HEREDOC
+  rescue ::Errno::ENOENT
     {}
   end
 end

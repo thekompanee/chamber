@@ -16,7 +16,7 @@ class   Ssl
                                 \z
                               /x.freeze
 
-  def self.encrypt(_key, value, encryption_keys) # rubocop:disable Metrics/AbcSize
+  def self.encrypt(_settings_key, value, encryption_keys) # rubocop:disable Metrics/AbcSize
     value         = YAML.dump(value)
     cipher        = OpenSSL::Cipher.new('AES-128-CBC')
     cipher.encrypt
@@ -35,52 +35,46 @@ class   Ssl
     Base64.strict_encode64(encrypted_data)
   end
 
-  def self.decrypt(key, value, decryption_keys) # rubocop:disable Metrics/AbcSize
-    if decryption_keys.nil?
-      value
-    else
-      key, iv, decoded_string = value
-                                  .match(LARGE_DATA_STRING_PATTERN)
-                                  .captures
-                                  .map do |part|
-        Base64.strict_decode64(part)
-      end
-      key                     = decryption_keys.private_decrypt(key)
+  def self.decrypt(_settings_key, value, decryption_keys) # rubocop:disable Metrics/AbcSize
+    return value if decryption_keys.nil?
 
-      cipher_dec = OpenSSL::Cipher.new('AES-128-CBC')
+    key, iv, decoded_string = value
+                                .match(LARGE_DATA_STRING_PATTERN)
+                                .captures
+                                .map do |part|
+                                  ::Base64.strict_decode64(part)
+                                end
+    key                     = decryption_keys.private_decrypt(key)
 
-      cipher_dec.decrypt
+    cipher_dec = ::OpenSSL::Cipher.new('AES-128-CBC')
 
-      cipher_dec.key = key
-      cipher_dec.iv  = iv
+    cipher_dec.decrypt
 
-      begin
-        unencrypted_value = cipher_dec.update(decoded_string) + cipher_dec.final
-      rescue OpenSSL::Cipher::CipherError
-        raise Chamber::Errors::DecryptionFailure,
-              'A decryption error occurred. It was probably due to invalid key data.'
-      end
+    cipher_dec.key = key
+    cipher_dec.iv  = iv
 
-      begin
-        YAML.safe_load(unencrypted_value,
-                       aliases:           true,
-                       permitted_classes: [
-                                            ::Date,
-                                            ::Time,
-                                            ::Regexp,
-                                          ])
-      rescue ::Psych::DisallowedClass => error
-        raise ::Chamber::Errors::DisallowedClass, <<~HEREDOC
-          #{error.message}
+    unencrypted_value = cipher_dec.update(decoded_string) + cipher_dec.final
 
-          You attempted to load a class instance via your Chamber settings that is not allowed.
+    ::YAML.safe_load(unencrypted_value,
+                     aliases:           true,
+                     permitted_classes: [
+                                          ::Date,
+                                          ::Time,
+                                          ::Regexp,
+                                        ])
+  rescue ::OpenSSL::Cipher::CipherError
+    raise ::Chamber::Errors::DecryptionFailure,
+          'A decryption error occurred. It was probably due to invalid key data.'
+  rescue ::Psych::DisallowedClass => error
+    raise ::Chamber::Errors::DisallowedClass, <<~HEREDOC
+      #{error.message}
 
-          See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#limiting-complex-classes for full details.
-        HEREDOC
-      rescue TypeError
-        unencrypted_value
-      end
-    end
+      You attempted to load a class instance via your Chamber settings that is not allowed.
+
+      See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#limiting-complex-classes for full details.
+    HEREDOC
+  rescue ::TypeError
+    unencrypted_value
   end
 end
 end
