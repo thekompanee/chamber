@@ -42,13 +42,13 @@ class  Signature
   end
 
   def write
-    signature_filename.write(<<-HEREDOC, 0, mode: 'w+')
-Signed By: #{signature_name}
-Signed At: #{Time.now.utc.iso8601}
+    signature_filename.write(<<~HEREDOC, 0, mode: 'w+')
+      Signed By: #{signature_name}
+      Signed At: #{Time.now.utc.iso8601}
 
-#{SIGNATURE_HEADER}
-#{encoded_signature}
-#{SIGNATURE_FOOTER}
+      #{SIGNATURE_HEADER}
+      #{encoded_signature}
+      #{SIGNATURE_FOOTER}
     HEREDOC
   end
 

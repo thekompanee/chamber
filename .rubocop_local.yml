@@ -1,10 +1,5 @@
 ---
 
-# <<~HEREDOC Introduced In Ruby 2.3
-# https://github.com/ruby/ruby/commit/9a28a29b870b5f45d370bc8f16c431b435f0bbb3
-Layout/HeredocIndentation:
-  Enabled:            false
-
 Lint/EmptyFile:
   Exclude:
     - 'spec/rails-2-test/config.ru'

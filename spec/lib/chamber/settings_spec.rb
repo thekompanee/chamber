@@ -114,12 +114,12 @@ describe  Settings do
                                     value_surrounder:       "'",
                                     name_value_separator:   ': '
 
-    expect(settings_string).to eql <<-HEREDOC.chomp
-LEVEL_1/BODY: 'gracias'
-LEVEL_1/LEVEL_2/ANOTHER: 'goodbye'
-LEVEL_1/LEVEL_2/SOME_SETTING: 'hello'
-MY_SETTING: 'value'
-THERE: 'was not that easy?'
+    expect(settings_string).to eql <<~HEREDOC.chomp
+      LEVEL_1/BODY: 'gracias'
+      LEVEL_1/LEVEL_2/ANOTHER: 'goodbye'
+      LEVEL_1/LEVEL_2/SOME_SETTING: 'hello'
+      MY_SETTING: 'value'
+      THERE: 'was not that easy?'
     HEREDOC
   end
 

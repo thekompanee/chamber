@@ -7,87 +7,87 @@ require 'fileutils'
 FileUtils.mkdir_p '/tmp/chamber/settings' unless File.exist? '/tmp/chamber/settings'
 
 File.open('/tmp/chamber/settings.yml', 'w+') do |file|
-  file.puts <<-HEREDOC
-test:
-  my_setting: my_value
-  my_boolean: false
-  my_dynamic_setting: <%= 1 + 1 %>
-  my_ftp_url: ftp://username:password@127.0.0.1
-  another_level:
-    setting_one: 1
-    setting_two: 2
-    level_three:
-      an_array:
-        - item 1
-        - item 2
-        - item 3
-      a_scalar: 'hello'
+  file.puts <<~HEREDOC
+    test:
+      my_setting: my_value
+      my_boolean: false
+      my_dynamic_setting: <%= 1 + 1 %>
+      my_ftp_url: ftp://username:password@127.0.0.1
+      another_level:
+        setting_one: 1
+        setting_two: 2
+        level_three:
+          an_array:
+            - item 1
+            - item 2
+            - item 3
+          a_scalar: 'hello'
   HEREDOC
 end
 
 File.open('/tmp/chamber/secure_settings_with_namespaces.yml', 'w+') do |file|
-  file.puts <<-HEREDOC
-development:
-  sub_key:
-    sub_sub_key:
-      _secure_development_setting: RPaB5BEuo4Ht+97GA41GSD+fW4xABbJ/CvDZtnh/UqpCoiAG9MlASlMsCrVEf6OH075Sm1X33Q3uJEoKEtdooqFF6rgUe9AV4rp1nrclFCv9/bJJEemeV3tVMPMFqItxxIdGzMMYE9CuiL74TCQzcnvadOl1qWlQ4y/q+l5t8YEziB6IZSKYXQJw8SUHBtTitfH/lnXqh27f2U6Y0WSlDC+LJHJLRo4x/0+Sc5CTRl78eGedctGjMjRCrzg7MKvKzaKx2Quw7MnG9d/eOy05/uLTho/SosEjL6wTHhMJMzWfeC5LPVuM4v9haSRZseZTkYeLczOpjn2W/PlOlvnWTw==
+  file.puts <<~HEREDOC
+    development:
+      sub_key:
+        sub_sub_key:
+          _secure_development_setting: RPaB5BEuo4Ht+97GA41GSD+fW4xABbJ/CvDZtnh/UqpCoiAG9MlASlMsCrVEf6OH075Sm1X33Q3uJEoKEtdooqFF6rgUe9AV4rp1nrclFCv9/bJJEemeV3tVMPMFqItxxIdGzMMYE9CuiL74TCQzcnvadOl1qWlQ4y/q+l5t8YEziB6IZSKYXQJw8SUHBtTitfH/lnXqh27f2U6Y0WSlDC+LJHJLRo4x/0+Sc5CTRl78eGedctGjMjRCrzg7MKvKzaKx2Quw7MnG9d/eOy05/uLTho/SosEjL6wTHhMJMzWfeC5LPVuM4v9haSRZseZTkYeLczOpjn2W/PlOlvnWTw==
 
-production:
-  sub_key:
-    sub_sub_key:
-      _secure_production_setting: P1dbC/J3kALefhxbnlYQiJVFXnAQTnZIs8Te2Wuz+HtS6LaOgHPUMal8h5Utx9ezPDHWRpZDRuXDyKLXoikp7TrQdfR2bOva6TSMLK2XT0U5aCWhwXphYsTvfXl22IDsvYP38SUZqK7BXyChZpaVw7tj8634MTEsXdjEdHdIzEWcO/pWJ2Xh2f71+s9FkfEQH1Mj6Tyd2Hhp0iczJDi5wbJ7EW1ivCUrhCnxQQR7Q8+exUx+inzOEyq0NHJ6GfFXf7cHAV4jPYXJCvBqk9TG/7rVVUKivUZeLrPkmiSorVUZgzzL8MARlWCJABs+AhXEZko42rc/jfi9O/ONMLdy7Q==
+    production:
+      sub_key:
+        sub_sub_key:
+          _secure_production_setting: P1dbC/J3kALefhxbnlYQiJVFXnAQTnZIs8Te2Wuz+HtS6LaOgHPUMal8h5Utx9ezPDHWRpZDRuXDyKLXoikp7TrQdfR2bOva6TSMLK2XT0U5aCWhwXphYsTvfXl22IDsvYP38SUZqK7BXyChZpaVw7tj8634MTEsXdjEdHdIzEWcO/pWJ2Xh2f71+s9FkfEQH1Mj6Tyd2Hhp0iczJDi5wbJ7EW1ivCUrhCnxQQR7Q8+exUx+inzOEyq0NHJ6GfFXf7cHAV4jPYXJCvBqk9TG/7rVVUKivUZeLrPkmiSorVUZgzzL8MARlWCJABs+AhXEZko42rc/jfi9O/ONMLdy7Q==
 
-other:
-  sub_key:
-    sub_sub_key:
-      _secure_other_setting: BZtWwj2KAuwxDCMoHvGRQmZwonh25vDxQUYXSNEUaxAx2ySVKJf5BsD166m1NUCpDTNr2u/s9u3TEQJCDaji6QU3zNshrs9JCeyhs2ti7AR/ZoY2GYAOvATYIM4Hc8EsrlQjf+TWRwgLOwjd0QWnyUWPVPrHcS+vk13rkkoOe03fVhb3gMuqQJn9Mlw08qW7oAFfQc3Fy/TgvmkSekMCtEbhNpa75xbk6RvDhTZKpHPXTq9/6jDXlukFo4MYX3zQ6AeGM8Rd+QsvwAWrlXhOTZ3qx8gLFuGWaD6GgoUDO5MoBZkSni4Ej1n/sBsbmF0jFY+EM6Z5Ajhn4VWoMerKfw==
+    other:
+      sub_key:
+        sub_sub_key:
+          _secure_other_setting: BZtWwj2KAuwxDCMoHvGRQmZwonh25vDxQUYXSNEUaxAx2ySVKJf5BsD166m1NUCpDTNr2u/s9u3TEQJCDaji6QU3zNshrs9JCeyhs2ti7AR/ZoY2GYAOvATYIM4Hc8EsrlQjf+TWRwgLOwjd0QWnyUWPVPrHcS+vk13rkkoOe03fVhb3gMuqQJn9Mlw08qW7oAFfQc3Fy/TgvmkSekMCtEbhNpa75xbk6RvDhTZKpHPXTq9/6jDXlukFo4MYX3zQ6AeGM8Rd+QsvwAWrlXhOTZ3qx8gLFuGWaD6GgoUDO5MoBZkSni4Ej1n/sBsbmF0jFY+EM6Z5Ajhn4VWoMerKfw==
   HEREDOC
 end
 
 File.open('/tmp/chamber/secure.yml', 'w+') do |file|
-  file.puts <<-HEREDOC
-test:
-  _secure_my_encrpyted_setting: cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==
+  file.puts <<~HEREDOC
+    test:
+      _secure_my_encrpyted_setting: cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjXFLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYnfY95gB2/emEAQLSz4/YwsE4LDGydkEjY1ZprfXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==
   HEREDOC
 end
 
 File.open('/tmp/chamber/settings-blue.yml', 'w+') do |file|
-  file.puts <<-HEREDOC
-test:
-  my_other_setting: my_other_value
-  another_level:
-    setting_one: 3
-other:
-  everything: works
+  file.puts <<~HEREDOC
+    test:
+      my_other_setting: my_other_value
+      another_level:
+        setting_one: 3
+    other:
+      everything: works
   HEREDOC
 end
 
 File.open('/tmp/chamber/settings/some_settings_file.yml', 'w+') do |file|
-  file.puts <<-HEREDOC
-blue:
-  my_settings_for_inline_namespace: my_value_for_inline_namespace
-my_non_inline_namespaced_setting: my_value_for_non_inline_namespace
+  file.puts <<~HEREDOC
+    blue:
+      my_settings_for_inline_namespace: my_value_for_inline_namespace
+    my_non_inline_namespaced_setting: my_value_for_non_inline_namespace
   HEREDOC
 end
 
 File.open('/tmp/chamber/settings/sub_settings.yml', 'w+') do |file|
-  file.puts <<-HEREDOC
-sub_settings:
-  my_sub_setting: my_sub_setting_value
+  file.puts <<~HEREDOC
+    sub_settings:
+      my_sub_setting: my_sub_setting_value
   HEREDOC
 end
 
 File.open('/tmp/chamber/settings/sub_settings-blue.yml', 'w+') do |file|
-  file.puts <<-HEREDOC
-sub_settings:
-  my_namespaced_sub_setting: my_namespaced_sub_setting_value
+  file.puts <<~HEREDOC
+    sub_settings:
+      my_namespaced_sub_setting: my_namespaced_sub_setting_value
   HEREDOC
 end
 
 File.open('/tmp/chamber/settings/only_namespaced_settings-blue.yml', 'w+') do |file|
-  file.puts <<-HEREDOC
-only_namespaced_sub_settings:
-  another_sub_setting: namespaced
+  file.puts <<~HEREDOC
+    only_namespaced_sub_settings:
+      another_sub_setting: namespaced
   HEREDOC
 end
 

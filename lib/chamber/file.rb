@@ -152,16 +152,16 @@ class   File < Pathname
                                           ::Regexp,
                                         ]) || {}
     rescue ::Psych::DisallowedClass => error
-      warn <<-HEREDOC
-WARNING: Recursive data structures (complex classes) being loaded from Chamber
-has been deprecated and will be removed in 3.0.
+      warn <<~HEREDOC
+        WARNING: Recursive data structures (complex classes) being loaded from Chamber
+        has been deprecated and will be removed in 3.0.
 
-See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#limiting-complex-classes
-for full details.
+        See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#limiting-complex-classes
+        for full details.
 
-#{error.message}
+        #{error.message}
 
-Called from: '#{caller.to_a[2]}'
+        Called from: '#{caller.to_a[2]}'
       HEREDOC
 
       if YAML.respond_to?(:unsafe_load)
