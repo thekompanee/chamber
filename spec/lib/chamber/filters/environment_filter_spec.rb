@@ -13,9 +13,9 @@ describe  EnvironmentFilter do
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 'value 1',
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 'value 1',
                                                   },
                                                 },
                                               })
@@ -35,13 +35,13 @@ describe  EnvironmentFilter do
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: [
-                                                                    1,
-                                                                    2,
-                                                                    3,
-                                                                  ],
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => [
+                                                                        1,
+                                                                        2,
+                                                                        3,
+                                                                      ],
                                                   },
                                                 },
                                               })
@@ -55,9 +55,9 @@ describe  EnvironmentFilter do
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: %w{1 2 3},
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => %w{1 2 3},
                                                   },
                                                 },
                                               })
@@ -77,8 +77,8 @@ describe  EnvironmentFilter do
       EnvironmentFilter.execute(
         secure_key_prefix: '_secure_',
         data:              {
-          test_setting_group: {
-            test_setting_one: %w{1 2 3},
+          'test_setting_group' => {
+            'test_setting_one' => %w{1 2 3},
           },
         },
       )
@@ -101,10 +101,10 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting:    'value 1',
-                                                    another_setting: 'value 3',
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting'    => 'value 1',
+                                                    'another_setting' => 'value 3',
                                                   },
                                                 },
                                               })
@@ -124,9 +124,9 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 1,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 1,
                                                   },
                                                 },
                                               })
@@ -140,9 +140,9 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 1,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 1,
                                                   },
                                                 },
                                               })
@@ -162,9 +162,9 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 1,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 1,
                                                   },
                                                 },
                                               })
@@ -184,8 +184,8 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
       EnvironmentFilter.execute(
         secure_key_prefix: '_secure_',
         data:              {
-          test_setting_group: {
-            test_setting_one: 1,
+          'test_setting_group' => {
+            'test_setting_one' => 1,
           },
         },
       )
@@ -210,9 +210,9 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 1.2,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 1.2,
                                                   },
                                                 },
                                               })
@@ -232,8 +232,8 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
       EnvironmentFilter.execute(
         secure_key_prefix: '_secure_',
         data:              {
-          test_setting_group: {
-            test_setting_one: 1.0,
+          'test_setting_group' => {
+            'test_setting_one' => 1.0,
           },
         },
       )
@@ -259,9 +259,9 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: Time.now.utc,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => Time.now.utc,
                                                   },
                                                 },
                                               })
@@ -286,14 +286,14 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_one:   true,
-                                                  test_setting_two:   false,
-                                                  test_setting_three: true,
-                                                  test_setting_four:  false,
-                                                  test_setting_five:  true,
-                                                  test_setting_six:   false,
-                                                  test_setting_seven: false,
+                                                'test_setting_group' => {
+                                                  'test_setting_one'   => true,
+                                                  'test_setting_two'   => false,
+                                                  'test_setting_three' => true,
+                                                  'test_setting_four'  => false,
+                                                  'test_setting_five'  => true,
+                                                  'test_setting_six'   => false,
+                                                  'test_setting_seven' => false,
                                                 },
                                               })
 
@@ -363,9 +363,9 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
   it 'returns the settings value if there is no environment variable to override it' do
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 1,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 1,
                                                   },
                                                 },
                                               })
@@ -381,9 +381,9 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: '1',
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => '1',
                                                   },
                                                 },
                                               })
