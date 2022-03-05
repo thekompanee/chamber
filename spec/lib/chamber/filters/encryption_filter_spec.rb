@@ -12,7 +12,7 @@ describe  EncryptionFilter do
                           data:              {
                             '_secure_my_secure_setting' => 'hello',
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['_secure_my_secure_setting'])
@@ -61,9 +61,9 @@ describe  EncryptionFilter do
                                    },
                                  },
                                  encryption_keys:   {
-                                   __default:   default_key,
-                                   development: development_key,
-                                   production:  production_key,
+                                   '__default'   => default_key,
+                                   'development' => development_key,
+                                   'production'  => production_key,
                                  },
                                )
 
@@ -91,7 +91,7 @@ describe  EncryptionFilter do
                           data:              {
                             'my_secure_setting' => 'hello',
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['my_secure_setting']).to eql 'hello'
@@ -103,7 +103,7 @@ describe  EncryptionFilter do
                           data:              {
                             'secure_setting' => 'hello',
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['secure_setting']).to eql 'hello'
@@ -115,7 +115,7 @@ describe  EncryptionFilter do
                           data:              {
                             '_secure_my_secure_setting' => 'fNI5\jwlBn',
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['_secure_my_secure_setting'])
@@ -128,7 +128,7 @@ describe  EncryptionFilter do
                                                    '_secure_my_secure_setting' => 12_345,
                                                  },
                                                  encryption_keys:   {
-                                                   __default: './spec/spec_key.pub',
+                                                   '__default' => './spec/spec_key.pub',
                                                  })
 
     expect(filtered_settings['_secure_my_secure_setting'])
@@ -151,7 +151,7 @@ describe  EncryptionFilter do
                                            '/im1rayGAwWYNgupQ/5LDmjffwx7Q3fyMH2uF3CD' \
                                            'IKRIC6U+mnM5SRMO4Dzysw==',
           },
-          encryption_keys:   { __default: './spec/spec_key.pub' },
+          encryption_keys:   { '__default' => './spec/spec_key.pub' },
         )
 
     my_secure_setting = filtered_settings['_secure_my_secure_setting']
@@ -197,7 +197,7 @@ describe  EncryptionFilter do
                                            'EPnEQcJgu0w/+dqSreqwp6TqaqXY3lzr8vi733lt' \
                                            'i4nss=',
           },
-          encryption_keys:   { __default: './spec/spec_key.pub' },
+          encryption_keys:   { '__default' => './spec/spec_key.pub' },
         )
 
     my_secure_setting = filtered_settings['_secure_my_secure_setting']
@@ -243,7 +243,7 @@ describe  EncryptionFilter do
                                    "-----END RSA PRIVATE KEY-----",
           },
           encryption_keys:   {
-            __default: './spec/spec_key.pub',
+            '__default' => './spec/spec_key.pub',
           },
         )
 
@@ -260,7 +260,7 @@ describe  EncryptionFilter do
           data:              {
             '_secure_my_secure_setting' => 'A' * 119,
           },
-          encryption_keys:   { __default: './spec/spec_key.pub' },
+          encryption_keys:   { '__default' => './spec/spec_key.pub' },
         )
 
     expect(filtered_settings['_secure_my_secure_setting'])
@@ -271,7 +271,7 @@ describe  EncryptionFilter do
                           data:              {
                             '_secure_my_secure_setting' => 'A' * 124,
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['_secure_my_secure_setting'])
@@ -284,7 +284,7 @@ describe  EncryptionFilter do
                           data:              {
                             '_secure_my_secure_setting' => 'long' * 100,
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['_secure_my_secure_setting'])
@@ -297,7 +297,7 @@ describe  EncryptionFilter do
                           data:              {
                             '_secure_my_secure_setting' => /^(.*\\.|)example\\.com$/,
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['_secure_my_secure_setting'])
@@ -310,7 +310,7 @@ describe  EncryptionFilter do
                           data:              {
                             '_secure_my_secure_setting' => %r{^(.*\\.|)example\\.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz}, # rubocop:disable Layout/LineLength
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['_secure_my_secure_setting'])
@@ -323,7 +323,7 @@ describe  EncryptionFilter do
                           data:              {
                             '_secure_my_secure_setting' => ::Date.new(2020, 1, 1),
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['_secure_my_secure_setting'])
@@ -341,7 +341,7 @@ describe  EncryptionFilter do
                                                                       0,
                                                                       0),
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['_secure_my_secure_setting'])
@@ -354,7 +354,7 @@ describe  EncryptionFilter do
                           data:              {
                             '_secure_my_secure_setting' => :foo_symbol,
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['_secure_my_secure_setting'])
@@ -367,7 +367,7 @@ describe  EncryptionFilter do
                           data:              {
                             '_secure_my_secure_setting' => :abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz,
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
     expect(filtered_settings['_secure_my_secure_setting'])

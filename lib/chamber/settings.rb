@@ -49,8 +49,8 @@ class   Settings
 
     ::Chamber::Refinements::Enumerable.deep_validate_keys(settings, &:to_s)
 
-    self.decryption_keys   = decryption_keys
-    self.encryption_keys   = encryption_keys
+    self.decryption_keys   = (decryption_keys || {}).transform_keys(&:to_s)
+    self.encryption_keys   = (encryption_keys || {}).transform_keys(&:to_s)
     self.namespaces        = NamespaceSet.new(namespaces)
     self.post_filters      = post_filters
     self.pre_filters       = pre_filters

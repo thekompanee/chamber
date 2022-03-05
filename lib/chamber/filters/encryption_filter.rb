@@ -29,7 +29,7 @@ class     EncryptionFilter
   attr_reader   :encryption_keys
 
   def initialize(data:, secure_key_prefix:, encryption_keys: {}, **_args)
-    self.encryption_keys  = encryption_keys || {}
+    self.encryption_keys  = (encryption_keys || {}).transform_keys(&:to_s)
     self.data             = data.deep_dup
     self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
@@ -69,7 +69,7 @@ class     EncryptionFilter
 
   def encrypt(namespace, key, value)
     method         = encryption_method(value)
-    encryption_key = encryption_keys[namespace&.to_sym] || encryption_keys[:__default]
+    encryption_key = encryption_keys[namespace] || encryption_keys['__default']
 
     return value unless encryption_key
 

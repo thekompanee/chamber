@@ -36,7 +36,7 @@ class   DecryptionFilter
   attr_reader   :decryption_keys
 
   def initialize(data:, secure_key_prefix:, decryption_keys: {}, **_args)
-    self.decryption_keys  = decryption_keys || {}
+    self.decryption_keys  = (decryption_keys || {}).transform_keys(&:to_s)
     self.data             = data.deep_dup
     self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end

@@ -46,8 +46,8 @@ describe  DecryptionFilter do
             },
           },
           decryption_keys:   {
-            __default:   './spec/fixtures/keys/real/.chamber.pem',
-            development: './spec/fixtures/keys/real/.chamber.development.pem',
+            '__default'   => './spec/fixtures/keys/real/.chamber.pem',
+            'development' => './spec/fixtures/keys/real/.chamber.development.pem',
           },
         )
 
@@ -74,7 +74,7 @@ describe  DecryptionFilter do
                                            'Kc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84Xz' \
                                            'mUp2Y0H1jPgGkBKQJKArfQ==',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to eql 'hello'
@@ -110,7 +110,7 @@ describe  DecryptionFilter do
                                            'NTVCZrTb9gnE9FyIqFmRZ9L8Ef43KE02wDcUnrKp' \
                                            '3oOMSItWnY5rFJew0eAU+CHQ==',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to eql <<~HEREDOC
@@ -138,7 +138,7 @@ describe  DecryptionFilter do
                                    'S7u2CJ0sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8OQA1kK' \
                                    'TcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ==',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     my_secure_setting = filtered_settings['my_secure_setting']
@@ -169,7 +169,7 @@ describe  DecryptionFilter do
                                 'Kc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84Xz' \
                                 'mUp2Y0H1jPgGkBKQJKArfQ==',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     secure_setting = filtered_settings['secure_setting']
@@ -199,7 +199,7 @@ describe  DecryptionFilter do
                                            'UKc8aaoX8OQA1kKTcdgbE9NcAhNr1+WfNxMnz84X' \
                                            'zmUp2Y0H1jPgGkBKQJKArfQ==',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     my_secure_setting = filtered_settings['_secure_my_secure_setting']
@@ -221,7 +221,7 @@ describe  DecryptionFilter do
                    '_secure_my_secure_setting' => 'hello',
                  },
                  decryption_keys:   {
-                   __default: './spec/spec_key',
+                   '__default' => './spec/spec_key',
                  })
 
     expect(filtered_settings['_secure_my_secure_setting']).to eql 'hello'
@@ -272,7 +272,7 @@ describe  DecryptionFilter do
                                            'WasFzK+WBUfvo8tQxUymexw/U3B7N/0R/9v6U3l6' \
                                            'x7eeIoQ4+lnJK2ULFzVgiw==',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to be_a ::Integer
@@ -295,7 +295,7 @@ describe  DecryptionFilter do
                                            'qYdtopBDI5kcr0zckPWMQRqkp7yd/XNZqyYCFGMN' \
                                            'KNwokE6wZuGffkD/H/VPxQ==',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to eql '12345'
@@ -317,7 +317,7 @@ describe  DecryptionFilter do
                                            'TCdOTA/oEd5+GLhuoSiC87k/vbURwhqs1fmyXUJp' \
                                            'UaDg3x4quTDZ6uBTG0Qu/A==',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to eql 'hello'
@@ -339,7 +339,7 @@ describe  DecryptionFilter do
                                            'NLiRIf1gwwi8X/7CxoTgBufgb+E/r/D1a2Qt4jH6' \
                                            'vnF9pjujmLPvfeNO2hCfNw==',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to be_a(::Regexp)
@@ -370,7 +370,7 @@ describe  DecryptionFilter do
                                            'uqKh742OIgUK6oN6Lq0veVOXBEyNLbt/EGXJ1x4U' \
                                            'd4tL8=',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to      be_a(::Regexp)
@@ -393,7 +393,7 @@ describe  DecryptionFilter do
                                            'gIf0zUDWNIO6+IG7cBNUu+ZJZGE0OgMT+a9r2+hv' \
                                            'YvxId4kRn4RDzCchQ3PBhg==',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to     be_a(::Date)
@@ -416,7 +416,7 @@ describe  DecryptionFilter do
                                            'YGSC40kTW/gQMQI1d9m767mDhO8e7r++ec6ZDs+I' \
                                            'HsN2D8UjXB7GnWFF4wrxHA==',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to     be_a(::Time)
@@ -443,7 +443,7 @@ describe  DecryptionFilter do
                                          'w/Xc3YkiBuGJK8UzshX3oFGwLMzQn1gxkFENAIgh' \
                                          'ZYScPfuJ5A1fcX5CbUAk7w==',
         },
-        decryption_keys:   { __default: './spec/spec_key' },
+        decryption_keys:   { '__default' => './spec/spec_key' },
       )
     }
       .to \
@@ -472,7 +472,7 @@ describe  DecryptionFilter do
                                          'aMv13z3iPI/zMMldyVeJCxKCd8pAQhUgOUe6RAcw' \
                                          '45',
         },
-        decryption_keys:   { __default: './spec/spec_key' },
+        decryption_keys:   { '__default' => './spec/spec_key' },
       )
     }
       .to \
@@ -511,7 +511,7 @@ describe  DecryptionFilter do
                                            'EPnEQcJgu0w/+dqSreqwp6TqaqXY3lzr8vi733lt' \
                                            'i4nss=',
           },
-          decryption_keys:   { __default: './spec/spec_key' },
+          decryption_keys:   { '__default' => './spec/spec_key' },
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to eql 'long' * 100
@@ -525,7 +525,7 @@ describe  DecryptionFilter do
                            data:              {
                              '_secure_my_secure_setting' => nil,
                            },
-                           decryption_keys:   { __default: './spec/spec_key' },
+                           decryption_keys:   { '__default' => './spec/spec_key' },
                          )
 
     expect(Chamber::EncryptionMethods::None).not_to have_received(:warn)
