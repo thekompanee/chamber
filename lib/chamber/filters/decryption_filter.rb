@@ -74,21 +74,17 @@ class   DecryptionFilter
 
   private
 
-  # rubocop:disable Style/RedundantBegin
   def decrypt(key, value)
     method = decryption_method(value)
 
     decryption_keys.each do |decryption_key|
-      begin
-        return method.decrypt(key, value, decryption_key)
-      rescue OpenSSL::PKey::RSAError
-        next
-      end
+      return method.decrypt(key, value, decryption_key)
+    rescue OpenSSL::PKey::RSAError
+      next
     end
 
     value
   end
-  # rubocop:enable Style/RedundantBegin
 
   def decryption_method(value)
     if value.is_a?(::String)
