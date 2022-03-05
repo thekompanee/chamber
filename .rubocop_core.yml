@@ -447,6 +447,7 @@ Layout/LineLength:
   IgnoredPatterns:
     - "\\s+raise_error\\([^)]+\\)$"                                             # raise_error(LongClassName)
     - "^(\\s+|.*)'[^']+'\\s+=\\>\\s+'[^']+',$"                                  # 'foo' => 'really_long_string',
+    - "^(\\s+|.*)'[^']+'\\s+=\\>\\s+:\\w+,$"                                    # 'foo' => :really_long_symbol,
     - "^(\\s+|.*)'[^']+'\\s+=\\>\\s+\\\"[^\\\"]+\\\",$"                         # 'foo' => "really_long_string",
     - "^(\\s+|.*)'[^']+'\\s+=\\>\\s+match\\(.*\\),"                             # 'foo' => match(/really_long_regex/),
     - "^(\\s+|.*):[\\w_]+\\s+=\\>\\s+'[^']+',$"                                 # :foo => 'really_long_string',
@@ -458,6 +459,7 @@ Layout/LineLength:
     - "^\\s*require\\s+'[^']+'$"                                                # require 'some_really_long_path_name'
     - "^\\s+expect\\([^\\)]+\\)+\\.(not_)?to\\s+[^\\s]+\\s+%[qQ]{[^}]+}$"       # RSpec expectation line for a string with %q syntax
     - "^\\s+expect\\([^\\)]+\\)+\\.(not_)?to\\s+[^\\s]+\\s+'[^']+'$"            # RSpec expectation line for a single-quoted string
+    - "^\\s+expect\\([^\\)]+\\)+\\.(not_)?to\\s+[^\\s]+\\s+:\\w+$"              # RSpec expectation line for a Symbol
     - "^\\s+expect\\([^\\)]+\\)+\\.(not_)?to\\s+[^\\s]+\\s+Time\\.(new|utc).*"  # RSpec expectation line for a Time
     - "^\\s+expect\\([^\\)]+\\)+\\.(not_)?to\\s+[^\\s]+\\s+\\\"[^\\\"]+\\\"$"   # RSpec expectation line for a double-quoted string
     - "^\\s+expect\\([^\\)]+\\)+\\.(not_)?to\\s+match\\(/[^/]+/\\)$"            # RSpec expectation line for a regex

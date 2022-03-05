@@ -308,7 +308,7 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            '_secure_my_secure_setting' => %r{^(.*\\.|)example\\.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz},
+                            '_secure_my_secure_setting' => %r{^(.*\\.|)example\\.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz}, # rubocop:disable Layout/LineLength
                           },
                           encryption_keys:   { __default: './spec/spec_key.pub' },
                         )

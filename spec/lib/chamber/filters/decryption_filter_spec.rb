@@ -343,7 +343,8 @@ describe  DecryptionFilter do
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to be_a(::Regexp)
-    expect(filtered_settings['_secure_my_secure_setting']).to eql(/^(.*\\.|)example\\.com$/)
+    expect(filtered_settings['_secure_my_secure_setting'])
+      .to eql(/^(.*\\.|)example\\.com$/)
   end
 
   it 'can decrypt a Regex/Complex Object via SSL' do
@@ -373,7 +374,7 @@ describe  DecryptionFilter do
         )
 
     expect(filtered_settings['_secure_my_secure_setting']).to      be_a(::Regexp)
-    expect(filtered_settings['_secure_my_secure_setting'].to_s).to eql(%r{^(.*\\.|)example\\.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz}.to_s)
+    expect(filtered_settings['_secure_my_secure_setting'].to_s).to eql %r{^(.*\\.|)example\\.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz}.to_s # rubocop:disable Layout/LineLength
   end
 
   it 'can decrypt a Date' do
