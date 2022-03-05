@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'thor'
-require 'chamber/core_ext/hash'
 require 'chamber/commands/travis/secure'
 
 module  Chamber
