@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Chamber
-  VERSION = '2.14.3'
+  VERSION = '3.0.0rc2'
 end
