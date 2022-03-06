@@ -20,7 +20,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.4)
-    awesome_print (1.8.0)
+    awesome_print (1.9.2)
     builder (3.2.3)
     concurrent-ruby (1.1.5)
     diff-lcs (1.4.4)
@@ -66,4 +66,4 @@ DEPENDENCIES
   timecop (~> 0.0)
 
 BUNDLED WITH
-   2.2.3
+   2.3.8
