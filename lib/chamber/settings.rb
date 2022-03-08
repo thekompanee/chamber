@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'chamber/errors/missing_index'
+require 'chamber/errors/missing_setting'
 require 'chamber/namespace_set'
 require 'chamber/filters/namespace_filter'
 require 'chamber/filters/encryption_filter'
@@ -247,11 +249,21 @@ class   Settings
 
       data_value.fetch(key)
     end
+  rescue ::KeyError => error
+    missing_setting_name = error.message.gsub(/.*key not found: "([^"]+)".*/, '\1')
+
+    raise ::Chamber::Errors::MissingSetting.new(missing_setting_name, args)
+  rescue ::IndexError => error
+    missing_index_number = error.message.gsub(/.*index (\d+) outside.*/, '\1')
+
+    raise ::Chamber::Errors::MissingIndex.new(missing_index_number, args)
   end
 
   def dig(*args)
     dig!(*args)
-  rescue ::KeyError, ::IndexError # rubocop:disable Lint/ShadowedException
+  rescue ::Chamber::Errors::MissingSetting,
+         ::Chamber::Errors::MissingIndex
+
     nil
   end
 
