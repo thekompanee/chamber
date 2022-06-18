@@ -38,6 +38,10 @@ class   Instance
     files.secure
   end
 
+  def unsecure
+    files.unsecure
+  end
+
   def sign
     files.sign
   end

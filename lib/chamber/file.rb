@@ -107,6 +107,44 @@ class   File < Pathname
   end
   # rubocop:enable Layout/LineLength, Metrics/AbcSize
 
+  # rubocop:disable Layout/LineLength, Metrics/AbcSize
+  # Decrypt the file
+  def decrypt
+    decrypted_settings = to_settings.decrypted.to_flattened_name_hash
+    secure_settings = to_settings.encrypted.to_flattened_name_hash
+
+    file_contents      = read
+
+    # Iterate over the decrypted setting
+    decrypted_settings.each_pair do |name_pieces, decrypted_value|
+      # Find the matching crypted value
+      encrypted_value = secure_settings[name_pieces]
+
+      # Skip unless the encrypted value is a String
+      next unless encrypted_value && encrypted_value.is_a?(String)
+      # Skip if there's nothing to change
+      next if encrypted_value == decrypted_value
+
+      escaped_name  = Regexp.escape(name_pieces.last)
+      escaped_value = Regexp.escape(encrypted_value)
+
+      file_contents
+        .sub!(
+          /^(\s*)#{escaped_name}(\s*):(\s*)['"]?#{escaped_value}['"]?$/,
+          "\\1#{name_pieces.last}\\2:\\3#{decrypted_value}",
+        )
+
+      file_contents
+        .sub!(
+          /^(\s*)#{escaped_name}(\s*):(\s*)\|((?:\n\1\s{2}.*)+)/,
+          "\\1#{name_pieces.last}\\2:\\3#{decrypted_value}",
+        )
+    end
+
+    write(file_contents)
+  end
+  # rubocop:enable Layout/LineLength, Metrics/AbcSize
+
   def sign
     signature_key_contents = decryption_keys[:signature]
 

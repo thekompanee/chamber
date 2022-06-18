@@ -14,13 +14,14 @@ class   Unsecure < Chamber::Commands::Base
 
   def call
     disable_warnings do
-      current_settings.decrypt.to_environment.each_key do |key|
+      current_settings.secure.to_environment.each_key do |key|
         color = dry_run ? :blue : :green
 
         shell.say_status 'decrypt', key, color
       end
     end
 
+    chamber.unsecure unless dry_run
   end
 
   private
