@@ -9,6 +9,7 @@ require 'chamber/binary/circle_ci'
 require 'chamber/commands/show'
 require 'chamber/commands/files'
 require 'chamber/commands/secure'
+require 'chamber/commands/unsecure'
 require 'chamber/commands/sign'
 require 'chamber/commands/verify'
 require 'chamber/commands/compare'
@@ -152,6 +153,21 @@ class   Runner < Thor
 
   def secure
     Commands::Secure.call(**options.transform_keys(&:to_sym).merge(shell: self))
+  end
+
+  ################################################################################
+
+  desc 'unsecure',
+       'Decrypts all encrypted values using the current key(s)' \
+
+  method_option :dry_run,
+                type:    :boolean,
+                aliases: '-d',
+                desc:    'Does not actually decrypt anything, but instead displays ' \
+                         'what values would be decrypted'
+
+  def unsecure
+    Commands::Unsecure.call(**options.transform_keys(&:to_sym).merge(shell: self))
   end
 
   ################################################################################
