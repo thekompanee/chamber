@@ -52,11 +52,10 @@ module  Securable
       Shellwords.escape(filename)
     end
 
-    `
-      git ls-files --other --ignored --exclude-per-directory=.gitignore |
-      sed -e "s|^|#{Shellwords.escape(rootpath.to_s)}/|" |
-      grep --colour=never -E '#{shell_escaped_chamber_filenames.join('|')}'
-    `.split("\n")
+    `git ls-files --other --ignored --exclude-per-directory=.gitignore`
+      .split("\n")
+      .map { |filename| "#{Shellwords.escape(rootpath.to_s)}/#{filename}"}
+      .select { |filename| shell_escaped_chamber_filenames.include?(filename) }
   end
 end
 end
