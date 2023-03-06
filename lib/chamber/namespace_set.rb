@@ -15,6 +15,7 @@ class   NamespaceSet
   include Enumerable
 
   attr_reader :raw_namespaces
+
   ###
   # Internal: Allows for more compact NamespaceSet creation by giving a list of
   # namespace values.

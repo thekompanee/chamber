@@ -9,6 +9,7 @@ module  Filters
 class   EnvironmentFilter
   attr_accessor :data,
                 :secure_key_token
+
   ###
   # Internal: Allows the existing environment to be injected into the passed in
   # hash.  The hash that is passed in is *not* modified, instead a new hash is

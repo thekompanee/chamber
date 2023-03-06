@@ -11,6 +11,7 @@ class   NamespaceFilter
 
   attr_accessor :data,
                 :namespaces
+
   def self.execute(**args)
     new(**args).__send__(:execute)
   end

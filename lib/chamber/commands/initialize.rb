@@ -14,6 +14,7 @@ class   Initialize < Chamber::Commands::Base
   attr_accessor :basepath,
                 :namespaces,
                 :signature
+
   def self.call(**args)
     new(**args).call
   end

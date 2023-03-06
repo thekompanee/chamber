@@ -9,6 +9,7 @@ class   TranslateSecureKeysFilter
 
   attr_accessor :data,
                 :secure_key_token
+
   def self.execute(**args)
     new(**args).__send__(:execute)
   end

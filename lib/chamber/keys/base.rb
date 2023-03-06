@@ -6,6 +6,7 @@ class   Base
   attr_accessor :rootpath
   attr_reader   :filenames,
                 :namespaces
+
   def self.resolve(**args)
     new(**args).resolve
   end

@@ -10,6 +10,7 @@ class   Base
                 :dry_run,
                 :rootpath,
                 :shell
+
   def self.call(**args)
     new(**args).call
   end
