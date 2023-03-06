@@ -45,7 +45,6 @@ class   DecryptionFilter
     self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
 
-
   protected
 
   def execute(raw_data = data)

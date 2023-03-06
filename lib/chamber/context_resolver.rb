@@ -52,7 +52,6 @@ class   ContextResolver
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Layout/LineLength
 
-
   protected
 
   def resolve_namespaces(other)
