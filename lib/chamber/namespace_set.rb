@@ -29,7 +29,6 @@ class   NamespaceSet
     new(namespace_values)
   end
 
-
   ###
   # Internal: Creates a new NamespaceSet from arrays, hashes and sets.
   #

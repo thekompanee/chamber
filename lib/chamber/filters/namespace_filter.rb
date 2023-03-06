@@ -15,7 +15,6 @@ class   NamespaceFilter
     new(**args).__send__(:execute)
   end
 
-
   def initialize(data:, namespaces:, **_args)
     self.data       = data.deep_dup
     self.namespaces = namespaces

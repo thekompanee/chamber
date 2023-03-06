@@ -93,7 +93,6 @@ class   EnvironmentFilter
     new(**args).__send__(:execute)
   end
 
-
   def initialize(data:, secure_key_prefix:, **_args)
     self.data             = data
     self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/

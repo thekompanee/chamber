@@ -14,7 +14,6 @@ class   Base
     new(**args).call
   end
 
-
   def initialize(shell: nil, rootpath: nil, dry_run: nil, **args)
     self.chamber  = Chamber::Instance.new(rootpath: rootpath, **args)
     self.shell    = shell

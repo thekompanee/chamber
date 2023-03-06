@@ -31,6 +31,7 @@ class     EncryptionFilter
   def self.execute(**args)
     new(**args).__send__(:execute)
   end
+
   def initialize(data:, secure_key_prefix:, encryption_keys: {}, **_args)
     self.encryption_keys  = (encryption_keys || {}).transform_keys(&:to_s)
     self.data             = data.deep_dup

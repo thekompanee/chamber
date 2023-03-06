@@ -13,6 +13,7 @@ class   ContextResolver
   def self.resolve(**args)
     new(**args).resolve
   end
+
   def initialize(**args)
     self.options = args
   end

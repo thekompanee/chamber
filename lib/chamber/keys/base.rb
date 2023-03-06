@@ -10,7 +10,6 @@ class   Base
     new(**args).resolve
   end
 
-
   def initialize(rootpath:, namespaces:, filenames: nil)
     self.rootpath   = Pathname.new(rootpath)
     self.namespaces = namespaces

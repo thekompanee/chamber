@@ -18,7 +18,6 @@ class   Initialize < Chamber::Commands::Base
     new(**args).call
   end
 
-
   def initialize(signature:, namespaces: [], **args)
     super(**args)
 
