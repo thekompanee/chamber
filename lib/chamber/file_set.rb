@@ -256,7 +256,6 @@ class   FileSet
 
   private
 
-  # rubocop:disable Performance/ChainArrayAllocation
   def all_files
     @all_files ||= file_globs
                      .map { |fg| Pathname.glob(fg) }
@@ -264,7 +263,6 @@ class   FileSet
                      .uniq
                      .sort
   end
-  # rubocop:enable Performance/ChainArrayAllocation
 
   def non_namespaced_files
     @non_namespaced_files ||= all_files - namespaced_files

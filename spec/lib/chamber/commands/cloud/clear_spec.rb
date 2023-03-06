@@ -7,9 +7,6 @@ module    Chamber
 module    Commands
 module    Cloud
 describe  Clear do
-  it 'works' do
-    true
-  end
 end
 end
 end

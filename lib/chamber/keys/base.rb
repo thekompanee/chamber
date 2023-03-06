@@ -20,7 +20,11 @@ class   Base
   def resolve
     key_paths.each_with_object({}) do |path, memo|
       namespace = namespace_from_path(path) || '__default'
-      value     = path.readable? ? path.read : ENV.fetch(environment_variable_from_path(path), nil)
+      value     = if path.readable?
+                    path.read
+                  else
+                    ENV.fetch(environment_variable_from_path(path), nil)
+                  end
 
       memo[namespace.downcase.to_sym] = value if value
     end
@@ -39,13 +43,13 @@ class   Base
                  namespaces.map { |n| namespace_to_key_path(n) }
   end
 
-  # rubocop:disable Performance/ChainArrayAllocation, Performance/MapCompact
+  # rubocop:disable Performance/MapCompact
   def filenames=(other)
     @filenames = Array(other)
                    .map { |o| Pathname.new(o) }
                    .compact
   end
-  # rubocop:enable Performance/ChainArrayAllocation, Performance/MapCompact
+  # rubocop:enable Performance/MapCompact
 
   def namespaces=(other)
     @namespaces = other + %w{signature}
