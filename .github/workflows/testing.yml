@@ -4,6 +4,7 @@ name:                             "Build"
 
 on:
   - "push"
+  - "pull_request"
 
 jobs:
   test:
@@ -23,7 +24,7 @@ jobs:
 
     steps:
       - name:                     "Checkout Code"
-        uses:                     "actions/checkout@v2"
+        uses:                     "actions/checkout@v3"
         timeout-minutes:          5
         with:
           fetch-depth:            0
@@ -38,5 +39,3 @@ jobs:
       - name:                     "Run RSpec"
         run:                      |
           bundle exec rspec
-        env:
-          CHAMBER_KEY:            "${{ secrets.CHAMBER_KEY }}"

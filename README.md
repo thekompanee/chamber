@@ -69,7 +69,8 @@ Chamber.dig('smtp_password')
 # => 'my_password'
 ```
 
-If you want to encrypt a setting, prefix the setting name with `_secure_` like so:
+If you want to encrypt a setting, prefix the setting name with `_secure_` like
+so:
 
 ```ruby
 # settings.yml

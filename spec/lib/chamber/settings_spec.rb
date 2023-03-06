@@ -302,8 +302,10 @@ describe  Settings do
                             })
 
     expect { settings.dig!('my_setting', 'my_inner_setting', 1, 'my_array') }
-      .to raise_error(::IndexError)
-            .with_message('index 1 outside of array bounds: -1...1')
+      .to raise_error(::Chamber::Errors::MissingIndex)
+            .with_message("You attempted to access setting " \
+                          "'my_setting:my_inner_setting:1:my_array' but the index " \
+                          "'1' in the array did not exist.")
   end
 
   it 'can allow the user to dig past hash keys that do not exist' do

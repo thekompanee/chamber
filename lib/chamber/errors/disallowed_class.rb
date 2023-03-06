@@ -2,7 +2,7 @@
 
 module  Chamber
 module  Errors
-class   DisallowedClass < ::Psych::DisallowedClass
+class   DisallowedClass < ::ArgumentError
 end
 end
 end
