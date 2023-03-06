@@ -9,12 +9,12 @@ class   NamespaceFilter
   using ::Chamber::Refinements::DeepDup
   using ::Chamber::Refinements::Hash
 
+  attr_accessor :data,
+                :namespaces
   def self.execute(**args)
     new(**args).__send__(:execute)
   end
 
-  attr_accessor :data,
-                :namespaces
 
   def initialize(data:, namespaces:, **_args)
     self.data       = data.deep_dup

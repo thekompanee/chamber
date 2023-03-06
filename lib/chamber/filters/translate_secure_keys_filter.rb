@@ -7,12 +7,12 @@ module  Filters
 class   TranslateSecureKeysFilter
   using ::Chamber::Refinements::DeepDup
 
+  attr_accessor :data,
+                :secure_key_token
   def self.execute(**args)
     new(**args).__send__(:execute)
   end
 
-  attr_accessor :data,
-                :secure_key_token
 
   def initialize(data:, secure_key_prefix:, **_args)
     self.data             = data.deep_dup

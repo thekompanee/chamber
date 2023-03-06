@@ -14,6 +14,7 @@ module  Chamber
 class   NamespaceSet
   include Enumerable
 
+  attr_reader :raw_namespaces
   ###
   # Internal: Allows for more compact NamespaceSet creation by giving a list of
   # namespace values.
@@ -28,7 +29,6 @@ class   NamespaceSet
     new(namespace_values)
   end
 
-  attr_reader :raw_namespaces
 
   ###
   # Internal: Creates a new NamespaceSet from arrays, hashes and sets.

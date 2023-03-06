@@ -28,15 +28,15 @@ class     EncryptionFilter
                 :secure_key_token
   attr_reader   :encryption_keys
 
+  def self.execute(**args)
+    new(**args).__send__(:execute)
+  end
   def initialize(data:, secure_key_prefix:, encryption_keys: {}, **_args)
     self.encryption_keys  = (encryption_keys || {}).transform_keys(&:to_s)
     self.data             = data.deep_dup
     self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
 
-  def self.execute(**args)
-    new(**args).__send__(:execute)
-  end
 
   protected
 

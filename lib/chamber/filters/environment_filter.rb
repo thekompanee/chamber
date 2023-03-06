@@ -7,6 +7,8 @@ require 'chamber/errors/environment_conversion'
 module  Chamber
 module  Filters
 class   EnvironmentFilter
+  attr_accessor :data,
+                :secure_key_token
   ###
   # Internal: Allows the existing environment to be injected into the passed in
   # hash.  The hash that is passed in is *not* modified, instead a new hash is
@@ -91,8 +93,6 @@ class   EnvironmentFilter
     new(**args).__send__(:execute)
   end
 
-  attr_accessor :data,
-                :secure_key_token
 
   def initialize(data:, secure_key_prefix:, **_args)
     self.data             = data

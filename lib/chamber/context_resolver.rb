@@ -10,6 +10,9 @@ module  Chamber
 class   ContextResolver
   attr_accessor :options
 
+  def self.resolve(**args)
+    new(**args).resolve
+  end
   def initialize(**args)
     self.options = args
   end
@@ -48,9 +51,6 @@ class   ContextResolver
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Layout/LineLength
 
-  def self.resolve(**args)
-    new(**args).resolve
-  end
 
   protected
 
