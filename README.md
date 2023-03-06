@@ -61,16 +61,15 @@ smtp_username: 'my_username'
 smtp_password: 'my_password'
 ```
 
-From there you can access your settings by using the special `Chamber.env`
+From there you can access your settings by using the special `Chamber.dig`
 constant.
 
 ```ruby
-Chamber.env.smtp_password
+Chamber.dig('smtp_password')
 # => 'my_password'
 ```
 
-If you want to encrypt a setting, prefix the setting name with `_secure_` like
-so:
+If you want to encrypt a setting, prefix the setting name with `_secure_` like so:
 
 ```ruby
 # settings.yml
@@ -92,7 +91,7 @@ which you still access the same way because Chamber handles the decryption for
 you:
 
 ```ruby
-Chamber.env.smtp_password
+Chamber.dig('smtp_password')
 # => 'my_password'
 ```
 
@@ -117,7 +116,7 @@ The names and logos for The Kompanee are trademarks of The Kompanee, Ltd.
 License
 --------------------------------------------------------------------------------
 
-Chamber is Copyright © 2014-2021 Jeff Felchner and Mark McEahern. It is free
+Chamber is Copyright © 2014-2023 Jeff Felchner and Mark McEahern. It is free
 software, and may be redistributed under the terms specified in the
 [LICENSE][license] file.
 
