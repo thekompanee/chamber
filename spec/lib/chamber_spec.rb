@@ -4,7 +4,7 @@ require 'rspectacular'
 require 'chamber'
 require 'fileutils'
 
-FileUtils.mkdir_p '/tmp/chamber/settings' unless File.exist? '/tmp/chamber/settings'
+FileUtils.mkdir_p '/tmp/chamber/settings'
 
 File.open('/tmp/chamber/settings.yml', 'w+') do |file|
   file.puts <<~HEREDOC
