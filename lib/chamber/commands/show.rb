@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pp'
 require 'chamber/commands/base'
 
 module  Chamber
