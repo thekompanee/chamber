@@ -19,7 +19,7 @@ Chamber
   </a>
 
   <a href="https://github.com/thekompanee/chamber/actions?query=workflow%3ABuild" alt="Build Status">
-    <img src="https://img.shields.io/github/workflow/status/thekompanee/chamber/Build?label=CI&style=flat-square&logo=github" alt="Build Status" />
+    <img src="https://img.shields.io/github/actions/workflow/status/thekompanee/chamber/testing.yml?branch=master&label=CI&style=flat-square&logo=github" alt="Build Status" />
   </a>
 
   <a href="#" alt="Maintainability">
