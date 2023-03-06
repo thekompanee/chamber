@@ -114,8 +114,8 @@ describe  File do
   end
 
   it 'can securely encrypt the settings contained in a file' do
-    tempfile = test.create_tempfile <<-HEREDOC
-_secure_setting: hello
+    tempfile = test.create_tempfile <<~HEREDOC
+      _secure_setting: hello
     HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
@@ -129,9 +129,9 @@ _secure_setting: hello
   end
 
   it 'does not encrypt the settings contained in a file which are already secure' do
-    tempfile = test.create_tempfile <<-HEREDOC
-_secure_setting: hello
-_secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
+    tempfile = test.create_tempfile <<~HEREDOC
+      _secure_setting: hello
+      _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
     HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
@@ -156,17 +156,17 @@ _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8Mvdv
   end
 
   it 'does not rewrite the entire file but only the encrypted settings' do
-    tempfile = test.create_tempfile <<-HEREDOC
-defaults:
-  stuff: &defaults
-    _secure_setting:       hello
-    _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
+    tempfile = test.create_tempfile <<~HEREDOC
+      defaults:
+        stuff: &defaults
+          _secure_setting:       hello
+          _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
 
-other:
-  stuff:
-    <<: *defaults
-    _secure_another_setting: "Thanks for all the fish"
-    regular_setting:         <%= 1 + 1 %>
+      other:
+        stuff:
+          <<: *defaults
+          _secure_another_setting: "Thanks for all the fish"
+          regular_setting:         <%= 1 + 1 %>
     HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
@@ -178,33 +178,33 @@ other:
     secure_setting_encoded         = file_contents[%r{    _secure_setting:       ([A-Za-z0-9+/]{342}==)$}, 1]
     secure_another_setting_encoded = file_contents[%r{    _secure_another_setting: ([A-Za-z0-9+/]{342}==)$}, 1]
 
-    expect(::File.read(tempfile.path)).to eql <<-HEREDOC
-defaults:
-  stuff: &defaults
-    _secure_setting:       #{secure_setting_encoded}
-    _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
+    expect(::File.read(tempfile.path)).to eql <<~HEREDOC
+      defaults:
+        stuff: &defaults
+          _secure_setting:       #{secure_setting_encoded}
+          _secure_other_setting: g4ryOaWniDPht0x1pW10XWgtC7Bax2yQAM3+p9ZDMmBUKlVXgvCn8MvdvciX0126P7uuLylY7Pdbm8AnpjeaTvPOaDnDjPATkH1xpQG/HKBy+7zd67SMb3tJ3sxJNkYm6RrmydFHkDCghG37lvCnuZs1Jvd/mhpr/+thqKvtI+c/vzY+eFxM52lnoWWOgqwGCtUjb+PMbq+HjId6X8uRbpL1SpINA6WYJwvxTVK9XD/HYn67Fcqdova4dEHoqwzFfE+XVXM8uesE1DG3PFNhAzkT+mWXtBmo17i+K4wrOO06I13uDS3x+7LqoZz/Ez17SPXRJze4M/wyWfm43pnuVw==
 
-other:
-  stuff:
-    <<: *defaults
-    _secure_another_setting: #{secure_another_setting_encoded}
-    regular_setting:         <%= 1 + 1 %>
+      other:
+        stuff:
+          <<: *defaults
+          _secure_another_setting: #{secure_another_setting_encoded}
+          regular_setting:         <%= 1 + 1 %>
     HEREDOC
   end
 
   it 'can handle encrypting multiline strings' do
-    tempfile = test.create_tempfile <<-HEREDOC
-other:
-  stuff:
-    _secure_setting: |
-      -----BEGIN RSA PRIVATE KEY-----
-      uQ431irYF7XGEwmsfNUcw++6Enjmt9MItVZJrfL4cUr84L1ccOEX9AThsxz2nkiO
-      GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVaYKYuHwYVb1spGfreHQHRP90EMv3U5Ir
-      xs0YFwKBgAJKGol+GM1oFodg48v4QA6hlF5z49v83wU+AS2f3aMVfjkTYgAEAoCT
-      qoSi7wkYK3NvftVgVi8Z2+1WEzp3S590UkkHmjc5o+HfS657v2fnqkekJyinB+OH
-      b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
-      -----END RSA PRIVATE KEY-----
-    something_else:  'right here'
+    tempfile = test.create_tempfile <<~HEREDOC
+      other:
+        stuff:
+          _secure_setting: |
+            -----BEGIN RSA PRIVATE KEY-----
+            uQ431irYF7XGEwmsfNUcw++6Enjmt9MItVZJrfL4cUr84L1ccOEX9AThsxz2nkiO
+            GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVaYKYuHwYVb1spGfreHQHRP90EMv3U5Ir
+            xs0YFwKBgAJKGol+GM1oFodg48v4QA6hlF5z49v83wU+AS2f3aMVfjkTYgAEAoCT
+            qoSi7wkYK3NvftVgVi8Z2+1WEzp3S590UkkHmjc5o+HfS657v2fnqkekJyinB+OH
+            b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI1Sqc8RsF/H8lRvj5ai5
+            -----END RSA PRIVATE KEY-----
+          something_else:  'right here'
     HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
@@ -215,20 +215,20 @@ other:
     file_contents          = ::File.read(tempfile.path)
     secure_setting_encoded = file_contents[/    _secure_setting: (.*)$/, 1]
 
-    expect(::File.read(tempfile.path)).to eql <<-HEREDOC
-other:
-  stuff:
-    _secure_setting: #{secure_setting_encoded}
-    something_else:  'right here'
+    expect(::File.read(tempfile.path)).to eql <<~HEREDOC
+      other:
+        stuff:
+          _secure_setting: #{secure_setting_encoded}
+          something_else:  'right here'
     HEREDOC
   end
 
   it 'when rewriting the file, can handle names and values with regex special ' \
      'characters' do
 
-    tempfile = test.create_tempfile <<-HEREDOC
-stuff:
-  _secure_another+_setting: "Thanks for +all the fish"
+    tempfile = test.create_tempfile <<~HEREDOC
+      stuff:
+        _secure_another+_setting: "Thanks for +all the fish"
     HEREDOC
 
     settings_file = File.new  path:            tempfile.path,
@@ -239,9 +239,9 @@ stuff:
     file_contents                  = ::File.read(tempfile.path)
     secure_another_setting_encoded = file_contents[%r{  _secure_another\+_setting: ([A-Za-z0-9+/]{342}==)$}, 1]
 
-    expect(::File.read(tempfile.path)).to eql <<-HEREDOC
-stuff:
-  _secure_another+_setting: #{secure_another_setting_encoded}
+    expect(::File.read(tempfile.path)).to eql <<~HEREDOC
+      stuff:
+        _secure_another+_setting: #{secure_another_setting_encoded}
     HEREDOC
   end
 
@@ -250,9 +250,9 @@ stuff:
     file_path      = "/tmp/settings-#{seed}.yml"
     signature_path = "/tmp/settings-#{seed}.sig"
 
-    ::File.write(file_path, <<-HEREDOC, mode: 'w+')
-stuff:
-  another_setting: "Thanks for all the fish"
+    ::File.write(file_path, <<~HEREDOC, mode: 'w+')
+      stuff:
+        another_setting: "Thanks for all the fish"
     HEREDOC
 
     settings_file = File.new  path:            file_path,
@@ -261,13 +261,13 @@ stuff:
 
     settings_file.sign
 
-    expect(::File.read(signature_path)).to eql <<-HEREDOC
-Signed By: Suzy Q Robinson
-Signed At: 2012-07-26T18:00:00Z
+    expect(::File.read(signature_path)).to eql <<~HEREDOC
+      Signed By: Suzy Q Robinson
+      Signed At: 2012-07-26T18:00:00Z
 
------BEGIN CHAMBER SIGNATURE-----
-qGBhOsEkkwiTJYh8BVWOMekYReR42GI8E+Rpj5TCNlU+VN3H3YhKx1fueKIzGKP0Vjdraeg3vn5UwlBtJrVSp9iNRewXtuADF1RlkZ5ZRaRDs6/H+71KuPY7fPYdx47u0oVgSv5hEH3QehdAVA/Qh4rjoOg0IieJGcstckY/ADerNefraAVJ69sJc0ZaylSWxLDFDp4lHM4ytDHoWPTxSVT3KTAwjaxgc37LE+rhjOuOnsEJYwmyevAUW9sk7OBN4p8vn92Fsq7/SbKSFNIi/+HUOOF+yAinijQoUSfnByMBUoS5b4k4dHxadVEn9QDDtflQ5/Aosjb0718v7/tBhw==
------END CHAMBER SIGNATURE-----
+      -----BEGIN CHAMBER SIGNATURE-----
+      qGBhOsEkkwiTJYh8BVWOMekYReR42GI8E+Rpj5TCNlU+VN3H3YhKx1fueKIzGKP0Vjdraeg3vn5UwlBtJrVSp9iNRewXtuADF1RlkZ5ZRaRDs6/H+71KuPY7fPYdx47u0oVgSv5hEH3QehdAVA/Qh4rjoOg0IieJGcstckY/ADerNefraAVJ69sJc0ZaylSWxLDFDp4lHM4ytDHoWPTxSVT3KTAwjaxgc37LE+rhjOuOnsEJYwmyevAUW9sk7OBN4p8vn92Fsq7/SbKSFNIi/+HUOOF+yAinijQoUSfnByMBUoS5b4k4dHxadVEn9QDDtflQ5/Aosjb0718v7/tBhw==
+      -----END CHAMBER SIGNATURE-----
     HEREDOC
   end
 
@@ -275,9 +275,9 @@ qGBhOsEkkwiTJYh8BVWOMekYReR42GI8E+Rpj5TCNlU+VN3H3YhKx1fueKIzGKP0Vjdraeg3vn5UwlBt
     seed      = SecureRandom.uuid
     file_path = "/tmp/settings-#{seed}.yml"
 
-    ::File.write(file_path, <<-HEREDOC, mode: 'w+')
-stuff:
-  another_setting: "Thanks for all the fish"
+    ::File.write(file_path, <<~HEREDOC, mode: 'w+')
+      stuff:
+        another_setting: "Thanks for all the fish"
     HEREDOC
 
     settings_file = File.new  path:            file_path,
@@ -294,18 +294,18 @@ stuff:
     file_path      = "/tmp/settings-#{seed}.yml"
     signature_path = "/tmp/settings-#{seed}.sig"
 
-    ::File.write(file_path, <<-HEREDOC, mode: 'w+')
-stuff:
-  another_setting: "Thanks for all the fish"
+    ::File.write(file_path, <<~HEREDOC, mode: 'w+')
+      stuff:
+        another_setting: "Thanks for all the fish"
     HEREDOC
 
-    ::File.write(signature_path, <<-HEREDOC, mode: 'w+')
-Signed By: Suzy Q Robinson
-Signed At: 2012-07-26T18:00:00Z
+    ::File.write(signature_path, <<~HEREDOC, mode: 'w+')
+      Signed By: Suzy Q Robinson
+      Signed At: 2012-07-26T18:00:00Z
 
------BEGIN CHAMBER SIGNATURE-----
-qGBhOsEkkwiTJYh8BVWOMekYReR42GI8E+Rpj5TCNlU+VN3H3YhKx1fueKIzGKP0Vjdraeg3vn5UwlBtJrVSp9iNRewXtuADF1RlkZ5ZRaRDs6/H+71KuPY7fPYdx47u0oVgSv5hEH3QehdAVA/Qh4rjoOg0IieJGcstckY/ADerNefraAVJ69sJc0ZaylSWxLDFDp4lHM4ytDHoWPTxSVT3KTAwjaxgc37LE+rhjOuOnsEJYwmyevAUW9sk7OBN4p8vn92Fsq7/SbKSFNIi/+HUOOF+yAinijQoUSfnByMBUoS5b4k4dHxadVEn9QDDtflQ5/Aosjb0718v7/tBhw==
------END CHAMBER SIGNATURE-----
+      -----BEGIN CHAMBER SIGNATURE-----
+      qGBhOsEkkwiTJYh8BVWOMekYReR42GI8E+Rpj5TCNlU+VN3H3YhKx1fueKIzGKP0Vjdraeg3vn5UwlBtJrVSp9iNRewXtuADF1RlkZ5ZRaRDs6/H+71KuPY7fPYdx47u0oVgSv5hEH3QehdAVA/Qh4rjoOg0IieJGcstckY/ADerNefraAVJ69sJc0ZaylSWxLDFDp4lHM4ytDHoWPTxSVT3KTAwjaxgc37LE+rhjOuOnsEJYwmyevAUW9sk7OBN4p8vn92Fsq7/SbKSFNIi/+HUOOF+yAinijQoUSfnByMBUoS5b4k4dHxadVEn9QDDtflQ5/Aosjb0718v7/tBhw==
+      -----END CHAMBER SIGNATURE-----
     HEREDOC
 
     settings_file = File.new  path:            file_path,
@@ -318,9 +318,9 @@ qGBhOsEkkwiTJYh8BVWOMekYReR42GI8E+Rpj5TCNlU+VN3H3YhKx1fueKIzGKP0Vjdraeg3vn5UwlBt
     seed      = SecureRandom.uuid
     file_path = "/tmp/settings-#{seed}.yml"
 
-    ::File.write(file_path, <<-HEREDOC, mode: 'w+')
-stuff:
-  another_setting: "Thanks for all the fish"
+    ::File.write(file_path, <<~HEREDOC, mode: 'w+')
+      stuff:
+        another_setting: "Thanks for all the fish"
     HEREDOC
 
     settings_file = File.new  path:            file_path,
@@ -363,12 +363,10 @@ stuff:
     tempfile      = test.create_tempfile '{ test: !ruby/symbol foo }'
     settings_file = File.new(path: tempfile.path)
 
-    allow(settings_file).to receive(:warn)
-
-    file_settings = settings_file.to_settings
-
-    expect(file_settings.to_hash).to eql('test' => :foo)
-    expect(settings_file).to have_received(:warn).with(include('WARNING: Recursive data structures'))
+    expect { settings_file.to_settings }
+      .to \
+        raise_error(::Chamber::Errors::DisallowedClass)
+          .with_message(include('Tried to load unspecified class: Symbol'))
   end
 end
 end

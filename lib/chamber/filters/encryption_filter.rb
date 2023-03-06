@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 
 require 'openssl'
-require 'hashie/mash'
 require 'yaml'
 require 'chamber/encryption_methods/public_key'
 require 'chamber/encryption_methods/ssl'
 require 'chamber/encryption_methods/none'
+require 'chamber/refinements/deep_dup'
 
 module    Chamber
 module    Filters
 class     EncryptionFilter
+  using ::Chamber::Refinements::DeepDup
+
   BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9+/]{342}==\z}.freeze
   BASE64_SUBSTRING_PATTERN  = %r{[A-Za-z0-9+/#]*={0,2}}.freeze
   LARGE_DATA_STRING_PATTERN = /
@@ -27,8 +29,8 @@ class     EncryptionFilter
   attr_reader   :encryption_keys
 
   def initialize(data:, secure_key_prefix:, encryption_keys: {}, **_args)
-    self.encryption_keys  = encryption_keys || {}
-    self.data             = data.dup
+    self.encryption_keys  = (encryption_keys || {}).transform_keys(&:to_s)
+    self.data             = data.deep_dup
     self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
 
@@ -39,7 +41,7 @@ class     EncryptionFilter
   protected
 
   def execute(raw_data = data, namespace = nil)
-    raw_data.each_with_object(Hashie::Mash.new) do |(key, value), settings|
+    raw_data.each_with_object({}) do |(key, value), settings|
       settings[key] = if value.respond_to? :each_pair
                         execute(value, namespace || key)
                       elsif key.match(secure_key_token)
@@ -51,7 +53,7 @@ class     EncryptionFilter
   end
 
   def encryption_keys=(other)
-    @encryption_keys = other.each_with_object({}) do |(namespace, keyish), memo|
+    @encryption_keys = other.each_with_object({}) do |(namespace, keyish), memo| # rubocop:disable Style/HashTransformValues
       memo[namespace] = if keyish.is_a?(OpenSSL::PKey::RSA)
                           keyish
                         elsif ::File.readable?(::File.expand_path(keyish))
@@ -67,7 +69,7 @@ class     EncryptionFilter
 
   def encrypt(namespace, key, value)
     method         = encryption_method(value)
-    encryption_key = encryption_keys[namespace] || encryption_keys[:__default]
+    encryption_key = encryption_keys[namespace] || encryption_keys['__default']
 
     return value unless encryption_key
 

@@ -1,29 +1,11 @@
 ---
 
-# <<~HEREDOC Introduced In Ruby 2.3
-# https://github.com/ruby/ruby/commit/9a28a29b870b5f45d370bc8f16c431b435f0bbb3
-Layout/HeredocIndentation:
-  Enabled:            false
-
 Lint/EmptyFile:
   Exclude:
     - 'spec/rails-2-test/config.ru'
     - 'spec/rails-3-test/config.ru'
     - 'spec/rails-4-test/config.ru'
 
-# Introduced In Ruby 2.4
-# https://apidock.com/ruby/v2_4_6/String/match%3F
-Performance/RegexpMatch:
-  Enabled:            false
-
-# Introduced In Ruby 2.4
-# https://apidock.com/ruby/v2_4_6/Hash/transform_values
-Style/HashTransformValues:
-  Enabled:            false
-
 # Rubocop Thinks Pathnames Are Strings
 Style/StringConcatenation:
-  Enabled:            false
-
-Security/YAMLLoad:
   Enabled:            false

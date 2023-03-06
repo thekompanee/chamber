@@ -194,7 +194,7 @@ class   Initialize < Chamber::Commands::Base
       .chamber*.enc.pass
       !.chamber*.pub.pem
     }.each do |pattern|
-      unless gitignore_contents =~ Regexp.new(Regexp.escape(pattern))
+      unless gitignore_contents&.match?(Regexp.new(Regexp.escape(pattern)))
         shell.append_to_file gitignore_filepath, "#{pattern}\n"
       end
     end

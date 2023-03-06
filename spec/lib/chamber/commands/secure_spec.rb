@@ -28,9 +28,9 @@ describe  Secure do # rubocop:disable RSpec/MultipleMemoizedHelpers
   end
 
   it 'can return values formatted as environment variables' do
-    settings_filename.write <<-HEREDOC
-test:
-  _secure_my_unencrpyted_setting: hello
+    settings_filename.write <<~HEREDOC
+      test:
+        _secure_my_unencrpyted_setting: hello
     HEREDOC
 
     Secure.call(**options)

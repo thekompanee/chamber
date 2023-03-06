@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require 'hashie/mash'
+require 'chamber/errors/missing_index'
+require 'chamber/errors/missing_setting'
 require 'chamber/namespace_set'
 require 'chamber/filters/namespace_filter'
 require 'chamber/filters/encryption_filter'
@@ -10,13 +11,18 @@ require 'chamber/filters/secure_filter'
 require 'chamber/filters/translate_secure_keys_filter'
 require 'chamber/filters/insecure_filter'
 require 'chamber/filters/failed_decryption_filter'
+require 'chamber/refinements/deep_dup'
 require 'chamber/refinements/enumerable'
+require 'chamber/refinements/hash'
 
 ###
 # Internal: Represents the base settings storage needed for Chamber.
 #
 module  Chamber
 class   Settings
+  using ::Chamber::Refinements::Hash
+  using ::Chamber::Refinements::DeepDup
+
   attr_accessor :decryption_keys,
                 :encryption_keys,
                 :post_filters,
@@ -45,12 +51,12 @@ class   Settings
 
     ::Chamber::Refinements::Enumerable.deep_validate_keys(settings, &:to_s)
 
-    self.decryption_keys   = decryption_keys
-    self.encryption_keys   = encryption_keys
-    self.namespaces        = namespaces
+    self.decryption_keys   = (decryption_keys || {}).transform_keys(&:to_s)
+    self.encryption_keys   = (encryption_keys || {}).transform_keys(&:to_s)
+    self.namespaces        = NamespaceSet.new(namespaces)
     self.post_filters      = post_filters
     self.pre_filters       = pre_filters
-    self.raw_data          = settings
+    self.raw_data          = settings.deep_dup
     self.secure_key_prefix = secure_key_prefix
   end
   # rubocop:enable Metrics/ParameterLists
@@ -113,7 +119,7 @@ class   Settings
   # Returns a Hash
   #
   def to_hash
-    data.to_hash
+    data.deep_dup
   end
 
   ###
@@ -205,7 +211,7 @@ class   Settings
       encryption_keys: encryption_keys.any? ? encryption_keys : other_settings.encryption_keys,
       decryption_keys: decryption_keys.any? ? decryption_keys : other_settings.decryption_keys,
       namespaces:      (namespaces + other_settings.namespaces),
-      settings:        raw_data.merge(other_settings.raw_data),
+      settings:        raw_data.deep_merge(other_settings.raw_data),
     )
     # rubocop:enable Layout/LineLength
   end
@@ -232,10 +238,9 @@ class   Settings
   end
 
   def [](key)
-    warn "WARNING: Bracket access will require strings instead of symbols in Chamber 3.0.  You attempted to access the '#{key}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-bracket-indifferent-access for full details. Called from: '#{caller.to_a.first}'" if key.is_a?(::Symbol) # rubocop:disable Layout/LineLength
-    warn "WARNING: Accessing a non-existent key ('#{key}') with brackets will fail in Chamber 3.0.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#bracket-access-now-fails-on-non-existent-keys for full details. Called from: '#{caller.to_a.first}'" unless data.has_key?(key) # rubocop:disable Layout/LineLength
+    fail ::ArgumentError, 'Bracket access with anything other than a String is unsupported.' unless key.is_a?(::String)
 
-    data.[](key)
+    data.fetch(key)
   end
 
   def dig!(*args)
@@ -244,11 +249,21 @@ class   Settings
 
       data_value.fetch(key)
     end
+  rescue ::KeyError => error
+    missing_setting_name = error.message.gsub(/.*key not found: "([^"]+)".*/, '\1')
+
+    raise ::Chamber::Errors::MissingSetting.new(missing_setting_name, args)
+  rescue ::IndexError => error
+    missing_index_number = error.message.gsub(/.*index (\d+) outside.*/, '\1')
+
+    raise ::Chamber::Errors::MissingIndex.new(missing_index_number, args)
   end
 
   def dig(*args)
     dig!(*args)
-  rescue ::KeyError, ::IndexError # rubocop:disable Lint/ShadowedException
+  rescue ::Chamber::Errors::MissingSetting,
+         ::Chamber::Errors::MissingIndex
+
     nil
   end
 
@@ -275,30 +290,10 @@ class   Settings
                  ))
   end
 
-  def method_missing(name, *args)
-    if data.respond_to?(name)
-      warn "WARNING: Object notation access is deprecated and will be removed in Chamber 3.0.  You attempted to access the '#{name}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-object-notation-access for full details. Called from: '#{caller.to_a.first}'" # rubocop:disable Layout/LineLength
-      warn "WARNING: Predicate methods are deprecated and will be removed in Chamber 3.0.  You attempted to access the '#{name}' setting.  See https://github.com/thekompanee/chamber/wiki/Upgrading-To-Chamber-3.0#removal-of-predicate-accessors for full details. Called from: '#{caller.to_a.first}'" if name.to_s.end_with?('?') # rubocop:disable Layout/LineLength
-
-      data.public_send(name, *args)
-    else
-      super
-    end
-  end
-
-  def respond_to_missing?(name, include_private = false)
-    data.respond_to?(name, include_private)
-  end
-
   protected
 
-  def raw_data=(new_raw_data)
-    @raw_data   = Hashie::Mash.new(new_raw_data)
-  end
-
-  def namespaces=(raw_namespaces)
-    @namespaces = NamespaceSet.new(raw_namespaces)
-  end
+  attr_writer :namespaces,
+              :raw_data
 
   # rubocop:disable Naming/MemoizedInstanceVariableName
   def raw_data

@@ -6,27 +6,27 @@ require 'chamber/settings'
 module    Chamber
 describe  Settings do
   it 'can verify that it is equal to another Settings object' do
-    settings        = Settings.new(settings:   { setting: 'value' },
+    settings        = Settings.new(settings:   { 'setting' => 'value' },
                                    namespaces: %w{good})
-    other_settings  = Settings.new(settings:   { setting: 'value' },
+    other_settings  = Settings.new(settings:   { 'setting' => 'value' },
                                    namespaces: %w{good})
 
     expect(settings).to eql other_settings
   end
 
   it 'does not consider itself equal if the namespaces are not equal' do
-    settings        = Settings.new(settings:   { setting: 'value' },
+    settings        = Settings.new(settings:   { 'setting' => 'value' },
                                    namespaces: %w{good})
-    other_settings  = Settings.new(settings:   { setting: 'value' },
+    other_settings  = Settings.new(settings:   { 'setting' => 'value' },
                                    namespaces: %w{bad})
 
     expect(settings).not_to eql other_settings
   end
 
   it 'does not consider itself equal if the settings are not equal' do
-    settings        = Settings.new(settings:   { setting: 'value' },
+    settings        = Settings.new(settings:   { 'setting' => 'value' },
                                    namespaces: %w{good})
-    other_settings  = Settings.new(settings:   { setting: 'value 1' },
+    other_settings  = Settings.new(settings:   { 'setting' => 'value 1' },
                                    namespaces: %w{good})
 
     expect(settings).not_to eql other_settings
@@ -34,15 +34,15 @@ describe  Settings do
 
   it 'knows how to convert itself into an environment hash' do
     settings = Settings.new(settings: {
-                              my_setting: 'value',
-                              level_1:    {
-                                level_2: {
-                                  some_setting: 'hello',
-                                  another:      'goodbye',
+                              'my_setting' => 'value',
+                              'level_1'    => {
+                                'level_2' => {
+                                  'some_setting' => 'hello',
+                                  'another'      => 'goodbye',
                                 },
-                                body:    'gracias',
+                                'body'    => 'gracias',
                               },
-                              there:      'was not that easy?',
+                              'there'      => 'was not that easy?',
                             })
 
     expect(settings.to_environment)
@@ -76,15 +76,15 @@ describe  Settings do
 
   it 'can convert itself into a string' do
     settings = Settings.new(settings: {
-                              my_setting: 'value',
-                              level_1:    {
-                                level_2: {
-                                  some_setting: 'hello',
-                                  another:      'goodbye',
+                              'my_setting' => 'value',
+                              'level_1'    => {
+                                'level_2' => {
+                                  'some_setting' => 'hello',
+                                  'another'      => 'goodbye',
                                 },
-                                body:    'gracias',
+                                'body'    => 'gracias',
                               },
-                              there:      'was not that easy?',
+                              'there'      => 'was not that easy?',
                             })
 
     expect(settings.to_s).to eql [
@@ -98,15 +98,15 @@ describe  Settings do
 
   it 'can convert itself into a string with custom options' do
     settings = Settings.new(settings: {
-                              my_setting: 'value',
-                              level_1:    {
-                                level_2: {
-                                  some_setting: 'hello',
-                                  another:      'goodbye',
+                              'my_setting' => 'value',
+                              'level_1'    => {
+                                'level_2' => {
+                                  'some_setting' => 'hello',
+                                  'another'      => 'goodbye',
                                 },
-                                body:    'gracias',
+                                'body'    => 'gracias',
                               },
-                              there:      'was not that easy?',
+                              'there'      => 'was not that easy?',
                             })
 
     settings_string = settings.to_s hierarchical_separator: '/',
@@ -114,18 +114,18 @@ describe  Settings do
                                     value_surrounder:       "'",
                                     name_value_separator:   ': '
 
-    expect(settings_string).to eql <<-HEREDOC.chomp
-LEVEL_1/BODY: 'gracias'
-LEVEL_1/LEVEL_2/ANOTHER: 'goodbye'
-LEVEL_1/LEVEL_2/SOME_SETTING: 'hello'
-MY_SETTING: 'value'
-THERE: 'was not that easy?'
+    expect(settings_string).to eql <<~HEREDOC.chomp
+      LEVEL_1/BODY: 'gracias'
+      LEVEL_1/LEVEL_2/ANOTHER: 'goodbye'
+      LEVEL_1/LEVEL_2/SOME_SETTING: 'hello'
+      MY_SETTING: 'value'
+      THERE: 'was not that easy?'
     HEREDOC
   end
 
   it 'can merge itself with a hash' do
-    settings        = Settings.new(settings: { setting: 'value' })
-    other_settings  = { other_setting: 'another value' }
+    settings        = Settings.new(settings: { 'setting' => 'value' })
+    other_settings  = { 'other_setting' => 'another value' }
 
     merged_settings = settings.merge(other_settings)
 
@@ -134,23 +134,23 @@ THERE: 'was not that easy?'
   end
 
   it 'can merge itself with Settings' do
-    settings       = Settings.new(settings:   { setting:       'value' },
+    settings       = Settings.new(settings:   { 'setting' =>       'value' },
                                   namespaces: %w{good})
-    other_settings = Settings.new(settings:   { other_setting: 'another value' },
+    other_settings = Settings.new(settings:   { 'other_setting' => 'another value' },
                                   namespaces: %w{bad})
 
     merged_settings = settings.merge(other_settings)
 
     expect(merged_settings).to eql Settings.new(settings:   {
-                                                  setting:       'value',
-                                                  other_setting: 'another value',
+                                                  'setting'       => 'value',
+                                                  'other_setting' => 'another value',
                                                 },
                                                 namespaces: %w{good bad})
   end
 
   it 'does not manipulate the existing Settings but instead returns a new one' do
-    settings       = Settings.new(settings:   { setting:       'value' })
-    other_settings = Settings.new(settings:   { other_setting: 'another value' })
+    settings       = Settings.new(settings:   { 'setting' =>       'value' })
+    other_settings = Settings.new(settings:   { 'other_setting' => 'another value' })
 
     merged_settings = settings.merge(other_settings)
 
@@ -159,24 +159,23 @@ THERE: 'was not that easy?'
   end
 
   it 'can convert itself into a hash' do
-    settings = Settings.new(settings: { setting: 'value' })
+    settings = Settings.new(settings: { 'setting' => 'value' })
 
-    expect(settings.to_hash).to     eql('setting' => 'value')
-    expect(settings.to_hash).to     be_a Hash
-    expect(settings.to_hash).not_to be_a Hashie::Mash
+    expect(settings.to_hash).to eql('setting' => 'value')
+    expect(settings.to_hash).to be_a Hash
   end
 
   it 'can convert itself into a hash with flattened names' do
     settings = Settings.new(settings: {
-                              my_setting: 'value',
-                              level_1:    {
-                                level_2: {
-                                  some_setting: 'hello',
-                                  another:      'goodbye',
+                              'my_setting' => 'value',
+                              'level_1'    => {
+                                'level_2' => {
+                                  'some_setting' => 'hello',
+                                  'another'      => 'goodbye',
                                 },
-                                body:    'gracias',
+                                'body'    => 'gracias',
                               },
-                              there:      'was not that easy?',
+                              'there'      => 'was not that easy?',
                             })
 
     expect(settings.to_flattened_name_hash)
@@ -187,49 +186,35 @@ THERE: 'was not that easy?'
             %w{level_1 body}                 => 'gracias',
             %w{there}                        => 'was not that easy?',
           )
-    expect(settings.to_flattened_name_hash).to     be_a Hash
-    expect(settings.to_flattened_name_hash).not_to be_a Hashie::Mash
+    expect(settings.to_flattened_name_hash).to be_a Hash
   end
 
   it 'does not allow manipulation of the internal setting hash when converted to ' \
      'a Hash' do
-    settings = Settings.new(settings: { setting: 'value' })
+    settings = Settings.new(settings: { 'setting' => 'value' })
 
     settings_hash            = settings.to_hash
     settings_hash['setting'] = 'foo'
 
     expect(settings.__send__(:data).object_id).not_to eql settings_hash.object_id
-    expect(settings.setting).to eql 'value'
+    expect(settings['setting']).to eql 'value'
   end
 
   it 'allows messages to be passed through to the underlying data' do
-    settings = Settings.new(settings: { setting: 'value' })
+    settings = Settings.new(settings: { 'setting' => 'value' })
 
-    expect(settings.setting).to eql 'value'
-  end
-
-  it 'will still raise an error if the underlying data does not respond to it' do
-    settings = Settings.new(settings: { setting: 'value' })
-
-    expect { settings.unknown }
-      .to raise_error(NoMethodError)
-  end
-
-  it 'can notify properly whether it responds to messages if the underlying data does' do
-    settings = Settings.new(settings: { setting: 'value' })
-
-    expect(settings.respond_to?(:setting)).to be_a TrueClass
+    expect(settings['setting']).to eql 'value'
   end
 
   it 'only includes namespaced data if any exists' do
     settings = Settings.new(settings:   {
-                              namespace_value:       {
-                                namespace_setting: 'value',
+                              'namespace_value'       => {
+                                'namespace_setting' => 'value',
                               },
-                              other_namespace_value: {
-                                other_namespace_setting: 'value',
+                              'other_namespace_value' => {
+                                'other_namespace_setting' => 'value',
                               },
-                              non_namespace_setting: 'other value',
+                              'non_namespace_setting' => 'other value',
                             },
                             namespaces: %w{namespace_value other_namespace_value})
 
@@ -240,16 +225,18 @@ THERE: 'was not that easy?'
   it 'can decrypt a setting if it finds a secure key' do
     settings = Settings.new(
                  settings:        {
-                   _secure_my_encrypted_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0' \
-                                                 'pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjX' \
-                                                 'FLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYn' \
-                                                 'fY95gB2/emEAQLSz4/YwsE4LDGydkEjY1Zpr' \
-                                                 'fXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9' \
-                                                 'ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71' \
-                                                 'Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0' \
-                                                 'sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8' \
-                                                 'OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2' \
-                                                 'Y0H1jPgGkBKQJKArfQ==',
+                   '_secure_my_encrypted_setting' => 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvc' \
+                                                     'dVD+p0pUdnMoYThaV4mpsspg/ZTBtm' \
+                                                     'jx7kMwcF6cjXFLDVw3FxptTHwzJUd4' \
+                                                     'akun6EZ57m+QzCMJYnfY95gB2/emEA' \
+                                                     'QLSz4/YwsE4LDGydkEjY1ZprfXznf+' \
+                                                     'rU31YGDJUTf34ESz7fsQGSc9DjkBb9' \
+                                                     'ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1' \
+                                                     'GzeL71Z8lrmQzk8QQuf/1kQzxsWVlz' \
+                                                     'pKNXWS7u2CJ0sN5eINMngJBfv5ZFrZ' \
+                                                     'gfXc86wdgUKc8aaoX8OQA1kKTcdgbE' \
+                                                     '9NcAhNr1+WfNxMnz84XzmUp2Y0H1jP' \
+                                                     'gGkBKQJKArfQ==',
                  },
                  decryption_keys: { __default: './spec/spec_key' },
                )
@@ -277,12 +264,12 @@ THERE: 'was not that easy?'
 
   it 'can dig deeply into the data' do
     settings = Settings.new(settings: {
-                              my_setting: {
-                                my_inner_setting: [
-                                                    {
-                                                      'my_array' => 'hello',
-                                                    },
-                                                  ],
+                              'my_setting' => {
+                                'my_inner_setting' => [
+                                                        {
+                                                          'my_array' => 'hello',
+                                                        },
+                                                      ],
                               },
                             })
 
@@ -291,10 +278,10 @@ THERE: 'was not that easy?'
 
   it 'does not allow the user to dig past hash keys that do not exist' do
     settings = Settings.new(settings: {
-                              my_setting: {
-                                my_inner_setting: %w{
-                                                    hello
-                                                  },
+                              'my_setting' => {
+                                'my_inner_setting' => %w{
+                                                        hello
+                                                      },
                               },
                             })
 
@@ -305,12 +292,12 @@ THERE: 'was not that easy?'
 
   it 'does not allow the user to dig past array indices that do not exist' do
     settings = Settings.new(settings: {
-                              my_setting: {
-                                my_inner_setting: [
-                                                    {
-                                                      'my_array' => 'hello',
-                                                    },
-                                                  ],
+                              'my_setting' => {
+                                'my_inner_setting' => [
+                                                        {
+                                                          'my_array' => 'hello',
+                                                        },
+                                                      ],
                               },
                             })
 
@@ -321,10 +308,10 @@ THERE: 'was not that easy?'
 
   it 'can allow the user to dig past hash keys that do not exist' do
     settings = Settings.new(settings: {
-                              my_setting: {
-                                my_inner_setting: %w{
-                                                    hello
-                                                  },
+                              'my_setting' => {
+                                'my_inner_setting' => %w{
+                                                        hello
+                                                      },
                               },
                             })
 
@@ -333,12 +320,12 @@ THERE: 'was not that easy?'
 
   it 'can allow the user to dig past array indices that do not exist' do
     settings = Settings.new(settings: {
-                              my_setting: {
-                                my_inner_setting: [
-                                                    {
-                                                      'my_array' => 'hello',
-                                                    },
-                                                  ],
+                              'my_setting' => {
+                                'my_inner_setting' => [
+                                                        {
+                                                          'my_array' => 'hello',
+                                                        },
+                                                      ],
                               },
                             })
 
@@ -347,19 +334,19 @@ THERE: 'was not that easy?'
 
   it 'can encrypt a setting if it finds a secure key' do
     settings = Settings.new(settings:        {
-                              _secure_my_encrypted_setting: 'hello',
+                              '_secure_my_encrypted_setting' => 'hello',
                             },
                             encryption_keys: { __default: './spec/spec_key.pub' },
                             pre_filters:     [],
                             post_filters:    [Filters::EncryptionFilter])
 
-    expect(settings._secure_my_encrypted_setting)
+    expect(settings['_secure_my_encrypted_setting'])
       .to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
 
   it 'can encrypt a settings without explicitly having to have a filter passed' do
     settings = Settings.new(settings:        {
-                              _secure_my_encrypted_setting: 'hello',
+                              '_secure_my_encrypted_setting' => 'hello',
                             },
                             decryption_keys: { __default: './spec/spec_key' },
                             encryption_keys: { __default: './spec/spec_key.pub' })
@@ -368,12 +355,19 @@ THERE: 'was not that easy?'
 
     secure_settings = settings.secure
 
-    expect(secure_settings.my_encrypted_setting)
+    expect(secure_settings['my_encrypted_setting'])
       .to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
 
+  it 'does not allow non-existent keys to be accessed via brackets' do
+    settings = Settings.new(settings: { 'my_setting' => 'hello' })
+
+    expect { settings['is_this_my_setting'] }
+      .to raise_error(::KeyError)
+  end
+
   it 'can check if it is equal to other items which can be converted into hashes' do
-    settings = Settings.new(settings: { setting: 'value' })
+    settings = Settings.new(settings: { 'setting' => 'value' })
 
     expect(settings).to eq('setting' => 'value')
   end
@@ -381,76 +375,75 @@ THERE: 'was not that easy?'
   it 'can filter securable settings' do
     settings = Settings.new(
                  settings:        {
-                   _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcd' \
-                                                   'VD+p0pUdnMoYThaV4mpsspg/ZTBtmjx' \
-                                                   '7kMwcF6cjXFLDVw3FxptTHwzJUd4aku' \
-                                                   'n6EZ57m+QzCMJYnfY95gB2/emEAQLSz' \
-                                                   '4/YwsE4LDGydkEjY1ZprfXznf+rU31Y' \
-                                                   'GDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4' \
-                                                   'cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z' \
-                                                   '8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u' \
-                                                   '2CJ0sN5eINMngJBfv5ZFrZgfXc86wdg' \
-                                                   'UKc8aaoX8OQA1kKTcdgbE9NcAhNr1+W' \
-                                                   'fNxMnz84XzmUp2Y0H1jPgGkBKQJKArf' \
-                                                   'Q==',
-                   _secure_my_unencrypted_setting: 'nifty',
-                   my_insecure_setting:            'goodbye',
+                   '_secure_my_encrypted_setting'   => 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcd' \
+                                                       'VD+p0pUdnMoYThaV4mpsspg/ZTBtmjx' \
+                                                       '7kMwcF6cjXFLDVw3FxptTHwzJUd4aku' \
+                                                       'n6EZ57m+QzCMJYnfY95gB2/emEAQLSz' \
+                                                       '4/YwsE4LDGydkEjY1ZprfXznf+rU31Y' \
+                                                       'GDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4' \
+                                                       'cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z' \
+                                                       '8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u' \
+                                                       '2CJ0sN5eINMngJBfv5ZFrZgfXc86wdg' \
+                                                       'UKc8aaoX8OQA1kKTcdgbE9NcAhNr1+W' \
+                                                       'fNxMnz84XzmUp2Y0H1jPgGkBKQJKArf' \
+                                                       'Q==',
+                   '_secure_my_unencrypted_setting' => 'nifty',
+                   'my_insecure_setting'            => 'goodbye',
                  },
                  decryption_keys: { __default: './spec/spec_key' },
                )
 
     secured_settings = settings.securable
 
-    expect(secured_settings.my_encrypted_setting).to    eql 'hello'
-    expect(secured_settings.my_unencrypted_setting).to  eql 'nifty'
-    expect(secured_settings.my_insecure_setting?).to    be  false
+    expect(secured_settings['my_encrypted_setting']).to    eql 'hello'
+    expect(secured_settings['my_unencrypted_setting']).to  eql 'nifty'
   end
 
   it 'can filter unencrypted settings' do
     settings = Settings.new(
                  settings:        {
-                   _secure_my_encrypted_setting:   'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcd' \
-                                                   'VD+p0pUdnMoYThaV4mpsspg/ZTBtmjx' \
-                                                   '7kMwcF6cjXFLDVw3FxptTHwzJUd4aku' \
-                                                   'n6EZ57m+QzCMJYnfY95gB2/emEAQLSz' \
-                                                   '4/YwsE4LDGydkEjY1ZprfXznf+rU31Y' \
-                                                   'GDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4' \
-                                                   'cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z' \
-                                                   '8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u' \
-                                                   '2CJ0sN5eINMngJBfv5ZFrZgfXc86wdg' \
-                                                   'UKc8aaoX8OQA1kKTcdgbE9NcAhNr1+W' \
-                                                   'fNxMnz84XzmUp2Y0H1jPgGkBKQJKArf' \
-                                                   'Q==',
-                   _secure_my_unencrypted_setting: 'nifty',
-                   my_insecure_setting:            'goodbye',
+                   '_secure_my_encrypted_setting'   => 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcd' \
+                                                       'VD+p0pUdnMoYThaV4mpsspg/ZTBtmjx' \
+                                                       '7kMwcF6cjXFLDVw3FxptTHwzJUd4aku' \
+                                                       'n6EZ57m+QzCMJYnfY95gB2/emEAQLSz' \
+                                                       '4/YwsE4LDGydkEjY1ZprfXznf+rU31Y' \
+                                                       'GDJUTf34ESz7fsQGSc9DjkBb9ao8Mv4' \
+                                                       'cI7pCXkQZDwS5kLAZDf6agy1GzeL71Z' \
+                                                       '8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u' \
+                                                       '2CJ0sN5eINMngJBfv5ZFrZgfXc86wdg' \
+                                                       'UKc8aaoX8OQA1kKTcdgbE9NcAhNr1+W' \
+                                                       'fNxMnz84XzmUp2Y0H1jPgGkBKQJKArf' \
+                                                       'Q==',
+                   '_secure_my_unencrypted_setting' => 'nifty',
+                   'my_insecure_setting'            => 'goodbye',
                  },
                  decryption_keys: { __default: './spec/spec_key' },
                )
 
     secured_settings = settings.insecure
 
-    expect(secured_settings.my_encrypted_setting?).to   be  false
-    expect(secured_settings.my_unencrypted_setting).to  eql 'nifty'
-    expect(secured_settings.my_insecure_setting?).to    be  false
+    expect(secured_settings['my_unencrypted_setting']).to eql 'nifty'
   end
 
   it 'raises an exception when it accesses a value which cannot be decrypted' do
     settings = Settings.new(
                  settings: {
-                   _secure_my_encrypted_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0' \
-                                                 'pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjX' \
-                                                 'FLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYn' \
-                                                 'fY95gB2/emEAQLSz4/YwsE4LDGydkEjY1Zpr' \
-                                                 'fXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9' \
-                                                 'ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71' \
-                                                 'Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0' \
-                                                 'sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8' \
-                                                 'OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2' \
-                                                 'Y0H1jPgGkBKQJKArfQ==',
+                   '_secure_my_encrypted_setting' => 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvc' \
+                                                     'dVD+p0pUdnMoYThaV4mpsspg/ZTBtm' \
+                                                     'jx7kMwcF6cjXFLDVw3FxptTHwzJUd4' \
+                                                     'akun6EZ57m+QzCMJYnfY95gB2/emEA' \
+                                                     'QLSz4/YwsE4LDGydkEjY1ZprfXznf+' \
+                                                     'rU31YGDJUTf34ESz7fsQGSc9DjkBb9' \
+                                                     'ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1' \
+                                                     'GzeL71Z8lrmQzk8QQuf/1kQzxsWVlz' \
+                                                     'pKNXWS7u2CJ0sN5eINMngJBfv5ZFrZ' \
+                                                     'gfXc86wdgUKc8aaoX8OQA1kKTcdgbE' \
+                                                     '9NcAhNr1+WfNxMnz84XzmUp2Y0H1jP' \
+                                                     'gGkBKQJKArfQ==',
                  },
                )
 
-    expect { settings.my_encrypted_setting }
+    expect { settings['my_encrypted_setting'] }
       .to raise_error Chamber::Errors::DecryptionFailure
   end
 
@@ -460,37 +453,39 @@ THERE: 'was not that easy?'
 
     settings = Settings.new(
                  settings: {
-                   _secure_my_encrypted_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvcdVD+p0' \
-                                                 'pUdnMoYThaV4mpsspg/ZTBtmjx7kMwcF6cjX' \
-                                                 'FLDVw3FxptTHwzJUd4akun6EZ57m+QzCMJYn' \
-                                                 'fY95gB2/emEAQLSz4/YwsE4LDGydkEjY1Zpr' \
-                                                 'fXznf+rU31YGDJUTf34ESz7fsQGSc9DjkBb9' \
-                                                 'ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1GzeL71' \
-                                                 'Z8lrmQzk8QQuf/1kQzxsWVlzpKNXWS7u2CJ0' \
-                                                 'sN5eINMngJBfv5ZFrZgfXc86wdgUKc8aaoX8' \
-                                                 'OQA1kKTcdgbE9NcAhNr1+WfNxMnz84XzmUp2' \
-                                                 'Y0H1jPgGkBKQJKArfQ==',
-                   encrypted_group:              {
-                     _secure_my_encrypted_group_setting: 'cJbFe0NI5wknmsp2fVgpC/YeBD' \
-                                                         '2pvcdVD+p0pUdnMoYThaV4mpss' \
-                                                         'pg/ZTBtmjx7kMwcF6cjXFLDVw3' \
-                                                         'FxptTHwzJUd4akun6EZ57m+QzC' \
-                                                         'MJYnfY95gB2/emEAQLSz4/YwsE' \
-                                                         '4LDGydkEjY1ZprfXznf+rU31YG' \
-                                                         'DJUTf34ESz7fsQGSc9DjkBb9ao' \
-                                                         '8Mv4cI7pCXkQZDwS5kLAZDf6ag' \
-                                                         'y1GzeL71Z8lrmQzk8QQuf/1kQz' \
-                                                         'xsWVlzpKNXWS7u2CJ0sN5eINMn' \
-                                                         'gJBfv5ZFrZgfXc86wdgUKc8aao' \
-                                                         'X8OQA1kKTcdgbE9NcAhNr1+WfN' \
-                                                         'xMnz84XzmUp2Y0H1jPgGkBKQJK' \
-                                                         'ArfQ==',
+                   '_secure_my_encrypted_setting' => 'cJbFe0NI5wknmsp2fVgpC/YeBD2pvc' \
+                                                     'dVD+p0pUdnMoYThaV4mpsspg/ZTBtm' \
+                                                     'jx7kMwcF6cjXFLDVw3FxptTHwzJUd4' \
+                                                     'akun6EZ57m+QzCMJYnfY95gB2/emEA' \
+                                                     'QLSz4/YwsE4LDGydkEjY1ZprfXznf+' \
+                                                     'rU31YGDJUTf34ESz7fsQGSc9DjkBb9' \
+                                                     'ao8Mv4cI7pCXkQZDwS5kLAZDf6agy1' \
+                                                     'GzeL71Z8lrmQzk8QQuf/1kQzxsWVlz' \
+                                                     'pKNXWS7u2CJ0sN5eINMngJBfv5ZFrZ' \
+                                                     'gfXc86wdgUKc8aaoX8OQA1kKTcdgbE' \
+                                                     '9NcAhNr1+WfNxMnz84XzmUp2Y0H1jP' \
+                                                     'gGkBKQJKArfQ==',
+                   'encrypted_group'              => {
+                     '_secure_my_encrypted_group_setting' => 'cJbFe0NI5wknmsp2fVgpC/YeB' \
+                                                             'D2pvcdVD+p0pUdnMoYThaV4mp' \
+                                                             'sspg/ZTBtmjx7kMwcF6cjXFLD' \
+                                                             'Vw3FxptTHwzJUd4akun6EZ57m' \
+                                                             '+QzCMJYnfY95gB2/emEAQLSz4' \
+                                                             '/YwsE4LDGydkEjY1ZprfXznf+' \
+                                                             'rU31YGDJUTf34ESz7fsQGSc9D' \
+                                                             'jkBb9ao8Mv4cI7pCXkQZDwS5k' \
+                                                             'LAZDf6agy1GzeL71Z8lrmQzk8' \
+                                                             'QQuf/1kQzxsWVlzpKNXWS7u2C' \
+                                                             'J0sN5eINMngJBfv5ZFrZgfXc8' \
+                                                             '6wdgUKc8aaoX8OQA1kKTcdgbE' \
+                                                             '9NcAhNr1+WfNxMnz84XzmUp2Y' \
+                                                             '0H1jPgGkBKQJKArfQ==',
                    },
                  },
                )
 
-    expect(settings.my_encrypted_setting).to                       eql 'my env setting'
-    expect(settings.encrypted_group.my_encrypted_group_setting).to eql 'my env group'
+    expect(settings['my_encrypted_setting']).to                          eql 'my env setting'
+    expect(settings['encrypted_group']['my_encrypted_group_setting']).to eql 'my env group'
 
     ENV['MY_ENCRYPTED_SETTING']                       = nil
     ENV['ENCRYPTED_GROUP_MY_ENCRYPTED_GROUP_SETTING'] = nil

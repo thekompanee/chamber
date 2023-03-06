@@ -1,3 +1,37 @@
+Version v3.0.0 - March 5, 2022
+================================================================================
+
+Change
+--------------------------------------------------------------------------------
+  * Internally Represent Key Names As Strings
+  * Raise An Error On Non-Conforming Keys
+  * Simplify Formatting For YAML Loading Codepaths
+  * Simplify Settings Writers
+
+Add
+--------------------------------------------------------------------------------
+  * Custom deep_dup Implementation
+  * Error Raising On Non-Existent Bracket Access
+
+Remove
+--------------------------------------------------------------------------------
+  * Unsafe YAML Loading
+  * Inadvertent Reliance On ActiveSupport For JSON Parsing
+  * Hashie
+  * Hashie From TranslateSecureKeysFilter
+  * Hashie From Settings
+  * Hashie From EncryptionFilter
+  * Hashie From DecryptionFilter
+  * Hashie From InsecureFilter
+  * Hashie From SecureFilter
+  * Hashie From NamespaceFilter
+  * Hashie From EnvironmentFilter
+  * Chamber.env
+  * Ability To Access Bracket Notation With Symbols
+  * Ability To Use Object Notation
+  * Ability To Call Arbitrary Settings On Instance
+  * Ability To Call Settings Directly On Chamber
+
 Version v2.14.3 - March 5, 2022
 ================================================================================
 

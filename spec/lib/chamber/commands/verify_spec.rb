@@ -31,18 +31,18 @@ describe  Verify do # rubocop:disable RSpec/MultipleMemoizedHelpers
   end
 
   it 'can generate signature files', :time_mock do
-    settings_filename.write <<-HEREDOC
-test:
-  my_setting: hello
+    settings_filename.write <<~HEREDOC
+      test:
+        my_setting: hello
     HEREDOC
 
-    signature_filename.write <<-HEREDOC
-Signed By: Suzy Q Robinson
-Signed At: 2012-07-26T18:00:00Z
+    signature_filename.write <<~HEREDOC
+      Signed By: Suzy Q Robinson
+      Signed At: 2012-07-26T18:00:00Z
 
------BEGIN CHAMBER SIGNATURE-----
-QhGPAea/1RQZnh8ES+Esmr3ZssBtZJvxp+yW7wUMHc2D5Mq9SzLymuwSxLtOGuJsqlxMWW0FaOIK1F0AcQRnw9+RXfdGvBNsm/5LJr1TYJ9EfAKFY/PPDpnMId6gJV/Tz+y5sOt97oyUXVqDbd6jbwmJvYWNfYYTmI1NunkRRNtLuS83hce+qJLPhmYqnHEkWvbcczkjml/axfh5l5VS8aob9zfXnHryMoaCu2E/yfZOsXDEXVLVAGid33eq719Wm/nK2R4hhgRMrm7+4kfGSQyluOAobgvU3jspKJZO7tLH3uXYxqTVG9ZldEc8tRlP79QjSwJdWLoLmwL+bnAjIQ==
------END CHAMBER SIGNATURE-----
+      -----BEGIN CHAMBER SIGNATURE-----
+      QhGPAea/1RQZnh8ES+Esmr3ZssBtZJvxp+yW7wUMHc2D5Mq9SzLymuwSxLtOGuJsqlxMWW0FaOIK1F0AcQRnw9+RXfdGvBNsm/5LJr1TYJ9EfAKFY/PPDpnMId6gJV/Tz+y5sOt97oyUXVqDbd6jbwmJvYWNfYYTmI1NunkRRNtLuS83hce+qJLPhmYqnHEkWvbcczkjml/axfh5l5VS8aob9zfXnHryMoaCu2E/yfZOsXDEXVLVAGid33eq719Wm/nK2R4hhgRMrm7+4kfGSQyluOAobgvU3jspKJZO7tLH3uXYxqTVG9ZldEc8tRlP79QjSwJdWLoLmwL+bnAjIQ==
+      -----END CHAMBER SIGNATURE-----
     HEREDOC
 
     result = Verify.call(**options)

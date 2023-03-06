@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
-require 'hashie/mash'
+require 'chamber/refinements/deep_dup'
 
 module  Chamber
 module  Filters
 class   TranslateSecureKeysFilter
+  using ::Chamber::Refinements::DeepDup
+
   def self.execute(**args)
     new(**args).__send__(:execute)
   end
@@ -13,14 +15,14 @@ class   TranslateSecureKeysFilter
                 :secure_key_token
 
   def initialize(data:, secure_key_prefix:, **_args)
-    self.data             = data.dup
+    self.data             = data.deep_dup
     self.secure_key_token = /\A#{Regexp.escape(secure_key_prefix)}/
   end
 
   protected
 
   def execute(raw_data = data)
-    settings = Hashie::Mash.new
+    settings = {}
 
     raw_data.each_pair do |key, value|
       value = execute(value) if value.respond_to? :each_pair

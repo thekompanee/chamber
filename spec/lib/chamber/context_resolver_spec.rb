@@ -66,16 +66,16 @@ describe  ContextResolver do # rubocop:disable RSpec/MultipleMemoizedHelpers
   it 'sets the encryption key to the default if not passed in' do
     options = ContextResolver.resolve(rootpath: rails_3_path)
 
-    expect(options[:encryption_keys][:__default]).to eql <<-HEREDOC
------BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvYcqkBjBLhSaTKOCMoq+
-ZxcuxTaA5UQpf/vDXbOiI871+6x7yKbTr+Xr9oFDvFldyvUFiK6LX0rj/jgLnaTB
-sLyXjH46dOmiPUO3k/QvDmRKN8zvl4x9T7YZKuoEkxZwE3T3MxKPmBorKGv/22Vb
-KocqkGGgx9gKIvSfxVXfTMfcvTDrFllm1bCaXEVGcRAknJg94ul2yMgqmYA2KJcP
-y2naped90yzv0A7c/UI5zjBcJPgkum79aDTSv095yl+Pk+5JM2jD85x3ph3ij++L
-dAXJ1fBJrV1H39UJ4A6yOupEG3+QsZTPDXkBBnX8+mWXYCClI/GF6iA/G3njeMqU
-fQIDAQAB
------END PUBLIC KEY-----
+    expect(options[:encryption_keys][:__default]).to eql <<~HEREDOC
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvYcqkBjBLhSaTKOCMoq+
+      ZxcuxTaA5UQpf/vDXbOiI871+6x7yKbTr+Xr9oFDvFldyvUFiK6LX0rj/jgLnaTB
+      sLyXjH46dOmiPUO3k/QvDmRKN8zvl4x9T7YZKuoEkxZwE3T3MxKPmBorKGv/22Vb
+      KocqkGGgx9gKIvSfxVXfTMfcvTDrFllm1bCaXEVGcRAknJg94ul2yMgqmYA2KJcP
+      y2naped90yzv0A7c/UI5zjBcJPgkum79aDTSv095yl+Pk+5JM2jD85x3ph3ij++L
+      dAXJ1fBJrV1H39UJ4A6yOupEG3+QsZTPDXkBBnX8+mWXYCClI/GF6iA/G3njeMqU
+      fQIDAQAB
+      -----END PUBLIC KEY-----
     HEREDOC
   end
 

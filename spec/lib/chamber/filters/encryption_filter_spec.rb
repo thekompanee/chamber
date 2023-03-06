@@ -10,12 +10,12 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: 'hello',
+                            '_secure_my_secure_setting' => 'hello',
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -38,50 +38,50 @@ describe  EncryptionFilter do
     filtered_settings        = EncryptionFilter.execute(
                                  secure_key_prefix: '_secure_',
                                  data:              {
-                                   development: {
-                                     sub_key: {
-                                       sub_sub_key: {
-                                         _secure_setting: 'hello development',
+                                   'development' => {
+                                     'sub_key' => {
+                                       'sub_sub_key' => {
+                                         '_secure_setting' => 'hello development',
                                        },
                                      },
                                    },
-                                   production:  {
-                                     sub_key: {
-                                       sub_sub_key: {
-                                         _secure_setting: 'hello production',
+                                   'production'  => {
+                                     'sub_key' => {
+                                       'sub_sub_key' => {
+                                         '_secure_setting' => 'hello production',
                                        },
                                      },
                                    },
-                                   other:       {
-                                     sub_key: {
-                                       sub_sub_key: {
-                                         _secure_setting: 'hello other',
+                                   'other'       => {
+                                     'sub_key' => {
+                                       'sub_sub_key' => {
+                                         '_secure_setting' => 'hello other',
                                        },
                                      },
                                    },
                                  },
                                  encryption_keys:   {
-                                   __default:   default_key,
-                                   development: development_key,
-                                   production:  production_key,
+                                   '__default'   => default_key,
+                                   'development' => development_key,
+                                   'production'  => production_key,
                                  },
                                )
 
     expect(EncryptionMethods::PublicKey)
       .to have_received(:encrypt)
-            .with(:_secure_setting, 'hello development', development_key)
+            .with('_secure_setting', 'hello development', development_key)
 
     expect(EncryptionMethods::PublicKey)
       .to have_received(:encrypt)
-            .with(:_secure_setting, 'hello other', default_key)
+            .with('_secure_setting', 'hello other', default_key)
 
-    expect(filtered_settings.development.sub_key.sub_sub_key._secure_setting)
+    expect(filtered_settings['development']['sub_key']['sub_sub_key']['_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
 
-    expect(filtered_settings.production.sub_key.sub_sub_key._secure_setting)
+    expect(filtered_settings['production']['sub_key']['sub_sub_key']['_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
 
-    expect(filtered_settings.other.sub_key.sub_sub_key._secure_setting)
+    expect(filtered_settings['other']['sub_key']['sub_sub_key']['_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -89,49 +89,49 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            my_secure_setting: 'hello',
+                            'my_secure_setting' => 'hello',
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings.my_secure_setting).to eql 'hello'
+    expect(filtered_settings['my_secure_setting']).to eql 'hello'
   end
 
   it 'will not attempt to encrypt values even if they are prefixed with "secure"' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            secure_setting: 'hello',
+                            'secure_setting' => 'hello',
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings.secure_setting).to eql 'hello'
+    expect(filtered_settings['secure_setting']).to eql 'hello'
   end
 
   it 'will attempt to encrypt values if they are not properly encoded' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: 'fNI5\jwlBn',
+                            '_secure_my_secure_setting' => 'fNI5\jwlBn',
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
   it 'will attempt to encrypt values if they are numbers' do
     filtered_settings = EncryptionFilter.execute(secure_key_prefix: '_secure_',
                                                  data:              {
-                                                   _secure_my_secure_setting: 12_345,
+                                                   '_secure_my_secure_setting' => 12_345,
                                                  },
                                                  encryption_keys:   {
-                                                   __default: './spec/spec_key.pub',
+                                                   '__default' => './spec/spec_key.pub',
                                                  })
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -141,19 +141,20 @@ describe  EncryptionFilter do
         .execute(
           secure_key_prefix: '_secure_',
           data:              {
-            _secure_my_secure_setting: 'fNI5wlBniNhEU4396pmhWwx+A09bRAMJOUASuP7PzprewB' \
-                                       'X8CXYqL+v/uXOJpIRCLDjwe8quuC+j9iLcPU7HBRMr054g' \
-                                       'GxeqZexbLevXcPk7SrMis3qeEKmnAuarQGXe7ZAntidMY9' \
-                                       'Lx4pqSkhYXwQnI48d2Dh44qfaS9w2OrehSkpdFRnuxQeOp' \
-                                       'CKO/bleB0J88WGkytCohyHCRIpbaEjEC3UD52pnqMeu/Cl' \
-                                       'Nm+PBgE6Ci94pu5UUnZuIE/y+P4A3wgD6G/u8hgvAW51Jw' \
-                                       'Vryg/im1rayGAwWYNgupQ/5LDmjffwx7Q3fyMH2uF3CDIK' \
-                                       'RIC6U+mnM5SRMO4Dzysw==',
+            '_secure_my_secure_setting' => 'fNI5wlBniNhEU4396pmhWwx+A09bRAMJOUASuP7P' \
+                                           'zprewBX8CXYqL+v/uXOJpIRCLDjwe8quuC+j9iLc' \
+                                           'PU7HBRMr054gGxeqZexbLevXcPk7SrMis3qeEKmn' \
+                                           'AuarQGXe7ZAntidMY9Lx4pqSkhYXwQnI48d2Dh44' \
+                                           'qfaS9w2OrehSkpdFRnuxQeOpCKO/bleB0J88WGky' \
+                                           'tCohyHCRIpbaEjEC3UD52pnqMeu/ClNm+PBgE6Ci' \
+                                           '94pu5UUnZuIE/y+P4A3wgD6G/u8hgvAW51JwVryg' \
+                                           '/im1rayGAwWYNgupQ/5LDmjffwx7Q3fyMH2uF3CD' \
+                                           'IKRIC6U+mnM5SRMO4Dzysw==',
           },
-          encryption_keys:   { __default: './spec/spec_key.pub' },
+          encryption_keys:   { '__default' => './spec/spec_key.pub' },
         )
 
-    my_secure_setting = filtered_settings._secure_my_secure_setting
+    my_secure_setting = filtered_settings['_secure_my_secure_setting']
 
     expect(my_secure_setting).to eql 'fNI5wlBniNhEU4396pmhWwx+A09bRAMJOUASuP7Pzprew' \
                                      'BX8CXYqL+v/uXOJpIRCLDjwe8quuC+j9iLcPU7HBRMr05' \
@@ -171,31 +172,35 @@ describe  EncryptionFilter do
         .execute(
           secure_key_prefix: '_secure_',
           data:              {
-            _secure_my_secure_setting: 'AcMY7ALLoGZRakL3ibyo2WB438ipdMDIjsa4SCDBP2saOY6' \
-                                       '3AD3C/SZanexlYDQoYoYC0V5J5EvKHgGMDAU8qnp9LjzU5V' \
-                                       'CwJ3SVRGz3J0c7LXgTlC585Lgy8LX+/yjYFm4D13hlMvvso' \
-                                       'I35Bo8EVkTSU2+0gRSjRpQJeK1o7az5+fBuNmFipevA4YfL' \
-                                       'narnpwo2d2oO+BqStI2QQI1UWwN2R04rvOdHoEzA6DLsdvY' \
-                                       'X+QTKDk4K5oSKXfuMBvzOCaCGT75cmt85ZY7XZnwbKi6c4m' \
-                                       'tL1ajrCr8sQFTA/GyG1EiYLFp1uQco0m2/S9yFf26REjax4' \
-                                       'ZE6O/ilXgT6xg==#YAm25swWRQx4ip1RjVzpGQ==#vRGvgj' \
-                                       'ErI+dATM4UOtFkkgefFpFTvxGpHN0gRbf1VCO4K07eqAQPb' \
-                                       '46BDI67a8iNum9cBphes7oGmuNnUvBg4JiZhKsXnolcRWdI' \
-                                       'TDVh/XYNioXRmesvj4x+tY0FVhkLV2zubRVfC7CDJgin6wR' \
-                                       'HP+bcZhICDD2YqB+XRS4ou66UeaiGA4eV4G6sPIo+DPjDM3' \
-                                       'm8JFnuRFMvGk73wthbN4MdAp9xONt5wfobJUiUR11k2iAqw' \
-                                       'hx7Wyj0imz/afI8goDTdMfQt3VDOYqYG3y2AcYOfsOL6m0G' \
-                                       'tQRlKvtsvw+m8/ICwSGiL2Loup0j/jDGhFi1lwf4ded8aSw' \
-                                       'yS+2/Ks9C008dsJwpR1SxJ59z1KSzdQcTcrJTnxd+2qpOVV' \
-                                       'IoaRGud2tSV+5wKXy9dWRflLsjEtBRFReFurTVQPodjDy+L' \
-                                       'hs452/O/+KAJOXMKeYegCGOe8z9tLD3teljjTyJPeW/1FE3' \
-                                       '+tP3G3HJAV4sgoO0YwhNY1Nji56igCl3UvEPnEQcJgu0w/+' \
-                                       'dqSreqwp6TqaqXY3lzr8vi733lti4nss=',
+            '_secure_my_secure_setting' => 'AcMY7ALLoGZRakL3ibyo2WB438ipdMDIjsa4SCDB' \
+                                           'P2saOY63AD3C/SZanexlYDQoYoYC0V5J5EvKHgGM' \
+                                           'DAU8qnp9LjzU5VCwJ3SVRGz3J0c7LXgTlC585Lgy' \
+                                           '8LX+/yjYFm4D13hlMvvsoI35Bo8EVkTSU2+0gRSj' \
+                                           'RpQJeK1o7az5+fBuNmFipevA4YfLnarnpwo2d2oO' \
+                                           '+BqStI2QQI1UWwN2R04rvOdHoEzA6DLsdvYX+QTK' \
+                                           'Dk4K5oSKXfuMBvzOCaCGT75cmt85ZY7XZnwbKi6c' \
+                                           '4mtL1ajrCr8sQFTA/GyG1EiYLFp1uQco0m2/S9yF' \
+                                           'f26REjax4ZE6O/ilXgT6xg==#YAm25swWRQx4ip1' \
+                                           'RjVzpGQ==#vRGvgjErI+dATM4UOtFkkgefFpFTvx' \
+                                           'GpHN0gRbf1VCO4K07eqAQPb46BDI67a8iNum9cBp' \
+                                           'hes7oGmuNnUvBg4JiZhKsXnolcRWdITDVh/XYNio' \
+                                           'XRmesvj4x+tY0FVhkLV2zubRVfC7CDJgin6wRHP+' \
+                                           'bcZhICDD2YqB+XRS4ou66UeaiGA4eV4G6sPIo+DP' \
+                                           'jDM3m8JFnuRFMvGk73wthbN4MdAp9xONt5wfobJU' \
+                                           'iUR11k2iAqwhx7Wyj0imz/afI8goDTdMfQt3VDOY' \
+                                           'qYG3y2AcYOfsOL6m0GtQRlKvtsvw+m8/ICwSGiL2' \
+                                           'Loup0j/jDGhFi1lwf4ded8aSwyS+2/Ks9C008dsJ' \
+                                           'wpR1SxJ59z1KSzdQcTcrJTnxd+2qpOVVIoaRGud2' \
+                                           'tSV+5wKXy9dWRflLsjEtBRFReFurTVQPodjDy+Lh' \
+                                           's452/O/+KAJOXMKeYegCGOe8z9tLD3teljjTyJPe' \
+                                           'W/1FE3+tP3G3HJAV4sgoO0YwhNY1Nji56igCl3Uv' \
+                                           'EPnEQcJgu0w/+dqSreqwp6TqaqXY3lzr8vi733lt' \
+                                           'i4nss=',
           },
-          encryption_keys:   { __default: './spec/spec_key.pub' },
+          encryption_keys:   { '__default' => './spec/spec_key.pub' },
         )
 
-    my_secure_setting = filtered_settings._secure_my_secure_setting
+    my_secure_setting = filtered_settings['_secure_my_secure_setting']
 
     expect(my_secure_setting).to eql 'AcMY7ALLoGZRakL3ibyo2WB438ipdMDIjsa4SCDBP2saOY63A' \
                                      'D3C/SZanexlYDQoYoYC0V5J5EvKHgGMDAU8qnp9LjzU5VCwJ3' \
@@ -224,25 +229,25 @@ describe  EncryptionFilter do
         .execute(
           secure_key_prefix: '_secure_',
           data:              {
-            _secure_multiline: "-----BEGIN RSA PRIVATE KEY-----" \
-                               "uQ431irYF7XGEwmsfNUcw++6Enjmt9MIt" \
-                               "VZJrfL4cUr84L1ccOEX9AThsxz2nkiO\n" \
-                               "GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVa" \
-                               "YKYuHwYVb1spGfreHQHRP90EMv3U5Ir\n" \
-                               "xs0YFwKBgAJKGol+GM1oFodg48v4QA6hl" \
-                               "F5z49v83wU+AS2f3aMVfjkTYgAEAoCT\n" \
-                               "qoSi7wkYK3NvftVgVi8Z2+1WEzp3S590U" \
-                               "kkHmjc5o+HfS657v2fnqkekJyinB+OH\n" \
-                               "b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI" \
-                               "1Sqc8RsF/H8lRvj5ai5\n" \
-                               "-----END RSA PRIVATE KEY-----",
+            '_secure_multiline' => "-----BEGIN RSA PRIVATE KEY-----" \
+                                   "uQ431irYF7XGEwmsfNUcw++6Enjmt9MIt" \
+                                   "VZJrfL4cUr84L1ccOEX9AThsxz2nkiO\n" \
+                                   "GgU+HtwwueZDUZ8Pdn71+1CdVaSUeEkVa" \
+                                   "YKYuHwYVb1spGfreHQHRP90EMv3U5Ir\n" \
+                                   "xs0YFwKBgAJKGol+GM1oFodg48v4QA6hl" \
+                                   "F5z49v83wU+AS2f3aMVfjkTYgAEAoCT\n" \
+                                   "qoSi7wkYK3NvftVgVi8Z2+1WEzp3S590U" \
+                                   "kkHmjc5o+HfS657v2fnqkekJyinB+OH\n" \
+                                   "b5tySsPxt/3Un4D9EaGhjv44GMvL54vFI" \
+                                   "1Sqc8RsF/H8lRvj5ai5\n" \
+                                   "-----END RSA PRIVATE KEY-----",
           },
           encryption_keys:   {
-            __default: './spec/spec_key.pub',
+            '__default' => './spec/spec_key.pub',
           },
         )
 
-    my_secure_setting = filtered_settings._secure_multiline
+    my_secure_setting = filtered_settings['_secure_multiline']
 
     expect(my_secure_setting).to match(EncryptionFilter::LARGE_DATA_STRING_PATTERN)
   end
@@ -253,23 +258,23 @@ describe  EncryptionFilter do
         .execute(
           secure_key_prefix: '_secure_',
           data:              {
-            _secure_my_secure_setting: 'A' * 119,
+            '_secure_my_secure_setting' => 'A' * 119,
           },
-          encryption_keys:   { __default: './spec/spec_key.pub' },
+          encryption_keys:   { '__default' => './spec/spec_key.pub' },
         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
 
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: 'A' * 124,
+                            '_secure_my_secure_setting' => 'A' * 124,
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
 
@@ -277,12 +282,12 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: 'long' * 100,
+                            '_secure_my_secure_setting' => 'long' * 100,
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
 
@@ -290,12 +295,12 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: /^(.*\\.|)example\\.com$/,
+                            '_secure_my_secure_setting' => /^(.*\\.|)example\\.com$/,
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -303,12 +308,12 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: %r{^(.*\\.|)example\\.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz},
+                            '_secure_my_secure_setting' => %r{^(.*\\.|)example\\.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz}, # rubocop:disable Layout/LineLength
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
 
@@ -316,12 +321,12 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: ::Date.new(2020, 1, 1),
+                            '_secure_my_secure_setting' => ::Date.new(2020, 1, 1),
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -329,12 +334,17 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: ::Time.utc(2020, 1, 1, 0, 0, 0),
+                            '_secure_my_secure_setting' => ::Time.utc(2020,
+                                                                      1,
+                                                                      1,
+                                                                      0,
+                                                                      0,
+                                                                      0),
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -342,12 +352,12 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: :foo_symbol,
+                            '_secure_my_secure_setting' => :foo_symbol,
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
@@ -355,12 +365,12 @@ describe  EncryptionFilter do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
-                            _secure_my_secure_setting: :abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz,
+                            '_secure_my_secure_setting' => :abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz,
                           },
-                          encryption_keys:   { __default: './spec/spec_key.pub' },
+                          encryption_keys:   { '__default' => './spec/spec_key.pub' },
                         )
 
-    expect(filtered_settings._secure_my_secure_setting)
+    expect(filtered_settings['_secure_my_secure_setting'])
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
 end

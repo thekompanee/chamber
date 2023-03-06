@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'yaml'
-require 'hashie/mash'
 
 require 'chamber/errors/environment_conversion'
 
@@ -122,7 +121,7 @@ class   EnvironmentFilter
   private
 
   def with_environment(settings, parent_keys, hash_block, value_block)
-    environment_hash = Hashie::Mash.new
+    environment_hash = {}
 
     settings.each_pair do |key, value|
       environment_key  = key.to_s.gsub(secure_key_token, '')
@@ -170,13 +169,13 @@ class   EnvironmentFilter
       environment_value
     end
   rescue ArgumentError
-    raise Chamber::Errors::EnvironmentConversion, <<-HEREDOC
-We attempted to convert '#{environment_key}' from '#{environment_value}' to a '#{settings_value.class.name}'.
+    raise Chamber::Errors::EnvironmentConversion, <<~HEREDOC
+      We attempted to convert '#{environment_key}' from '#{environment_value}' to a '#{settings_value.class.name}'.
 
-Unfortunately, this did not go as planned.  Please either verify that your value is convertable
-or change the original YAML value to be something more generic (like a String).
+      Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+      or change the original YAML value to be something more generic (like a String).
 
-For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+      For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
     HEREDOC
   end
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'thor'
-require 'chamber/core_ext/hash'
 require 'chamber/commands/cloud/clear'
 require 'chamber/commands/cloud/push'
 require 'chamber/commands/cloud/pull'

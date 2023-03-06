@@ -13,14 +13,15 @@ describe  EnvironmentFilter do
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 'value 1',
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 'value 1',
                                                   },
                                                 },
                                               })
 
-    test_setting  = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql 'value 2'
 
@@ -34,18 +35,19 @@ describe  EnvironmentFilter do
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: [
-                                                                    1,
-                                                                    2,
-                                                                    3,
-                                                                  ],
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => [
+                                                                        1,
+                                                                        2,
+                                                                        3,
+                                                                      ],
                                                   },
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql [4, 5, 6]
 
@@ -53,14 +55,15 @@ describe  EnvironmentFilter do
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: %w{1 2 3},
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => %w{1 2 3},
                                                   },
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql %w{4 5 6}
 
@@ -74,20 +77,20 @@ describe  EnvironmentFilter do
       EnvironmentFilter.execute(
         secure_key_prefix: '_secure_',
         data:              {
-          test_setting_group: {
-            test_setting_one: %w{1 2 3},
+          'test_setting_group' => {
+            'test_setting_one' => %w{1 2 3},
           },
         },
       )
     }.to \
       raise_error(Chamber::Errors::EnvironmentConversion)
-        .with_message(<<-HEREDOC)
-We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from '{"foobar": "bazqux"}' to a 'Array'.
+        .with_message(<<~HEREDOC)
+          We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from '{"foobar": "bazqux"}' to a 'Array'.
 
-Unfortunately, this did not go as planned.  Please either verify that your value is convertable
-or change the original YAML value to be something more generic (like a String).
+          Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+          or change the original YAML value to be something more generic (like a String).
 
-For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+          For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
         HEREDOC
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
@@ -98,15 +101,16 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting:    'value 1',
-                                                    another_setting: 'value 3',
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting'    => 'value 1',
+                                                    'another_setting' => 'value 3',
                                                   },
                                                 },
                                               })
 
-    another_setting = filtered_data.test_setting_group.test_setting_level.another_setting
+    another_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['another_setting']
 
     expect(another_setting).to eql 'value 3'
 
@@ -120,14 +124,15 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 1,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 1,
                                                   },
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be nil
 
@@ -135,14 +140,15 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 1,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 1,
                                                   },
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be nil
 
@@ -156,14 +162,15 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 1,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 1,
                                                   },
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be 2
 
@@ -177,20 +184,20 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
       EnvironmentFilter.execute(
         secure_key_prefix: '_secure_',
         data:              {
-          test_setting_group: {
-            test_setting_one: 1,
+          'test_setting_group' => {
+            'test_setting_one' => 1,
           },
         },
       )
     }.to \
       raise_error(Chamber::Errors::EnvironmentConversion)
-        .with_message(<<-HEREDOC)
-We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foo' to a '#{1.class.name}'.
+        .with_message(<<~HEREDOC)
+          We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foo' to a '#{1.class.name}'.
 
-Unfortunately, this did not go as planned.  Please either verify that your value is convertable
-or change the original YAML value to be something more generic (like a String).
+          Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+          or change the original YAML value to be something more generic (like a String).
 
-For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+          For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
         HEREDOC
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
@@ -203,14 +210,15 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 1.2,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 1.2,
                                                   },
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be 2.3
 
@@ -224,20 +232,20 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
       EnvironmentFilter.execute(
         secure_key_prefix: '_secure_',
         data:              {
-          test_setting_group: {
-            test_setting_one: 1.0,
+          'test_setting_group' => {
+            'test_setting_one' => 1.0,
           },
         },
       )
     }.to \
       raise_error(Chamber::Errors::EnvironmentConversion)
-        .with_message(<<-HEREDOC)
-We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foo' to a 'Float'.
+        .with_message(<<~HEREDOC)
+          We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foo' to a 'Float'.
 
-Unfortunately, this did not go as planned.  Please either verify that your value is convertable
-or change the original YAML value to be something more generic (like a String).
+          Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+          or change the original YAML value to be something more generic (like a String).
 
-For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+          For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
         HEREDOC
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
@@ -251,14 +259,15 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: Time.now.utc,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => Time.now.utc,
                                                   },
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql Time.utc(2018, 1, 1, 12, 0, 0)
 
@@ -277,24 +286,24 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_one:   true,
-                                                  test_setting_two:   false,
-                                                  test_setting_three: true,
-                                                  test_setting_four:  false,
-                                                  test_setting_five:  true,
-                                                  test_setting_six:   false,
-                                                  test_setting_seven: false,
+                                                'test_setting_group' => {
+                                                  'test_setting_one'   => true,
+                                                  'test_setting_two'   => false,
+                                                  'test_setting_three' => true,
+                                                  'test_setting_four'  => false,
+                                                  'test_setting_five'  => true,
+                                                  'test_setting_six'   => false,
+                                                  'test_setting_seven' => false,
                                                 },
                                               })
 
-    expect(filtered_data.test_setting_group.test_setting_one).to   be false
-    expect(filtered_data.test_setting_group.test_setting_two).to   be true
-    expect(filtered_data.test_setting_group.test_setting_three).to be false
-    expect(filtered_data.test_setting_group.test_setting_four).to  be true
-    expect(filtered_data.test_setting_group.test_setting_five).to  be false
-    expect(filtered_data.test_setting_group.test_setting_six).to   be true
-    expect(filtered_data.test_setting_group.test_setting_seven).to be false
+    expect(filtered_data['test_setting_group']['test_setting_one']).to   be false
+    expect(filtered_data['test_setting_group']['test_setting_two']).to   be true
+    expect(filtered_data['test_setting_group']['test_setting_three']).to be false
+    expect(filtered_data['test_setting_group']['test_setting_four']).to  be true
+    expect(filtered_data['test_setting_group']['test_setting_five']).to  be false
+    expect(filtered_data['test_setting_group']['test_setting_six']).to   be true
+    expect(filtered_data['test_setting_group']['test_setting_seven']).to be false
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
   end
@@ -313,13 +322,13 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
       )
     }.to \
       raise_error(Chamber::Errors::EnvironmentConversion)
-        .with_message(<<-HEREDOC)
-We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foobar' to a 'TrueClass'.
+        .with_message(<<~HEREDOC)
+          We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foobar' to a 'TrueClass'.
 
-Unfortunately, this did not go as planned.  Please either verify that your value is convertable
-or change the original YAML value to be something more generic (like a String).
+          Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+          or change the original YAML value to be something more generic (like a String).
 
-For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+          For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
         HEREDOC
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
@@ -339,13 +348,13 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
       )
     }.to \
       raise_error(Chamber::Errors::EnvironmentConversion)
-        .with_message(<<-HEREDOC)
-We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foobar' to a 'Time'.
+        .with_message(<<~HEREDOC)
+          We attempted to convert 'TEST_SETTING_GROUP_TEST_SETTING_ONE' from 'foobar' to a 'Time'.
 
-Unfortunately, this did not go as planned.  Please either verify that your value is convertable
-or change the original YAML value to be something more generic (like a String).
+          Unfortunately, this did not go as planned.  Please either verify that your value is convertable
+          or change the original YAML value to be something more generic (like a String).
 
-For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
+          For more information, see https://github.com/thekompanee/chamber/wiki/Environment-Variable-Coercions
         HEREDOC
 
     ENV.delete('TEST_SETTING_GROUP_TEST_SETTING_LEVEL_TEST_SETTING')
@@ -354,14 +363,15 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
   it 'returns the settings value if there is no environment variable to override it' do
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: 1,
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => 1,
                                                   },
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be 1
   end
@@ -371,14 +381,15 @@ For more information, see https://github.com/thekompanee/chamber/wiki/Environmen
 
     filtered_data = EnvironmentFilter.execute(secure_key_prefix: '_secure_',
                                               data:              {
-                                                test_setting_group: {
-                                                  test_setting_level: {
-                                                    test_setting: '1',
+                                                'test_setting_group' => {
+                                                  'test_setting_level' => {
+                                                    'test_setting' => '1',
                                                   },
                                                 },
                                               })
 
-    test_setting = filtered_data.test_setting_group.test_setting_level.test_setting
+    test_setting = \
+      filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql '2'
 

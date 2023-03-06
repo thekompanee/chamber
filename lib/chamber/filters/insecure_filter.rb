@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'hashie/mash'
 require 'chamber/filters/secure_filter'
 
 module  Chamber
@@ -22,7 +21,7 @@ class   InsecureFilter < SecureFilter
 
   def execute(raw_data = data) # rubocop:disable Metrics/CyclomaticComplexity
     securable_settings = super
-    settings           = Hashie::Mash.new
+    settings           = {}
 
     securable_settings.each_pair do |key, value|
       value = if value.respond_to? :each_pair
