@@ -238,7 +238,7 @@ class   Settings
   end
 
   def [](key)
-    fail ::ArgumentError, 'Bracket access with anything other than a String is unsupported.' unless key.is_a?(::String)
+    fail ::Chamber::Errors::InvalidKeyType, 'Bracket access with anything other than a String is unsupported.' unless key.is_a?(::String)
 
     data.fetch(key)
   rescue ::KeyError => error

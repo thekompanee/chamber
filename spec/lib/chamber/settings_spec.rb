@@ -287,7 +287,7 @@ describe  Settings do
 
     expect { settings.dig!('my_setting', 'my_invalid_setting', 0) }
       .to raise_error(::Chamber::Errors::MissingSetting)
-            .with_message(/You attempted to access setting 'my_setting:my_invalid_setting:0'/)
+            .with_message(/attempted to access setting 'my_setting:my_invalid_setting:0'/)
   end
 
   it 'does not allow the user to dig past array indices that do not exist' do
