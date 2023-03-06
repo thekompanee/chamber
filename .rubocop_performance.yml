@@ -1,6 +1,6 @@
 ---
 
-# Last updated to 1.13.2
+# Last updated to 1.16.0
 
 require:
   - 'rubocop-performance'
@@ -35,7 +35,8 @@ Performance/CaseWhenSplat:
   Enabled:                                    true
 
 Performance/ChainArrayAllocation:
-  Enabled:                                    true
+  # Disallows: Most compact chaining where performance impact is minimal
+  Enabled:                                    false
 
 Performance/CollectionLiteralInLoop:
   Enabled:                                    true
