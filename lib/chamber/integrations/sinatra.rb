@@ -7,7 +7,7 @@ module Integrations
 module Sinatra
   def self.registered(app)
     app.configure do |inner_app|
-      env  = inner_app.environment || ENV['RACK_ENV']
+      env  = inner_app.environment || ENV.fetch('RACK_ENV', nil)
       root = inner_app.root
 
       if defined?(Padrino)

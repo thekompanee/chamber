@@ -20,7 +20,7 @@ class   Base
   def resolve
     key_paths.each_with_object({}) do |path, memo|
       namespace = namespace_from_path(path) || '__default'
-      value     = path.readable? ? path.read : ENV[environment_variable_from_path(path)]
+      value     = path.readable? ? path.read : ENV.fetch(environment_variable_from_path(path), nil)
 
       memo[namespace.downcase.to_sym] = value if value
     end

@@ -23,7 +23,7 @@ class   Runner < Thor
   class_option  :rootpath,
                 type:    :string,
                 aliases: '-r',
-                default: ENV['PWD'],
+                default: ENV.fetch('PWD', nil),
                 desc:    'The root filepath of the application'
 
   class_option  :basepath,

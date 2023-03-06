@@ -111,7 +111,7 @@ class   EnvironmentFilter
       lambda do |key, value, environment_key|
         {
           key => convert_environment_value(environment_key,
-                                           ENV[environment_key],
+                                           ENV.fetch(environment_key, nil),
                                            value),
         }
       end,
