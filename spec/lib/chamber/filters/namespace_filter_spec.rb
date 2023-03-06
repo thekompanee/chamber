@@ -40,7 +40,7 @@ describe  NamespaceFilter do
                         )
 
     expect(filtered_settings['namespace_setting']).to eql 'value 1'
-    expect(filtered_settings['non_namespaced_setting']).to be_nil
+    expect(filtered_settings['non_namespaced_setting']).to be(nil)
   end
 
   it 'ignores namespaces which do not exist in the data' do

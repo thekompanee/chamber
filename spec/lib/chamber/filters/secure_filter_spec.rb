@@ -36,9 +36,9 @@ describe  SecureFilter do
                                              })
 
     expect(filtered_settings['_secure_setting']).to                         eql 'hello'
-    expect(filtered_settings['secure_setting']).to                          be_nil
+    expect(filtered_settings['secure_setting']).to                          be(nil)
     expect(filtered_settings['secure_group']['_secure_nested_setting']).to  eql 'movie'
-    expect(filtered_settings['secure_group']['insecure_nested_setting']).to be_nil
+    expect(filtered_settings['secure_group']['insecure_nested_setting']).to be(nil)
   end
 end
 end

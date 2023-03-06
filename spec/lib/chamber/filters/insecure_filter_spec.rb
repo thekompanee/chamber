@@ -21,7 +21,7 @@ describe  InsecureFilter do
                                                  'my_secure_setting' => 'hello',
                                                })
 
-    expect(filtered_settings['my_secure_setting']).to be_nil
+    expect(filtered_settings['my_secure_setting']).to be(nil)
   end
 
   it 'will properly return values even if they are mixed and deeply nested' do
@@ -36,9 +36,9 @@ describe  InsecureFilter do
                                                })
 
     expect(filtered_settings['_secure_setting']).to                         eql 'hello'
-    expect(filtered_settings['secure_setting']).to                          be_nil
+    expect(filtered_settings['secure_setting']).to                          be(nil)
     expect(filtered_settings['secure_group']['_secure_nested_setting']).to  eql 'movie'
-    expect(filtered_settings['secure_group']['insecure_nested_setting']).to be_nil
+    expect(filtered_settings['secure_group']['insecure_nested_setting']).to be(nil)
   end
 
   it 'will not return values which are encrypted' do

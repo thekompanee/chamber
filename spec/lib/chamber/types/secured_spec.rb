@@ -31,7 +31,7 @@ describe  Secured do
   it 'allows nils to be cast from a user' do
     secured = secured_type.cast(nil)
 
-    expect(secured).to be_nil
+    expect(secured).to be(nil)
   end
 
   it 'fails if passed something that it cannot be cast' do
