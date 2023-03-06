@@ -179,7 +179,7 @@ describe Chamber do
     Chamber.load(basepath: '/tmp/chamber')
 
     expect { Chamber['only_namespaced_sub_settings'] }
-      .to raise_error(::KeyError)
+      .to raise_error(Chamber::Errors::MissingSetting)
   end
 
   it 'does not raise an exception if a namespaced file does not exist' do
@@ -210,7 +210,7 @@ describe Chamber do
 
   it 'does not load YAML files from the "settings" directory if it is namespaced' do
     expect { Chamber['sub_settings-namespaced'] }
-      .to raise_error(::KeyError)
+      .to raise_error(Chamber::Errors::MissingSetting)
   end
 
   it 'loads namespaced YAML files in the "settings" directory if they correspond to ' \
@@ -239,7 +239,7 @@ describe Chamber do
                  })
 
     expect { Chamber['my_non_inline_namespaced_setting'] }
-      .to raise_error(::KeyError)
+      .to raise_error(Chamber::Errors::MissingSetting)
   end
 
   it 'loads the entire inline namespaced file if no namespaces are passed in since ' \

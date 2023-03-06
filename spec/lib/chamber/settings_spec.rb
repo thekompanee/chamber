@@ -286,8 +286,8 @@ describe  Settings do
                             })
 
     expect { settings.dig!('my_setting', 'my_invalid_setting', 0) }
-      .to raise_error(::KeyError)
-            .with_message(/key not found: "my_invalid_setting"/)
+      .to raise_error(::Chamber::Errors::MissingSetting)
+            .with_message(/You attempted to access setting 'my_setting:my_invalid_setting:0'/)
   end
 
   it 'does not allow the user to dig past array indices that do not exist' do
@@ -363,7 +363,7 @@ describe  Settings do
     settings = Settings.new(settings: { 'my_setting' => 'hello' })
 
     expect { settings['is_this_my_setting'] }
-      .to raise_error(::KeyError)
+      .to raise_error(::Chamber::Errors::MissingSetting)
   end
 
   it 'can check if it is equal to other items which can be converted into hashes' do

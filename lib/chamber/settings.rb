@@ -241,6 +241,10 @@ class   Settings
     fail ::ArgumentError, 'Bracket access with anything other than a String is unsupported.' unless key.is_a?(::String)
 
     data.fetch(key)
+  rescue ::KeyError => error
+    missing_setting_name = error.message.gsub(/.*key not found: "([^"]+)".*/, '\1')
+
+    raise ::Chamber::Errors::MissingSetting.new(missing_setting_name, [])
   end
 
   def dig!(*args)
