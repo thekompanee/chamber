@@ -107,6 +107,43 @@ class   File < Pathname
   end
   # rubocop:enable Layout/LineLength, Metrics/AbcSize
 
+  # rubocop:disable Metrics/AbcSize
+  def decrypt
+    decrypted_settings = to_settings.decrypted.to_flattened_name_hash
+    secure_settings    = to_settings.encrypted.to_flattened_name_hash
+    file_contents      = read
+
+    decrypted_settings.each_pair do |name_pieces, decrypted_value|
+      encrypted_value = secure_settings[name_pieces]
+
+      next unless encrypted_value.is_a?(String)
+
+      escaped_name      = Regexp.escape(name_pieces.last)
+      escaped_value     = Regexp.escape(encrypted_value)
+      line_pattern      = /^(\s*)#{escaped_name}(\s*):(\s*)#{escaped_value}$/
+      indentation_level = file_contents
+                            .match(line_pattern)
+                            &.[](1)
+                            &.<<('  ')
+
+      if decrypted_value.include?("\n")
+        decrypted_value = decrypted_value
+                            .chomp
+                            .gsub(/\n/, "\n#{indentation_level}")
+                            .prepend("|\n#{indentation_level}")
+      end
+
+      file_contents
+        .sub!(
+          line_pattern,
+          "\\1#{name_pieces.last}\\2:\\3#{decrypted_value}",
+        )
+    end
+
+    write(file_contents)
+  end
+  # rubocop:enable Metrics/AbcSize
+
   def sign
     signature_key_contents = decryption_keys[:signature]
 

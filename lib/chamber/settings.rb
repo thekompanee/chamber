@@ -286,6 +286,21 @@ class   Settings
                  ))
   end
 
+  def decrypted
+    Settings.new(**metadata.merge(
+                   settings:     raw_data,
+                   post_filters: [Filters::DecryptionFilter],
+                 ))
+  end
+
+  def encrypted
+    Settings.new(**metadata.merge(
+                   settings:     raw_data,
+                   pre_filters:  [Filters::EncryptionFilter],
+                   post_filters: [],
+                 ))
+  end
+
   def insecure
     Settings.new(**metadata.merge(
                    settings:     raw_data,

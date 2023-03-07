@@ -346,7 +346,7 @@ describe  Settings do
       .to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
   end
 
-  it 'can encrypt a settings without explicitly having to have a filter passed' do
+  it 'can secure a settings without explicitly having to have a filter passed' do
     settings = Settings.new(settings:        {
                               '_secure_my_encrypted_setting' => 'hello',
                             },
@@ -359,6 +359,36 @@ describe  Settings do
 
     expect(secure_settings['my_encrypted_setting'])
       .to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
+  end
+
+  it 'can encrypt a settings without explicitly having to have a filter passed' do
+    settings = Settings.new(settings:        {
+                              '_secure_my_encrypted_setting' => 'hello',
+                            },
+                            decryption_keys: { __default: './spec/spec_key' },
+                            encryption_keys: { __default: './spec/spec_key.pub' })
+
+    expect(settings).to eq('my_encrypted_setting' => 'hello')
+
+    secure_settings = settings.encrypted
+
+    expect(secure_settings['_secure_my_encrypted_setting'])
+      .to match Filters::EncryptionFilter::BASE64_STRING_PATTERN
+  end
+
+  it 'can decrypt a settings without explicitly having to have a filter passed' do
+    settings = Settings.new(settings:        {
+                              '_secure_my_encrypted_setting' => 'OudqnP7rcxcBzb+Uv0Hls7akfDzv0/+Kxy4O+i6oqyD+4d7bhaP5JMXnuKMj6/+YxqVEH4xIsyWYJ+dHsqCtzi1WuMBYjIY2X3l9BTf9X97cPCIkXa0YaszTXHJ717Wu7GXRwvKm9wJM26JvmLkyE2+hVxYph7ufBTKkfbQZ5UFDpY2d4i/l/KSBChzBp/qntJhcvJnuGmRmBTo2JmPnaIm/0eNgcUqdmYVqe7sXzDZfKRDK70Ye6ekDEaohaEU5gjFONrO4J5MxD1A1+YjyvQnrncJxguxiDu5bdLiQnxSWuGjxX8r9zYd8PJTy0+R75BT1KaO9e+HBnSsGITEHUw==',
+                            },
+                            decryption_keys: { __default: './spec/spec_key' },
+                            encryption_keys: { __default: './spec/spec_key.pub' })
+
+    expect(settings).to eq('my_encrypted_setting' => 'hello')
+
+    secure_settings = settings.decrypted
+
+    expect(secure_settings['_secure_my_encrypted_setting'])
+      .to eql 'hello'
   end
 
   it 'does not allow non-existent keys to be accessed via brackets' do
