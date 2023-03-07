@@ -2,9 +2,6 @@
 
 require 'thor'
 require 'chamber/rubinius_fix'
-require 'chamber/binary/travis'
-require 'chamber/binary/heroku'
-require 'chamber/binary/circle_ci'
 require 'chamber/commands/show'
 require 'chamber/commands/files'
 require 'chamber/commands/secure'
@@ -59,21 +56,6 @@ class   Runner < Thor
                 type: :array,
                 desc: 'The path to or contents of the public key (or keys) associated ' \
                       'with the project (typically .chamber.pub.pem)'
-
-  ################################################################################
-
-  desc 'travis SUBCOMMAND ...ARGS', 'For manipulating Travis CI environment variables'
-  subcommand 'travis', Chamber::Binary::Travis
-
-  ################################################################################
-
-  desc 'heroku SUBCOMMAND ...ARGS', 'For manipulating Heroku environment variables'
-  subcommand 'heroku', Chamber::Binary::Heroku
-
-  ################################################################################
-
-  desc 'circleci SUBCOMMAND ...ARGS', 'For manipulating CircleCI environment variables'
-  subcommand 'circleci', Chamber::Binary::CircleCi
 
   ################################################################################
 
