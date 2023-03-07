@@ -1,3 +1,18 @@
+Version v3.0.0 - March 6, 2023
+================================================================================
+
+Remove
+--------------------------------------------------------------------------------
+  * grep and sed system dependencies
+  * Cloud Provider Environment Variable Support
+  * Support For Ruby pre-2.7
+
+Add
+--------------------------------------------------------------------------------
+  * Custom Error For Non-String Key Access
+  * Custom Exception For Missing Setting
+  * Better Error Handling For Missing Dig Keys
+
 Version v3.0.0 - March 5, 2022
 ================================================================================
 
