@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    chamber (3.0.0rc2)
+    chamber (3.0.0)
       thor (>= 0.20.3, < 2.0)
 
 GEM
