@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
+# `require 'pp'` is required.
+# See https://github.com/thekompanee/chamber/issues/84
+# rubocop:disable Lint/RedundantRequireStatement
 require 'pp'
+# rubocop:enable Lint/RedundantRequireStatement
+
 require 'chamber/commands/base'
 
 module  Chamber
