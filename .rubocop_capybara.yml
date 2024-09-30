@@ -1,0 +1,44 @@
+---
+
+# Last updated to 2.21.0
+
+require:
+  - 'rubocop-capybara'
+
+Capybara/ClickLinkOrButtonStyle:
+  Enabled:                        true
+  EnforcedStyle:                  'link_or_button'
+
+Capybara/CurrentPathExpectation:
+  Enabled:                        true
+
+Capybara/MatchStyle:
+  Enabled:                        true
+
+Capybara/NegationMatcher:
+  Enabled:                        true
+  EnforcedStyle:                  'have_no'
+
+Capybara/RedundantWithinFind:
+  Enabled:                        true
+
+Capybara/RSpec/HaveSelector:
+  Enabled:                        true
+  DefaultSelector:                'css'
+
+Capybara/RSpec/PredicateMatcher:
+  Enabled:                        true
+  AllowedExplicitMatchers:        []
+  EnforcedStyle:                  'inflected'
+
+Capybara/SpecificActions:
+  Enabled:                        true
+
+Capybara/SpecificFinders:
+  Enabled:                        true
+
+Capybara/SpecificMatcher:
+  Enabled:                        true
+
+Capybara/VisibilityMatcher:
+  Enabled:                        true
