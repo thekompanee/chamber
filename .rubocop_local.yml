@@ -8,4 +8,8 @@ Lint/EmptyFile:
 
 # Rubocop Thinks Pathnames Are Strings
 Style/StringConcatenation:
-  Enabled:            false
+  Enabled:                                    false
+
+# We Use To Call Private Methods Internally
+Style/SendWithLiteralMethodName:
+  AllowSend:                                  true

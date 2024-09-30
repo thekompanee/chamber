@@ -317,14 +317,14 @@ class   Settings
   # rubocop:disable Naming/MemoizedInstanceVariableName
   def raw_data
     @filtered_raw_data ||= pre_filters.inject(@raw_data) do |filtered_data, filter|
-      filter.execute(**{ data: filtered_data }.merge(metadata))
+      filter.execute(data: filtered_data, **metadata)
     end
   end
   # rubocop:enable Naming/MemoizedInstanceVariableName
 
   def data
     @data ||= post_filters.inject(raw_data) do |filtered_data, filter|
-      filter.execute(**{ data: filtered_data }.merge(metadata))
+      filter.execute(data: filtered_data, **metadata)
     end
   end
 

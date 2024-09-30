@@ -252,7 +252,7 @@ describe  EncryptionFilter do
   end
 
   it 'encrypts strings of 127 chars effective length' do
-    filtered_settings = \
+    filtered_settings =
       EncryptionFilter
         .execute(
           secure_key_prefix: '_secure_',

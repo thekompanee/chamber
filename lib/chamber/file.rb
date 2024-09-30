@@ -49,7 +49,7 @@ class   File < Pathname
     self.encryption_keys = encryption_keys
     self.signature_name  = signature_name
 
-    super path
+    super(path)
   end
 
   ###
@@ -129,7 +129,7 @@ class   File < Pathname
       if decrypted_value.include?("\n")
         decrypted_value = decrypted_value
                             .chomp
-                            .gsub(/\n/, "\n#{indentation_level}")
+                            .gsub("\n", "\n#{indentation_level}")
                             .prepend("|\n#{indentation_level}")
       end
 

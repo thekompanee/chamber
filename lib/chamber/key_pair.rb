@@ -58,7 +58,7 @@ class  KeyPair
   private
 
   def encrypted_private_key
-    @encrypted_private_key ||= \
+    @encrypted_private_key ||=
       unencrypted_private_key.export(encryption_cipher, passphrase)
   end
 
