@@ -6,7 +6,7 @@ require 'chamber/filters/translate_secure_keys_filter'
 module    Chamber
 module    Filters
 describe  TranslateSecureKeysFilter do
-  it 'will translate keys if they start with "_secure_"' do
+  it 'translates keys if they start with "_secure_"' do
     filtered_settings = TranslateSecureKeysFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -17,7 +17,7 @@ describe  TranslateSecureKeysFilter do
     expect(filtered_settings['my_secure_setting']).to eql 'hello'
   end
 
-  it 'will not translate keys if they do not start with "_secure_"' do
+  it 'does not translate keys if they do not start with "_secure_"' do
     filtered_settings = TranslateSecureKeysFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -28,7 +28,7 @@ describe  TranslateSecureKeysFilter do
     expect(filtered_settings['my_secure_setting']).to eql 'hello'
   end
 
-  it 'will not translate the key if it starts with "secure"' do
+  it 'does not translate the key if it starts with "secure"' do
     filtered_settings = TranslateSecureKeysFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {

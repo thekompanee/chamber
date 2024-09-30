@@ -6,7 +6,7 @@ require 'chamber/filters/decryption_filter'
 module    Chamber
 module    Filters
 describe  DecryptionFilter do
-  it 'will attempt multiple keys to decrypt values' do
+  it 'attempts multiple keys to decrypt values' do
     allow(EncryptionMethods::PublicKey).to receive(:decrypt).and_call_original
 
     filtered_settings = \
@@ -58,7 +58,7 @@ describe  DecryptionFilter do
       .to eql 'hello other'
   end
 
-  it 'will attempt to decrypt values which are marked as "secure"' do
+  it 'attempts to decrypt values which are marked as "secure"' do
     filtered_settings = \
       DecryptionFilter
         .execute(
@@ -80,7 +80,7 @@ describe  DecryptionFilter do
     expect(filtered_settings['_secure_my_secure_setting']).to eql 'hello'
   end
 
-  it 'will correct decrypt values which contain multiline strings' do
+  it 'corrects decrypt values which contain multiline strings' do
     filtered_settings = \
       DecryptionFilter
         .execute(
@@ -124,7 +124,7 @@ describe  DecryptionFilter do
     HEREDOC
   end
 
-  it 'will not attempt to decrypt values which are not marked as "secure"' do
+  it 'does not attempt to decrypt values which are not marked as "secure"' do
     filtered_settings = \
       DecryptionFilter
         .execute(
@@ -153,7 +153,7 @@ describe  DecryptionFilter do
                                      '+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ=='
   end
 
-  it 'will not attempt to decrypt values even if they are prefixed with "secure"' do
+  it 'does not attempt to decrypt values even if they are prefixed with "secure"' do
     filtered_settings = \
       DecryptionFilter
         .execute(
@@ -183,7 +183,7 @@ describe  DecryptionFilter do
                                   'TcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ=='
   end
 
-  it 'will not attempt to decrypt values even if they are not properly encoded' do
+  it 'does not attempt to decrypt values even if they are not properly encoded' do
     filtered_settings = \
       DecryptionFilter
         .execute(
@@ -213,7 +213,7 @@ describe  DecryptionFilter do
                                      'KTcdgbE9NcAhNr1+WfNxMnz84XzmUp2Y0H1jPgGkBKQJKArfQ=='
   end
 
-  it 'will not attempt to decrypt values if it guesses that they are not encrpyted' do
+  it 'does not attempt to decrypt values if it guesses that they are not encrpyted' do
     filtered_settings = \
       DecryptionFilter
         .execute(secure_key_prefix: '_secure_',

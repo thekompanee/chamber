@@ -159,7 +159,7 @@ describe Chamber do
   end
   # rubocop:enable Lint/DuplicateHashKey
 
-  it 'will load settings files which are only namespaced' do
+  it 'loads settings files which are only namespaced' do
     Chamber.load(basepath:   '/tmp/chamber',
                  namespaces: {
                    my_namespace: -> { 'blue' },

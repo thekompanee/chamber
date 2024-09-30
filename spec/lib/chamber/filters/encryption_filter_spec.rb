@@ -6,7 +6,7 @@ require 'chamber/filters/encryption_filter'
 module    Chamber
 module    Filters
 describe  EncryptionFilter do
-  it 'will attempt to encrypt values which are marked as "secure"' do
+  it 'attempts to encrypt values which are marked as "secure"' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -19,8 +19,7 @@ describe  EncryptionFilter do
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
-  it 'will attempt to encrypt values with a key which matches the namespace of the ' \
-     'value' do
+  it 'attempts to encrypt values with a key which matches the namespace of the value' do
     allow(EncryptionMethods::PublicKey).to receive(:encrypt).and_call_original
 
     default_key_filename     = './spec/fixtures/keys/real/.chamber.pub.pem'
@@ -85,7 +84,7 @@ describe  EncryptionFilter do
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
-  it 'will not attempt to encrypt values which are not marked as "secure"' do
+  it 'does not attempt to encrypt values which are not marked as "secure"' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -97,7 +96,7 @@ describe  EncryptionFilter do
     expect(filtered_settings['my_secure_setting']).to eql 'hello'
   end
 
-  it 'will not attempt to encrypt values even if they are prefixed with "secure"' do
+  it 'does not attempt to encrypt values even if they are prefixed with "secure"' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -109,7 +108,7 @@ describe  EncryptionFilter do
     expect(filtered_settings['secure_setting']).to eql 'hello'
   end
 
-  it 'will attempt to encrypt values if they are not properly encoded' do
+  it 'attempts to encrypt values if they are not properly encoded' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -122,7 +121,7 @@ describe  EncryptionFilter do
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
-  it 'will attempt to encrypt values if they are numbers' do
+  it 'attempts to encrypt values if they are numbers' do
     filtered_settings = EncryptionFilter.execute(secure_key_prefix: '_secure_',
                                                  data:              {
                                                    '_secure_my_secure_setting' => 12_345,
@@ -135,7 +134,7 @@ describe  EncryptionFilter do
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
-  it 'will not attempt to encrypt normal values if it guesses that they are already encrypted' do
+  it 'does not attempt to encrypt normal values if it guesses that they are already encrypted' do
     filtered_settings = \
       EncryptionFilter
         .execute(
@@ -166,7 +165,7 @@ describe  EncryptionFilter do
                                      'uF3CDIKRIC6U+mnM5SRMO4Dzysw=='
   end
 
-  it 'will not attempt to encrypt large values if it guesses that they are already encrypted' do
+  it 'does not attempt to encrypt large values if it guesses that they are already encrypted' do
     filtered_settings = \
       EncryptionFilter
         .execute(
@@ -252,7 +251,7 @@ describe  EncryptionFilter do
     expect(my_secure_setting).to match(EncryptionFilter::LARGE_DATA_STRING_PATTERN)
   end
 
-  it 'will encrypt strings of 127 chars effective length' do
+  it 'encrypts strings of 127 chars effective length' do
     filtered_settings = \
       EncryptionFilter
         .execute(
@@ -278,7 +277,7 @@ describe  EncryptionFilter do
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
 
-  it 'will encrypt and decrypt strings larger than 128 chars' do
+  it 'encrypts and decrypt strings larger than 128 chars' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -291,7 +290,7 @@ describe  EncryptionFilter do
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
 
-  it 'will encrypt values which are Regexes via public key' do
+  it 'encrypts values which are Regexes via public key' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -304,7 +303,7 @@ describe  EncryptionFilter do
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
-  it 'will encrypt values which are Regexes via SSL' do
+  it 'encrypts values which are Regexes via SSL' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -317,7 +316,7 @@ describe  EncryptionFilter do
       .to match EncryptionFilter::LARGE_DATA_STRING_PATTERN
   end
 
-  it 'will encrypt values which are Dates' do
+  it 'encrypts values which are Dates' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -330,7 +329,7 @@ describe  EncryptionFilter do
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
-  it 'will encrypt values which are Times' do
+  it 'encrypts values which are Times' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -348,7 +347,7 @@ describe  EncryptionFilter do
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
-  it 'will encrypt values which are unsupported via Public Key' do
+  it 'encrypts values which are unsupported via Public Key' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {
@@ -361,7 +360,7 @@ describe  EncryptionFilter do
       .to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
-  it 'will encrypt values which are unsupported via SSL' do
+  it 'encrypts values which are unsupported via SSL' do
     filtered_settings = EncryptionFilter.execute(
                           secure_key_prefix: '_secure_',
                           data:              {

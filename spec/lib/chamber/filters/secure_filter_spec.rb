@@ -6,7 +6,7 @@ require 'chamber/filters/secure_filter'
 module    Chamber
 module    Filters
 describe  SecureFilter do
-  it 'will return values which are marked as "secure"' do
+  it 'returns values which are marked as "secure"' do
     filtered_settings = SecureFilter.execute(secure_key_prefix: '_secure_',
                                              data:              {
                                                '_secure_my_secure_setting' => 'hello',
@@ -15,7 +15,7 @@ describe  SecureFilter do
     expect(filtered_settings['_secure_my_secure_setting']).to match 'hello'
   end
 
-  it 'will not return values which are not marked as "secure"' do
+  it 'does not return values which are not marked as "secure"' do
     filtered_settings = SecureFilter.execute(secure_key_prefix: '_secure_',
                                              data:              {
                                                'my_secure_setting' => 'hello',
@@ -24,7 +24,7 @@ describe  SecureFilter do
     expect(filtered_settings['my_secure_setting']).to be nil
   end
 
-  it 'will properly return values even if they are mixed and deeply nested' do
+  it 'properly returns values even if they are mixed and deeply nested' do
     filtered_settings = SecureFilter.execute(secure_key_prefix: '_secure_',
                                              data:              {
                                                '_secure_setting' => 'hello',

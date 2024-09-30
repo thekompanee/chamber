@@ -41,7 +41,7 @@ describe  FileSet do
     ::FileUtils.rm_rf('/tmp/settings')
   end
 
-  it 'will process both *.yml and *.yml.erb files by default' do
+  it 'processes both *.yml and *.yml.erb files by default' do
     ::File.new('/tmp/settings/some_settings_file.yml', 'w+')
     ::File.new('/tmp/settings/another_settings_file.yml.erb', 'w+')
 
