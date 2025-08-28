@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.7.5'
 
   spec.add_dependency             'thor',          [">= 0.20.3", "< 2.0"]
+  spec.add_dependency             'base64',        ["~> 0.3"] if RUBY_VERSION >= "3.4.0"
 
   spec.add_development_dependency 'rspec',         ["~> 3.5"]
   spec.add_development_dependency 'rspectacular',  ["~> 0.46"]
