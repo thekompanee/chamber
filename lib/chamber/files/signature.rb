@@ -8,14 +8,14 @@ module Chamber
 module Files
 class  Signature
   SIGNATURE_HEADER          = '-----BEGIN CHAMBER SIGNATURE-----'
-  SIGNATURE_HEADER_PATTERN  = /-----BEGIN\sCHAMBER\sSIGNATURE-----/.freeze
+  SIGNATURE_HEADER_PATTERN  = /-----BEGIN\sCHAMBER\sSIGNATURE-----/
   SIGNATURE_FOOTER          = '-----END CHAMBER SIGNATURE-----'
-  SIGNATURE_FOOTER_PATTERN  = /-----END\sCHAMBER\sSIGNATURE-----/.freeze
+  SIGNATURE_FOOTER_PATTERN  = /-----END\sCHAMBER\sSIGNATURE-----/
   SIGNATURE_IN_FILE_PATTERN = /
                                 #{SIGNATURE_HEADER_PATTERN}\n # Header
                                 (.*)\n                        # Signature Body
                                 #{SIGNATURE_FOOTER_PATTERN}   # Footer
-                              /x.freeze
+                              /x
 
   attr_accessor :settings_content,
                 :settings_filename,
@@ -77,8 +77,8 @@ class  Signature
     @encoded_signature_content ||= signature_filename
                                      .read
                                      .match(SIGNATURE_IN_FILE_PATTERN) do |match|
-      match[1]
-    end
+                                       match[1]
+                                     end
   end
 
   def signature_content

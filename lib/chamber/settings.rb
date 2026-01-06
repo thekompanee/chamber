@@ -48,7 +48,6 @@ class   Settings
                   settings:          {},
                   **_args
                 )
-
     ::Chamber::Refinements::Enumerable.deep_validate_keys(settings, &:to_s)
 
     self.decryption_keys   = (decryption_keys || {}).transform_keys(&:to_s)
@@ -272,41 +271,36 @@ class   Settings
   end
 
   def securable
-    Settings.new(**metadata.merge(
-                   settings:    raw_data,
-                   pre_filters: [Filters::SecureFilter],
-                 ))
+    Settings.new(**metadata,
+                 settings:    raw_data,
+                 pre_filters: [Filters::SecureFilter])
   end
 
   def secure
-    Settings.new(**metadata.merge(
-                   settings:     raw_data,
-                   pre_filters:  [Filters::EncryptionFilter],
-                   post_filters: [Filters::TranslateSecureKeysFilter],
-                 ))
+    Settings.new(**metadata,
+                 settings:     raw_data,
+                 pre_filters:  [Filters::EncryptionFilter],
+                 post_filters: [Filters::TranslateSecureKeysFilter])
   end
 
   def decrypted
-    Settings.new(**metadata.merge(
-                   settings:     raw_data,
-                   post_filters: [Filters::DecryptionFilter],
-                 ))
+    Settings.new(**metadata,
+                 settings:     raw_data,
+                 post_filters: [Filters::DecryptionFilter])
   end
 
   def encrypted
-    Settings.new(**metadata.merge(
-                   settings:     raw_data,
-                   pre_filters:  [Filters::EncryptionFilter],
-                   post_filters: [],
-                 ))
+    Settings.new(**metadata,
+                 settings:     raw_data,
+                 pre_filters:  [Filters::EncryptionFilter],
+                 post_filters: [])
   end
 
   def insecure
-    Settings.new(**metadata.merge(
-                   settings:     raw_data,
-                   pre_filters:  [Filters::InsecureFilter],
-                   post_filters: [Filters::TranslateSecureKeysFilter],
-                 ))
+    Settings.new(**metadata,
+                 settings:     raw_data,
+                 pre_filters:  [Filters::InsecureFilter],
+                 post_filters: [Filters::TranslateSecureKeysFilter])
   end
 
   protected

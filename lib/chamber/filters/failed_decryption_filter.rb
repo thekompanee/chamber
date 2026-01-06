@@ -8,7 +8,7 @@ module  Filters
 class   FailedDecryptionFilter
   using ::Chamber::Refinements::DeepDup
 
-  BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9+/]{342}==\z}.freeze
+  BASE64_STRING_PATTERN = %r{\A[A-Za-z0-9+/]{342}==\z}
 
   attr_accessor :data,
                 :secure_key_token

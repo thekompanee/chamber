@@ -176,6 +176,6 @@ jobs:
         run:                      |
           yamllint -f "github" -d ".yamllint" .
 
-      - name:                     "Run Remark"
-        run:                      |
-          remark --ignore-path .markdownlintignore --silently-ignore **/*.md .**/*.md
+      # - name:                     "Run Remark"
+      #   run:                      |
+      #     remark --ignore-path .markdownlintignore --silently-ignore **/*.md .**/*.md

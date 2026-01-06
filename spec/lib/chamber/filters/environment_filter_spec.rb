@@ -20,7 +20,7 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = \
+    test_setting =
       filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql 'value 2'
@@ -46,7 +46,7 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = \
+    test_setting =
       filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql [4, 5, 6]
@@ -62,7 +62,7 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = \
+    test_setting =
       filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql %w{4 5 6}
@@ -109,7 +109,7 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    another_setting = \
+    another_setting =
       filtered_data['test_setting_group']['test_setting_level']['another_setting']
 
     expect(another_setting).to eql 'value 3'
@@ -131,7 +131,7 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = \
+    test_setting =
       filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be nil
@@ -147,7 +147,7 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = \
+    test_setting =
       filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be nil
@@ -169,7 +169,7 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = \
+    test_setting =
       filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be 2
@@ -217,7 +217,7 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = \
+    test_setting =
       filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be 2.3
@@ -266,7 +266,7 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = \
+    test_setting =
       filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql Time.utc(2018, 1, 1, 12, 0, 0)
@@ -370,7 +370,7 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = \
+    test_setting =
       filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to be 1
@@ -388,7 +388,7 @@ describe  EnvironmentFilter do
                                                 },
                                               })
 
-    test_setting = \
+    test_setting =
       filtered_data['test_setting_group']['test_setting_level']['test_setting']
 
     expect(test_setting).to eql '2'

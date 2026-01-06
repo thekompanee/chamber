@@ -27,7 +27,7 @@ class   Secure < Chamber::Commands::Base
   private
 
   def disable_warnings
-    $stderr = ::File.open('/dev/null', 'w')
+    $stderr = ::File.open(::File::NULL, 'w')
 
     yield
 

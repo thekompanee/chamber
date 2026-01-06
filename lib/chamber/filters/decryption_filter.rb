@@ -14,7 +14,7 @@ module  Filters
 class   DecryptionFilter
   using ::Chamber::Refinements::DeepDup
 
-  BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9+/]{342}==\z}.freeze
+  BASE64_STRING_PATTERN     = %r{\A[A-Za-z0-9+/]{342}==\z}
   LARGE_DATA_STRING_PATTERN = %r{
                                   \A                            # Beginning of String
                                   (
@@ -29,7 +29,7 @@ class   DecryptionFilter
                                     [A-Za-z0-9+/#]*={0,2}       # Base64 Encoded Data
                                   )
                                   \z                            # End of String
-                                }x.freeze
+                                }x
 
   attr_accessor :data,
                 :secure_key_token

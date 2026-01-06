@@ -293,15 +293,13 @@ class   FileSet
   end
 
   def relevant_namespaced_files
-    file_holder = []
-
-    namespaces.each do |namespace|
-      file_holder << namespaced_files.select do |file|
-        file.basename.fnmatch? "*-#{namespace}.???"
-      end
-    end
-
-    file_holder.flatten
+    namespaces
+      .map { |namespace|
+        namespaced_files.select do |file|
+          file.basename.fnmatch? "*-#{namespace}.???"
+        end
+      }
+      .flatten
   end
 end
 end

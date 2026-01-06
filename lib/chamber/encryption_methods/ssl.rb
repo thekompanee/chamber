@@ -5,7 +5,7 @@ require 'base64'
 module  Chamber
 module  EncryptionMethods
 class   Ssl
-  BASE64_STRING_PATTERN     = %r{[A-Za-z0-9+/#]*={0,2}}.freeze
+  BASE64_STRING_PATTERN     = %r{[A-Za-z0-9+/#]*={0,2}}
   LARGE_DATA_STRING_PATTERN = /
                                 \A
                                 (#{BASE64_STRING_PATTERN})
@@ -14,7 +14,7 @@ class   Ssl
                                 \#
                                 (#{BASE64_STRING_PATTERN})
                                 \z
-                              /x.freeze
+                              /x
 
   def self.encrypt(_settings_key, value, encryption_keys) # rubocop:disable Metrics/AbcSize
     value         = YAML.dump(value)

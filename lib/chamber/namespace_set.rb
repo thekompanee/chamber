@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
-
 ###
 # Internal: Respresents a set of namespaces which will be processed by Chamber
 # at various stages when settings are loaded.

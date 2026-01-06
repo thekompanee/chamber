@@ -75,7 +75,7 @@ class   Runner < Thor
                          'Useful for debugging.'
 
   def show
-    puts Commands::Show.call(**options.transform_keys(&:to_sym).merge(shell: self))
+    puts Commands::Show.call(**options.transform_keys(&:to_sym), shell: self)
   end
 
   ################################################################################
@@ -83,7 +83,7 @@ class   Runner < Thor
   desc 'files', 'Lists the settings files which are parsed with the given options'
 
   def files
-    puts Commands::Files.call(**options.transform_keys(&:to_sym).merge(shell: self))
+    puts Commands::Files.call(**options.transform_keys(&:to_sym), shell: self)
   end
 
   ################################################################################
@@ -113,7 +113,7 @@ class   Runner < Thor
                           'destination of the comparison'
 
   def compare
-    Commands::Compare.call(**options.transform_keys(&:to_sym).merge(shell: self))
+    Commands::Compare.call(**options.transform_keys(&:to_sym), shell: self)
   end
 
   ################################################################################
@@ -133,7 +133,7 @@ class   Runner < Thor
                          'what values would be encrypted'
 
   def secure
-    Commands::Secure.call(**options.transform_keys(&:to_sym).merge(shell: self))
+    Commands::Secure.call(**options.transform_keys(&:to_sym), shell: self)
   end
 
   ################################################################################
@@ -148,7 +148,7 @@ class   Runner < Thor
                          'what values would be decrypted'
 
   def unsecure
-    Commands::Unsecure.call(**options.transform_keys(&:to_sym).merge(shell: self))
+    Commands::Unsecure.call(**options.transform_keys(&:to_sym), shell: self)
   end
 
   ################################################################################
@@ -167,9 +167,9 @@ class   Runner < Thor
 
   def sign
     if options[:verify]
-      Commands::Verify.call(**options.transform_keys(&:to_sym).merge(shell: self))
+      Commands::Verify.call(**options.transform_keys(&:to_sym), shell: self)
     else
-      Commands::Sign.call(**options.transform_keys(&:to_sym).merge(shell: self))
+      Commands::Sign.call(**options.transform_keys(&:to_sym), shell: self)
     end
   end
 
@@ -183,7 +183,7 @@ class   Runner < Thor
                 default: false
 
   def init
-    Commands::Initialize.call(**options.transform_keys(&:to_sym).merge(shell: self))
+    Commands::Initialize.call(**options.transform_keys(&:to_sym), shell: self)
   end
 end
 end
