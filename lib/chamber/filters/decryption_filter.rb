@@ -82,7 +82,7 @@ class   DecryptionFilter
 
     decryption_keys.each do |decryption_key|
       return method.decrypt(key, value, decryption_key)
-    rescue OpenSSL::PKey::RSAError
+    rescue ::OpenSSL::PKey::RSAError, ::Psych::SyntaxError
       next
     end
 

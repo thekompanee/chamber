@@ -40,7 +40,11 @@ describe  Show do
   end
 
   it 'can return values formatted as a hash' do
-    expect(Show.call(**options))
+    # Ruby 3.4's PP changed how hashrockets were rendered (it added spaces
+    # around the hashrockets). So, until Ruby 3.3 is EOL and no longer suppored,
+    # this (the gsubs) are the workaround so that the test passes on all Ruby
+    # versions in CI.
+    expect(Show.call(**options).gsub(' => ', '=>').gsub(' =>', '=>'))
       .to eql(
             <<~HEREDOC.chomp)
               {"my_setting"=>"my_value",
