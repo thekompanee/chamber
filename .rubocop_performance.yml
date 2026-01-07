@@ -1,8 +1,8 @@
 ---
 
-# Last updated to 1.22.1
+# Last updated to 1.26.1
 
-require:
+plugins:
   - 'rubocop-performance'
 
 ################################################################################
@@ -148,6 +148,9 @@ Performance/Squeeze:
 Performance/StartWith:
   Enabled:                                    true
 
+Performance/StringBytesize:
+  Enabled:                                    true
+
 Performance/StringIdentifierArgument:
   Enabled:                                    true
 
@@ -169,4 +172,7 @@ Performance/UnfreezeString:
   Enabled:                                    true
 
 Performance/UriDefaultParser:
+  Enabled:                                    true
+
+Performance/ZipWithoutBlock:
   Enabled:                                    true

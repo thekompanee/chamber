@@ -17,7 +17,7 @@ describe  Show do
   end
 
   it 'can return values formatted as environment variables' do
-    expect(Show.call(**options.merge(as_env: true)))
+    expect(Show.call(**options, as_env: true))
       .to eql(
             <<~HEREDOC.chomp)
               ANOTHER_LEVEL_LEVEL_THREE_A_SCALAR="hello"
@@ -32,7 +32,7 @@ describe  Show do
   end
 
   it 'can return values filtered by whether or not they are secure' do
-    expect(Show.call(**options.merge(as_env: true, only_sensitive: true)))
+    expect(Show.call(**options, as_env: true, only_sensitive: true))
       .to eql(
             <<~HEREDOC.chomp)
               MY_SECURE_SETTINGS="my_secure_value"
@@ -40,7 +40,11 @@ describe  Show do
   end
 
   it 'can return values formatted as a hash' do
-    expect(Show.call(**options))
+    # Ruby 3.4's PP changed how hashrockets were rendered (it added spaces
+    # around the hashrockets). So, until Ruby 3.3 is EOL and no longer suppored,
+    # this (the gsubs) are the workaround so that the test passes on all Ruby
+    # versions in CI.
+    expect(Show.call(**options).gsub(' => ', '=>').gsub(' =>', '=>'))
       .to eql(
             <<~HEREDOC.chomp)
               {"my_setting"=>"my_value",

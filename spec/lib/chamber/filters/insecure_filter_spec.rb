@@ -42,7 +42,7 @@ describe  InsecureFilter do
   end
 
   it 'does not return values which are encrypted' do
-    filtered_settings = \
+    filtered_settings =
       InsecureFilter
         .execute(
           secure_key_prefix: '_secure_',

@@ -1,8 +1,8 @@
 ---
 
-# Last updated to 3.0.5
+# Last updated to 3.7.0
 
-require:
+plugins:
   - 'rubocop-rspec'
 
 RSpec/AlignLeftLetBrace:
@@ -120,8 +120,6 @@ RSpec/EmptyLineAfterHook:
 
 RSpec/EmptyLineAfterSubject:
   Enabled:                        true
-  Exclude:
-    - '**/factories/*.rb'
 
 RSpec/EmptyMetadata:
   Enabled:                        true
@@ -193,6 +191,9 @@ RSpec/ImplicitSubject:
   Enabled:                        true
   EnforcedStyle:                  'single_statement_only'
 
+RSpec/IncludeExamples:
+  Enabled:                        true
+
 RSpec/IndexedLet:
   Enabled:                        true
   AllowedIdentifiers:             []
@@ -219,6 +220,9 @@ RSpec/LeadingSubject:
   Enabled:                        true
 
 RSpec/LeakyConstantDeclaration:
+  Enabled:                        true
+
+RSpec/LeakyLocalVariable:
   Enabled:                        true
 
 RSpec/LetBeforeExamples:
@@ -395,7 +399,6 @@ RSpec/VariableName:
 
 RSpec/VerifiedDoubleReference:
   Enabled:                        true
-  EnforcedStyle:                  'string'
 
 RSpec/VerifiedDoubles:
   Enabled:                        true

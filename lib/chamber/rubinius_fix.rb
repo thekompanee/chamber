@@ -2,7 +2,7 @@
 
 require 'pathname'
 
-unless Pathname.instance_methods.include?(:write)
+unless Pathname.method_defined?(:write)
   class Pathname
     def write(*args)
       IO.write @path, *args # rubocop:disable Security/IoMethods

@@ -1,6 +1,6 @@
 ---
 
-# Last updated to rubocop 1.66.0
+# Last updated to rubocop 1.82.1
 
 AllCops:
   Include:
@@ -132,6 +132,11 @@ Bundler/OrderedGems:
 ################################################################################
 
 Gemspec/AddRuntimeDependency:
+  Enabled:                                    true
+  Include:
+    - '**/*.gemspec'
+
+Gemspec/AttributeAssignment:
   Enabled:                                    true
   Include:
     - '**/*.gemspec'
@@ -325,6 +330,9 @@ Layout/EmptyLineAfterMagicComment:
 Layout/EmptyLineAfterMultilineCondition:
   Enabled:                                    true
 
+Layout/EmptyLinesAfterModuleInclusion:
+  Enabled:                                    true
+
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled:                                    true
   AllowAliasSyntax:                           false
@@ -422,6 +430,7 @@ Layout/FirstMethodArgumentLineBreak:
   #                      bar)
   Enabled:                                    false
   AllowMultilineFinalElement:                 false
+  AllowedMethods:                             []
 
 Layout/FirstMethodParameterLineBreak:
   # Disallows: def my_method(foo,
@@ -464,6 +473,10 @@ Layout/InitialIndentation:
 
 Layout/LeadingCommentSpace:
   Enabled:                                    true
+  AllowDoxygenCommentStyle:                   false
+  AllowGemfileRubyComment:                    true
+  AllowRBSInlineAnnotation:                   false
+  AllowSteepAnnotation:                       false
 
 Layout/LeadingEmptyLines:
   Enabled:                                    true
@@ -487,7 +500,8 @@ Layout/LineLength:
   Max:                                        90
   AllowHeredoc:                               true
   AllowURI:                                   true
-  IgnoreCopDirectives:                        true
+  AllowCopDirectives:                         true
+  AllowRBSInlineAnnotation:                   false
   AllowedPatterns:
     - "\\s+raise_error\\([^)]+\\)$"                                             # raise_error(LongClassName)
     - "^(\\s+|.*)'[^']+'\\s+=\\>\\s+'[^']+',$"                                  # 'foo' => 'really_long_string',
@@ -744,6 +758,9 @@ Lint/AmbiguousRange:
 Lint/AmbiguousRegexpLiteral:
   Enabled:                                    true
 
+Lint/ArrayLiteralInRegexp:
+  Enabled:                                    true
+
 Lint/AssignmentInCondition:
   Enabled:                                    true
   AllowSafeAssignment:                        true
@@ -768,11 +785,17 @@ Lint/ConstantDefinitionInBlock:
 Lint/ConstantOverwrittenInRescue:
   Enabled:                                    true
 
+Lint/ConstantReassignment:
+  Enabled:                                    true
+
 Lint/ConstantResolution:
   Enabled:                                    false
   Only:                                       []
   Ignore:
     - 'ENV'
+
+Lint/CopDirectiveSyntax:
+  Enabled:                                    true
 
 Lint/Debugger:
   Enabled:                                    true
@@ -793,6 +816,7 @@ Lint/DuplicateBranch:
   Enabled:                                    true
   IgnoreLiteralBranches:                      true
   IgnoreConstantBranches:                     true
+  IgnoreDuplicateElseBranch:                  true
 
 Lint/DuplicateElsifCondition:
   Enabled:                                    true
@@ -816,6 +840,9 @@ Lint/DuplicateRequire:
   Enabled:                                    true
 
 Lint/DuplicateRescueException:
+  Enabled:                                    true
+
+Lint/DuplicateSetElement:
   Enabled:                                    true
 
 Lint/EachWithObjectArgument:
@@ -879,6 +906,9 @@ Lint/FormatParameterMismatch:
   Enabled:                                    true
 
 Lint/HashCompareByIdentity:
+  Enabled:                                    true
+
+Lint/HashNewWithKeywordArgumentsAsDefault:
   Enabled:                                    true
 
 Lint/HeredocMethodCallPosition:
@@ -974,6 +1004,9 @@ Lint/NumberConversion:
 Lint/NumberedParameterAssignment:
   Enabled:                                    true
 
+Lint/NumericOperationWithConstantResult:
+  Enabled:                                    true
+
 Lint/OrAssignmentToConstant:
   Enabled:                                    true
 
@@ -1015,6 +1048,7 @@ Lint/RedundantRequireStatement:
 
 Lint/RedundantSafeNavigation:
   Enabled:                                    true
+  InferNonNilReceiver:                        true
   AllowedMethods:
     - 'eql?'
     - 'equal?'
@@ -1028,6 +1062,9 @@ Lint/RedundantSplatExpansion:
   AllowPercentLiteralArrayArgument:           false
 
 Lint/RedundantStringCoercion:
+  Enabled:                                    true
+
+Lint/RedundantTypeConversion:
   Enabled:                                    true
 
 Lint/RedundantWithIndex:
@@ -1089,12 +1126,18 @@ Lint/ShadowedException:
 Lint/ShadowingOuterLocalVariable:
   Enabled:                                    true
 
+Lint/SharedMutableDefault:
+  Enabled:                                    true
+
 Lint/StructNewOverride:
   Enabled:                                    true
 
 Lint/SuppressedException:
   Enabled:                                    true
   AllowComments:                              true
+
+Lint/SuppressedExceptionInNumberConversion:
+  Enabled:                                    true
 
 Lint/SymbolConversion:
   Enabled:                                    true
@@ -1117,6 +1160,9 @@ Lint/TripleQuotes:
   Enabled:                                    true
 
 Lint/UnderscorePrefixedVariableName:
+  Enabled:                                    true
+
+Lint/UnescapedBracketInRegexp:
   Enabled:                                    true
 
 Lint/UnexpectedBlockArity:
@@ -1155,6 +1201,7 @@ Lint/UnusedMethodArgument:
   AllowUnusedKeywordArguments:                true
   IgnoreEmptyMethods:                         true
   IgnoreNotImplementedMethods:                true
+  NotImplementedExceptions:                   []
 
 Lint/UriEscapeUnescape:
   Enabled:                                    true
@@ -1168,6 +1215,15 @@ Lint/UselessAccessModifier:
 Lint/UselessAssignment:
   Enabled:                                    true
 
+Lint/UselessConstantScoping:
+  Enabled:                                    true
+
+Lint/UselessDefaultValueArgument:
+  Enabled:                                    true
+
+Lint/UselessDefined:
+  Enabled:                                    true
+
 Lint/UselessElseWithoutRescue:
   Enabled:                                    true
 
@@ -1175,6 +1231,9 @@ Lint/UselessMethodDefinition:
   Enabled:                                    true
 
 Lint/UselessNumericOperation:
+  Enabled:                                    true
+
+Lint/UselessOr:
   Enabled:                                    true
 
 Lint/UselessRescue:
@@ -1284,6 +1343,7 @@ Metrics/MethodLength:
   CountComments:                              false
   Max:                                        30
   AllowedMethods:                             []
+  AllowedPatterns:                            []
   CountAsOne:
     - 'array'
     - 'hash'
@@ -1377,6 +1437,10 @@ Naming/MethodName:
   Enabled:                                    true
   EnforcedStyle:                              'snake_case'
   AllowedPatterns:                            []
+  ForbiddenIdentifiers:
+    - '__id__'
+    - '__send__'
+  ForbiddenPatterns:                          []
 
 Naming/MethodParameterName:
   Enabled:                                    true
@@ -1400,22 +1464,35 @@ Naming/MethodParameterName:
     - 'to'
   ForbiddenNames:                             []
 
-Naming/PredicateName:
+Naming/PredicateMethod:
+  Enabled:                                    true
+  Mode:                                       'aggressive'
+  AllowedMethods:
+    - 'call'
+  AllowedPatterns:                            []
+  AllowBangMethods:                           false
+  WaywardPredicates:
+    - 'nonzero?'
+
+Naming/PredicatePrefix:
   Enabled:                                    true
   AllowedMethods:
     - 'is_a?'
   ForbiddenPrefixes:
+    - 'does_'
+    - 'have_'
     - 'is_'
     - 'was_'
-    - 'have_'
   MethodDefinitionMacros:
     - 'define_method'
     - 'define_singleton_method'
   NamePrefix:
-    - 'is_'
-    - 'was_'
+    - 'does_'
     - 'has_'
     - 'have_'
+    - 'is_'
+    - 'was_'
+  UseSorbetSigs:                              false
   Exclude:
     - '/**/spec/**/*.rb'
 
@@ -1427,6 +1504,9 @@ Naming/VariableName:
   Enabled:                                    true
   EnforcedStyle:                              'snake_case'
   AllowedIdentifiers:                         []
+  AllowedPatterns:                            []
+  ForbiddenIdentifiers:                       []
+  ForbiddenPatterns:                          []
 
 Naming/VariableNumber:
   Enabled:                                    true
@@ -1490,6 +1570,7 @@ Style/AccessModifierDeclarations:
   EnforcedStyle:                              'group'
   AllowModifiersOnSymbols:                    true
   AllowModifiersOnAttrs:                      true
+  AllowModifiersOnAliasMethod:                true
 
 Style/AccessorGrouping:
   Enabled:                                    true
@@ -1498,6 +1579,9 @@ Style/AccessorGrouping:
 Style/Alias:
   Enabled:                                    true
   EnforcedStyle:                              'prefer_alias'
+
+Style/AmbiguousEndlessMethodDefinition:
+  Enabled:                                    true
 
 Style/AndOr:
   Enabled:                                    true
@@ -1516,7 +1600,6 @@ Style/ArgumentsForwarding:
     - 'options'
     - 'opts'
   RedundantRestArgumentNames:
-    - 'args'
     - 'arguments'
 
 Style/ArrayCoercion:
@@ -1530,6 +1613,9 @@ Style/ArrayJoin:
   Enabled:                                    true
 
 Style/ArrayIntersect:
+  Enabled:                                    true
+
+Style/ArrayIntersectWithSingleElement:
   Enabled:                                    true
 
 Style/AsciiComments:
@@ -1551,6 +1637,9 @@ Style/BeginBlock:
   Enabled:                                    true
 
 Style/BisectedAttrAccessor:
+  Enabled:                                    true
+
+Style/BitwisePredicate:
   Enabled:                                    true
 
 Style/BlockComments:
@@ -1579,6 +1668,8 @@ Style/CharacterLiteral:
 Style/ClassAndModuleChildren:
   Enabled:                                    true
   EnforcedStyle:                              'nested'
+  EnforcedStyleForClasses:                    null
+  EnforcedStyleForModules:                    null
 
 Style/ClassCheck:
   Enabled:                                    true
@@ -1616,10 +1707,16 @@ Style/CollectionMethods:
     member?:                                  'include?'
     reduce:                                   'inject'
 
+Style/CollectionQuerying:
+  Enabled:                                    true
+
 Style/ColonMethodCall:
   Enabled:                                    true
 
 Style/ColonMethodDefinition:
+  Enabled:                                    true
+
+Style/CombinableDefined:
   Enabled:                                    true
 
 Style/CombinableLoops:
@@ -1644,6 +1741,9 @@ Style/CommentedKeyword:
   Enabled:                                    true
   Exclude:
     - '/**/Gemfile'
+
+Style/ComparableBetween:
+  Enabled:                                    true
 
 Style/ComparableClamp:
   Enabled:                                    true
@@ -1670,6 +1770,9 @@ Style/DataInheritance:
   Enabled:                                    true
 
 Style/DefWithParentheses:
+  Enabled:                                    true
+
+Style/DigChain:
   Enabled:                                    true
 
 Style/Dir:
@@ -1727,6 +1830,10 @@ Style/EmptyMethod:
   Enabled:                                    true
   EnforcedStyle:                              'compact'
 
+Style/EmptyStringInsideInterpolation:
+  Enabled:                                    true
+  EnforcedStyle:                              'trailing_conditional'
+
 Style/Encoding:
   Enabled:                                    true
 
@@ -1762,11 +1869,18 @@ Style/ExactRegexpMatch:
 Style/FetchEnvVar:
   Enabled:                                    true
   AllowedVars:                                []
+  DefaultToNil:                               true
 
 Style/FileEmpty:
   Enabled:                                    true
 
+Style/FileNull:
+  Enabled:                                    true
+
 Style/FileRead:
+  Enabled:                                    true
+
+Style/FileTouch:
   Enabled:                                    true
 
 Style/FileWrite:
@@ -1824,9 +1938,15 @@ Style/HashEachMethods:
 Style/HashExcept:
   Enabled:                                    true
 
+Style/HashFetchChain:
+  Enabled:                                    true
+
 Style/HashLikeCase:
   Enabled:                                    true
   MinBranchesCount:                           1
+
+Style/HashSlice:
+  Enabled:                                    true
 
 Style/HashSyntax:
   Enabled:                                    true
@@ -1926,6 +2046,16 @@ Style/IpAddresses:
     - '/**/spec/**/factories/**/*.rb'
     - '/**/spec/factories.rb'
 
+Style/ItAssignment:
+  Enabled:                                    true
+
+Style/ItBlockParameter:
+  Enabled:                                    true
+  EnforcedStyle:                              'disallow'
+
+Style/KeywordArgumentsMerging:
+  Enabled:                                    true
+
 Style/KeywordParametersOrder:
   Enabled:                                    true
 
@@ -1972,6 +2102,7 @@ Style/MethodCallWithArgsParentheses:
     - 'puts'
   AllowedPatterns:                            []
   IncludedMacros:                             []
+  IncludedMacroPatterns:                      []
 
 Style/MethodCallWithoutArgsParentheses:
   Enabled:                                    true
@@ -2011,6 +2142,9 @@ Style/MixinUsage:
 Style/ModuleFunction:
   Enabled:                                    true
   EnforcedStyle:                              'module_function'
+
+Style/ModuleMemberExistenceCheck:
+  Enabled:                                    true
 
 Style/MultilineBlockChain:
   Enabled:                                    true
@@ -2096,6 +2230,7 @@ Style/Next:
   Enabled:                                    true
   EnforcedStyle:                              'skip_modifier_ifs'
   MinBodyLength:                              3
+  AllowConsecutiveConditionals:               false
 
 Style/NilComparison:
   Enabled:                                    true
@@ -2227,6 +2362,9 @@ Style/RedundantArgument:
 Style/RedundantArrayConstructor:
   Enabled:                                    true
 
+Style/RedundantArrayFlatten:
+  Enabled:                                    true
+
 Style/RedundantAssignment:
   Enabled:                                    true
 
@@ -2264,6 +2402,9 @@ Style/RedundantFileExtensionInRequire:
   Enabled:                                    true
 
 Style/RedundantFilterChain:
+  Enabled:                                    true
+
+Style/RedundantFormat:
   Enabled:                                    true
 
 Style/RedundantFreeze:
@@ -2355,6 +2496,10 @@ Style/SafeNavigation:
     - 'present?'
     - 'try!'
     - 'try'
+
+Style/SafeNavigationChainLength:
+  Enabled:                                    true
+  Max:                                        2
 
 Style/Sample:
   Enabled:                                    true

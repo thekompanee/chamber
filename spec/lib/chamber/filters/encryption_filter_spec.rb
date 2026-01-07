@@ -135,7 +135,7 @@ describe  EncryptionFilter do
   end
 
   it 'does not attempt to encrypt normal values if it guesses that they are already encrypted' do
-    filtered_settings = \
+    filtered_settings =
       EncryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -166,7 +166,7 @@ describe  EncryptionFilter do
   end
 
   it 'does not attempt to encrypt large values if it guesses that they are already encrypted' do
-    filtered_settings = \
+    filtered_settings =
       EncryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -223,7 +223,7 @@ describe  EncryptionFilter do
   end
 
   it 'can encrypt long multiline strings' do
-    filtered_settings = \
+    filtered_settings =
       EncryptionFilter
         .execute(
           secure_key_prefix: '_secure_',

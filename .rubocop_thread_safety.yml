@@ -2,7 +2,7 @@
 
 # Last updated to 0.5.1
 
-require:
+plugins:
   - 'rubocop-thread_safety'
 
 ThreadSafety/ClassAndModuleAttributes:

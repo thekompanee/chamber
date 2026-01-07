@@ -23,11 +23,11 @@ describe  Verify do # rubocop:disable RSpec/MultipleMemoizedHelpers
   end
 
   before(:each) do
-    ::FileUtils.mkdir_p settings_directory unless ::File.exist? settings_directory
+    ::FileUtils.mkdir_p settings_directory
   end
 
   after(:each) do
-    ::FileUtils.rm_rf(settings_directory) if ::File.exist? settings_directory
+    ::FileUtils.rm_rf(settings_directory)
   end
 
   it 'can generate signature files', :time_mock do

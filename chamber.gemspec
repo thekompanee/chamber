@@ -29,7 +29,11 @@ Gem::Specification.new do |spec|
     'wiki_uri'          => 'https://github.com/thekompanee/chamber/wiki',
   }
 
-  spec.required_ruby_version = '>= 2.7.5'
+  spec.required_ruby_version = '>= 3.2.4'
+
+  spec.add_dependency             'base64',        ["~> 0.3"]
+  spec.add_dependency             'bigdecimal',    ["~> 4.0"]
+  spec.add_dependency             'mutex_m',       ["~> 0.3"]
 
   spec.add_dependency             'thor',          [">= 0.20.3", "< 2.0"]
 

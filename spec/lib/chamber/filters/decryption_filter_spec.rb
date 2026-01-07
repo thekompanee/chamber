@@ -9,7 +9,7 @@ describe  DecryptionFilter do
   it 'attempts multiple keys to decrypt values' do
     allow(EncryptionMethods::PublicKey).to receive(:decrypt).and_call_original
 
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -59,7 +59,7 @@ describe  DecryptionFilter do
   end
 
   it 'attempts to decrypt values which are marked as "secure"' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -81,7 +81,7 @@ describe  DecryptionFilter do
   end
 
   it 'corrects decrypt values which contain multiline strings' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -125,7 +125,7 @@ describe  DecryptionFilter do
   end
 
   it 'does not attempt to decrypt values which are not marked as "secure"' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -154,7 +154,7 @@ describe  DecryptionFilter do
   end
 
   it 'does not attempt to decrypt values even if they are prefixed with "secure"' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -184,7 +184,7 @@ describe  DecryptionFilter do
   end
 
   it 'does not attempt to decrypt values even if they are not properly encoded' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -214,7 +214,7 @@ describe  DecryptionFilter do
   end
 
   it 'does not attempt to decrypt values if it guesses that they are not encrpyted' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(secure_key_prefix: '_secure_',
                  data:              {
@@ -228,7 +228,7 @@ describe  DecryptionFilter do
   end
 
   it 'simply returns the encrypted string if there is no decryption key' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -257,7 +257,7 @@ describe  DecryptionFilter do
   end
 
   it 'can decrypt a complex object' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -280,7 +280,7 @@ describe  DecryptionFilter do
   end
 
   it 'can decrypt a number that has not been yamlled' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -302,7 +302,7 @@ describe  DecryptionFilter do
   end
 
   it 'can decrypt a string that has not been yamlled' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -324,7 +324,7 @@ describe  DecryptionFilter do
   end
 
   it 'can decrypt a Regex/Complex Object via Public Key' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -348,7 +348,7 @@ describe  DecryptionFilter do
   end
 
   it 'can decrypt a Regex/Complex Object via SSL' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -378,7 +378,7 @@ describe  DecryptionFilter do
   end
 
   it 'can decrypt a Date' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -401,7 +401,7 @@ describe  DecryptionFilter do
   end
 
   it 'can decrypt a Time' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',
@@ -481,7 +481,7 @@ describe  DecryptionFilter do
   end
 
   it 'can decrypt large encrypted data' do
-    filtered_settings = \
+    filtered_settings =
       DecryptionFilter
         .execute(
           secure_key_prefix: '_secure_',

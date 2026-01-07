@@ -1,9 +1,12 @@
 ---
 
-# Last updated to 2.21.0
+# Last updated to 2.22.1
 
-require:
+plugins:
   - 'rubocop-capybara'
+
+Capybara/AmbiguousClick:
+  Enabled:                        true
 
 Capybara/ClickLinkOrButtonStyle:
   Enabled:                        true
@@ -12,12 +15,18 @@ Capybara/ClickLinkOrButtonStyle:
 Capybara/CurrentPathExpectation:
   Enabled:                        true
 
+Capybara/FindAllFirst:
+  Enabled:                        true
+
 Capybara/MatchStyle:
   Enabled:                        true
 
 Capybara/NegationMatcher:
   Enabled:                        true
   EnforcedStyle:                  'have_no'
+
+Capybara/NegationMatcherAfterVisit:
+  Enabled:                        true
 
 Capybara/RedundantWithinFind:
   Enabled:                        true

@@ -2,7 +2,7 @@
 
 # Last updated to 2.29.0
 
-require:
+plugins:
   - 'rubocop-rspec_rails'
 
 RSpecRails/AvoidSetupHook:
